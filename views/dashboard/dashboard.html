@@ -1,0 +1,374 @@
+{{extend 'layout_dashboard.html'}}
+
+<style type="text/css">
+	.page_color,body{
+		font-family:Arial, Helvetica, sans-serif;
+		font-size:13px;
+	}
+</style>
+
+<link rel="stylesheet" href="{{=URL('static', 'jchart/styles/jchartfx.css')}}" type="text/css" />
+<script src="{{=URL('static','jchart/js/jchartfx.system.js')}}"></script>
+<script src="{{=URL('static','jchart/js/jchartfx.coreVector.js')}}"></script>
+<script src="{{=URL('static','jchart/js/jchartfx.advanced.js')}}"></script>
+
+<style type="text/css">
+	.jchartfx .Title {
+		 font-size:12pt;
+		 font-weight: bold;
+		 color:#000000;
+	}
+	
+	input[type=submit] {
+		margin: 2px 0px 2px 0px;
+		padding: 0px 0px 2px 0px;
+		width:250px;
+	}
+	input[type=text] {
+		width:120px;
+	}
+	
+	.checkbox{
+	padding-left:0px;
+	}
+	.multiselect{ 
+			text-align:left;
+			height:28px;
+	}
+	
+	<!--Chart color -->
+	.jchartfx .Attribute3{
+		 fill:#C44000;
+	}
+	.jchartfx .Attribute0{
+		 fill:#C0504D; 
+	}
+	.jchartfx .Attribute1{
+		 fill:#4F81BD;
+	}
+	
+	  .jchartfx .Attribute0Line{
+		 stroke:#C0504D;
+		 stroke-width:2;
+	}
+	 .jchartfx .Attribute1Line{
+		 stroke:#4F81BD;
+		 stroke-width:2;	
+	}
+	<!--color-->
+
+
+</style>
+<font color="#0054A8"></font>
+
+<script type="text/javascript" language="javascript">   
+	var doctorShowFlag='{{=session.setting_doctor}}';
+	
+	var chart1;
+	var chart2;
+	var chart3;
+	var chart4;
+    function loadChart()
+      {
+		  //------------------------
+		chart1 = new cfx.Chart();
+		chart1.getData().setSeries(1);		
+		chart1.setGallery(cfx.Gallery.Bar);
+		if (doctorShowFlag==1){	
+			var title1 = new cfx.TitleDockable();
+			title1.setText("Doctor Visit Last 10 days");
+			title1.setAlignment(cfx.StringAlignment.Center);		
+			chart1.getTitles().add(title1);
+			chart1.getAllSeries().setMultipleColors(true);
+			
+			var dataPtype= new Array();
+			
+			dataPtype=eval($('#ChartDivDoctorVisitData').val());
+			
+			chart1.setDataSource(dataPtype);
+			chart1.getAllSeries().getPointLabels().setVisible(true);
+			chart1.getLegendBox().setVisible(false);
+			
+			var divHolder1 = document.getElementById('ChartDivDoctorVisit');
+			chart1.create(divHolder1);
+		}
+		//------------------------
+		chart2 = new cfx.Chart();
+		chart2.getData().setSeries(1);
+		var series2 = chart2.getSeries().getItem(0);
+		chart2.setGallery(cfx.Gallery.Lines);
+		//Doughnut
+		var title = new cfx.TitleDockable();
+		title.setText("Order volume in last 10 days");
+		title.setAlignment(cfx.StringAlignment.Center);		
+		chart2.getTitles().add(title);
+		chart2.getAllSeries().setMultipleColors(true);
+		//chart2.getAxisX().setAutoScroll(true);
+		//chart2.getAxisX().setClientScroll(true);
+		
+		var dataPtype= new Array();
+		dataPtype=eval($('#OrderVolumeData').val());	
+		
+		//----- Set series fields order
+		var fields2 = chart2.getDataSourceSettings().getFields();
+		var field21 = new cfx.FieldMap();
+		var field22 = new cfx.FieldMap();
+		
+		field21.setName("Day");		
+		field21.setUsage(cfx.FieldUsage.Label);		
+		fields2.add(field21);
+		
+		field22.setName("Amount");
+		field22.setUsage(cfx.FieldUsage.Value);
+		fields2.add(field22);
+		
+		//---	
+		chart2.setDataSource(dataPtype);
+		
+		chart2.getAllSeries().getPointLabels().setVisible(true);
+		chart2.getLegendBox().setVisible(false);
+		//chart2.getAxisX().setLabelAngle(90);
+		
+		var divHolder2 = document.getElementById('ChartDivOrderVolume');
+		chart2.create(divHolder2); 
+		
+		//-------------------------------------------
+		chart3 = new cfx.Chart();
+		chart3.getData().setSeries(1);
+		
+		var series3 = chart3.getSeries().getItem(0);
+		chart3.setGallery(cfx.Gallery.Bar);
+		
+		var title3 = new cfx.TitleDockable();
+		title3.setText("Visit Vs Order in last 10 days");
+		title3.setAlignment(cfx.StringAlignment.Center);		
+		chart3.getTitles().add(title3);
+		//chart3.getAllSeries().setMultipleColors(true);
+		//chart3.getAxisX().setAutoScroll(true);
+		//chart3.getAxisX().setClientScroll(true);
+		
+		var regAttend= new Array();
+		regAttend=eval($('#callVsOrderData').val());		
+		
+		//----- Set series fields order
+		var fields = chart3.getDataSourceSettings().getFields();
+		var field1 = new cfx.FieldMap();
+		var field2 = new cfx.FieldMap();
+		var field3 = new cfx.FieldMap();
+		
+		field1.setName("Day");		
+		field1.setUsage(cfx.FieldUsage.Label);		
+		fields.add(field1);
+		
+		field2.setName("Call");
+		field2.setUsage(cfx.FieldUsage.Value);
+		fields.add(field2);
+		
+		field3.setName("Order");
+		field3.setUsage(cfx.FieldUsage.Value);
+		fields.add(field3);
+		//---
+		
+		chart3.setDataSource(regAttend);
+		chart3.getAllSeries().getPointLabels().setVisible(true);
+		chart3.getLegendBox().setVisible(false);
+		
+		var divHolder3 = document.getElementById('ChartDivCallVsOrder');
+		chart3.create(divHolder3);
+		
+		//------------------------
+		
+	}
+</script>
+
+
+<script>
+var base_url=location.protocol + "//" + location.hostname + (location.port && ":" + location.port) + "/{{=request.application}}/";
+
+ $(function() { 
+ 	var doctorFlag='{{=session.setting_doctor}}';
+ 	//-----------
+	$("#ChartDivOrderVolume").empty();	
+	$("#ChartDivCallVsOrder").empty();
+	if (doctorFlag==1){		
+		$("#ChartDivDoctorVisit").empty();
+	};
+	
+	loadChart();
+	
+	//------------------------
+	/*var minutes=1;// minutes after reload the page
+	
+	var secCount=0;
+	var dueTime=0;	
+	var myVar = setInterval(function(){myTimer()},1000);
+	
+	function myTimer() {
+		secCount=secCount+1
+		dueTime=minutes*60-secCount;
+		
+		//alert(base_url+'dashboard/get_sales_call')
+		
+		if (secCount==60*minutes){
+			secCount=0;
+				
+			$.ajax({
+				  url: base_url+'dashboard/get_sales_call',
+				  success: function(resStr) {						  
+					  $('#salesCall').text(resStr.toString());
+				  }
+				});			
+			};
+	}*/
+	
+	//-------------------
+  });
+  </script>
+  
+</head>
+
+<body id="htmlbody">
+<input type="hidden" value="{{=orderVolumeList}}" id="OrderVolumeData"/>
+<input type="hidden" value="{{=callVsOrderList}}" id="callVsOrderData"/>
+<input type="hidden" value="{{=doctorScheduleVsExceList}}" id="ChartDivDoctorVisitData"/>
+
+<table width="100%"  border="0" cellspacing="0" cellpadding="0" style="background-color:#FFFFFF;" >
+  <tr height="30px" >
+    <td width="900"><span class="blackCatTitle">Dashboard [{{=showLevelName}}{{if showLevelValue!='':}}: {{=showLevelValue}}{{pass}}]</span></td>
+    <td><span class="blackCatTitle">{{=currentMonth}}</span></td>
+  </tr>
+  <tr  height="1px" style="background-color:#CCCCCC;">
+	    <td width="900" ></td>
+	    <td ></td>
+  </tr>
+  </table>
+  
+  <table width="100%" height="500px"  border="0" cellpadding="0" cellspacing="0"  >
+   <tr>
+    <td>
+    
+   
+  <table width="100%" height="500px"  border="0" cellspacing="0" cellpadding="0" class="page_color"  >
+  <tr height="100%"  style="vertical-align:top;">
+    <td>
+    
+	<table width="100%"  border="0" cellpadding="0" cellspacing="0"  >
+      
+      <tr>
+        <td>&nbsp;</td>
+        <td align="left" valign="top">
+        
+        	<!--  table -->
+        	<table width="1050" height="180" border="1" cellspacing="0" cellpadding="0" class="sample_border">
+            	<tr>
+                	<td width="450" align="left" valign="top">                    
+                        <table width="400" height="170" border="0" style="background-color:#7EBEBE; color:#F3F3F3; font-size:16px">
+                          <tr height="50px">
+                            <td colspan="4" style="padding-top:10px; text-align:center"><font style="font-size:36px"><span id="salesCall"></span></font> {{=recordDictData['CallThisMonth']}} Sales Call</td>
+                            <td width="5" rowspan="8" align="right">&nbsp;</td>
+                          </tr>
+                          <tr>
+                            <td align="left">&nbsp;</td>
+                            <td width="60" align="right">Today</td>
+                            <td width="60" align="right">Yesterday</td>
+                            <td width="60" align="right">ThisMonth</td>
+                          </tr>
+                          <tr>
+                            <td width="150" align="left">Visit</td>
+                            <td width="60" align="right">{{=recordDictData['CallToday']}}</td>
+                            <td width="60" align="right">{{=recordDictData['CallYesterday']}}</td>
+                            <td width="60" align="right">{{=recordDictData['CallThisMonth']}}</td>
+                        </tr>
+                          <tr>
+                            <td width="150" align="left">Order</td>
+                            <td width="60" align="right">{{=recordDictData['OrderToday']}}</td>
+                            <td width="60" align="right">{{=recordDictData['OrderYesterday']}}</td>
+                            <td width="60" align="right">{{=recordDictData['OrderThisMonth']}}</td>
+                        </tr>
+                          <tr>
+                            <td width="150" align="left">Order (Amount)</td>
+                            <td width="60" align="right">{{=recordDictData['OrderAmtToday']}}</td>
+                            <td width="60" align="right">{{=recordDictData['OrderAmtYesterday']}}</td>
+                            <td width="60" align="right">{{=recordDictData['OrderAmtThisMonth']}}</td>
+                        </tr>
+                          <tr align="left">
+                            <td colspan="4">&nbsp;</td>
+                        </tr>
+                        </table>
+                    </td>
+                    
+                	<td width="450" height="50" valign="top" >   
+                    	{{if session.setting_doctor==1:}}                 
+                            <table width="400" height="170" border="0" style="background-color:#62B0FF; color:#F3F3F3; font-size:16px">
+                              <tr height="50px" style="padding-top:5px;">
+                                <td colspan="4" style="padding-top:10px; text-align:center"><font style="font-size:36px"><span id="doctorVisit"></span></font> Doctor Visit</td>
+                                <td width="5" rowspan="7" align="right">&nbsp;</td>
+                            </tr>
+                              <tr>
+                                <td align="left">&nbsp;</td>
+                                <td width="60" align="right">Today</td>
+                                <td width="60" align="right">Yesterday</td>
+                                <td width="60" align="right">ThisMonth</td>
+                              </tr>
+                              <!--<tr>
+                                <td width="150" align="left">Scheduled</td>
+                                <td width="60" align="right">{{#=recordDictData['DocSchedToday']}}</td>
+                                <td width="60" align="right">{{#=recordDictData['DocSchedYesterday']}}</td>
+                                <td width="60" align="right">{{#=recordDictData['DocSchedThisMonth']}}</td>
+                            </tr>-->
+                              <tr>
+                                <td width="150" align="left">Visit</td>
+                                <td width="60" align="right">{{=recordDictData['DocVisitToday']}}</td>
+                                <td width="60" align="right">{{=recordDictData['DocVisitYesterday']}}</td>
+                                <td width="60" align="right">{{=recordDictData['DocVisitThisMonth']}}</td>
+                            </tr>
+                              <tr align="left">
+                                <td colspan="4">&nbsp;</td>
+                            </tr>
+                            </table>
+                    	{{pass}}
+                    
+                    </td>
+                    
+                	<td width="150" valign="top" ><a style="text-decoration:none;" href="{{=URL(c='analysis',f='analysis')}}"><input type="button" name="btn_analysis" value="Analysis" style="width:140px; height:80px; background-color:#0B9AA6; font-size:18px; font-weight:bold; color:#FFF"></a></td>                
+                    
+                </tr>
+                
+        	</table>
+            <!--  table -->
+        	<table width="1050" height="400" border="1" cellspacing="0" cellpadding="0" class="sample_border">
+            	<tr>
+                	<td align="right" valign="top"><div id="ChartDivCallVsOrder" style="width:1050px;height:400px"></div></td>                
+                </tr>
+        	</table>
+            
+            <!--  table -->
+        	<table width="1050" height="400" border="1" cellspacing="0" cellpadding="0" class="sample_border">
+            	<tr>
+                	<td height="50" align="left" valign="top"><div id="ChartDivOrderVolume" style="width:1050px;height:400px;"></div></td>
+               	  </tr>
+            	
+        	</table>
+            
+           <!--  table -->
+           {{if session.setting_doctor==1:}}
+        	<table width="1050" height="400" border="1" cellspacing="0" cellpadding="0" class="sample_border">
+            	<tr>
+                	<td align="right" valign="top"><div id="ChartDivDoctorVisit" style="width:1050px;height:400px"></div></td>                
+                </tr>
+        	</table>
+            {{pass}}
+<br />
+			
+	      </td>
+          
+          
+          
+          </tr>
+    </table>
+
+</td>
+  </tr>
+</table>
+
+</body>

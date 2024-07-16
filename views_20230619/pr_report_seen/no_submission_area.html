@@ -1,0 +1,64 @@
+{{extend 'layout_sample_report.html'}}
+
+<html>
+<head>
+</head>
+<body>
+<table width="900px" style="border:none; text-align:center; font-weight:bold;" >
+        <tr >
+            <td width="100" >&nbsp;</td>
+            <td align="center" ><span style="border-bottom:1px solid #333;">No Submission Area (Seen)</span></td>
+            <td width="100" ><img  height="30px" src="{{=URL('static','images/comp_logo1.png')}}"/></td>
+        </tr>
+    </table>
+
+<table width="900" style="border:none; font-weight:bold;" >
+    <tr >
+    	<td >Date Range&nbsp;:&nbsp;&nbsp;{{=date_from}}&nbsp;&nbsp; To &nbsp;&nbsp; {{=date_to}}</td>                        
+    </tr>        
+    <!--<tr >
+        <td >
+        {{if reg_name=='':}}REGION &nbsp;:National{{else:}}REGION &nbsp;:{{=reg_name}}{{pass}}&nbsp;&nbsp;&nbsp;
+        {{if pr_zone!='':}}Zone &nbsp;:{{=pr_zone}}{{else:}}{{pass}}&nbsp;&nbsp;&nbsp;
+        {{if pr_area!='':}}Area &nbsp;:{{=pr_area}}{{else:}}{{pass}}&nbsp;&nbsp;&nbsp;             
+        </td>                           
+    </tr>
+    <tr >
+        <td >
+        {{if pr_territory!='':}}Territory &nbsp;:{{=pr_territory}}{{else:}}{{pass}}&nbsp;&nbsp;&nbsp;
+		{{if pr_brand!='':}}Brand &nbsp;:{{=pr_brand}}{{else:}}{{pass}}&nbsp;&nbsp;&nbsp;
+        {{if pr_ff!='':}}Field Force &nbsp;:{{=pr_ff}}{{else:}}{{pass}}&nbsp;&nbsp;&nbsp;
+        {{if pr_doctor!='':}}Doctor &nbsp;:{{=pr_doctor}}{{else:}}{{pass}}&nbsp;&nbsp;&nbsp;            
+        </td>                           
+    </tr> -->  
+</table>
+	
+    <table width="900px" border="1" cellpadding="1" cellspacing="1" class="sample_border" >
+        <tr align="left" style="background-color:#EBEBEB; font-size:12px; font-weight:bold;" >		    
+            <td style="width:50px;">SL</td>
+			<td style="width:200px;">Region</td>
+			<td style="width:200px;">Zone</td>
+			<td style="width:200px;">Area</td>
+			<td style="width:200px;">Territory</td>
+      </tr>
+        {{sl=0}}
+        {{for i in range(len(allAreaList)):}}
+		{{allAreaListStr=allAreaList[i]}}		
+		{{sl+=1}}
+        <tr  align="left" style="font-size:11px;">
+			<td >{{=sl}}</td>
+            <td >{{=allAreaListStr['level0']}}&nbsp;|&nbsp;{{=allAreaListStr['level0_name']}}</td>
+			<td >{{=allAreaListStr['level1']}}&nbsp;|&nbsp;{{=allAreaListStr['level1_name']}}</td>
+			<td >{{=allAreaListStr['level2']}}&nbsp;|&nbsp;{{=allAreaListStr['level2_name']}}</td>
+			<td >{{=allAreaListStr['level3']}}&nbsp;|&nbsp;{{=allAreaListStr['level3_name']}}</td>			
+        </tr>
+		{{pass}}
+        {{pass}}        
+        
+        
+</table>		 
+
+</body>
+
+</html>
+

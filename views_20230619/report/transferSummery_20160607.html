@@ -1,0 +1,122 @@
+{{extend 'layout_invoice.html'}}
+
+<html>
+
+<head>
+
+<script type="text/javascript">
+
+function print_page()
+
+  {
+
+    window.print()
+
+  }
+
+</script>
+
+
+
+</head>
+
+<body>
+
+<!--<table width="900px;"> <tr><td style="text-align:right"><a href="{{=URL(c='report',f='downloadAdjustmentItemWise',vars=dict(fromDate=fromDate,toDate=toDate,depotID=depotID,depotName=depotName,storeID=storeID,storeName=storeName))}}" >Downlaod</a></td></tr></table>-->
+
+<table width="900" cellpadding="0" cellspacing="0" style="border:none;" >
+    <tr >
+      <td width="300" ><div style="border: solid 2px #C4C4C4; width:100%; font-weight:bold;" >IC Transfer Summery</div></td>
+      <td width="100" align="right" >Date From</td>
+      <td width="2" >:</td>
+      <td width="100" >{{=datetime.datetime.strptime(str(fromDate),'%Y-%m-%d').strftime('%d-%b-%y')}}</td>
+      <td width="100" align="right" >To</td>
+      <td width="2" >:</td>
+      <td width="100" >{{=datetime.datetime.strptime(str(toDate),'%Y-%m-%d').strftime('%d-%b-%y')}}</td>
+      <td width="100" align="right" ></td>
+      <td width="100" ><img style="width:80px;" src="{{=URL('static','images/comp_logo1.png')}}"/></td>
+  </tr>
+</table>
+
+<table width="900" border="1" cellpadding="1" cellspacing="1" class="sample_border" >
+  <tr align="left" class="blackCatHead" height="20px" ;  style="font-size:12px">
+      <td width="80" align="left"  >Transfer No</td>
+      <td width="80" style=" text-align:center;" >Date</td>
+      <td width="200"  >From Location</td>
+      <td width="200"  >To Location</td>
+      <td width="80" style=" text-align:center;"  >Quantity</td>
+      <td width="80" align="right"  > Trade Price</td>
+      
+  </tr>
+  	{{totalTp=0}}
+    {{totalQty=0}}
+	{{for i,record in enumerate(records):}}
+    {{ if i==items_per_page: break}}
+      
+  <tr  align="left" class="blackCat"  style="background-color:#F7F7F7; font-size:11px;">
+    <td width="80" align="left" style=" text-align:center;">SKTR-{{=record.sl}}</td>
+    <td width="80" style="text-align:center;" >{{=record.damage_date}}</td>
+    <td width="200" style=" text-align:left;" >{{=record.store_id}}: {{=record.store_name}}</td>
+    <td width="200" style=" text-align:left;">{{=record.store_id_to}}: {{=record.store_name_to}}</td>
+    <td width="80" style=" text-align:center;">{{=record.quantity}}{{totalQty+=record.quantity}}</td> 
+    <td width="80" style=" text-align:right; font-weight:bold;">{{=easy_format(record.quantity*record.dist_rate)}}{{totalTp+=record.quantity*record.dist_rate}}</td>                
+  </tr>   
+   {{pass}}
+  </table>
+<table width="900" style="border: solid 1px #C4C4C4; margin:3px 0px;" >
+  <tr align="left">    
+    <td align="right" >&nbsp;</td>
+    <td align="right" >&nbsp;</td>
+    <td align="right" >&nbsp;</td>
+    <td align="right" >&nbsp;</td>
+    <td align="right" >&nbsp;</td>
+    <td align="right" >&nbsp;</td>
+    <td align="right" >&nbsp;</td>
+    <td align="right" >&nbsp;</td>
+    <td width="120" align="center" >{{=totalQty}}</td>
+    
+    <td width="100" align="right" style="font-weight:bold;" >{{=easy_format(totalTp)}}</td>
+  </tr>
+</table>   
+<br/>
+<table width="900" >
+	<tr>
+	  <td width="150" align="left">__________________</td>
+	  <td align="center">____________________________________</td>
+	  <td width="20" align="center">&nbsp;</td>
+	  <td width="180" align="center">&nbsp;</td>
+  </tr>
+	<tr>
+	  <td width="150" align="left"><strong>Store Department</strong></td>
+	  <td width="150" align="center"><span style=" font-style:italic;">for</span>&nbsp;<strong>{{=session.cName}}</strong></td>
+	  <td width="20" align="center">&nbsp;</td>
+	  <td width="180" align="center">&nbsp;</td>
+  </tr>
+</table>
+
+{{ if page: }}
+
+<a href="{{=URL(args=[page-page],vars=dict(fromDate=fromDate,toDate=toDate,depotID=depotID,depotName=depotName,storeID=storeID,storeName=storeName))}}">first</a> | 
+
+<a href="{{=URL(args=[page-1],vars=dict(fromDate=fromDate,toDate=toDate,depotID=depotID,depotName=depotName,storeID=storeID,storeName=storeName))}}">previous</a> |
+
+{{pass}}
+
+
+
+{{if len(records)>items_per_page:}}
+
+<a href="{{=URL(args=[page+1],vars=dict(fromDate=fromDate,toDate=toDate,depotID=depotID,depotName=depotName,storeID=storeID,storeName=storeName))}}">next</a>
+
+{{pass}}
+
+
+
+<br/>
+
+
+
+</body>
+
+</html>
+

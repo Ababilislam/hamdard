@@ -1,0 +1,42 @@
+{{extend 'layout_login.html'}}
+
+<div align="center">
+  <table width="434" border="0" cellspacing="0" cellpadding="0">
+    <tr>
+      <td colspan="4" bgcolor="#F0F0F0" class="heading"><div align="center" class="heading"><strong>Submit request </strong></div></td>
+    </tr>
+    <tr>
+      <td colspan="2" bgcolor="#CACACA">&nbsp;</td>
+      <td width="22" bgcolor="#CACACA">&nbsp;</td>
+      <td width="159" bgcolor="#CACACA">&nbsp;</td>
+    </tr>
+    <tr>
+      <td bgcolor="#E8E8E8">&nbsp;</td>
+      <td bgcolor="#E8E8E8">&nbsp;</td>
+      <td bgcolor="#E8E8E8">&nbsp;</td>
+      <td bgcolor="#E8E8E8">&nbsp;</td>
+    </tr>
+    <form name="customer" id="customer" method="post" action="{{=URL(c='default',f='device_registration_form')}}">
+      <tr>
+        <td width="91" bgcolor="#E8E8E8">User name </td>
+        <td width="162" bgcolor="#E8E8E8"><input name="user_name" type="text" id="user_name" size="25"  
+	value="" /></td>
+        <td bgcolor="#E8E8E8"> *</td>
+        <td bgcolor="#E8E8E8"><input name="btn_save" id="btn_save" type="submit" value="submit" /></td>
+      </tr>
+      <tr>
+        <td bgcolor="#E8E8E8">&nbsp;</td>
+        <td bgcolor="#E8E8E8">&nbsp;</td>
+        <td bgcolor="#E8E8E8">&nbsp;</td>
+        <td bgcolor="#E8E8E8">&nbsp;</td>
+      </tr>
+      <tr>
+        <td bgcolor="#E8E8E8">&nbsp;</td>
+        <td bgcolor="#E8E8E8">&nbsp;</td>
+        <td bgcolor="#E8E8E8">&nbsp;</td>
+        <td bgcolor="#E8E8E8">&nbsp;</td>
+      </tr>
+    </form>
+  </table>
+</div>
+<p>&nbsp;</p>

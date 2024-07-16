@@ -1,0 +1,289 @@
+{{extend 'layout.html'}}
+
+ <link rel="stylesheet" href="{{=URL('static', 'js_and_css/ui.theme.css')}}" type="text/css" />
+  <link rel="stylesheet" href="{{=URL('static', 'js_and_css/jquery-ui.css')}}" type="text/css" />
+  <link rel="stylesheet" href="{{=URL('static', 'js_and_css/style.css')}}" type="text/css" />
+  <script src="{{=URL('static','js_and_css/jquery-1.8.2.js')}}"></script>
+  <script src="{{=URL('static','js_and_css/jquery-ui.js')}}"></script>
+<style>
+body {
+  font-family: "Lato", sans-serif;
+}
+
+
+#btn_delete{ width:18px; height:18px;background:url('{{=URL('static','images/delete.png')}}') }
+
+#main {
+  transition: margin-left .5s;
+  padding: 16px;
+}
+
+@media screen and (max-height: 450px) {
+  .sidenav {padding-top: 15px;}
+  .sidenav a {font-size: 18px;}
+}
+</style>
+ 
+  <style type="text/css">
+ input[type=text], input[type=password],  select {
+    margin: 2px 0px 2px 0px;
+	width:250px;
+}
+
+select{ width:265px; margin:2px 0px 2px 0px;}
+
+textarea{
+    width:250px;
+	height:50px;
+	margin:2px 0px 2px 0px;
+}
+
+div.error {
+    margin-left:0px;
+	width:265px;
+}
+.page_color,body{
+	font-family:Arial, Helvetica, sans-serif;
+	font-size:13px;
+	}
+	
+#uni_middle_str4{
+width:100px;
+}
+.menu_table{
+  height: auto;
+
+}
+
+</style>
+
+
+
+  <table align="left" width="80%"  border="0" cellspacing="1" cellpadding="2" style="background-color:#FFFFFF;margin-left:auto;margin-right:auto;">
+        
+
+
+          <tr>
+                  <td height="25px" style="color:#212F3C; font-size: 20px;padding-top: 5px;"> &nbsp;Tour&nbsp;Plan&nbsp;Details</td>
+
+                  <td width="100%" colspan="8" align="right" style="padding-top: 3px; padding-bottom: 2px;">
+                    <a href="{{=URL(c='tour',f='tour_plan')}}">
+                    <input name="" type="submit" style="background-color: #EBEBEB; color: #212F3C; height:25px" value=" Back "/>
+                  </a>
+                  </td>          
+          </tr>
+
+          <tr>
+                  <td colspan="16" style=" background-color: #B2BABB;  height: 1px"> </td>
+          </tr>  
+
+          <tr>
+                  <!-- <td style="padding-top:5px; padding-left:10px">
+                          <input  type="text" name="select_item" id="select_item" placeholder=" ID | Name " autocomplete="on" value="" style="width:150px; height: 20px;">
+                  </td>
+ -->
+                  <!-- <td style="color:#212F3C;padding-top:5px;padding-left:10px">                                   
+                            <input  name="from_dt" type="text" id="from_dt" size="25" value="" autocomplete="off" placeholder="From Date" style="width:100px" class="date" />
+                           
+                  </td>
+
+                  <td style="color:#212F3C;padding-top:5px ;padding-left:10px">    
+                            <input  name="to_dt" type="text" id="to_dt" size="25" autocomplete="off" placeholder="To Date" value="" style="width:100px" class="date"/>
+                           
+                  </td>
+
+                  <td  style=" padding-top:5px" >
+                          <input  type="submit" name="filter_btn" id="filter_btn" value="FILTER"  style=" width:60px; height:30px; background-color:#EBEBEB;color: #212F3C; "/>
+                  </td>
+
+                  <td style="padding-left: 5px;padding-top:5px ;padding-left:5px">
+                          <input type="submit" name="ALL" id="ALL" value=" ALL " style=" width: 60px; height:30px; background-color:#EBEBEB;color: #212F3C; ">&nbsp;&nbsp;
+                  </td> -->
+
+                  
+
+
+      </form>
+  </table>    
+
+</p></p>
+
+<table align="left" width="80%"  border="1" cellspacing="0px" cellpadding="1px" style="margin-top:5px; background-color:#F5F5F5;margin-right:auto; height: 100%; margin-left: 5px;" >
+<tr style="background-color:#D1E2DA">
+  <td>Rep: &nbsp;&nbsp;{{=rep_name}}|{{=rep_id}}({{=level}})&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Month:{{=session.show_month}}</td>
+  
+    <td colspan="6" align="right" style="color:#212F3C;width: 40%; padding-left:10px;padding-top:5px">
+        <a href="{{=URL(c='tour',f='tour_plan_details_list_Download')}}">
+        <input type="button" name="tour_download" id="tour_download"  value="Download" style="background-color: #EBEBEB;color: #212F3C;width: 100px;height: 30px; text-align: center;">
+        </a>
+  </td> 
+</tr>
+
+</table>
+  
+
+    <table width="1000" border="1" cellpadding="1" cellspacing="1" class="sample_border" >
+                <tr align="left" class="blackCatHead"  height="20px" ;style="vertical-align:middle">
+                      
+                      <td align="left" width="100px" style="padding-left:5px"> Date </td>                      
+                      <td align="left" width="200px"> Morning </td>
+                      <td align="left" width="80px"> Type </td>
+                      <td align="left" width="200px">Evening </td>
+                      <td align="left" width="80px"> Type </td>
+                  
+                </tr>
+
+              {{
+                  morning_level = ''
+                  data = {}
+                  merged_data = {}
+                  morning_tour_plan_sql = "select id, rep_id, rep_name, schedule_date, route_id, note from sm_doctor_visit_plan where cid = '"+str(cid)+"' and rep_id = '"+str(rep_id)+"' and  first_date = '"+str(session.first_day)+"' and note = 'Morning'  order by schedule_date"
+                  #=morning_tour_plan_sql
+                  morning_tour_plan = db.executesql(morning_tour_plan_sql, as_dict=True)
+
+
+                  for i in range(len(morning_tour_plan)):
+                      invRecords_str_single = morning_tour_plan[i]
+                      date = str(invRecords_str_single['schedule_date'])
+                   
+
+                      morning_data_sql = "select route_id,route_name from sm_doctor_visit_plan where cid = '"+str(cid)+"' and rep_id = '"+str(rep_id)+"' and  schedule_date = '"+str(date)+"' and note = 'Morning'"
+                      morning_record = db.executesql(morning_data_sql, as_dict=True)
+                      morning_str=''
+                      for m in range(len(morning_record)):
+                        m_str_single = morning_record[m]
+                        rname=str(m_str_single['route_name'])
+                        if rname!='':
+                          route_id = str(m_str_single['route_id'])+'|'+rname
+                        else:
+                          route_id = str(m_str_single['route_id'])+'|'+rname
+                        pass
+                        if morning_str=='':
+                          morning_str=route_id
+                        else:
+                          morning_str=morning_str+', '+route_id
+
+                        pass
+                      pass
+
+
+                      evening_data_sql = "select route_id,route_name from sm_doctor_visit_plan where cid = '"+str(cid)+"' and rep_id = '"+str(rep_id)+"' and  schedule_date = '"+str(date)+"' and note = 'Evening'"
+                      evening_record = db.executesql(evening_data_sql, as_dict=True)
+                      evening_str=''
+                      for e in range(len(evening_record)):
+                        e_str_single = evening_record[e]
+                        rname_e=str(e_str_single['route_name'])
+
+                        if rname_e!='':
+                          route_id_e = str(e_str_single['route_id'])+'|'+rname_e
+                        else:
+                          route_id_e = str(e_str_single['route_id'])+'|'+rname_e
+                        pass
+
+                        if evening_str=='':
+                          evening_str=route_id_e
+                        else:
+                          evening_str=evening_str+', '+route_id_e
+
+                        pass
+                      pass
+
+                
+              }}
+                    
+
+                <tr  align="left" class="blackCat"  style="font-size:13px"> 
+                      
+                      <td align="left" style="height:40px; vertical-align: top;padding-top: 2px; padding-left: 5px" >{{=date}}</td>
+                     
+                      <td align="left" style="vertical-align:top;padding-top: 2px">{{=morning_str}}</td>
+                      {{type_morning=''}}
+                      {{if morning_str.find(', HQ')!=-1:
+                        type_morning='HQ'
+                        pass
+                      }}
+                      {{if morning_str.find(', EHQ')!=-1:
+                          if type_morning!='':
+                            type_morning=type_morning+','+'EHQ'
+                          else:
+                            type_morning='EHQ'
+                          pass
+                        pass
+                      }}
+                      {{if morning_str.find(', NS')!=-1:
+                          if type_morning!='':
+                            type_morning=type_morning+','+'NS'
+                          else:
+                            type_morning='NS'
+                          pass
+                        pass
+                      }}
+
+
+
+
+                      {{type_ev=''}}
+
+                      {{if evening_str.find(', HQ')!=-1:
+                        type_ev='HQ'
+                        pass
+                      }}
+                      {{if evening_str.find(', EHQ')!=-1:
+                          if type_ev!='':
+                            type_ev=type_ev+','+'EHQ'
+                          else:
+                            type_ev='EHQ'
+                          pass
+                        pass
+                      }}
+                      {{if evening_str.find(', NS')!=-1:
+                          if type_ev!='':
+                            type_ev=type_ev+','+'NS'
+                          else:
+                            type_ev='NS'
+                          pass
+                        pass
+                      }}
+
+
+
+                      {{if morning_str=='HQ':
+                        type_morning='HQ'
+                        pass
+                      }}
+                      {{if morning_str=='EHQ':
+                        type_morning='EHQ'
+                        pass
+                      }}
+                      {{if morning_str=='NS':
+                        type_morning='NS'
+                        pass
+                      }}
+
+                      {{if evening_str=='HQ':
+                        type_ev='HQ'
+                        pass
+                      }}
+                      {{if evening_str=='EHQ':
+                        type_ev='EHQ'
+                        pass
+                      }}
+                      {{if evening_str=='NS':
+                        type_ev='NS'
+                        pass
+                      }}
+                      <td align="left" style="vertical-align:top;padding-top: 2px;padding-left: 5px">{{=type_morning}}</td>
+                     
+                      <td align="left" style="vertical-align:top;padding-top: 2px">{{=evening_str}}</td>
+                     
+                      <td align="left" style="vertical-align:top;padding-top: 2px">{{=type_ev}}</td>
+                     
+                </tr>
+                {{pass}}
+                {{pass}}
+
+    </table>
+     
+
+
+              

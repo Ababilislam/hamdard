@@ -1,0 +1,268 @@
+{{extend 'layout_change_pass.html'}}
+
+<head>
+	<link rel="stylesheet" href="{{=URL('static', 'jchart/styles/jchartfx.css')}}" type="text/css" />
+	<script src="{{=URL('static','jchart/js/jchartfx.system.js')}}"></script>
+	<script src="{{=URL('static','jchart/js/jchartfx.coreVector.js')}}"></script>
+	<script src="{{=URL('static','jchart/js/jchartfx.advanced.js')}}"></script>
+
+	<link rel="stylesheet" href="{{=URL('static', 'js_and_css/ui.theme.css')}}" type="text/css" />
+	<link rel="stylesheet" href="{{=URL('static', 'js_and_css/jquery-ui.css')}}" type="text/css" />
+	<link rel="stylesheet" href="{{=URL('static', 'js_and_css/style.css')}}" type="text/css" />
+
+	<script src="{{=URL('static','js_and_css/jquery-1.8.2.js')}}"></script>
+	<script src="{{=URL('static','js_and_css/jquery-ui.js')}}"></script>
+
+	<style type="text/css">
+		.jchartfx .Title {
+			 font-size:12pt;
+			 font-weight: bold;
+			 color:#000000;
+		}
+
+		<!--Chart color-->
+		.jchartfx .Attribute3{
+			 fill:#C44000;
+		}
+		.jchartfx .Attribute0{
+			 fill:#4F81BD; 
+		}
+		.jchartfx .Attribute1{
+			 fill:#C0504D;
+		}
+		
+		.jchartfx .Attribute0Line{
+			 stroke:#C0504D;
+			 stroke-width:2;
+		}
+		 .jchartfx .Attribute1Line{
+			 stroke:#4F81BD;
+			 stroke-width:2;	
+		}
+		<!--color-->
+		
+		input[type=submit] {
+			margin: 2px 0px 2px 0px;
+			padding: 0px 0px 2px 0px;
+			width:200px;
+		}
+		
+		input[type=text] {
+			width:120px;
+		}
+		
+		.checkbox{
+		padding-left:0px;
+		}
+		
+		.multiselect{ 
+				text-align:left;
+				height:28px;
+		}
+		
+		.page_color,body{
+				font-family:Arial, Helvetica, sans-serif;
+				font-size:13px;	
+				}
+
+			#accordion ul{	list-style-type:none;margin:0;}
+			#accordion li{ margin:1px; border-radius:5px; border-bottom:1px solid #CCCCCC; font-size:10px; background-color:#F7F7F7; height:20px; padding:5px 2px 2px 15px;}/*:#F7F7F7*/
+			#accordion li a{ text-decoration:none;}
+			#accordion li:hover{ height:21px;background-color:#F5F5F5;}
+			
+		
+		/*#home{ margin-top:0px; width:16px; height:16px;background:url('{{=URL('static','images/ui-icon.png')}}') 0 -110px;}*/
+		
+		#AM{ width:32px; height:25px;background:url('{{=URL('static','images/vicon.png')}}') -307px -289px;}
+		#RSM{ width:32px; height:25px;background:url('{{=URL('static','images/vicon.png')}}') -115px -194px;}	
+
+	</style>
+
+
+	<script>
+		 $(function() { 
+			
+			$( "#accordionReport" ).accordion({
+			  active:0,
+		      heightStyle: "content",
+			  collapsible: true
+		    });
+
+			
+		  });
+	</script>
+	  
+   
+	<script>
+		var base_url=location.protocol + "//" + location.hostname + (location.port && ":" + location.port) + "/{{=request.application}}/";
+
+		$(function() {
+			 	
+			
+		});
+	</script>
+
+
+	<style>
+		.rptlist{font-size:15px; height:auto; }
+		.rptlist:hover{ height:auto;}
+		.rptul{color:#0076AE; background-color:#F0F0F0;}
+		.rptdiv{  font-size:16px; color:#0076AE; background-color:#F0F0F0;}
+		
+		#accordionReport ul{	list-style-type:none;margin:0; font-size:15px; }
+		#accordionReport li{ margin:1px; border-radius:5px; border-bottom:1px solid #CCCCCC; font-size:15px; background-color:#F7F7F7; height:20px; padding:5px 2px 2px 15px;}/*:#F7F7F7*/
+		
+		#accordionReport li:hover{ height:21px;background-color:#F5F5F5; font-size:15px;}
+		
+		/*table.sample_border {
+		border-width: 1px;
+		border-style: solid;
+		border-color: #F7F7F7;
+		margin-left: 9px;
+	}
+	*/
+		
+		
+		
+	</style>
+
+</head>
+<body id="htmlbody">
+	
+	{{currYear=str(date_fixed)[0:4]}}
+	{{currMonth=str(date_fixed)[5:7]}}
+
+ 
+
+ <header style="border-bottom: 0px;background:#53777f">
+    <table width="100%">
+    <tr>          
+      <td colspan='3'  align="center" style="  width:300px; height:auto;"><h3 id="sfs" style=" color:#fbfbfb;margin:5px">Approve List </h3></td>
+    </tr>
+  </table>
+</header>
+	
+<br>
+	
+	<div class="table-responsive-sm">
+		 
+	<table width="100%" cellpadding="0" cellspacing="0" > 
+	{{#=leave_req}}
+			{{#if (session.msg_1!= ''):}}  
+			{{for i in range(len(leave_req)):}}
+				{{recRsmSingle=leave_req[i]}}
+				{{if session.depthNo_user!=2:}}
+					{{cid=recRsmSingle[(db.sm_leave_application.cid)]}}
+
+					{{memId_1_id=recRsmSingle[(db.sm_leave_application.id)]}}
+					{{memId_1=recRsmSingle[(db.sm_leave_application.emp_id)]}}
+					{{memName_1=recRsmSingle[(db.sm_leave_application.emp_name)]}}
+					{{leave_type=recRsmSingle[(db.sm_leave_application.leave_type)]}}
+					{{total_leave=recRsmSingle[(db.sm_leave_application.total_leave)]}}
+					{{from_date=recRsmSingle[(db.sm_leave_application.from_date)]}}
+					{{to_date=recRsmSingle[(db.sm_leave_application.to_date)]}}
+			
+			{{else:}}
+				{{cid=recRsmSingle[(db.sm_leave_application.cid)]}}
+				{{memId_1_id=recRsmSingle[(db.sm_leave_application.id)]}}
+				{{memId_1=recRsmSingle[(db.sm_leave_application.emp_id)]}}
+				{{memName_1=recRsmSingle[(db.sm_leave_application.emp_name)]}}
+				{{leave_type=recRsmSingle[(db.sm_leave_application.leave_type)]}}
+				{{total_leave=recRsmSingle[(db.sm_leave_application.total_leave)]}}
+				{{from_date=recRsmSingle[(db.sm_leave_application.from_date)]}}
+				{{to_date=recRsmSingle[(db.sm_leave_application.to_date)]}}
+			{{pass}}
+		
+		
+			<tr  class="" style="color:#000" >    			
+	            <td width="30%" style="border:1px solid #ddd" >{{=memId_1}}-{{=memName_1}} </td >              
+	            <td width="10%" style="border:1px solid #ddd" > {{=leave_type}}  </td>
+	            <td width="40%" style="border:1px solid #ddd" align="center"> {{=from_date}} - {{=to_date}} </td>
+	            <td width="10%" style="border:1px solid #ddd" align="center">{{=total_leave}}  </td>               
+	            <td width="10%" align="center" style="border:1px solid #ddd" ><form id="form1" name="form1" method="post" action="{{=URL(c='leave_application',f='leave_application_approval_ddm',vars=dict(cid=cid,memId_1=memId_1,memName_1=memName_1,director_id=director_id,director_pass=director_pass,memId_1_id=memId_1_id))}}" target="_blank">   
+					<input class="form-control form-control-sm bg-secondary  text-light" type="submit" name="btn_tour" value="Approve" title="Approve"/> 
+	    			</form>  
+				</td>			
+			</tr>			
+		
+		{{pass}}
+
+		{{#else:}}
+			<!-- <font style="font-size:16px; color:#B90000" ></font> -->
+		{{#pass}}
+	</table> 
+</div>
+
+
+	<div class="table-responsive-sm">		  	
+		
+		<table width="100%"  cellpadding="0" cellspacing="0" > 
+			{{#=app_req}}
+			{{#if (session.msg!= ''):}}  								
+				{{for j in range(len(app_req)):}}
+					{{recSingle=app_req[j]}}					
+					{{if session.depthNo_user!=2:}}
+						{{cid=recSingle[(db.sm_leave_application.cid)]}}
+
+						{{memId_r_id=recSingle[(db.sm_leave_application.id)]}}
+						{{memId_r=recSingle[(db.sm_leave_application.emp_id)]}}
+						{{memName_r=recSingle[(db.sm_leave_application.emp_name)]}}
+						{{leave_type_r=recSingle[(db.sm_leave_application.leave_type)]}}
+						{{total_leave_r=recSingle[(db.sm_leave_application.total_leave)]}}
+						{{from_date_r=recSingle[(db.sm_leave_application.from_date)]}}
+						{{to_date_r=recSingle[(db.sm_leave_application.to_date)]}}
+				
+				{{else:}}
+					    {{memId_r_id=recSingle[(db.sm_leave_application.id)]}}
+					    {{memId_r=recSingle[(db.sm_leave_application.emp_id)]}}
+						{{memName_r=recSingle[(db.sm_leave_application.emp_name)]}}
+						{{leave_type_r=recSingle[(db.sm_leave_application.leave_type)]}}
+						{{total_leave_r=recSingle[(db.sm_leave_application.total_leave)]}}
+						{{from_date_r=recSingle[(db.sm_leave_application.from_date)]}}
+						{{to_date_r=recSingle[(db.sm_leave_application.to_date)]}}
+				
+				{{pass}}
+		
+		 				<tr  class="" style="color:#1f8e15" >
+                    			
+	                        <td width="30%" style="border:1px solid #ddd" >{{=memId_r}}-{{=memName_r}} </td>
+	                        <td width="10%" style="border:1px solid #ddd" > {{=leave_type_r}}  </td>
+	                        <td width="40%" style="border:1px solid #ddd" align="center"> {{=from_date_r}} - {{=to_date_r}} </td>
+	                        <td width="10%" style="border:1px solid #ddd" align="center">{{=total_leave_r}}  </td>
+
+							<td width="10%" align="center" style="border:1px solid #ddd">						
+								<form id="form1" name="form1" method="post" action="{{=URL(c='leave_application',f='leave_application_approval_ddmP',vars=dict(cid=cid,memId_r=memId_r,memName_r=memName_r,director_id=director_id,director_pass=director_pass,memId_r_id=memId_r_id))}}" target="_blank"> <input class="form-control form-control-sm bg-secondary  text-light" type="submit" name="btn_tour" value="Approve" title="Approve"/> 
+								</form> 						
+							</td>
+						</tr>
+		{{pass}}
+	</table> 
+		{{#else:}}
+			<!-- <font style="font-size:16px; color:#B90000" ></font> -->
+		{{#pass}}
+	</div>
+
+	
+
+		<br>
+		<br>
+		<br>
+		<br>
+		<br>
+		<br>
+
+
+		<footer style="border-bottom: 0px;background:#53777f;height: 45px">
+            <table width="100%">
+            <tr>          
+              <td colspan='3'  align="center" style="  width:300px; height:auto;"><h3 id="sfs" style=" color:#fbfbfb;margin:5px"> </h3></td>
+            </tr>
+          </table>
+        </footer>
+		<script type="text/javascript">
+		$(document).ready(function() {
+
+
+		});
+		</script>
+</body> 

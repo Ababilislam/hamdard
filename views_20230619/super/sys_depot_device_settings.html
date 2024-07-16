@@ -1,0 +1,99 @@
+{{extend 'layout_login.html'}}
+
+<table width="900px" border="0">
+  <tr>
+    <td align="left"><div class="blackCatTitle">Depot Device Settings</div></td>
+    <td align="right">
+	<form action="{{=URL(c='super',f='home')}}" method="post">
+	<input name="" type="submit"  value="Back"/>
+	</form>
+	</td>
+  </tr>
+</table>
+
+{{=form}}
+
+<table width="100%" border="0" >
+  <tr style="background-color:#F0F8FF;"><form action="{{=URL(c='super',f='sys_depot_device_settings')}}" method="post">
+    <td width="400" align="left">CID:
+	<input type="text" name="cid_value" id="cid_value" style="width:100px" value="">
+	Depot ID:
+	  <input name="depot_id_value" type="text" id="depot_id_value" value=""/>
+	</td>
+	
+    <td width="190" align="right">	
+	<input name="btn_filter_depot_device" type="submit"  value="Filter" style="background-color:#ECF5FF" class="button_update"/>
+	<input name="btn_filter_all" type="submit"  value="All" style="background-color:#ECF5FF" class="button_update"/>	
+	</td></form>
+  </tr>
+</table>
+
+<table width="100%" border="1" style="border-color:#FFFFFF" class="sample2"  >
+  <tr align="left" class="blackCatHead" style="background-color:#CAE4FF;font-size:14px" height="auto";"vertical-align:middle"; >
+    <td width="50">CID</td>
+    <td width="50">Dep.ID </td>
+    <td>Name</td>
+    <td width="50">Req.Sl</td>
+    <td width="50">Iss.Sl</td>
+    <td width="50">Rec.Sl</td>
+    <td width="50">Dam.Sl</td>
+    <td width="50">Ord.Sl</td>
+    <td width="50">Del.Sl</td>
+    <td width="50">Ret.Sl</td>
+    <td width="50">ClientPaym.sl</td>
+    <td width="50">Depot.Paym.Sl</td>
+    <td width="50">Stock_In_Sl</td>
+    <td>DM Pass </td>
+    <td>Mac</td>
+    <td>HDD</td>
+    <td width="50">Status</td>
+	<td width="50">&nbsp;</td>
+  </tr>
+  {{ p=0}} 
+
+  {{for i,record in enumerate(records):}}	
+	{{if i==items_per_page: break}}
+
+  {{ p=p%2 }}
+  {{ if p==0:}}
+  <tr  align="left" valign="top" class="blackCat"  style="background-color:#DFEFFF;font-size:12px" ;"vertical-align:middle">
+  {{ else:}}
+  <tr  align="left" valign="top" class="blackCat"  style="font-size:12px" ;"vertical-align:middle">
+  {{pass}}
+  
+  
+    <td width="50" height="30" >{{=record.cid}}</td>
+    <td width="50" >{{=record.depot_id}}</td>
+    <td >{{=record.name}}</td>
+    <td width="50" >{{=record.requisition_sl}}</td>
+    <td width="50" >{{=record.issue_sl}}</td>
+    <td width="50" >{{=record.receive_sl}}</td>
+    <td width="50" >{{=record.damage_sl}}</td>
+    <td width="50" >{{=record.order_sl}}</td>
+    <td width="50" >{{=record.del_sl}}</td>
+    <td width="50" >{{=record.return_sl}}</td>
+    <td width="50" >{{=record.client_payment_sl}}</td>
+    <td width="50" >{{=record.depot_payment_sl}}</td>
+    <td width="50" >{{=record.stock_in_sl}}</td>
+    <td >{{=record.dm_pass}}</td>
+    <td >{{=record.mac}}</td>
+    <td >{{=record.hdd}}</td>
+    <td width="50" >{{=record.status}}</td>
+    <form id="form1" method="post" action="{{=URL(c='super',f='update_sys_depot_device_settings',args=[page,record.id])}}">
+      <td width="50">
+      <input type="submit" name="update" id="update" value="Edit"  style="background-color:#ECF5FF" class="button_update"/></td></form>
+  </tr>
+  {{ p=p+1 }} 
+  {{pass}}
+</table>
+
+<br/>
+{{if page:}}
+<a href="{{=URL(args=[page-page])}}">first</a> | 
+<a href="{{=URL(args=[page-1])}}">previous</a> |
+{{pass}}
+
+{{if len(records)>items_per_page:}}
+<a href="{{=URL(args=[page+1])}}">next</a>
+{{pass}}
+ <br/><br/><br/><br/>

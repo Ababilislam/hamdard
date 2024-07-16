@@ -1,0 +1,191 @@
+{{extend 'layout.html'}}
+
+
+
+ <style type="text/css">
+
+	.page_color,body{
+
+	font-family:Arial, Helvetica, sans-serif;
+
+	font-size:13px;
+
+	}
+
+ </style>
+
+
+
+
+
+<script>
+
+  //var base_url="http://127.0.0.1:8000/";
+
+//var base_url="http://app.businesssolutionapps.com/";
+
+  var base_url=location.protocol + "//" + location.hostname + (location.port && ":" + location.port) + "/{{=request.application}}/";
+
+  	
+
+	function setStorageDate(){
+
+		//alert(base_url+'default/get_item_data_list');
+
+		document.getElementById("msgid").innerHTML="Wait...";
+
+		
+
+		//============
+
+		
+
+		  localStorage.itemDataStr="";
+
+		  $.ajax({
+
+			  url: base_url+'default/get_item_data_list',
+
+			  success: function(itemDataStr) {					
+
+				if(typeof(Storage)!=="undefined")
+
+				  {
+
+				  	localStorage.itemDataStr=itemDataStr;
+
+				  	document.getElementById("msgid").innerHTML="";
+
+				  }
+
+				else
+
+				  {
+
+					document.getElementById("msgid").innerHTML="Error: local storage. Please communicate with system administrator.";
+
+				  };
+
+			  }
+
+			});	
+
+		
+
+		//===============
+		
+		
+		
+		 localStorage.itemBatchStr="";
+
+		  $.ajax({
+
+			  url: base_url+'default/get_item_batch',
+
+			  success: function(itemBatchStr) {					
+
+				if(typeof(Storage)!=="undefined")
+
+				  {
+
+				  	localStorage.itemBatchStr=itemBatchStr;
+					
+				  	document.getElementById("msgid").innerHTML="";
+
+				  }
+
+				else
+
+				  {
+
+					document.getElementById("msgid").innerHTML="Error: local storage. Please communicate with system administrator.";
+
+				  };
+
+			  }
+
+			});	
+			
+			
+			
+//			==================Depot local storage
+
+		
+		 localStorage.depotStr="";
+
+		  $.ajax({
+
+			  url: base_url+'default/get_item_batch',
+
+			  success: function(itemBatchStr) {					
+
+				if(typeof(Storage)!=="undefined")
+
+				  {
+
+				  	localStorage.itemBatchStr=itemBatchStr;
+					
+				  	document.getElementById("msgid").innerHTML="";
+
+				  }else{
+					document.getElementById("msgid").innerHTML="Error: local storage. Please communicate with system administrator.";
+
+				  };
+
+			  }
+
+			});	
+
+	};
+
+
+
+</script>
+
+
+
+<body onLoad="setStorageDate();">
+
+
+
+<table width="100%"  border="0" cellspacing="0" cellpadding="0" style="background-color:#FFFFFF;" >
+
+  <tr height="30px" >
+
+    <td><span class="blackCatTitle"></span></td>
+
+  </tr>
+
+  <tr  height="1px" style="background-color:#CCCCCC;">
+
+	    <td ></td>
+
+  </tr>
+
+</table>
+
+  
+
+
+
+    
+
+  <table width="100%" height="500px"  border="0" cellspacing="0" cellpadding="0" class="page_color"  >
+
+  <tr height="100%"  style="vertical-align:top;">
+
+    <td width="50%"><span id="msgid"></span></td>
+
+    <td width="45%" align="right"><a href="{{=URL('dashboard','dashboard')}}"><!--<div><img src="{{#=URL('static','images/dashboard2.png')}}" alt="Dashboard Icon" style="width:100px;height:50px;border:0"></div>--><input type="button" value="Dashboard" style="width:120px; height:40px; color:#066" /></a></td><!--background-image:url('{{#=URL('static','images/dashboard2.png')}}');)-->
+
+    <td width="5%" align="right">&nbsp;</td>
+
+  </tr>
+
+</table>
+
+
+
+
+
+</body>

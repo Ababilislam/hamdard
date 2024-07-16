@@ -1,0 +1,3354 @@
+{{extend 'layout.html'}}
+
+
+
+<head>
+
+
+
+<style type="text/css">
+
+	.jchartfx .Title {
+
+		 font-size:12pt;
+
+		 font-weight: bold;
+
+		 color:#000000;
+
+	}
+
+
+
+	<!--Chart color-->
+
+	.jchartfx .Attribute3{
+
+		 fill:#C44000;
+
+	}
+
+	.jchartfx .Attribute0{
+
+		 fill:#4F81BD; 
+
+	}
+
+	.jchartfx .Attribute1{
+
+		 fill:#C0504D;
+
+	}
+
+	
+
+	.jchartfx .Attribute0Line{
+
+		 stroke:#C0504D;
+
+		 stroke-width:2;
+
+	}
+
+	 .jchartfx .Attribute1Line{
+
+		 stroke:#4F81BD;
+
+		 stroke-width:2;	
+
+	}
+
+	<!--color-->
+
+	
+
+	input[type=submit] {
+
+		margin: 2px 0px 2px 0px;
+
+		padding: 0px 0px 2px 0px;
+
+		width:200px;
+
+	}
+
+	
+
+	input[type=text] {
+
+		width:120px;
+
+	}
+
+	
+
+	.checkbox{
+
+	padding-left:0px;
+
+	}
+
+	
+
+	.multiselect{ 
+
+			text-align:left;
+
+			height:28px;
+
+	}
+
+	
+
+	.page_color,body{
+
+			font-family:Arial, Helvetica, sans-serif;
+
+			font-size:13px;	
+
+			}
+
+
+
+</style>
+
+
+
+<script>
+
+ $(function() { 
+
+	/*$( "#htmlbody" ).click(function(){		
+
+		$("#ChartDivSalesTrend").empty();		
+
+		 loadChart();
+
+    });*/
+
+	
+
+	$( "#accordionReport" ).accordion({
+
+	  active:0,
+
+      heightStyle: "content",
+
+	  collapsible: true
+
+    });
+
+	
+
+  });
+
+  </script>
+
+  
+
+   
+
+<script>
+
+var base_url=location.protocol + "//" + location.hostname + (location.port && ":" + location.port) + "/{{=request.application}}/";
+
+
+
+$(function() {
+ var storeListStr="";
+ var clientListStr="";
+ var delManListStr="";
+ 
+ 	var userType='{{=session.user_type}}';
+	if ( userType == 'Depot'){
+		var depotId='{{=session.depot_id}}';
+		
+		//--------- store list
+		$.ajax({
+		  url: base_url+'default/get_depot_store_all_list?depotid='+depotId,
+		  success: function(resStr) {
+			  storeListStr=resStr;
+		  }
+		});	
+		
+		//-----customer
+		$.ajax({
+		  url: base_url+'default/get_depot_client_all_list?depot='+depotId,
+		  success: function(resStr) {
+			  clientListStr=resStr;
+		  }
+		});	
+		
+		//-----delivery person
+		$.ajax({
+		  url: base_url+'default/get_depot_delivery_man_list?depot='+depotId,
+		  success: function(resStr) {
+			  delManListStr=resStr
+		  }
+		});			
+	};
+ 
+//--------------- stock	
+	$('#depot_id').blur(function(){
+		var depotIdName=$('#depot_id').val();
+		if(depotIdName!=''){
+			var dpIdNameArray=depotIdName.split("|");
+			
+			var depotId=dpIdNameArray[0];
+			
+			$.ajax({
+			  url: base_url+'default/get_depot_store_all_list?depotid='+depotId,
+			  success: function(resStr2) {
+				  storeListStr=resStr2;
+			  }
+			});
+			
+		}		
+	});
+	
+ 	var scListStr="";
+	$.ajax({
+		  url: base_url+'default/get_depot_list',
+		  success: function(resStr) {
+			  scListStr=resStr
+		  }
+		});
+	
+	var allDepotListStr="";
+	$.ajax({
+		  url: base_url+'default/get_depot_list_all',
+		  success: function(resStr) {
+			  allDepotListStr=resStr
+		  }
+		});
+	
+	//========================depot/Branch
+	$('#depot_id_name').keyup(function(){	
+		
+		//-------------------------
+		var ref_list = scListStr.split(',');				
+		var ref_name=$("#depot_id_name").val();
+		
+		//---------------- auto complete combo list
+		var ref_list_new=new Array();
+		lc=0;
+		i =0;
+		var refStr="";				
+		while (i < ref_list.length)
+		{
+			refStr=ref_list[i];
+			i=i+1;					
+			var res=refStr.toUpperCase().match(ref_name.toUpperCase());
+			if (res!=null){
+				ref_list_new[lc]=refStr;
+				lc=lc+1;
+				if (lc==30){
+					break;
+				};
+			}else{
+				continue;
+			}					
+		};
+		//alert (ref_list_new);
+		
+		//-------------- auto complete source
+		$( "input#depot_id_name" ).autocomplete({
+			source: ref_list_new
+		});
+	
+  });  
+  //==============
+
+	   var valueListStr2="";
+		$('#item_id_name').keyup(function(){
+			$.ajax({
+				  url: base_url+'default/get_item_list',
+				  success: function(resStr) {
+					  valueListStr2=resStr
+				  }
+				});
+
+			//-------------------------
+			var valueList = valueListStr2.split(',');
+			var searchValue=$("#item_id_name").val();
+			
+			//---------------- auto complete combo list
+			var valueList_new=new Array();
+			lc=0;
+			i =0;
+			var valueStr="";
+			while (i < valueList.length)
+			{
+				valueStr=valueList[i];
+				i=i+1;
+				var res=valueStr.toUpperCase().match(searchValue.toUpperCase());
+				if (res!=null){
+					valueList_new[lc]=valueStr;
+					lc=lc+1;
+					if (lc==30){
+						break;
+					};
+				}else{
+					continue;
+				}
+			};
+
+			//-------------- auto complete source
+			$( "input#item_id_name" ).autocomplete({
+				source: valueList_new
+			});
+	  });
+
+  //-------------------
+	$('#depot_id').keyup(function(){	
+		
+		//-------------------------
+		var ref_list = scListStr.split(',');				
+		var ref_name=$("#depot_id").val();
+		
+		//---------------- auto complete combo list
+		var ref_list_new=new Array();
+		lc=0;
+		i =0;
+		var refStr="";				
+		while (i < ref_list.length)
+		{
+			refStr=ref_list[i];
+			i=i+1;					
+			var res=refStr.toUpperCase().match(ref_name.toUpperCase());
+			if (res!=null){
+				ref_list_new[lc]=refStr;
+				lc=lc+1;
+				if (lc==30){
+					break;
+				};
+			}else{
+				continue;
+			}					
+		};
+		//alert (ref_list_new);
+		
+		//-------------- auto complete source
+		$( "input#depot_id" ).autocomplete({
+			source: ref_list_new
+		});
+	
+  });  
+  
+  	  //------------Depot Store
+	  $('#store_id').keyup(function(){	
+		
+		//-------------------------
+		var ref_list = storeListStr.split(',');				
+		var ref_name=$("#store_id").val();
+		
+		//---------------- auto complete combo list
+		var ref_list_new=new Array();
+		lc=0;
+		i =0;
+		var refStr="";				
+		while (i < ref_list.length)
+		{
+			refStr=ref_list[i];
+			i=i+1;					
+			var res=refStr.toUpperCase().match(ref_name.toUpperCase());
+			if (res!=null){
+				ref_list_new[lc]=refStr;
+				lc=lc+1;
+				if (lc==30){
+					break;
+				};
+			}else{
+				continue;
+			}					
+		};
+		//alert (ref_list_new);
+		
+		//-------------- auto complete source
+		$( "input#store_id" ).autocomplete({
+			source: ref_list_new
+		});
+		
+	  });
+
+
+
+//------------------------- Primary
+	$('#pri_depot_id').blur(function(){
+		var depotIdName=$('#pri_depot_id').val();
+		if(depotIdName!=''){
+			var dpIdNameArray=depotIdName.split("|");
+			
+			var depotId=dpIdNameArray[0];
+			
+			$.ajax({
+			  url: base_url+'default/get_depot_store_all_list?depotid='+depotId,
+			  success: function(resStr2) {
+				  storeListStr=resStr2;
+			  }
+			});
+			
+		}		
+	});
+	
+//========================depot/Branch	
+    
+	$('#pri_depot_id').keyup(function(){	
+		
+		//-------------------------
+		var ref_list = scListStr.split(',');				
+		var ref_name=$("#pri_depot_id").val();
+		
+		//---------------- auto complete combo list
+		var ref_list_new=new Array();
+		lc=0;
+		i =0;
+		var refStr="";				
+		while (i < ref_list.length)
+		{
+			refStr=ref_list[i];
+			i=i+1;					
+			var res=refStr.toUpperCase().match(ref_name.toUpperCase());
+			if (res!=null){
+				ref_list_new[lc]=refStr;
+				lc=lc+1;
+				if (lc==30){
+					break;
+				};
+			}else{
+				continue;
+			}					
+		};
+		//alert (ref_list_new);
+		
+		//-------------- auto complete source
+		$( "input#pri_depot_id" ).autocomplete({
+			source: ref_list_new
+		});
+	
+  });  
+  
+  	  //------------Depot Store
+	  $('#pri_store_id').keyup(function(){	
+		
+		//-------------------------
+		var ref_list = storeListStr.split(',');				
+		var ref_name=$("#pri_store_id").val();
+		
+		//---------------- auto complete combo list
+		var ref_list_new=new Array();
+		lc=0;
+		i =0;
+		var refStr="";				
+		while (i < ref_list.length)
+		{
+			refStr=ref_list[i];
+			i=i+1;					
+			var res=refStr.toUpperCase().match(ref_name.toUpperCase());
+			if (res!=null){
+				ref_list_new[lc]=refStr;
+				lc=lc+1;
+				if (lc==30){
+					break;
+				};
+			}else{
+				continue;
+			}					
+		};
+		//alert (ref_list_new);
+		
+		//-------------- auto complete source
+		$( "input#pri_store_id" ).autocomplete({
+			source: ref_list_new
+		});
+		
+	  });
+
+//========================depot/Branch	
+    
+	$('#pri_depot_id_from').keyup(function(){	
+		
+		//-------------------------
+		var ref_list = allDepotListStr.split(',');				
+		var ref_name=$("#pri_depot_id_from").val();
+		
+		//---------------- auto complete combo list
+		var ref_list_new=new Array();
+		lc=0;
+		i =0;
+		var refStr="";				
+		while (i < ref_list.length)
+		{
+			refStr=ref_list[i];
+			i=i+1;					
+			var res=refStr.toUpperCase().match(ref_name.toUpperCase());
+			if (res!=null){
+				ref_list_new[lc]=refStr;
+				lc=lc+1;
+				if (lc==30){
+					break;
+				};
+			}else{
+				continue;
+			}					
+		};
+		//alert (ref_list_new);
+		
+		//-------------- auto complete source
+		$( "input#pri_depot_id_from" ).autocomplete({
+			source: ref_list_new
+		});
+	
+  });  
+  
+
+//------------------------- Out Standing
+	$('#out_st_depot_id').blur(function(){
+		var depotIdName=$('#out_st_depot_id').val();
+		if(depotIdName!=''){
+			var dpIdNameArray=depotIdName.split("|");
+			
+			var depotId=dpIdNameArray[0];
+			
+			$.ajax({
+			  url: base_url+'default/get_depot_store_all_list?depotid='+depotId,
+			  success: function(resStr2) {
+				  storeListStr=resStr2;
+			  }
+			});
+			
+			//-----customer
+			$.ajax({
+			  url: base_url+'default/get_depot_client_all_list?depot='+depotId,
+			  success: function(resStr) {
+				  clientListStr=resStr;
+			  }
+			});
+			
+			//-----delivery person
+			$.ajax({
+			  url: base_url+'default/get_depot_delivery_man_list?depot='+depotId,
+			  success: function(resStr) {
+				  delManListStr=resStr
+			  }
+			});
+			
+			
+		}		
+	});
+
+
+  
+//========================depot/Branch	
+     
+	$('#out_st_depot_id').keyup(function(){	
+		
+		//-------------------------
+		var ref_list = scListStr.split(',');				
+		var ref_name=$("#out_st_depot_id").val();
+		
+		//---------------- auto complete combo list
+		var ref_list_new=new Array();
+		lc=0;
+		i =0;
+		var refStr="";				
+		while (i < ref_list.length)
+		{
+			refStr=ref_list[i];
+			i=i+1;					
+			var res=refStr.toUpperCase().match(ref_name.toUpperCase());
+			if (res!=null){
+				ref_list_new[lc]=refStr;
+				lc=lc+1;
+				if (lc==30){
+					break;
+				};
+			}else{
+				continue;
+			}					
+		};
+		//alert (ref_list_new);
+		
+		//-------------- auto complete source
+		$( "input#out_st_depot_id" ).autocomplete({
+			source: ref_list_new
+		});
+	
+  });  
+  
+  
+  
+  	  //------------Depot Store
+	  $('#out_st_store_id').keyup(function(){	
+		
+		//-------------------------
+		var ref_list = storeListStr.split(',');				
+		var ref_name=$("#out_st_store_id").val();
+		
+		//---------------- auto complete combo list
+		var ref_list_new=new Array();
+		lc=0;
+		i =0;
+		var refStr="";				
+		while (i < ref_list.length)
+		{
+			refStr=ref_list[i];
+			i=i+1;					
+			var res=refStr.toUpperCase().match(ref_name.toUpperCase());
+			if (res!=null){
+				ref_list_new[lc]=refStr;
+				lc=lc+1;
+				if (lc==30){
+					break;
+				};
+			}else{
+				continue;
+			}					
+		};
+		//alert (ref_list_new);
+		
+		//-------------- auto complete source
+		$( "input#out_st_store_id" ).autocomplete({
+			source: ref_list_new
+		});
+		
+	  });
+
+
+	//------------- delivery man
+	
+	$('#out_st_delivery_man').keyup(function(){	
+		
+		//-------------------------
+		var ref_list = delManListStr.split(',');				
+		var ref_name=$("#out_st_delivery_man").val();
+		
+		//---------------- auto complete combo list
+		var ref_list_new=new Array();
+		lc=0;
+		i =0;
+		var refStr="";				
+		while (i < ref_list.length)
+		{
+			refStr=ref_list[i];
+			i=i+1;					
+			var res=refStr.toUpperCase().match(ref_name.toUpperCase());
+			if (res!=null){
+				ref_list_new[lc]=refStr;
+				lc=lc+1;
+				if (lc==30){
+					break;
+				};
+			}else{
+				continue;
+			}					
+		};
+		//alert (ref_list_new);
+		
+		//-------------- auto complete source
+		$( "input#out_st_delivery_man" ).autocomplete({
+			source: ref_list_new
+		});
+		
+	});	
+	
+	//------------- customer	    
+	 	
+	$('#out_st_customer').keyup(function(){	
+		
+		//-------------------------
+		var ref_list = clientListStr.split(',');				
+		var ref_name=$("#out_st_customer").val();
+		
+		//---------------- auto complete combo list
+		var ref_list_new=new Array();
+		lc=0;
+		i =0;
+		var refStr="";				
+		while (i < ref_list.length)
+		{
+			refStr=ref_list[i];
+			i=i+1;					
+			var res=refStr.toUpperCase().match(ref_name.toUpperCase());
+			if (res!=null){
+				ref_list_new[lc]=refStr;
+				lc=lc+1;
+				if (lc==30){
+					break;
+				};
+			}else{
+				continue;
+			}					
+		};
+		
+		//-------------- auto complete source
+		$( "input#out_st_customer" ).autocomplete({
+			source: ref_list_new
+		});
+		
+	});	
+	//---------------- territory		
+	
+    var outStTerritoryListStr="";
+	$.ajax({
+		  url: base_url+'default/get_area_list',
+		  success: function(resStr) {
+			  outStTerritoryListStr=resStr
+		  }
+		});
+ 
+	$('#out_st_territory').keyup(function(){	
+		
+		//-------------------------
+		var ref_list = outStTerritoryListStr.split(',');				
+		var ref_name=$("#out_st_territory").val();
+		
+		//---------------- auto complete combo list
+		var ref_list_new=new Array();
+		lc=0;
+		i =0;
+		var refStr="";				
+		while (i < ref_list.length)
+		{
+			refStr=ref_list[i];
+			i=i+1;					
+			var res=refStr.toUpperCase().match(ref_name.toUpperCase());
+			if (res!=null){
+				ref_list_new[lc]=refStr;
+				lc=lc+1;
+				if (lc==30){
+					break;
+				};
+			}else{
+				continue;
+			}					
+		};
+		//alert (ref_list_new);
+		
+		//-------------- auto complete source
+		$( "input#out_st_territory" ).autocomplete({
+			source: ref_list_new
+		});
+	});
+
+
+
+
+	//---------------- RSM / FM		
+	
+/*    var outStRSMFMListStr="";
+	$.ajax({
+		  url: base_url+'default/get_supervisor_list',
+		  success: function(resStr) {
+			  outStTerritoryListStr=resStr
+		  }
+		});
+ 
+	$('#out_st_rsm_fm').keyup(function(){	
+		
+		//-------------------------
+		var ref_list = outStTerritoryListStr.split(',');				
+		var ref_name=$("#out_st_rsm_fm").val();
+		
+		//---------------- auto complete combo list
+		var ref_list_new=new Array();
+		lc=0;
+		i =0;
+		var refStr="";				
+		while (i < ref_list.length)
+		{
+			refStr=ref_list[i];
+			i=i+1;					
+			var res=refStr.toUpperCase().match(ref_name.toUpperCase());
+			if (res!=null){
+				ref_list_new[lc]=refStr;
+				lc=lc+1;
+				if (lc==30){
+					break;
+				};
+			}else{
+				continue;
+			}					
+		};
+		//alert (ref_list_new);
+		
+		//-------------- auto complete source
+		$( "input#out_st_rsm_fm" ).autocomplete({
+			source: ref_list_new
+		});	
+	});*/
+
+	//---------------- MSO		
+	
+    var outStMSOListStr="";
+	$.ajax({
+		  url: base_url+'default/get_rep_list',
+		  success: function(resStr) {
+			  outStMSOListStr=resStr
+		  }
+		});
+ 
+	$('#out_st_mso').keyup(function(){	
+		
+		//-------------------------
+		var ref_list = outStMSOListStr.split(',');				
+		var ref_name=$("#out_st_mso").val();
+		
+		//---------------- auto complete combo list
+		var ref_list_new=new Array();
+		lc=0;
+		i =0;
+		var refStr="";				
+		while (i < ref_list.length)
+		{
+			refStr=ref_list[i];
+			i=i+1;					
+			var res=refStr.toUpperCase().match(ref_name.toUpperCase());
+			if (res!=null){
+				ref_list_new[lc]=refStr;
+				lc=lc+1;
+				if (lc==30){
+					break;
+				};
+			}else{
+				continue;
+			}					
+		};
+		//alert (ref_list_new);
+		
+		//-------------- auto complete source
+		$( "input#out_st_mso" ).autocomplete({
+			source: ref_list_new
+		});	
+	});	
+		
+		
+
+//------------------------- Collection
+	$('#coll_depot_id').blur(function(){
+		
+		var depotIdName=$('#coll_depot_id').val();
+		if(depotIdName!=''){
+			var dpIdNameArray=depotIdName.split("|");
+			
+			var depotId=dpIdNameArray[0];
+			
+			$.ajax({
+			  url: base_url+'default/get_depot_store_all_list?depotid='+depotId,
+			  success: function(resStr2) {
+				  storeListStr=resStr2;
+			  }
+			});
+			
+		}		
+	});
+
+
+
+//========================depot/Branch	
+    
+	$('#coll_depot_id').keyup(function(){	
+		
+		//-------------------------
+		var ref_list = scListStr.split(',');				
+		var ref_name=$("#coll_depot_id").val();
+		
+		//---------------- auto complete combo list
+		var ref_list_new=new Array();
+		lc=0;
+		i =0;
+		var refStr="";				
+		while (i < ref_list.length)
+		{
+			refStr=ref_list[i];
+			i=i+1;					
+			var res=refStr.toUpperCase().match(ref_name.toUpperCase());
+			if (res!=null){
+				ref_list_new[lc]=refStr;
+				lc=lc+1;
+				if (lc==30){
+					break;
+				};
+			}else{
+				continue;
+			}					
+		};
+		//alert (ref_list_new);
+		
+		//-------------- auto complete source
+		$( "input#coll_depot_id" ).autocomplete({
+			source: ref_list_new
+		});
+	
+  });  
+  
+  
+  
+  	  //------------Depot Store
+	  $('#coll_store_id').keyup(function(){	
+		
+		//-------------------------
+		var ref_list = storeListStr.split(',');				
+		var ref_name=$("#coll_store_id").val();
+		
+		//---------------- auto complete combo list
+		var ref_list_new=new Array();
+		lc=0;
+		i =0;
+		var refStr="";				
+		while (i < ref_list.length)
+		{
+			refStr=ref_list[i];
+			i=i+1;					
+			var res=refStr.toUpperCase().match(ref_name.toUpperCase());
+			if (res!=null){
+				ref_list_new[lc]=refStr;
+				lc=lc+1;
+				if (lc==30){
+					break;
+				};
+			}else{
+				continue;
+			}					
+		};
+		//alert (ref_list_new);
+		
+		//-------------- auto complete source
+		$( "input#coll_store_id" ).autocomplete({
+			source: ref_list_new
+		});
+		
+	  });
+
+
+	//------------- delivery man
+	
+    var collDelManListStr="";
+	$.ajax({
+		  url: base_url+'default/get_delivery_man_list',
+		  success: function(resStr) {
+			  collDelManListStr=resStr
+		  }
+		});
+ 
+	$('#coll_delivery_man').keyup(function(){	
+		
+		//-------------------------
+		var ref_list = collDelManListStr.split(',');				
+		var ref_name=$("#coll_delivery_man").val();
+		
+		//---------------- auto complete combo list
+		var ref_list_new=new Array();
+		lc=0;
+		i =0;
+		var refStr="";				
+		while (i < ref_list.length)
+		{
+			refStr=ref_list[i];
+			i=i+1;					
+			var res=refStr.toUpperCase().match(ref_name.toUpperCase());
+			if (res!=null){
+				ref_list_new[lc]=refStr;
+				lc=lc+1;
+				if (lc==30){
+					break;
+				};
+			}else{
+				continue;
+			}					
+		};
+		//alert (ref_list_new);
+		
+		//-------------- auto complete source
+		$( "input#coll_delivery_man" ).autocomplete({
+			source: ref_list_new
+		});
+		
+	});	
+		
+	//---------------- territory		
+	
+    var collTerritoryListStr="";
+	$.ajax({
+		  url: base_url+'default/get_area_list',
+		  success: function(resStr) {
+			  collTerritoryListStr=resStr
+		  }
+		});
+ 
+	$('#coll_territory').keyup(function(){	
+		
+		//-------------------------
+		var ref_list = collTerritoryListStr.split(',');				
+		var ref_name=$("#coll_territory").val();
+		
+		//---------------- auto complete combo list
+		var ref_list_new=new Array();
+		lc=0;
+		i =0;
+		var refStr="";				
+		while (i < ref_list.length)
+		{
+			refStr=ref_list[i];
+			i=i+1;					
+			var res=refStr.toUpperCase().match(ref_name.toUpperCase());
+			if (res!=null){
+				ref_list_new[lc]=refStr;
+				lc=lc+1;
+				if (lc==30){
+					break;
+				};
+			}else{
+				continue;
+			}					
+		};
+		//alert (ref_list_new);
+		
+		//-------------- auto complete source
+		$( "input#coll_territory" ).autocomplete({
+			source: ref_list_new
+		});
+	});		
+
+	//---------------- MSO		
+	
+    var collMSOListStr="";
+	$.ajax({
+		  url: base_url+'default/get_rep_list',
+		  success: function(resStr) {
+			  collMSOListStr=resStr
+		  }
+		});
+ 
+	$('#coll_mso').keyup(function(){	
+		
+		//-------------------------
+		var ref_list = outStMSOListStr.split(',');				
+		var ref_name=$("#coll_mso").val();
+		
+		//---------------- auto complete combo list
+		var ref_list_new=new Array();
+		lc=0;
+		i =0;
+		var refStr="";				
+		while (i < ref_list.length)
+		{
+			refStr=ref_list[i];
+			i=i+1;					
+			var res=refStr.toUpperCase().match(ref_name.toUpperCase());
+			if (res!=null){
+				ref_list_new[lc]=refStr;
+				lc=lc+1;
+				if (lc==30){
+					break;
+				};
+			}else{
+				continue;
+			}					
+		};
+		//alert (ref_list_new);
+		
+		//-------------- auto complete source
+		$( "input#coll_mso" ).autocomplete({
+			source: ref_list_new
+		});	
+		
+  });  
+
+
+
+//======================================== stp
+	$('#stp_depot_id').blur(function(){
+		
+		var depotIdName=$('#stp_depot_id').val();
+		if(depotIdName!=''){
+			var dpIdNameArray=depotIdName.split("|");
+			
+			var depotId=dpIdNameArray[0];
+			
+			$.ajax({
+			  url: base_url+'default/get_depot_store_all_list?depotid='+depotId,
+			  success: function(resStr2) {
+				  storeListStr=resStr2;
+			  }
+			});
+			
+		}		
+	});
+
+//========================depot/Branch	
+     
+	$('#stp_depot_id').keyup(function(){	
+		
+		//-------------------------
+		var ref_list = scListStr.split(',');				
+		var ref_name=$("#stp_depot_id").val();
+		
+		//---------------- auto complete combo list
+		var ref_list_new=new Array();
+		lc=0;
+		i =0;
+		var refStr="";				
+		while (i < ref_list.length)
+		{
+			refStr=ref_list[i];
+			i=i+1;					
+			var res=refStr.toUpperCase().match(ref_name.toUpperCase());
+			if (res!=null){
+				ref_list_new[lc]=refStr;
+				lc=lc+1;
+				if (lc==30){
+					break;
+				};
+			}else{
+				continue;
+			}					
+		};
+		//alert (ref_list_new);
+		
+		//-------------- auto complete source
+		$( "input#stp_depot_id" ).autocomplete({
+			source: ref_list_new
+		});
+	
+  });  
+  
+  
+  
+  	  //------------Depot Store
+	  $('#stp_store_id').keyup(function(){	
+		
+		//-------------------------
+		var ref_list = storeListStr.split(',');				
+		var ref_name=$("#stp_store_id").val();
+		
+		//---------------- auto complete combo list
+		var ref_list_new=new Array();
+		lc=0;
+		i =0;
+		var refStr="";				
+		while (i < ref_list.length)
+		{
+			refStr=ref_list[i];
+			i=i+1;					
+			var res=refStr.toUpperCase().match(ref_name.toUpperCase());
+			if (res!=null){
+				ref_list_new[lc]=refStr;
+				lc=lc+1;
+				if (lc==30){
+					break;
+				};
+			}else{
+				continue;
+			}					
+		};
+		//alert (ref_list_new);
+		
+		//-------------- auto complete source
+		$( "input#stp_store_id" ).autocomplete({
+			source: ref_list_new
+		});
+		
+	  });
+
+
+//------------------------- Customer 
+ 
+	$('#cus_depot_id').keyup(function(){	
+		
+		//-------------------------
+		var ref_list = scListStr.split(',');				
+		var ref_name=$("#cus_depot_id").val();
+		
+		//---------------- auto complete combo list
+		var ref_list_new=new Array();
+		lc=0;
+		i =0;
+		var refStr="";				
+		while (i < ref_list.length)
+		{
+			refStr=ref_list[i];
+			i=i+1;					
+			var res=refStr.toUpperCase().match(ref_name.toUpperCase());
+			if (res!=null){
+				ref_list_new[lc]=refStr;
+				lc=lc+1;
+				if (lc==30){
+					break;
+				};
+			}else{
+				continue;
+			}					
+		};
+		//alert (ref_list_new);
+		
+		//-------------- auto complete source
+		$( "input#cus_depot_id" ).autocomplete({
+			source: ref_list_new
+		});
+	
+  });  
+  
+
+
+
+
+//------------------------- Sales Nadira
+	
+	$('#sales_depot_id_sales').keyup(function(){	
+		
+		//-------------------------
+		var ref_list = scListStr.split(',');				
+		var ref_name=$("#sales_depot_id_sales").val();
+		
+		//---------------- auto complete combo list
+		var ref_list_new=new Array();
+		lc=0;
+		i =0;
+		var refStr="";				
+		while (i < ref_list.length)
+		{
+			refStr=ref_list[i];
+			i=i+1;					
+			var res=refStr.toUpperCase().match(ref_name.toUpperCase());
+			if (res!=null){
+				ref_list_new[lc]=refStr;
+				lc=lc+1;
+				if (lc==30){
+					break;
+				};
+			}else{
+				continue;
+			}					
+		};
+		//alert (ref_list_new);
+		
+		//-------------- auto complete source
+		$( "input#sales_depot_id_sales" ).autocomplete({
+			source: ref_list_new
+		});
+	
+  });
+  
+  //=======================Nadira
+//========================depot/Branch	
+
+ 
+	$('#sales_depot_id_sales').keyup(function(){	
+		
+		//-------------------------
+		var ref_list = scListStr.split(',');				
+		var ref_name=$("#sales_depot_id_sales").val();
+		
+		//---------------- auto complete combo list
+		var ref_list_new=new Array();
+		lc=0;
+		i =0;
+		var refStr="";				
+		while (i < ref_list.length)
+		{
+			refStr=ref_list[i];
+			i=i+1;					
+			var res=refStr.toUpperCase().match(ref_name.toUpperCase());
+			if (res!=null){
+				ref_list_new[lc]=refStr;
+				lc=lc+1;
+				if (lc==30){
+					break;
+				};
+			}else{
+				continue;
+			}					
+		};
+		//alert (ref_list_new);
+		
+		//-------------- auto complete source
+		$( "input#sales_depot_id_sales" ).autocomplete({
+			source: ref_list_new
+		});
+	
+  });  
+  
+  
+  
+  	  //------------Depot Store
+	  $('#store_id_sales').keyup(function(){	
+		
+		//-------------------------
+		var ref_list = storeListStr.split(',');				
+		var ref_name=$("#store_id_sales").val();
+		
+		//---------------- auto complete combo list
+		var ref_list_new=new Array();
+		lc=0;
+		i =0;
+		var refStr="";				
+		while (i < ref_list.length)
+		{
+			refStr=ref_list[i];
+			i=i+1;					
+			var res=refStr.toUpperCase().match(ref_name.toUpperCase());
+			if (res!=null){
+				ref_list_new[lc]=refStr;
+				lc=lc+1;
+				if (lc==30){
+					break;
+				};
+			}else{
+				continue;
+			}					
+		};
+		//alert (ref_list_new);
+		
+		//-------------- auto complete source
+		$( "input#store_id_sales" ).autocomplete({
+			source: ref_list_new
+		});
+		
+	  });
+
+
+	//------------- delivery man
+	
+	$('#dman_id_sales').keyup(function(){	
+		
+		//-------------------------
+		var ref_list = delManListStr.split(',');				
+		var ref_name=$("#dman_id_sales").val();
+		
+		//---------------- auto complete combo list
+		var ref_list_new=new Array();
+		lc=0;
+		i =0;
+		var refStr="";				
+		while (i < ref_list.length)
+		{
+			refStr=ref_list[i];
+			i=i+1;					
+			var res=refStr.toUpperCase().match(ref_name.toUpperCase());
+			if (res!=null){
+				ref_list_new[lc]=refStr;
+				lc=lc+1;
+				if (lc==30){
+					break;
+				};
+			}else{
+				continue;
+			}					
+		};
+		//alert (ref_list_new);
+		
+		//-------------- auto complete source
+		$( "input#dman_id_sales" ).autocomplete({
+			source: ref_list_new
+		});
+		
+	});	
+	//===============Nadira
+  
+
+
+});
+
+</script>
+
+
+
+
+
+<style>
+
+	.rptlist{font-size:15px; height:auto; }
+
+	.rptlist:hover{ height:auto;}
+
+	.rptul{color:#0076AE; background-color:#F0F0F0;}
+
+	.rptdiv{  font-size:16px; color:#0076AE; background-color:#F0F0F0;}
+
+	
+
+	#accordionReport ul{	list-style-type:none;margin:0; font-size:15px; }
+
+	#accordionReport li{ margin:1px; border-radius:5px; border-bottom:1px solid #CCCCCC; font-size:15px; background-color:#F7F7F7; height:20px; padding:5px 2px 2px 15px;}/*:#F7F7F7*/
+
+	
+
+	#accordionReport li:hover{ height:21px;background-color:#F5F5F5; font-size:15px;}
+
+</style>
+
+
+
+</head>
+
+<body id="htmlbody">
+
+<!--<input type="hidden" value="{{#=salesTrendList}}" id="chartDataSalesTrend"/>-->
+
+
+
+{{currYear=str(date_fixed)[0:4]}}
+
+{{currMonth=str(date_fixed)[5:7]}}
+
+
+
+<!--Form Title -->
+
+<table width="100%" border="0" cellspacing="0" cellpadding="0" style="background-color:#FFFFFF;">
+
+  <tr height="30px">
+
+    <td><div class="blackCatTitle">Stock &amp; Collection</div></td>
+
+  </tr>
+
+  <tr >
+
+    <td height="1px" style="background-color:#CCCCCC;"></td>
+
+  </tr>
+
+</table>
+
+<!--Form Content -->
+
+<table width="100%" border="0" cellspacing="0" cellpadding="0" class="page_color">
+
+  
+
+  <tr height="20px">
+
+  	<td width="10px"></td>
+
+  	<td> </td>	
+
+  </tr>
+
+  
+
+  <tr >
+
+    <td width="10px"></td>
+
+	<td valign="top">					
+
+		 <div id="accordionReport"  style="width:90%">
+
+		 	
+
+            <div  class="rptdiv">
+
+                <ul class="rptul">
+
+                    <li class="rptlist"> Stock</li>
+
+                </ul>
+
+		   </div>
+
+		   <div >  
+
+           
+
+           <table width="900" border="0" cellpadding="0" cellspacing="0">
+
+				<form name="form2" id="form2" action="{{=URL(c='report',f='home')}}" target="_blank">
+
+                <tr>
+
+                	<td valign="top">
+
+                   	  <table width="550" height="200px;" style="background-color:#F8F8F8;">
+
+                        	
+
+                          <tr style="background-color:#E9E9E9; height:25px">
+
+                              <td width="10">&nbsp;</td>
+
+                              <td width="150">&nbsp;</td>
+
+                              <td width="2">&nbsp;</td>
+
+                              <td width="400">&nbsp;</td>
+
+                          </tr>
+
+                          <tr >
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                          </tr>
+                          <tr >
+
+            
+
+                            <td width="10">&nbsp;</td>
+
+                            <td>Branch/Depot</td>
+
+                            <td>:</td>
+
+                            <td width="400">
+                            {{if (session.user_type=='Depot' and session.user_depot_category=='DEPOT'):}}
+                                <input type="text" name="depot_id" id="depot_id" size="25" value="{{=session.depot_id}}|{{=session.user_depot_name}}" placeholder="Select Branch/Depot" autocomplete="off" style="width:288px"/>
+                            {{else:}}
+                              <input  name="depot_id" type="text" id="depot_id"   size="25" value="" placeholder="Select Branch/Depot" autocomplete="off" style="width:288px"/>
+                             {{pass}}
+                            </td>
+
+                          </tr>
+
+                          <tr >
+
+                              <td width="10">&nbsp;</td>
+
+                              <td>Branch Store</td>
+
+                              <td>:</td>
+
+                              <td width="400"><input  name="store_id" type="text" id="store_id" size="25" value="" placeholder="Select Branch/Depot Store" autocomplete="off" style="width:288px"/></td>
+
+                          </tr>
+
+                            <tr >
+
+                              <td width="10">&nbsp;</td>
+
+                              <td>&nbsp;</td>
+
+                              <td>&nbsp;</td>
+
+                              <td width="400">&nbsp;</td>
+
+                          </tr>
+
+                            <tr >
+
+                              <td width="10">&nbsp;</td>
+
+                              <td>&nbsp;</td>
+
+                              <td>&nbsp;</td>
+
+                              <td width="400">&nbsp;</td>
+
+                          </tr>
+
+                            <tr >
+
+                              <td width="10">&nbsp;</td>
+
+                              <td>&nbsp;</td>
+
+                              <td>&nbsp;</td>
+
+                              <td width="400">&nbsp;</td>
+
+                          </tr>
+
+                      </table>
+
+                    
+
+                    
+
+                  </td>
+
+                    <td valign="top">
+
+                   	  <table width="350">
+
+                        	
+
+                            <tr style="background-color:#E9E9E9; height:25px">
+
+                              <td>&nbsp;</td>
+
+                            </tr>
+
+                            <tr >
+
+                                <td><input type="submit" style="width:350px" name="btn_stock_status_batch" value="1.1 Stock Status with batch" title="Depot/branch,Store"/></td>
+
+                            </tr>  
+
+                            <tr >
+
+                              <td><input type="submit" name="btn_stock_status_without_batch" style="width:350px;" value="1.2 Stock Status Without Batch" title="Depot/branch,Store"/></td>
+
+                            </tr>
+                            <tr style="height:25px" >
+
+                              <td></td>
+
+                            </tr>
+
+                            <tr >
+
+                              <td>&nbsp;</td>
+
+                            </tr>
+
+
+                    </table>
+
+                    
+
+                    </td>                    
+
+                </tr>
+
+                
+
+               </form>
+
+            </table>
+            <br>
+          
+           <table width="900" border="0" cellpadding="0" cellspacing="0">
+           	<tr><td>
+           
+         <table width="550" style="background-color:#F8F8F8;">
+         
+          <form name="form1" id="form1" action="{{=URL('report_menu','report_home')}}" target="_blank">
+              <tr>
+                <td width="10">&nbsp;</td>
+                <td width="150" height="27" align="left">&nbsp;</td>
+                <td>&nbsp;</td>
+                <td align="right">&nbsp;</td>
+                <td align="right">&nbsp;</td>
+              </tr>
+              <tr>
+                <td width="10">&nbsp;</td>
+                <td width="150" height="27" align="left"><span style="font-family:Arial, Helvetica, sans-serif; font-size:14px">Branch Wise Stock&nbsp;&nbsp;</span> </td>
+        		
+                <td width="250">:
+                {{if (session.user_type=='Depot' and session.user_depot_category=='DEPOT'):}}
+                <input type="text" name="depot_id_name" id="depot_id_name" style="width:250px" value="{{=session.depot_id}}|{{=session.user_depot_name}}" placeholder="Select Branch ID/Name" autocomplete="off"/>
+                {{else:}}
+                <input type="text" name="depot_id_name" id="depot_id_name" style="width:250px" value="" placeholder="Select Branch ID/Name" autocomplete="off"/>
+                {{pass}}
+                </td>
+        		
+                <td width="80" align="right">        
+                  <input type="submit" style="width:50px" name="btn_depot_wise_stock" value="Show" title="Depot wise stock report"/>          </td>
+        		<td width="10" align="right">&nbsp;</td>        		
+              </tr>
+        
+              <tr>
+        
+                <td width="10">&nbsp;</td>
+        
+                <td width="150" height="27" align="left"><span style="font-family:Arial, Helvetica, sans-serif; font-size:14px">Item Wise Stock&nbsp;&nbsp;</span></td>
+        
+                <td width="250">:     
+                <input type="text" name="item_id_name" id="item_id_name" style="width:250px" value="" placeholder="Select Item ID/Name" autocomplete="off"/>
+        		</td>
+        
+                <td width="80" align="right"><input type="submit" style="width:50px" name="btn_item_wise_stock" value="Show" title="Item wise stock report"/></td>
+        
+                <td width="10" align="right">&nbsp;</td>
+        
+              </tr>
+        
+              <tr>
+        
+                <td width="10">&nbsp;</td>
+        
+                <td width="150" align="left">&nbsp;</td>
+        
+                <td width="250">&nbsp;</td>
+        
+                <td width="80" align="right">&nbsp;</td>
+        
+                <td width="10" align="right">&nbsp;</td>
+        
+              </tr>
+        
+            </form>        
+        </table>
+        </td>
+        <td>&nbsp;</td>
+        </tr>
+        </table>
+
+		   </div>
+           <div  class="rptdiv">
+
+                <ul class="rptul">
+
+                    <li class="rptlist"> Stock Movement</li>
+
+                </ul>
+
+		   </div>
+
+		   <div >  
+
+           
+
+           <table width="900" border="0" cellpadding="0" cellspacing="0">
+
+				<form name="form2" id="form2" action="{{=URL(c='report',f='home')}}" target="_blank">
+
+                <tr>
+
+                	<td valign="top">
+
+                   	  <table width="550" height="300px;" style="background-color:#F8F8F8;">
+
+                        	
+
+                          <tr style="background-color:#E9E9E9; height:25px">
+
+                              <td width="10">&nbsp;</td>
+
+                              <td width="150">&nbsp;</td>
+
+                              <td width="2">&nbsp;</td>
+
+                              <td width="400">&nbsp;</td>
+
+                          </tr>
+
+                          <tr >
+                            <td>&nbsp;</td>
+                            <td>Date Range</td>
+                            <td>:</td>
+                            <td><span style="vertical-align:middle;">{{=search_form.custom.widget.from_dt}}&nbsp;To&nbsp;{{=search_form.custom.widget.to_dt}}</span></td>
+                          </tr>
+                          <tr >
+
+            
+
+                            <td width="10">&nbsp;</td>
+
+                            <td>Branch/Depot</td>
+
+                            <td>:</td>
+
+                            <td width="400">
+                            {{if (session.user_type=='Depot' and session.user_depot_category=='DEPOT'):}}
+                                <input type="text" name="pri_depot_id" id="pri_depot_id" size="25" value="{{=session.depot_id}}|{{=session.user_depot_name}}" placeholder="Select Branch/Depot" autocomplete="off" style="width:288px"/>
+                            {{else:}}
+                              <input  name="pri_depot_id" type="text" id="pri_depot_id" size="25" value="" placeholder="Select Branch/Depot" autocomplete="off" style="width:288px"/>
+                            {{pass}}
+                            </td>
+
+                          </tr>
+
+                          <tr >
+
+                              <td width="10">&nbsp;</td>
+
+                              <td>Branch Store</td>
+
+                              <td>:</td>
+
+                              <td width="400"><input  name="pri_store_id" type="text" id="pri_store_id" size="25" value="" placeholder="Select Branch/Depot Store" autocomplete="off" style="width:288px"/></td>
+
+                          </tr>
+
+                            <tr >
+
+                              <td width="10">&nbsp;</td>
+
+                              <td>&nbsp;</td>
+
+                              <td>&nbsp;</td>
+
+                              <td width="400">&nbsp;</td>
+
+                          </tr>
+
+                            <tr >
+
+                              <td width="10">&nbsp;</td>
+
+                              <td>Receipt From Branch/Depot(24.1-3)</td>
+
+                              <td>:</td>
+
+                              <td width="400">
+                              <input  name="pri_depot_id_from" type="text" id="pri_depot_id_from" size="25" value="" placeholder="Select Branch/Depot (Optional)" autocomplete="off" style="width:288px"/>
+                              </td>
+                          	</tr>
+
+                            <tr >
+
+                              <td width="10">&nbsp;</td>
+
+                              <td>&nbsp;</td>
+
+                              <td>&nbsp;</td>
+
+                              <td width="400">&nbsp;</td>
+
+                          </tr>
+                            <tr >
+                              <td>&nbsp;</td>
+                              <td>&nbsp;</td>
+                              <td>&nbsp;</td>
+                              <td>&nbsp;</td>
+                            </tr>
+
+                      </table>
+
+                    
+
+                    
+
+                  </td>
+
+                    <td valign="top">
+
+                    	<table width="350">
+
+                        	
+
+                            <tr style="background-color:#E9E9E9; height:25px">
+
+                              <td>&nbsp;</td>
+
+                            </tr>
+
+                            <tr >
+
+                                <td><input type="submit" style="width:350px" name="btn_issue" value="Issue List" title="Date Range,Depot/branch,Store"/></td>
+
+                            </tr>  
+
+                            <tr >
+
+                              <td><input type="submit" name="btn_issue_item_wise" style="width:350px;" value="Issue Item Wise" title="Date Range,Depot/branch,Store"/></td>
+
+                            </tr>
+                            <tr style="height:25px" >
+
+                              <td></td>
+
+                            </tr>
+                            
+                            <tr >
+
+                              <td><input type="submit" name="btn_in_transit" style="width:350px;" value="In Transit" title=""/></td>
+
+                            </tr>
+                            <tr style="height:25px" >
+
+                              <td></td>
+
+                            </tr>
+                            
+                            <tr >
+
+                              <td><input type="submit" name="btn_goods_receive_list" style="width:350px;" value="Receive List Batch Wise" title="Date Range,Depot/branch,Store"/></td>
+
+                            </tr>
+                            <tr >
+
+                              <td><input type="submit" name="btn_goods_receive_summary" style="width:350px;" value="Receive List Item Wise" title="Date Range,Depot/branch,Store"/></td>
+
+                            </tr>
+                            <tr style="height:25px" >
+
+                              <td></td>
+
+                            </tr>
+                            <tr >
+
+                              <td><input type="submit" name="btn_transit_dispute" style="width:350px;" value="Transit Dispute List" title="Date Range,Depot/branch,Store"/></td>
+
+                            </tr>
+                            <tr >
+
+                              <td><input type="submit" name="btn_transit_dispute_item_wise" style="width:350px;" value="Transit Dispute Item Wise" title="Date Range,Depot/branch,Store"/></td>
+
+                            </tr>
+                          <tr style="height:25px" >
+
+                              <td></td>
+
+                            </tr>
+                            <tr >
+
+                              <td><input type="submit" name="btn_adjustment" style="width:350px;" value="Adjustment List" title="Date Range,Depot/branch,Store"/></td>
+
+                            </tr>
+                            <tr >
+
+                              <td><input type="submit" name="btn_adjustment_item_wise" style="width:350px;" value="Adjustment Item Wise" title="Date Range,Depot/branch,Store"/></td>
+
+                            </tr>
+                            <tr style="height:25px" >
+
+                              <td></td>
+
+                            </tr>
+                            <tr >
+
+                              <td><input type="submit" name="btn_adj_sum_and_details" style="width:350px;" value="23 Adjustment Summary And Details" title="Date Range,Depot/branch,Store"/></td>
+
+                            </tr>
+                            <tr >
+                              <td><input type="submit" name="btn_adj_sum" style="width:350px;" value="23.1 Adjustment Summary" title="Date Range,Depot/branch,Store"/></td>
+							</tr>
+                             <tr >
+                              <td><input type="submit" name="btn_adj_details" style="width:350px;" value="23.2 Adjustment Details" title="Date Range,Depot/branch,Store"/></td>
+							</tr>
+                            <tr >
+                              <td><input type="submit" name="btn_receipt_summery" style="width:350px;" value="24.1 Receipt Summary" title="Date Range,Depot/branch,Store"/></td>
+							</tr>
+                            <tr >
+                              <td><input type="submit" name="btn_receipt_details" style="width:350px;" value="24.2 Receipt Details" title="Date Range,Depot/branch,Store" /></td>
+							</tr>
+                            <tr >
+                              <td><input type="submit" name="btn_receipt_summery_itemwise" style="width:350px;" value="24.3 Receipt Summary Item Wise" title="Date Range,Depot/branch,Store" /></td>
+							</tr>
+                            <tr >
+
+                              <td><input type="submit" name="btn_transfer_summery" style="width:350px;" value="25.1 Transfer Summary" title="Date Range,Depot/branch,Store" /></td>
+
+                            </tr>
+                            <tr >
+
+                              <td><input type="submit" name="btn_transfer_summery_item_wise" style="width:350px;" value="25.2 Transfer Summery Item Wise" title="Date Range,Depot/branch,Store" /></td>
+
+                            </tr>
+                            <tr >
+
+                              <td><input type="submit" name="btn_transfer_details" style="width:350px;" value="25.3 Transfer Details" title="Date Range,Depot/branch,Store" /></td>
+
+                            </tr>
+                            
+
+                            <tr >
+
+                              <td>&nbsp;</td>
+
+                            </tr>
+
+
+                    </table>
+
+                    
+
+                    </td>                    
+
+                </tr>
+
+                
+
+               </form>
+
+            </table>
+
+                
+
+		   </div>
+		   <div  class="rptdiv">
+
+                <ul class="rptul">
+
+                    <li class="rptlist"> Outstanding</li>
+
+                </ul>
+
+		   </div>
+
+		   <div >  
+
+           
+
+           <table width="900" border="0" cellpadding="0" cellspacing="0">
+
+				<form name="form2" id="form2" action="{{=URL(c='report',f='home')}}" target="_blank">
+
+                <tr>
+
+                	<td valign="top">
+
+                   	  <table width="550" height="300px;" style="background-color:#F8F8F8;">
+
+                        	
+
+                          <tr style="background-color:#E9E9E9; height:25px">
+
+                              <td width="10">&nbsp;</td>
+
+                              <td width="150">&nbsp;</td>
+
+                              <td width="2">&nbsp;</td>
+
+                              <td width="400">&nbsp;</td>
+
+                          </tr>
+
+                          <tr >
+                            <td>&nbsp;</td>
+                            <td>Date Range</td>
+                            <td>:</td>
+                            <td><span style="vertical-align:middle;">{{=search_form.custom.widget.from_dt_2}}&nbsp;To/ as of date&nbsp;{{=search_form.custom.widget.to_dt_2}}</span></td>
+                          </tr>
+                          <tr >
+
+            
+
+                            <td width="10">&nbsp;</td>
+
+                            <td>Branch/Depot</td>
+
+                            <td>:</td>
+
+                            <td width="400">
+                            {{if (session.user_type=='Depot' and session.user_depot_category=='DEPOT'):}}
+                                <input type="text" name="out_st_depot_id" id="out_st_depot_id" size="25" value="{{=session.depot_id}}|{{=session.user_depot_name}}" placeholder="Select Branch/Depot" autocomplete="off" style="width:288px"/>
+                            {{else:}}
+                              <input  name="out_st_depot_id" type="text" id="out_st_depot_id" size="25" value="" placeholder="Select Branch/Depot" autocomplete="off" style="width:288px"/>
+                            {{pass}}
+                            </td>
+
+                          </tr>
+
+                          <tr >
+
+                              <td width="10">&nbsp;</td>
+
+                              <td>Branch Store</td>
+
+                              <td>:</td>
+
+                              <td width="400"><input  name="out_st_store_id" type="text" id="out_st_store_id" size="25" value="" placeholder="Select Branch/Depot Store" autocomplete="off" style="width:288px"/></td>
+
+                          </tr>
+
+                            <tr >
+
+                              <td width="10">&nbsp;</td>
+
+                              <td>Delivery Man</td>
+
+                              <td>:</td>
+
+                              <td width="400"><input  name="out_st_delivery_man" type="text" id="out_st_delivery_man" size="25" value="" placeholder="Select Delivery Man" autocomplete="off" style="width:288px"/></td>
+
+                          </tr>
+
+                            <tr >
+                              <td>&nbsp;</td>
+                              <td>Territory</td>
+                              <td>:</td>
+                              <td><input  name="out_st_territory" type="text" id="out_st_territory" size="25" value="" placeholder="Select Territory" autocomplete="off" style="width:288px"/></td>
+                            </tr>
+                            <!--<tr >
+
+                              <td width="10">&nbsp;</td>
+
+                              <td>RSM/FM</td>
+
+                              <td>:</td>
+
+                              <td width="400"><input  name="out_st_rsm_fm" type="text" id="out_st_rsm_fm" size="25" value="" placeholder="Select RSM/FM" autocomplete="off" style="width:288px"/></td>
+
+                          </tr>-->
+							<tr >
+                              <td>&nbsp;</td>
+                              <td>Customer</td>
+                              <td>:</td>
+                              <td><input  name="out_st_customer" type="text" id="out_st_customer" size="25" value="" placeholder="Select Customer" autocomplete="off" style="width:288px"/></td>
+                            </tr>
+                            <tr >
+                              <td>&nbsp;</td>
+                              <td>MSO</td>
+                              <td>:</td>
+                              <td><input  name="out_st_mso" type="text" id="out_st_mso" size="25" value="" placeholder="Select MSO" autocomplete="off" style="width:288px"/></td>
+                            </tr>
+                            <tr title="Used For: 6.1,6.2">
+                              <td>&nbsp;</td>
+                              <td>Invoice Term</td>
+                              <td>:</td>
+                              <td>
+                              <select name="invoice_term" id="invoice_term" style="width:300px;">
+                                    <option value=""></option>
+                                    {{for invTermRow in invTermRows:}}
+                                        <option value="{{=invTermRow.cat_type_id}}" >{{=invTermRow.cat_type_id}}</option>
+                                    {{pass}}
+                                </select>                              
+                              </td>
+                            </tr>
+
+                      </table>
+				
+                  </td>
+
+                    <td valign="top">
+
+                   	  <table width="350">
+
+                        	
+
+                            <tr style="background-color:#E9E9E9; height:25px">
+
+                              <td>&nbsp;</td>
+
+                            </tr>
+                           
+                            <tr >
+
+                              <td><input type="submit" name="btn_invoice_wise" style="width:350px;" value="6.1 Invoice Wise" title="ALL" id="btn_invoice_wise"/></td>
+
+                            </tr>
+                           <tr >
+
+                              <td><input type="submit" name="btn_customer_wise_details" style="width:350px;" value="6.2 Customer Wise Details" title="ALL"/></td>
+
+                            </tr>
+                            
+                            <tr >
+
+                              <td><input type="submit" name="btn_customer_wise" style="width:350px;" value="6.3 Customer Wise" title="ALL"/></td>
+
+                            </tr>
+                            <tr >
+
+                              <td><input type="submit" name="btn_delivery_man_wise" style="width:350px;" value="6.4 Delivery Person Wise" title="ALL" /></td>
+
+                            </tr>
+                            
+                            <tr >
+
+                              <td><input type="submit" name="btn_delivery_man_details" style="width:350px;" value="6.5 Delivery Person Details" title="ALL" /></td>
+
+                            </tr>
+                            <tr >
+
+                              <td><input type="submit" name="btn_territory_wise" style="width:350px;" value="6.6 Territory Wise" title="ALL" /></td>
+
+                            </tr>
+                            <tr >
+
+                              <td><input type="submit" name="btn_territory_details" style="width:350px;" value="6.7 Territory Wise Details" title="ALL" /></td>
+
+                            </tr>
+                            <tr >
+
+                              <td><input type="submit" name="btn_negative_balance" style="width:350px;" value="6.8 Negative Balance: Invoice Wise " title="ALL" /></td>
+
+                            </tr>
+                            <tr >
+
+                              <td><input type="submit" name="btn_rsm_fm_mso_wise" style="width:350px;" value="6.9 RSM FM MSO Wise" title="ALL"  /></td>
+
+                            </tr>
+                            
+
+                            <tr >
+
+                              <td>&nbsp;</td>
+
+                            </tr>
+
+
+                    </table>
+
+                    
+
+                    </td>                    
+
+                </tr>
+
+                
+
+               </form>
+
+            </table>
+		   </div>
+           <div  class="rptdiv">
+
+                <ul class="rptul">
+
+                    <li class="rptlist">Customer Ledger and Collection</li>
+
+                </ul>
+
+		   </div>
+
+		   <div >  
+
+           
+
+           <table width="900" border="0" cellpadding="0" cellspacing="0">
+
+				<form name="form2" id="form2" action="{{=URL(c='report',f='home')}}" target="_blank">
+
+                <tr>
+
+                	<td valign="top">
+
+                   	  <table width="550" height="300px;" style="background-color:#F8F8F8;">
+
+                        	
+
+                          <tr style="background-color:#E9E9E9; height:25px">
+
+                              <td width="10">&nbsp;</td>
+
+                              <td width="150">&nbsp;</td>
+
+                              <td width="2">&nbsp;</td>
+
+                              <td width="400">&nbsp;</td>
+
+                          </tr>
+
+                          <tr >
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                          </tr>
+                          <tr >
+                            <td>&nbsp;</td>
+                            <td>Date Range</td>
+                            <td>:</td>
+                            <td><span style="vertical-align:middle;">{{=search_form.custom.widget.from_dt_3}}&nbsp;To&nbsp;{{=search_form.custom.widget.to_dt_3}}</span></td>
+                          </tr>
+                          <tr >
+
+            
+
+                            <td width="10">&nbsp;</td>
+
+                            <td>Branch/Depot</td>
+
+                            <td>:</td>
+
+                            <td width="400">
+                            {{if (session.user_type=='Depot' and session.user_depot_category=='DEPOT'):}}
+                                <input type="text" name="coll_depot_id" id="coll_depot_id" size="25" value="{{=session.depot_id}}|{{=session.user_depot_name}}" placeholder="Select Branch/Depot" autocomplete="off" style="width:288px"/>
+                            {{else:}}
+                              <input  name="coll_depot_id" type="text" id="coll_depot_id" size="25" value="" placeholder="Select Branch/Depot" autocomplete="off" style="width:288px"/>
+                            {{pass}}
+                            </td>
+
+                          </tr>
+
+                          <tr >
+
+                              <td width="10">&nbsp;</td>
+
+                              <td>Branch Store</td>
+
+                              <td>:</td>
+
+                              <td width="400"><input  name="coll_store_id" type="text" id="coll_store_id" size="25" value="" placeholder="Select Branch/Depot Store" autocomplete="off" style="width:288px"/></td>
+
+                          </tr>
+
+                            <tr >
+
+                              <td width="10">&nbsp;</td>
+
+                              <td>Delivery Man</td>
+
+                              <td>:</td>
+
+                              <td width="400"><input  name="coll_delivery_man" type="text" id="coll_delivery_man" size="25" value="" placeholder="Select Delivery Man" autocomplete="off" style="width:288px"/></td>
+
+                          </tr>
+
+                            <tr >
+                              <td>&nbsp;</td>
+                              <td>Territory</td>
+                              <td>:</td>
+                              <td><input  name="coll_territory" type="text" id="coll_territory" size="25" value="" placeholder="Select Territory" autocomplete="off" style="width:288px"/></td>
+                            </tr>
+                            <!--<tr >
+
+                              <td width="10">&nbsp;</td>
+
+                              <td>RSM/FM</td>
+
+                              <td>:</td>
+
+                              <td width="400"><input  name="out_st_rsm_fm" type="text" id="out_st_rsm_fm" size="25" value="" placeholder="Select RSM/FM" autocomplete="off" style="width:288px"/></td>
+
+                          </tr>-->
+
+                            <tr >
+                              <td>&nbsp;</td>
+                              <td>MSO</td>
+                              <td>:</td>
+                              <td><input  name="coll_mso" type="text" id="coll_mso" size="25" value="" placeholder="Select MSO" autocomplete="off" style="width:288px"/></td>
+                            </tr>
+                            <tr >
+                              <td>&nbsp;</td>
+                              <td>&nbsp;</td>
+                              <td>&nbsp;</td>
+                              <td>&nbsp;</td>
+                            </tr>
+
+                      </table>
+
+                    
+
+                    
+
+                  </td>
+
+                    <td valign="top">
+
+                   	  <table width="350">
+
+                        	
+
+                            <tr style="background-color:#E9E9E9; height:25px">
+
+                              <td>&nbsp;</td>
+
+                            </tr>
+                           
+                            <tr >
+
+                              <td><input type="submit" name="btn_collection_invoice_wise" style="width:350px;" value="Invoice Wise" title="ALL" /></td>
+
+                            </tr>
+                           
+                            
+                            <tr >
+
+                              <td><input type="submit" name="btn_collection_customer_wise" style="width:350px;" value="Customer Wise" title="ALL" /></td>
+
+                            </tr>
+                            <tr >
+
+                              <td><input type="submit" name="btn_collection_transaction_wise" style="width:350px;" value="Transaction Wise" title="ALL" /></td>
+
+                            </tr>                            
+                            <tr >
+
+                              <td><input type="submit" name="btn_ledger_wise" style="width:350px;" value="Ledger" title="ALL" /></td>
+
+                            </tr>
+                            <tr >
+
+                              <td>&nbsp;</td>
+
+                            </tr>
+                             <tr >
+
+                              <td><input type="submit" name="btn_money_receipt" style="width:350px;" value="3.1-A Money Receipt" title="ALL" /></td>
+
+                            </tr>
+                            <tr >
+
+                              <td><input type="submit" name="btn_money_receipt_adjustment" style="width:350px;" value="3.1-B AR Adjustment" title="ALL" /></td>
+
+                            </tr>
+                            <tr >
+
+                              <td><input type="submit" name="btn_money_receipt_2" style="width:350px;" value="3.2 Money Receipt" title="ALL" /></td>
+
+                            </tr>
+                            
+                            <tr >
+
+                              <td><input type="submit" name="btn_inv_and_receipt" style="width:350px;" value="7.1 Invoice And Receipt Details"  /></td>
+
+                            </tr>
+                            <tr >
+
+                              <td><input type="submit" name="btn_inv_details" style="width:350px;" value="7.2 Invoice Details"  /></td>
+
+                            </tr>
+
+
+                    </table>
+
+                    
+
+                    </td>                    
+
+                </tr>
+
+                
+
+               </form>
+
+            </table>
+		   </div>
+           
+          <!-- Billal Start-->
+           
+           <div  class="rptdiv">
+
+                <ul class="rptul">
+
+                    <li class="rptlist">STP Generator</li>
+
+                </ul>
+
+		   </div>
+
+		   <div >  
+
+           
+
+           <table width="900" border="0" cellpadding="0" cellspacing="0">
+
+				<form name="form2" id="form2" action="{{=URL(c='report',f='home')}}" target="_blank">
+
+                <tr>
+
+                	<td valign="top">
+
+                   	  <table width="550" height="200px;" style="background-color:#F8F8F8;">
+
+                        	
+
+                          <tr style="background-color:#E9E9E9; height:25px">
+
+                              <td width="10">&nbsp;</td>
+
+                              <td width="150">&nbsp;</td>
+
+                              <td width="2">&nbsp;</td>
+
+                              <td width="400">&nbsp;</td>
+
+                          </tr>
+
+                          <tr >
+                            <td>&nbsp;</td>
+                            <td>Date Range</td>
+                            <td>:</td>
+                            <td><span style="vertical-align:middle;">{{=search_form.custom.widget.from_dt_4}}&nbsp;To&nbsp;{{=search_form.custom.widget.to_dt_4}}</span></td>
+                          </tr>
+                          <tr >
+
+            
+
+                            <td width="10">&nbsp;</td>
+
+                            <td>Branch/Depot</td>
+
+                            <td>:</td>
+
+                            <td width="400">
+                            {{if (session.user_type=='Depot' and session.user_depot_category=='DEPOT'):}}
+                                <input type="text" name="stp_depot_id" id="stp_depot_id" size="25" value="{{=session.depot_id}}|{{=session.user_depot_name}}" placeholder="Select Branch/Depot" autocomplete="off" style="width:288px"/>
+                            {{else:}}
+                              <input  name="stp_depot_id" type="text" id="stp_depot_id" size="25" value="" placeholder="Select Branch/Depot" autocomplete="off" style="width:288px"/>
+                            {{pass}}
+                            </td>
+
+                          </tr>
+
+                          <tr >
+
+                              <td width="10">&nbsp;</td>
+
+                              <td>Branch Store</td>
+
+                              <td>:</td>
+
+                              <td width="400"><input  name="stp_store_id" type="text" id="stp_store_id" size="25" value="" placeholder="Select Branch/Depot Store" autocomplete="off" style="width:288px"/></td>
+
+                          </tr>
+
+                            <tr >
+
+                              <td width="10">&nbsp;</td>
+
+                              <td>&nbsp;</td>
+
+                              <td>&nbsp;</td>
+
+                              <td width="400">&nbsp;</td>
+
+                          </tr>
+
+                      </table>
+
+                    
+
+                    
+
+                  </td>
+
+                    <td valign="top">
+
+                    	<table width="350">
+
+                        	
+
+                            <tr style="background-color:#E9E9E9; height:25px">
+
+                              <td>&nbsp;</td>
+
+                            </tr>
+
+                            <tr >
+
+                                <td><input type="submit" style="width:350px" name="btn_stp_generator" value="4.1 STP Generator" title="Date Range,Depot/branch,Store"/></td>
+
+                            </tr>  
+
+                            <tr >
+
+                              <td><input type="submit" name="btn_stp_item_wise_sales_distribution" style="width:350px;" value="4.2 Item Wise Sales Distribution" title="Date Range,Depot/branch,Store"/></td>
+
+                            </tr>
+                            <tr style="height:25px" >
+
+                              <td></td>
+
+                            </tr>
+                            
+                            <tr >
+
+                              <td>&nbsp;</td>
+
+                            </tr>
+                            <tr style="height:25px" >
+
+                              <td></td>
+
+                            </tr>
+                            
+                            <tr >
+
+                              <td>&nbsp;</td>
+
+                            </tr>
+                            <tr >
+
+                              <td>&nbsp;</td>
+
+                            </tr>
+                            <tr style="height:25px" >
+
+                              <td></td>
+
+                            </tr>
+                            <tr >
+
+                              <td>&nbsp;</td>
+
+                            </tr>
+                          <tr style="height:25px" >
+
+                              <td></td>
+
+                            </tr>
+                            <tr style="height:25px" >
+
+                              <td></td>
+
+                            </tr>
+                      </table>
+
+                    
+
+                    </td>                    
+
+                </tr>
+
+                
+
+               </form>
+
+            </table>
+
+                
+
+		   </div>
+           
+           
+           <!-- Billal End-->
+		   
+           <!--<div  class="rptdiv">
+
+                <ul class="rptul">
+
+                    <li class="rptlist">Sales</li>
+
+                </ul>
+
+		   </div>
+
+		   <div >  
+
+           
+
+           <table width="900" border="0" cellpadding="0" cellspacing="0">
+
+				<form name="form2" id="form2" action="{{=URL(c='report',f='home')}}" target="_blank">
+
+                <tr>
+
+                	<td valign="top">
+
+                   	  <table width="550" height="300px;" style="background-color:#F8F8F8;">
+
+                        	
+
+                          <tr style="background-color:#E9E9E9; height:25px">
+
+                              <td width="10">&nbsp;</td>
+
+                              <td width="150">&nbsp;</td>
+
+                              <td width="2">&nbsp;</td>
+
+                              <td width="400">&nbsp;</td>
+
+                          </tr>
+
+                          <tr >
+                            <td>&nbsp;</td>
+                            <td>Date Range</td>
+                            <td>:</td>
+                            <td><span style="vertical-align:middle;">{{=search_form.custom.widget.from_dt_2}}&nbsp;To&nbsp;{{=search_form.custom.widget.to_dt_2}}</span></td>
+                          </tr>
+                          <tr >
+                            <td>&nbsp;</td>
+                            <td>Depot/Branch</td>
+                            <td>:</td>
+                            <td>
+                            {{if (session.user_type=='Depot' and session.user_depot_category=='DEPOT'):}}
+                                <input type="text" name="sales_depot_id_sales" id="sales_depot_id_sales" size="25" value="{{=session.depot_id}}|{{=session.user_depot_name}}" placeholder="Select Branch/Depot" autocomplete="off" style="width:288px"/>
+                            {{else:}}
+                            <input  name="sales_depot_id_sales" type="text" id="sales_depot_id_sales" class="depot_id" size="25" value="" placeholder="Select Branch/Depot" autocomplete="off" style="width:288px"/>
+                            {{pass}}
+                            
+                            </td>
+                          </tr>
+                          <tr >
+
+
+                            <td width="10">&nbsp;</td>
+
+                            <td>Branch/Depot Store</td>
+
+                            <td>:</td>
+
+                            <td width="400"><input  name="store_id_sales" type="text" id="store_id_sales" size="25" value="" placeholder="Select Branch/Depot Store" autocomplete="off" style="width:288px"/></td>
+
+                          </tr>
+
+                          <tr >
+
+                            <td width="10">&nbsp;</td>
+
+                            <td>Customer</td>
+
+                            <td>:</td>
+
+                            <td width="400"><input  name="customer_id_sales" type="text" id="customer_id_sales" size="25" value="" placeholder="Select Customer" autocomplete="off" style="width:288px"/></td>
+
+                          </tr>
+
+                            <tr >
+
+                              <td width="10">&nbsp;</td>
+
+                              <td>Delivery Man</td>
+
+                              <td>:</td>
+
+                              <td width="400"><input  name="dman_id_sales" type="text" id="dman_id_sales" size="25" value="" placeholder="Select Branch/Depot Store" autocomplete="off" style="width:288px"/></td>
+
+                          </tr>
+                            <tr >
+                              <td>&nbsp;</td>
+                              <td>MSO</td>
+                              <td>:</td>
+                              <td><input  name="mso_id_sales" type="text" id="mso_id_sales" size="25" value="" placeholder="Select Branch/Depot Store" autocomplete="off" style="width:288px"/></td>
+                            </tr>
+                            <tr >
+                              <td>&nbsp;</td>
+                              <td>Status</td>
+                              <td>:</td>
+                              <td><select name="status_sales" id="status_sales" >
+                                <option value="Invoiced">Invoiced</option>
+                                <option value="Pending">Pending</option>
+                              </select>
+                              </td>
+                            </tr>
+                            <tr >
+                              <td>&nbsp;</td>
+                              <td>&nbsp;</td>
+                              <td>&nbsp;</td>
+                              <td>&nbsp;</td>
+                            </tr>
+
+                      </table>
+
+                    
+
+                    
+
+                  </td>
+
+                    <td valign="top">
+
+                    	<table width="350">
+
+                        	
+
+                            <tr style="background-color:#E9E9E9; height:25px">
+
+                              <td>&nbsp;</td>
+
+                            </tr>
+
+                            <tr >
+
+                                <td><input type="submit" style="width:350px" name="btn_list_sales" value="Sales Invoice Wise" title="Depot/branch,Store"/></td>
+
+                            </tr>  
+
+                            <tr >
+
+                              <td><input type="submit" name="btn_customer_wise_sales" style="width:350px;" value="Sales Customer Wise" title="Depot/branch,Store"/></td>
+
+                            </tr>
+                            <tr style="height:25px" >
+
+                              <td></td>
+
+                            </tr>
+                            
+                            <tr >
+
+                              <td><input type="submit" name="btn_item_wise_batch_sales" style="width:350px;" value="Sales Item Wise (With Batch)" title="Depot/branch,Store"/></td>
+
+                            </tr>
+                           
+                            <tr style="height:25px" >
+
+                              <td><input type="submit" name="btn_item_wise_sales" style="width:350px;" value="Sales Item Wise (Without Batch)" title="Depot/branch,Store"/></td>
+
+                            </tr>
+                            <tr >
+
+                              <td>&nbsp;</td>
+
+                            </tr>
+                            <tr >
+
+                              <td>&nbsp;</td>
+
+                            </tr>
+                            <tr >
+
+                              <td>&nbsp;</td>
+
+                            </tr>
+                            <tr >
+
+                              <td>&nbsp;</td>
+
+                            </tr>
+                            
+
+                            
+
+                            <tr >
+
+                              <td>&nbsp;</td>
+
+                            </tr>
+
+
+                    </table>
+
+                    
+
+                    </td>                    
+
+                </tr>
+
+                
+
+               </form>
+
+            </table>
+
+                
+
+		   </div>-->
+
+	  </div>
+
+      
+
+      </td>
+
+  </tr>
+
+</table>
+
+<br>
+
+<br>
+
+<br>
+
+<br>
+
+<br>
+
+<br>
+
+<script type="text/javascript">
+
+$(document).ready(function() {
+
+	
+
+	// Test build of multiselect.
+
+	var build = function(select, tr) {
+
+		select.multiselect();
+
+		
+
+		if (select.length === 0) {
+
+			return 'Select not present anymore.';
+
+		}
+
+		
+
+		if (select.css('display') !== 'none') {
+
+			return 'Select still visible (expected <code>display: none;</code>).';
+
+		}
+
+		
+
+		if ($('button.multiselect', tr).length === 0) {
+
+			return 'Multiselect button not present.';
+
+		}
+
+		
+
+		if ($('option', select).length !== 5) {
+
+			return 'Not all options present anymore.';
+
+		}
+
+		
+
+		if ($('ul.multiselect-container', tr).length === 0) {
+
+			return 'Unordered list <code>.multiselect-container</code> not present.';
+
+		}
+
+		
+
+		if ($('ul.multiselect-container li', tr).length !== 5) {
+
+			return 'No list item for each option present.';
+
+		}
+
+		
+
+		if ($('ul.multiselect-container li a', tr).length !== 5) {
+
+			return 'Not all list items come with an anchor inside.';
+
+		}
+
+		
+
+		return false;
+
+	}($('#test-build-select'), $('#test-build-tr'));
+
+	
+
+	if (build) {
+
+		$('#test-build-tr').removeClass('success').addClass('danger');
+
+		$('#test-build-tr td').last().html(build);
+
+	}
+
+	
+
+	// Test build with optgroups.
+
+	var buildOptgroups = function(select, tr) {
+
+		select.multiselect();
+
+		
+
+		if ($('optgroup', select).length !== 2) {
+
+			return 'Optgroups not present anymore (2 expected).';
+
+		}
+
+		
+
+		var first = $('optgroup', select).get(0);
+
+		var second = $('optgroup', select).get(1);
+
+		
+
+		if ($('option', $(first)).length !== 2) {
+
+			return 'First optgroup does not have 2 options.';
+
+		}
+
+		
+
+		if ($('option', $(second)).length !== 3) {
+
+			return 'Second optgroup does not have 3 options.';
+
+		}
+
+		
+
+		// Check the corresponding labels.
+
+		if ($('label.multiselect-group', tr).length !== 2) {
+
+			return 'Expected 2 labels within the unordered list.';
+
+		}
+
+		
+
+		// Check labeling of groups.
+
+		var firstLabel = $('label.multiselect-group', tr).get(0);
+
+		var secondLabel = $('label.multiselect-group', tr).get(1);
+
+		
+
+		if ($(firstLabel).text() !== $(first).prop('label')) {
+
+			return 'First group labeled incorrectly.';
+
+		}
+
+		
+
+		if ($(secondLabel).text() !== $(second).prop('label')) {
+
+			return 'Second group labeled incorrectly.';
+
+		}
+
+		
+
+		return false;
+
+	}($('#test-build-optgroups-select'), $('#test-build-optgroups-tr'));
+
+	
+
+	if (buildOptgroups) {
+
+		$('#test-build-optgroups-tr').removeClass('success').addClass('danger');
+
+		$('#test-build-optgroups-tr td').last().html(build);
+
+	}
+
+	
+
+	var buildSelected = function(select, tr ) {
+
+		select.multiselect();
+
+		
+
+		if ($('option:selected', select).length !== 1) {
+
+			return 'Multiselect did not adopt selected options (1 selected option).';
+
+		}
+
+		
+
+		if ($('ul.multiselect-container li.active', tr).length !== 1) {
+
+			return 'Corresponding list item not set to <code>.active</code>.';
+
+		}
+
+		
+
+		return false;
+
+	}($('#test-build-selected-select'), $('#test-build-selected-tr'));
+
+	
+
+	if (buildSelected) {
+
+		$('#test-build-selected-tr').removeClass('success').addClass('danger');
+
+		$('#test-build-selected-tr td').last().html(buildSelected);
+
+	}
+
+
+
+//-----------	Editing code
+
+	var buildSelectAll = function(select, tr ) {
+
+		var value ="all";
+
+		select.multiselect({
+
+			maxHeight: 150,
+
+			selectedClass: null,
+
+			//buttonWidth:'200px',
+
+			//buttonHeight:'50px',
+
+			includeSelectAllOption: true,
+
+			selectAllValue: value
+
+		});
+
+		
+
+		if ($('.multiselect-container input[value="' + value + '"]', tr).length !== 1) {
+
+			return 'Expected exactly one input with value ' + value + ' as select all option.';
+
+		}
+
+		
+
+		return false;
+
+	}($('.test-build-select-all-select'), $('#test-build-select-all-tr'));
+
+	
+
+	if (buildSelectAll) {
+
+		$('#test-build-select-all-tr').removeClass('success').addClass('');
+
+		$('#test-build-select-all-tr td').last().html(buildSelectAll);
+
+	}
+
+	//------- close editing code
+
+	
+
+	var buildFilter = function(select, tr) {
+
+		select.multiselect({
+
+			enableFiltering: true
+
+		});
+
+		
+
+		if ($('.multiselect-search', tr).length !== 1) {
+
+			return 'No search input present.';
+
+		}
+
+		
+
+	}($('.test-build-filter-select'), $('#test-build-filter-tr'));
+
+	
+
+	if (buildFilter) {
+
+		$('#test-build-filter-tr').removeClass('success').addClass('danger');
+
+		$('#test-build-filter-tr td').last().html(buildFilter);
+
+	}
+
+	
+
+	// Test select.
+
+	var select = function(selectElement, tr) {
+
+		selectElement.multiselect();
+
+		
+
+		// Check for no selected options and no active li's.
+
+		if ($('option:selected', selectElement).length > 0) {
+
+			return 'There are already selected options (0 expected).';
+
+		}
+
+		
+
+		if ($('ul.multiselect-container li.active', tr).length > 0) {
+
+			return 'There are already active list items (0 expected).';
+
+		}
+
+		
+
+		selectElement.multiselect('select', '1');
+
+		
+
+		if ($('option:selected', selectElement).length !== 1) {
+
+			return 'Just selected an option - option not marked selected.';
+
+		}
+
+		
+
+		if ($('ul.multiselect-container li.active', tr).length !== 1) {
+
+			return 'Just selected an option - list item not set active.';
+
+		}
+
+		
+
+		if ($('option:selected', selectElement).first().val() !== '1') {
+
+			return 'Wrong option selected.';
+
+		}
+
+		
+
+		selectElement.multiselect('select', ['2', '3']);
+
+		
+
+		if ($('option:selected', selectElement).length !== 3) {
+
+			return 'Just selected two additional options - options not marked selected.';
+
+		}
+
+		
+
+		if ($('ul.multiselect-container li.active', tr).length !== 3) {
+
+			return 'Just selected two additional options - list items not set active.';
+
+		}
+
+		
+
+		var second = $('option:selected', selectElement).get(1),
+
+			third = $('option:selected', selectElement).get(2);
+
+		
+
+		if (second === undefined || second.length === 0) {
+
+			return 'Could not get second option.';
+
+		}
+
+		
+
+		if (third === undefined || third.length === 0) {
+
+			return 'Could not get third option.';
+
+		}
+
+		
+
+		if ($(second).val() !== '2' || $(third).val() !== '3') {
+
+			return 'Wrong options selected.';
+
+		}
+
+		
+
+		return false;
+
+	}($('#test-select-select'), $('#test-select-tr'));
+
+	
+
+	if (select) {
+
+		$('#test-select-tr').removeClass('success').addClass('danger');
+
+		$('#test-select-tr td').last().html(select);
+
+	}
+
+	
+
+	// Test deselect.
+
+	var deselect = function(select, tr) {
+
+		select.multiselect();
+
+		
+
+		// Check for no selected options and no active li's.
+
+		if ($('option:selected', select).length !== 3) {
+
+			return 'There should be 3 options selected.';
+
+		}
+
+		
+
+		if ($('ul.multiselect-container li.active', tr).length !== 3) {
+
+			return 'There should be 3 list items set to active.';
+
+		}
+
+		
+
+		select.multiselect('deselect', '1');
+
+		
+
+		if ($('option:selected', select).length !== 2) {
+
+			return 'Just deselected an option - option not marked deselected.';
+
+		}
+
+		
+
+		if ($('ul.multiselect-container li.active', tr).length !== 2) {
+
+			return 'Just deselected an option - list item not set inactive.';
+
+		}
+
+		
+
+		if ($('option:selected', select).first().val() !== '2') {
+
+			return 'Wrong option deselected.';
+
+		}
+
+		
+
+		select.multiselect('deselect', ['2', '3']);
+
+		
+
+		if ($('option:selected', select).length > 0) {
+
+			return 'Just deselected two additional options - options not marked deselected.';
+
+		}
+
+		
+
+		if ($('ul.multiselect-container li.active', tr).length > 0) {
+
+			return 'Just deselected two additional options - list items not set unactive.';
+
+		}
+
+		
+
+		return false;
+
+	}($('#test-deselect-select'), $('#test-deselect-tr'));
+
+	
+
+	if (deselect) {
+
+		$('#test-deselect-tr').removeClass('success').addClass('danger');
+
+		$('#test-deselect-tr td').last().html(deselect);
+
+	}
+
+	
+
+	var maxHeight = function(select, tr) {
+
+		
+
+		select.multiselect({
+
+			maxHeight: 100
+
+		});
+
+		
+
+		var height = $('.multiselect-container', tr).css('max-height');
+
+		if (height !== '100px') {
+
+			return 'Max height not set correctly (set: ' + height + ').';
+
+		}
+
+		
+
+		return false;
+
+	}($('#test-max-height-select'), $('#test-max-height-tr'));
+
+	
+
+	if (maxHeight) {
+
+		$('#test-max-height-tr').removeClass('success').addClass('danger');
+
+		$('#test-max-height-tr td').last().html(maxHeight);
+
+	}
+
+});
+
+</script>
+
+</body> 
+

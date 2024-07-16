@@ -1,0 +1,490 @@
+{{extend 'layout.html'}}
+
+
+
+<link rel="stylesheet" href="{{=URL('static', 'js_and_css/ui.theme.css')}}" type="text/css" />
+
+<link rel="stylesheet" href="{{=URL('static', 'js_and_css/jquery-ui.css')}}" type="text/css" />
+
+<link rel="stylesheet" href="{{=URL('static', 'js_and_css/style.css')}}" type="text/css" />
+
+<script src="{{=URL('static','js_and_css/jquery-1.8.2.js')}}"></script>
+
+<script src="{{=URL('static','js_and_css/jquery-ui.js')}}"></script>
+
+
+
+
+
+ <style type="text/css">
+
+	 input[type=text], input[type=password],  select {
+
+		margin: 2px 0px 2px 0px;
+
+		width:100px;
+
+	
+
+	}
+
+	div.error {
+
+		margin-left:0px;
+
+		width:auto;
+
+	}
+
+	#status,#note{
+
+	 width:150px;
+
+	 }
+
+	
+
+	#depot_id,#sl,#status{
+
+	 background-color:#F7F7F7;
+
+	  }
+
+	
+
+	 #sm_damage_item_id{
+
+	 width:80px;
+
+	 }
+
+	 #sm_damage_quantity{
+
+	 width:80px;
+
+	 text-align:right;
+
+	 }
+
+	 #sm_damage_item_name{
+
+	 width:200px;
+
+	 }
+
+	 #sm_damage_short_note{
+
+	 width:180px;
+
+	 }
+
+	
+
+	.page_color,body{
+
+		font-family:Arial, Helvetica, sans-serif;
+
+		font-size:13px;	
+
+	}
+
+ </style>
+
+
+
+<script>
+
+var base_url=location.protocol + "//" + location.hostname + (location.port && ":" + location.port) + "/{{=request.application}}/";
+
+
+
+$(function() {
+	 	var valueListStr=localStorage.itemDataStr;
+		$('#item_details').keyup(function(){
+			//-------------------------
+			var valueList = valueListStr.split(',');				
+			var searchValue=$("#item_details").val();
+			//---------------- auto complete combo list
+			var valueList_new=new Array();
+			lc=0;
+			i =0;
+			var valueStr="";				
+			while (i < valueList.length)
+			{
+				valueStr=valueList[i];
+				i=i+1;					
+				var res=valueStr.toUpperCase().match(searchValue.toUpperCase());
+				if (res!=null){
+					valueList_new[lc]=valueStr;
+					lc=lc+1;
+					if (lc==30){
+						break;
+					};
+				}else{
+					continue;
+				}					
+			};
+			//alert (ref_list_new);
+			//-------------- auto complete source
+			$( "input#item_details" ).autocomplete({
+				source: valueList_new
+			});
+	  }); 
+	   //==============	 
+	   $('#item_details').blur(function(){
+		    //============Check Item from list
+		   var item_details=$("#item_details").val();
+		   var itemDataStr_check=localStorage.itemDataStr
+		   var valueList_check = itemDataStr_check.split(',');		
+		   var check_i=0;
+		  
+		   while (check_i < valueList_check.length)
+			{
+				//alert (valueList_check[check_i] + "  "+item_details )
+				if (valueList_check[check_i].indexOf(item_details)!=-1){
+					//alert ("dsfdsg");
+					$("#item_details").val(valueList_check[check_i]);
+					 $("#error_div").html("");
+					 check_i=valueList_check.length;
+				}
+				check_i=check_i+1;
+				//return false;
+			}
+			
+		   if (itemDataStr_check.indexOf(item_details)==-1){
+			   
+			   $("#error_div").html("Please Select from List");
+			   $("#item_details").val("");
+			   $("#item_details").focus();
+		   }
+		    //============Check Item from list end
+		   var my_array=new Array();
+			my_array=$("#item_details").val().split('|');
+			if (my_array.length == 5){
+				document.getElementById('item_name').value=my_array[0];
+				document.getElementById('item_id').value=my_array[1];
+				document.getElementById('dist_rate').value=my_array[3];
+				document.getElementById('name_value').innerHTML = my_array[0];
+				document.getElementById('id_value').innerHTML = my_array[1];
+				document.getElementById('price_value').innerHTML = my_array[3];	
+			};
+		}); 
+	   //==============	
+
+	   //================Item Batch Auto complete
+	    var valueListStr_batch=localStorage.itemBatchStr;
+		//alert (valueListStr_batch);
+		$('#item_batch_details').keyup(function(){
+			//-------------------------
+			var valueList_batch = valueListStr_batch.split(',');				
+			var searchValue_batch=$("#item_batch_details").val();
+			//---------------- auto complete combo list
+			var valueList_batch_new=new Array();
+			x=0;
+			y =0;
+			
+			var valueStr_batch="";				
+			while (y < valueList_batch.length)
+
+			{
+				valueStr_batch=valueList_batch[y];
+				
+				y=y+1;					
+				var res_batch=valueStr_batch.toUpperCase().match(searchValue_batch.toUpperCase());
+				if (res_batch!=null){
+					valueList_batch_new[x]=valueStr_batch;
+					x=x+1;
+					if (x==30){
+						break;
+					};
+				}else{
+					continue;
+				}					
+			};
+			
+			//-------------- auto complete source
+			$( "input#item_batch_details" ).autocomplete({
+				source: valueList_batch_new
+			});
+	  }); 
+	 //   ==============	 
+
+	   $('#item_batch_details').blur(function(){
+		   //============Check Item Batch from list
+		   var item_batch_details=$("#item_batch_details").val();
+		   var valueList_batch_check=localStorage.itemBatchStr
+		   var valueListBatch_check = valueList_batch_check.split(',');		
+		   var check_b=0;
+		   while (check_b < valueListBatch_check.length)
+			{
+				if (valueListBatch_check[check_b].indexOf(item_batch_details)!=-1){
+					$("#item_batch_details").val(valueListBatch_check[check_b]);
+					 $("#error_div").html("");
+					 check_b=valueListBatch_check.length;
+				}
+				check_b=check_b+1;
+			}
+			
+		   if (valueList_batch_check.indexOf(item_batch_details)==-1){
+			   $("#error_div").html("Please Select from List");
+			   $("#item_batch_details").val("");
+			   $("#item_batch_details").focus();
+		   }
+		    //============Check Item Batch from list end
+			
+		   var my_array_batch=new Array();
+			my_array_batch=$("#item_batch_details").val().split('|');
+			if (my_array_batch.length == 3){
+				document.getElementById('batch_id').value=my_array_batch[0];
+				document.getElementById('batch_item_id').value=my_array_batch[1];
+			};
+		}); 
+	   //==============	
+
+}); 
+
+
+
+</script>
+
+    
+
+<body > 
+
+<table width="100%"  border="0" cellspacing="0" cellpadding="0" style="background-color:#FFFFFF;" >
+
+  <tr height="30px" >
+
+    <td width="500"><span class="blackCatTitle">Excess/Shortage</span></td>
+    
+    <form action="{{=URL(c='depot',f='depot_trans_dispute_list')}}" method="post">
+    <td width="410" align="right"><input name="" type="submit"  value="Back"/></td>
+    </form>
+    <td>&nbsp;</td>
+
+  </tr>
+
+  <tr  height="1px" style="background-color:#CCCCCC;">
+
+	    <td colspan="3" ></td>
+
+  </tr>
+
+</table>
+
+  <table width="100%" height="500px"  border="0" cellspacing="0" cellpadding="0" class="page_color"  >
+
+  <tr height="100%"  style="vertical-align:top;">
+
+    <td width="10px">&nbsp;</td>
+
+    <td>
+
+	<!--start-->
+
+	<table width="100%"  border="0" cellpadding="0" cellspacing="0"  >
+
+      <tr>
+
+        <td colspan="2">&nbsp;</td>
+
+      </tr>
+
+      <tr>
+
+        <td colspan="2">
+
+          <table width="900" height="78" border="0" cellpadding="0" cellspacing="0">
+
+            <tr>
+
+			<td width="450" valign="top">
+			
+            <table width="422" class="blackCat">			  
+
+      <tr>
+        <td width="100"> Branch ID </td>
+        <td colspan="2">:&nbsp;<input type="text" style="width:200px;" name="depot_id" id="depot_id" value="{{=depot_id}}|{{=depot_name}}" readonly/></td>
+	  </tr>
+
+      <tr>
+
+        <td width="100">Sl</td>
+
+        <td colspan="2">:&nbsp;<input type="text" style="width:200px;" name="sl" id="sl" value="{{=sl}}" readonly/></td>
+
+        </tr>
+
+      <tr>
+        <td>Store</td>
+        <td colspan="2">:
+          <input type="text" name="store_id" id="store_id" value="{{=store_id}}|{{=store_name}}" style="background-color:#F3F3F3;width:200px;" readonly/>
+		  
+        </td>
+      </tr>
+      <tr>
+        <td>Issue SL</td>
+        <td colspan="2">:&nbsp;<input type="text" style="width:200px;" name="sl2" id="sl2" value="{{=issu_sl}}" readonly/></td>
+      </tr>
+      <tr>
+        <td>Receive SL</td>
+        <td colspan="2">:&nbsp;<input type="text" style="width:200px;" name="sl3" id="sl3" value="{{=recieve_sl}}" readonly/></td>
+      </tr>
+      <tr>
+
+        <td width="100">&nbsp;</td>
+
+        <td colspan="2">&nbsp;</td>
+
+        </tr>
+    
+
+
+            </table>			  </td>
+
+              <td width="400" align="right"><table class="blackCat">
+
+      <tr>
+        <td>Date</td>
+        <td>:<input name="damage_date" style="width:200px;" type="Text" id="date1" value="{{=dispute_date}}" readonly  /></td>
+      </tr>
+      
+      
+        
+      <tr>
+
+        <td width="100">Status</td>
+
+        <td>:<input type="text" style="width:200px;" name="status" id="status" value="{{=status}}" readonly/></td>
+
+    </tr>
+
+	<form id="form1" name="form1" method="post" action="{{=URL(c='depot',f='close_update_dispute',vars=dict(req_sl=sl,depot_id=depot_id))}}">
+      
+	<tr>
+		<td width="100">Note</td>
+
+        <td>:<input type="text" style="width:200px;" name="note" id="note" value="{{=note}}"/></td>
+
+        </tr>
+
+      
+
+      <tr>
+
+        <td width="100">&nbsp;</td>
+
+        <td>
+		 
+
+		{{if access_permission==True:}}
+		  {{if (status!='Resolved'):}}            
+			&nbsp;<input type="submit" name="btn_update" id="btn_update" value="Update"/>
+		  {{pass}}
+		{{pass}}
+        
+          </td>
+		
+        </tr>
+		</form>
+      <tr>
+
+        <td width="100">&nbsp;</td>
+
+        <td>&nbsp;</td>
+
+        </tr>
+
+      
+
+                
+
+              </table></td>
+
+            </tr>
+
+
+
+            <tr id="upload_div">
+
+              <td width="450" valign="bottom"></td>
+
+              <td width="400" align="right">&nbsp;</td>
+
+            </tr>
+
+
+
+            <tr>
+
+              <td colspan="2"><table width="900" border="1" cellpadding="1" cellspacing="1" class="sample_border" >
+
+
+				  <tr align="left" class="blackCatHead"  height="20px" ;"vertical-align:middle">                    
+
+                    <td >Name</td>
+
+					<td width="100" >Item ID </td>
+
+                    <td width="100" align="right"  ><div align="left">Batch ID </div></td>
+                    <td width="100" align="right"  >Issue Qty</td>
+
+                    <td width="100" align="right"  >Receive Qty</td>
+                    <td width="100" align="right"  >Extra/Short</td>
+
+                    </tr>
+                  
+				{{gross_total=0.0}}
+			   {{for record in (records):}}
+
+			<tr  align="left" class="blackCat"  style="vertical-align:middle"> 			  
+
+			  <td >{{=record.item_name}}</td>
+
+			  <td width="100" >{{=record.item_id}}</td>
+
+			  <td width="100" align="right" ><div align="left">{{=record.batch_id}}</div></td>
+			  <td width="100" align="right" >{{=record.issued_quantity}}</td>
+
+			  <td width="100" align="right" >{{=record.recieved_quantity}}</td>
+			  <td width="100" align="right" >{{=record.recieved_quantity-record.issued_quantity}}</td>
+
+			  </tr>
+			
+			   {{pass}}
+              </table>			  </td>
+              </tr>
+          </table>          </td>
+      </tr>
+      <tr>
+        <td colspan="2">&nbsp;</td>
+      </tr>
+      <tr>
+        <td width="100">
+		<a href="{{=URL(c ='depot',f ='preview_trans_dispute',vars=dict(req_sl=sl,depotid=depot_id))}}" style="text-decoration:none" target="_blank">
+          <input name="button" type="button" style="width:80px;" value="Preview"/>
+		</a></td>
+		
+        <form id="form1" name="form1" method="post" action="{{=URL(c='depot',f='close_update_dispute',vars=dict(req_sl=sl,depot_id=depot_id))}}">
+		<td>
+		{{if access_permission==True:}}		  
+		  {{if (status=='Resolved'):}}
+            &nbsp;
+          {{else:}}
+            <input type="submit" name="btn_resolve" id="btn_resolve" style="width:80px;" value="Resolve"/>
+          {{pass}}
+		{{pass}}
+		</td>
+        </form>
+        
+      </tr>
+    </table>
+<!--end-->	</td>
+  </tr>
+</table>
+</body>
+
+
+
+	
+

@@ -1,0 +1,292 @@
+{{extend 'layout.html'}}
+	
+<link rel="stylesheet" href="{{=URL('static', 'js_and_css/ui.theme.css')}}" type="text/css" />
+<link rel="stylesheet" href="{{=URL('static', 'js_and_css/jquery-ui.css')}}" type="text/css" />
+<link rel="stylesheet" href="{{=URL('static', 'js_and_css/style.css')}}" type="text/css" />
+<script src="{{=URL('static','js_and_css/jquery-1.8.2.js')}}"></script>
+<script src="{{=URL('static','js_and_css/jquery-ui.js')}}"></script>
+  
+<style type="text/css">
+ input[type=text], input[type=password],  select {
+    margin: 2px 0px 2px 0px;
+	width:150px;
+}
+
+
+div.error {
+    padding: 0px;
+	width: 200px;
+	margin-left:0px;
+}
+.page_color,body{
+	font-family:Arial, Helvetica, sans-serif;
+	font-size:13px;	
+	}
+	
+ </style>
+ 
+<script>
+var base_url=location.protocol + "//" + location.hostname + (location.port && ":" + location.port) + "/{{=request.application}}/";
+
+$(function() {
+		
+	   //==============	 
+	   var valueListStr2="";
+		
+		$('#search_type').blur(function(){
+			
+			if ($('#search_type').val()=='RSM'){
+				//alert(base_url+'default/get_route_list');
+				$.ajax({
+					  url: base_url+'default/get_region_list',
+					  success: function(resStr) {
+						  valueListStr2=resStr
+					  }
+					});
+			}else if ($('#search_type').val()=='TL'){
+				$.ajax({
+					  url: base_url+'default/get_level1_list',
+					  success: function(resStr) {
+						  valueListStr2=resStr
+					  }
+					});			
+			}else if ($('#search_type').val()=='MPO'){
+				$.ajax({
+					  url: base_url+'default/get_rep_list',
+					  success: function(resStr) {
+						  valueListStr2=resStr
+					  }
+					});			
+			};
+			
+	 	});
+	 
+		$('#search_value').keyup(function(){
+			//-------------------------
+			var valueList = valueListStr2.split(',');				
+			var searchValue=$("#search_value").val();
+			
+			//---------------- auto complete combo list
+			var valueList_new=new Array();
+			lc=0;
+			i =0;
+			var valueStr="";				
+			while (i < valueList.length)
+			{
+				valueStr=valueList[i];
+				i=i+1;					
+				var res=valueStr.toUpperCase().match(searchValue.toUpperCase());
+				if (res!=null){
+					valueList_new[lc]=valueStr;
+					lc=lc+1;
+					if (lc==30){
+						break;
+					};
+				}else{
+					continue;
+				}					
+			};
+			//alert (ref_list_new);
+			
+			//-------------- auto complete source
+			$( "input#search_value" ).autocomplete({
+				source: valueList_new
+			});
+		
+	  }); 
+	   //==============	  	   
+	   	   
+}); 
+</script>
+ 
+
+<body >  
+{{currYear=str(date_fixed)[0:4]}}
+{{currMonth=str(date_fixed)[5:7]}}
+
+<!--Form Title -->
+<table width="100%" border="0" cellspacing="0" cellpadding="0" style="background-color:#FFFFFF;">
+  <tr height="30px">
+    <td width="700"><div class="blackCatTitle">Processed Tabulation Sheet</div></td>
+    
+	<form action="{{=URL(c='utility',f='process_report')}}" method="post">
+	<td width="200" align="right"><!--<input name="" type="submit"  value="  Back  "/>--></td>
+	</form>
+	
+    <td>&nbsp;</td>
+  </tr>
+  <tr>
+    <td height="1px" colspan="3" style="background-color:#CCCCCC;"></td>
+  </tr>
+</table>
+
+<!--Form Content -->
+
+<table width="100%" border="0" cellspacing="0" cellpadding="0" class="page_color" id="table_details">
+  
+  <tr height="20px">
+  	<td width="10"></td>
+  	<td> </td>	
+  </tr>
+  
+  <tr height="600px">
+    <td width="10" valign="top">    
+    <td valign="top">
+	
+	<table width="900" border="0" cellpadding="0" cellspacing="0" style="background-color: #F0F0F0">
+    <form name="form1" id="form1" action="{{=URL(c='utility',f='process_report')}}" method="post">
+      <tr >
+        <td width="500" align="left"><strong><em>Tabulation Sheet:</em></strong></td>
+        <td align="right">Process Date: {{=processRow[0].created_date}}</td>
+        <td width="5">&nbsp;</td>
+      </tr>
+      </form>
+    </table>
+    
+    
+	<br>
+    <table width="900" border="1" cellpadding="1" cellspacing="1" class="sample_border" >
+			<form id="form1" name="form1" method="post" action="{{=URL(c='utility',f='process_report_show')}}">
+              <tr align="left" class="blackCatHead"  height="20px";>
+                <td width="120" >
+                <select name="search_type" id="search_type" style="width:150px" >
+                  <option selected="selected" value="">Select a Type</option>
+                  {{if session.search_type_pReport=='RSM':}}<option value="RSM" selected="selected">RSM</option>{{else:}}<option value="RSM" >RSM</option>{{pass}}
+                  {{if session.search_type_pReport=='TL':}}<option value="TL" selected="selected">TL</option>{{else:}}<option value="TL" >TL</option>{{pass}}
+                  {{if session.search_type_pReport=='MPO':}}<option value="MPO" selected="selected">MPO</option>{{else:}}<option value="MPO" >MPO</option>{{pass}}
+				</select>
+                
+                </td>
+                <td width="342" >
+                	{{if session.search_value_pReport=='' or session.search_value_pReport==None:}}
+                        <input  name="search_value" type="text" id="search_value" size="25" value="" placeholder="Select a value" autocomplete="off" style="width:300px"/>
+                    {{else:}}
+                        <input  name="search_value" type="text" id="search_value" size="25" value="{{=session.search_value_pReport}}" placeholder="Select a value" autocomplete="off" style="width:300px"/>
+                    {{pass}}
+                	
+                </td>
+                <td align="right"  ><input type="submit" name="btn_filter" id="btn_filter" value="Filter"   class="button_update"/>
+                  <input type="submit" name="btn_all" id="btn_all" value="All"   class="button_update"/></td>
+                <td width="200" align="right"  >
+                <a href="{{=URL(c='utility',f='process_report_download')}}">
+                <input type="button" name="Input2" id="Input2" value="Download" class="button_update"/></a>
+                
+                </td>
+              </tr>
+	    </form>
+      </table>
+            <br>
+	
+    
+    {{if session.search_type_pReport=='RSM':}}
+        <table width="900" border="1" cellpadding="1" cellspacing="1" class="sample_border" >
+            <tr align="left" class="blackCatHead"  height="20px" ;"vertical-align:middle">
+              <td >RSM</td>
+              <td width="100" colspan="2" align="center" >{{=processRow[0].month_1.strftime('%b,%Y')}}</td>
+              <td width="100" colspan="2" align="center" >{{=processRow[0].month_2.strftime('%b,%Y')}}</td>
+            </tr>
+            <tr align="left" class="blackCatHead"  height="20px" ;"vertical-align:middle">
+              <td >&nbsp;</td>
+              <td width="100" align="right" >Order Count</td>
+              <td width="100" align="right" >Amount</td>
+              <td width="100" align="right" >Order Count</td>
+              <td width="100" align="right" >Amount</td>
+            </tr>
+            {{ p=0}} 		  
+            {{for i,record in enumerate(records):}}   
+            {{ if i==items_per_page: break}}    
+            <tr  align="left" class="blackCat"  style="font-size:12px"> 
+              <td >{{=record.sm_temp_report.region_id}} | {{=record.sm_temp_report.region_name}}</td>
+              <td width="100" align="right" >{{=record[db.sm_temp_report.m1_order_count.sum()]}}</td>
+              <td width="100" align="right" >{{=round(record[db.sm_temp_report.m1_amt.sum()],2)}}</td>
+              <td width="100" align="right" >{{=record[db.sm_temp_report.m2_order_count.sum()]}}</td>
+              <td width="100" align="right" >{{=round(record[db.sm_temp_report.m2_amt.sum()],2)}}</td>          
+            </tr>      
+            {{pass}}
+        </table>
+    
+    
+    {{elif session.search_type_pReport=='TL':}}
+        <table width="900" border="1" cellpadding="1" cellspacing="1" class="sample_border" >
+            <tr align="left" class="blackCatHead"  height="20px" ;"vertical-align:middle">
+              <td width="220" >RSM</td>
+              <td >TL</td>
+              <td width="100" colspan="2" align="center" >{{=processRow[0].month_1.strftime('%b,%Y')}}</td>
+              <td width="100" colspan="2" align="center" >{{=processRow[0].month_2.strftime('%b,%Y')}}</td>
+            </tr>
+            <tr align="left" class="blackCatHead"  height="20px" ;"vertical-align:middle">
+              <td >&nbsp;</td>
+              <td >&nbsp;</td>
+              <td width="100" align="right" >Order Count</td>
+              <td width="100" align="right" >Amount</td>
+              <td width="100" align="right" >Order Count</td>
+              <td width="100" align="right" >Amount</td>
+            </tr>
+            {{ p=0}} 		  
+            {{for i,record in enumerate(records):}} 
+            {{ if i==items_per_page: break}}      
+            <tr  align="left" class="blackCat"  style="font-size:12px"> 
+              <td width="220" >{{=record.sm_temp_report.region_id}} | {{=record.sm_temp_report.region_name}}</td>
+              <td >{{=record.sm_temp_report.tl_id}} | {{=record.sm_temp_report.tl_name}}</td>
+              <td width="100" align="right" >{{=record[db.sm_temp_report.m1_order_count.sum()]}}</td>
+              <td width="100" align="right" >{{=round(record[db.sm_temp_report.m1_amt.sum()],2)}}</td>
+              <td width="100" align="right" >{{=record[db.sm_temp_report.m2_order_count.sum()]}}</td>
+              <td width="100" align="right" >{{=round(record[db.sm_temp_report.m2_amt.sum()],2)}}</td>          
+            </tr>      
+            {{pass}}
+      </table>
+    
+    {{elif session.search_type_pReport=='MPO' or session.search_type_pReport=='' or session.search_type_pReport==None:}}
+    <table width="900" border="1" cellpadding="1" cellspacing="1" class="sample_border" >
+        <tr align="left" class="blackCatHead"  height="20px" ;"vertical-align:middle">
+          <td width="220" >RSM</td>
+          <td width="220" >TL</td>
+          <td width="220" >MPO</td>
+          <td width="80" colspan="2" align="center" >{{=processRow[0].month_1.strftime('%b,%Y')}}</td>
+          <td width="80" colspan="2" align="center" >{{=processRow[0].month_2.strftime('%b,%Y')}}</td>
+        </tr>
+        <tr align="left" class="blackCatHead"  height="20px" ;"vertical-align:middle">
+          <td >&nbsp;</td>
+          <td >&nbsp;</td>
+          <td >&nbsp;</td>
+          <td width="100" align="right" >Order Count</td>
+          <td width="100" align="right" >Amount</td>
+          <td width="100" align="right" >Order Count</td>
+          <td width="100" align="right" >Amount</td>
+        </tr>
+        {{ p=0}} 		  
+        {{for i,record in enumerate(records):}}         
+        {{ if i==items_per_page: break}}
+        
+        <tr  align="left" class="blackCat"  style="font-size:12px"> 
+          <td width="220" >{{=record.sm_temp_report.region_id}} | {{=record.sm_temp_report.region_name}}</td>
+          <td width="220" >{{=record.sm_temp_report.tl_id}} | {{=record.sm_temp_report.tl_name}}</td>
+          <td width="220" >{{=record.sm_temp_report.mpo_id}} | {{=record.sm_temp_report.mpo_name}}</td>
+          <td width="100" align="right" >{{=record[db.sm_temp_report.m1_order_count.sum()]}}</td>
+          <td width="100" align="right" >{{=record[db.sm_temp_report.m1_amt.sum()]}}</td>
+          <td width="100" align="right" >{{=record[db.sm_temp_report.m2_order_count.sum()]}}</td>
+          <td width="100" align="right" >{{=record[db.sm_temp_report.m2_amt.sum()]}}</td>          
+        </tr>      
+        {{pass}}
+    </table>
+    {{pass}}
+    
+    
+    
+    <br>
+    {{if page:}}
+&nbsp;&nbsp;<a href="{{=URL(args=[page-page])}}">first</a> |
+&nbsp;&nbsp;<a href="{{=URL(args=[page-1])}}">previous</a> |
+{{pass}}
+
+{{if len(records)>items_per_page:}}
+&nbsp;&nbsp;<a href="{{=URL(args=[page+1])}}">next</a>
+{{pass}}
+<br>
+
+<!--start-->
+<!--end-->
+  <td width="5"></tr>
+</table>
+
+</body>

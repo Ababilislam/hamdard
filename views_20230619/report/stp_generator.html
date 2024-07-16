@@ -1,0 +1,85 @@
+{{extend 'layout_invoice.html'}}
+
+<html>
+
+<head>
+
+<script type="text/javascript">
+
+function print_page()
+
+  {
+
+    window.print()
+
+  }
+
+</script>
+
+</head>
+
+<body>
+
+<table width="900" cellpadding="0" cellspacing="0" style="border:none;" >
+    <tr >
+      <td align="center" ><span style="font-size:20px; font-weight:bold;">STP Generator</span><span style="float:right">#4.01</span></td>
+  </tr>
+    <tr >
+      <td align="right" ><a href="{{=URL(c='report',f='stp_generator_download',vars=dict(fromDate=fromDate,toDate=toDate,depotID=depotID,storeID=storeID))}}" >Download</a></td>
+    </tr>
+</table>   
+<table width="900" border="1" cellpadding="1" cellspacing="1" class="sample_border" >
+  <tr align="left" class="blackCatHead" height="20px" ;  style="font-size:12px">
+      <td width="40" align="center"  >Product</td>
+      <td width="80" style=" text-align:center;" >Date From</td>
+      <td width="100" style=" text-align:center;" >Date To</td>
+      <td width="150" align="right"  >Sold</td>
+      <td width="150" align="right"  >Transit</td>
+      <td width="150" style=" text-align:right;"  >Pending</td>
+      <td width="150" align="right"  > Net Sales</td>
+      
+  </tr>
+  	
+  <tr  align="left" class="blackCat"  style="background-color:#F7F7F7; font-size:11px;">
+    <td width="40" align="left" style=" text-align:center;">{{=session.depot_short_name}}</td>
+    <td width="80" style="text-align:center;" >{{=datetime.datetime.strptime(str(fromDate),'%Y-%m-%d').strftime('%d-%b-%y')}}</td>
+    <td width="100" style=" text-align:center;" >{{=datetime.datetime.strptime(str(toDate),'%Y-%m-%d').strftime('%d-%b-%y')}}</td>
+    <td width="150" style=" text-align:right;" >{{soldAmt=cashRecTotal+creditTotal}} {{=easy_format(soldAmt)}}</td>
+    <td width="150" style=" text-align:right;">{{=easy_format(saleTotal-(soldAmt+cashPendingTotal))}}</td>
+    <td width="150" style=" text-align:right;">{{=easy_format(cashPendingTotal)}}</td> 
+    <td width="150" style=" text-align:right; font-weight:bold;">{{=easy_format(saleTotal)}} </td>                
+  </tr>   
+   
+  </table>
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+<table width="900" >
+	<tr>
+	  <td align="center">{{=session.user_id}}</td>
+	  <td align="right">&nbsp;</td>
+	  <td align="center">&nbsp;</td>
+  </tr>
+	<tr>
+	  <td width="150" align="center">__________________</td>
+	  <td align="right">&nbsp;</td>
+	  <td width="300" align="center">______________________________________</td>
+  </tr>
+	<tr>
+	  <td width="150" align="center"><strong>Printed By</strong></td>
+	  <td align="right">&nbsp;</td>
+	  <td width="300" align="center">for<strong> {{=session.cName}}</strong></td>
+  </tr>
+</table>
+
+
+
+</body>
+
+</html>
+

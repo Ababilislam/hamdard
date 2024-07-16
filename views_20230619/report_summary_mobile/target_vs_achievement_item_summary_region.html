@@ -1,0 +1,100 @@
+{{extend 'layout_report_mobile.html'}}
+<html>
+    <head>
+    </head>
+    <body style="font-size:60%;"> 
+     <table width="700"> 
+    	<form action="{{=URL(c='report_summary_mobile',f='target_vs_achievement_item_summary_zone',vars=dict(category_id=category_id,item_id=item_id,item_name=item_name,zone_id=zone_id,zone_name=zone_name))}}" method="post">   	    
+        <tr >
+            <td ><input type="submit" value=" < Back "/></td>            
+        </tr> 
+        </form>            
+    </table>   
+    <table width="500" style="margin-bottom:10px; font-weight:bold;" >    	    
+        <tr style="background-color:#F0FAFF">
+            <td width="100" >Month</td>
+            <td width="2" >:</td>
+            <td >{{=datetime.datetime.strptime(str(current_date)[0:7] + '-01', '%Y-%m-%d').strftime('%Y-%b')}}</td>
+        </tr>
+        {{if category_id!='':}}
+        <tr style="background-color:#F0FAFF">
+            <td width="100" >Category</td>
+            <td width="2" >:</td>
+            <td >{{=category_id}}</td>
+        </tr>
+        {{pass}}
+        {{if item_id!='':}}
+        <tr style="background-color:#F0FAFF">
+            <td width="100" >Item Id</td>
+            <td width="2" >:</td>
+            <td >{{=item_name}} | {{=item_id}}</td>
+        </tr>
+        {{pass}}
+        {{if zone_id!='':}}
+        <tr style="background-color:#F0FAFF">
+            <td width="100" >Division</td>
+            <td width="2" >:</td>
+            <td >{{=zone_name}} | {{=zone_id}}</td>
+        </tr>
+        {{pass}}           
+    </table>
+        			
+    {{if len(targetAchRows)==0:}}
+    	Data not available.
+    {{else:}}
+        <table width="500" border="1" cellpadding="1" cellspacing="1" class="sample_border" >
+            <tr align="left" class="blackCatHead" height="20px" ;  style="font-size:12px; background-color:#E9E9E9;">
+            	<td align="left"  >Zone</td>      
+                <!--<td align="left"  >Item </td>-->
+                <td width="60"   style=" text-align:center;" >Target (Qty)</td>
+                <td width="60"   style=" text-align:center;" >Ach. (qty)</td> 
+                <td width="60"   style=" text-align:center;" >Ach. (%)</td>  
+                <td width="10"   style=" text-align:center;" ></td>    
+            </tr>
+            {{totalTgt=0}}
+            {{totalAch=0}}
+            {{AchPer=0}}
+            {{i=0}}
+                                       
+            {{for row in range(len(targetAchRows)):}}  
+                {{targetAchRowsS=targetAchRows[row]}}
+                 {{totalTgt+=targetAchRowsS['target_qty']}}
+                 {{totalAch+=targetAchRowsS['achievement_qty']}}
+                 
+                 {{
+                 if targetAchRowsS['target_qty']>0:
+                 	AchPer=(float(targetAchRowsS['achievement_qty'])/float(targetAchRowsS['target_qty'])*100)
+                 else:
+                    AchPer=0                 
+                 pass
+                 }}
+                 {{i+=1}}
+                 <form action="{{=URL(c='report_summary_mobile',f='target_vs_achievement_item_summary_region',vars=dict(category_id=category_id,item_id=item_id,item_name=item_name,zone_id=zone_id,zone_name=zone_name,region_id=targetAchRowsS['region_id'],region_name=targetAchRowsS['region_name']))}}" method="post">
+                 {{if i%2==0:}}
+                 <tr  align="left" class="blackCat"  style="vertical-align:middle; font-size:11px; background-color:#F0FAFF">
+                 {{else:}}
+                <tr  align="left" class="blackCat"  style="vertical-align:middle; font-size:11px;">
+                {{pass}}
+                    <td style=" text-align:left;">{{=targetAchRowsS['region_name']}}|{{=targetAchRowsS['region_id']}}</td>
+                    <!--<td style=" text-align:left;">{{=targetAchRowsS['item_name']}}|{{=targetAchRowsS['item_id']}}</td>--> 
+                    <td style=" text-align:center;">{{=targetAchRowsS['target_qty']}}</td>
+                    <td style=" text-align:center;">{{=targetAchRowsS['achievement_qty']}}</td>
+                    <td style=" text-align:center;">{{if AchPer>0:}}{{=round(AchPer,2)}}%{{else:}}{{pass}}</td>
+                    <td style=" text-align:center;"><input type="submit" name="btn_submit_r" value=" >> "/></td>             
+                </tr>
+                </form>                           
+                        
+             {{pass}}           
+            <tr  align="left" class="blackCat"  style="vertical-align:middle; font-size:11px; background-color:#F4F4F4;">
+                <td style=" text-align:right;">Total=</td> 
+                <td style=" text-align:center;">{{=totalTgt}}</td>
+                <td style=" text-align:center;">{{=totalAch}}</td> 
+                <td style=" text-align:right;"></td>
+                <td style=" text-align:right;"></td>            
+            </tr>
+        </table>
+     {{pass}}
+   
+    </body>
+</html>
+

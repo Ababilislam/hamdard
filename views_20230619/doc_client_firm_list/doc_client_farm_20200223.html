@@ -1,0 +1,448 @@
+{{extend 'layout_wap.html'}}
+
+<link rel="stylesheet" href="{{=URL('static', 'js_and_css/ui.theme.css')}}" type="text/css" />
+  <link rel="stylesheet" href="{{=URL('static', 'js_and_css/jquery-ui.css')}}" type="text/css" />
+  <link rel="stylesheet" href="{{=URL('static', 'js_and_css/style.css')}}" type="text/css" />
+  
+  <script src="{{=URL('static','js_and_css/jquery-1.8.2.js')}}"></script>
+  <script src="{{=URL('static','js_and_css/jquery-ui.js')}}"></script>
+  
+  <style type="text/css">
+	 input[type=text], input[type=password],  select {
+    margin: 2px 0px 2px 0px;
+	}
+	
+	#sm_client_status,#sm_client_category_id{
+	width:auto;
+	}
+	#sm_client_client_id,#sm_client_area_id{
+	width:70px;
+	}
+	
+	#sm_client_op_balance,#sm_client_balance,#sm_client_credit_limit{
+	width:60px;
+	text-align:right;
+	}
+	
+	div.error {
+		color: white;
+		padding: 0px;
+		width: auto; 
+		margin-left:0px;
+	}
+	.page_color,body{
+		font-family:Arial, Helvetica, sans-serif;
+		font-size:13px;	
+		}
+		
+	input.btn_h:hover{background-color: #73c6e6;}
+	input.btn_h{background-color: #afe0f3;}
+	input.btn_h:hover{color:#000;}
+ </style>
+ 
+<script>
+
+var base_url=location.protocol + "//" + location.hostname + (location.port && ":" + location.port) + "/{{=request.application}}/";
+
+function docsearch(){
+	$("#heading_doc").show();
+	$("#heading_client").hide();
+	$("#heading_farm").hide();
+	
+	cid=$("#cid").val();
+	rep_id=$("#rep_id").val();
+	rep_pass=$("#rep_pass").val();
+	month_pass=$("#month_pass").val();
+	setDate=$("#setDate").val();
+	setTime=$("#setTime").val();
+	area=$("#area").val();
+
+	//alert ('Nadira')
+	//alert(base_url+'doc_client_firm_list/docsearch?cid='+cid+'&rep_id='+rep_id+'&rep_pass='+rep_pass+'&area_id='+area+'&setDate='+setDate+'&setTime='+setTime+'&month_pass='+month_pass);
+	$.ajax({
+		url:base_url+'doc_client_firm_list/docsearch?cid='+cid+'&rep_id='+rep_id+'&rep_pass='+rep_pass+'&area_id='+area+'&setDate='+setDate+'&setTime='+setTime+'&month_pass='+month_pass,
+		success: function(result) {
+			searchResult=result.split('<syncdata>')[0]
+			searchResult_check=result.split('<syncdata>')[1]
+			$("#docList").val(result);
+			
+			if (searchResult==''){
+				alert ('Sorry Doctor not available');
+			}else{
+				
+				docName=searchResult.split('rdrd');	
+				docList=''
+			
+				for (i=0; i<docName.length; i++){
+					docNameStr = docName[i];
+					dName=docNameStr.split('|')[0];
+					docId =docNameStr.split('|')[1];
+					//alert (docNameStr)
+					//alert (searchResult_check)
+					if (searchResult_check.indexOf(docNameStr)!=-1){
+						docList=docList+'</br><label><table width="100%"  cellpadding="1" cellspacing="1" class=""><tr><td><input type="checkbox" class="chk" name="'+docId+'" value="'+docNameStr+'" id="'+docId+'" checked> '+docNameStr+'</label></td></tr></table>'
+					}
+					else{
+						docList=docList+'</br><label><table width="100%"  cellpadding="1" cellspacing="1" class=""><tr><td><input type="checkbox" class="chk" name="'+docId+'" value="'+docNameStr+'" id="'+docId+'"> '+docNameStr+'</label></td></tr></table>'
+					}
+				}
+				
+				docList=docList+'<br/><br/><table width="100%"  cellpadding="1" cellspacing="1" class="sample_border"><tr><td  colspan="3"  ><input type="submit" id="btn" style="width:100%;border:1px solid #527f8e;padding:4px;background-color:#afe0f3"value="Submit" onClick="docSubmit()"></td></tr></table><br/><br/>'
+
+				localStorage.docList= docList;
+				var rpt_rep_ob=$("#doc_client_farm_NameList");
+
+				rpt_rep_ob.empty();	 
+				rpt_rep_ob.append(localStorage.docList);
+			}
+		}
+	});
+}
+
+function clientsearch(){
+	$("#heading_client").show();
+	$("#heading_doc").hide();
+	$("#heading_farm").hide();
+
+	cid=$("#cid").val();
+	rep_id=$("#rep_id").val();
+	rep_pass=$("#rep_pass").val();
+	month_pass=$("#month_pass").val();
+	setDate=$("#setDate").val();
+	setTime=$("#setTime").val();
+	area=$("#area").val();
+	//alert (base_url+'doc_client_firm_list/clientsearch?cid='+cid+'&rep_id='+rep_id+'&rep_pass='+rep_pass+'&area_id='+area+'&setDate='+setDate+'&setTime='+setTime+'&month_pass='+month_pass)
+	
+	$.ajax({
+		url:base_url+'doc_client_firm_list/clientsearch?cid='+cid+'&rep_id='+rep_id+'&rep_pass='+rep_pass+'&area_id='+area+'&setDate='+setDate+'&setTime='+setTime+'&month_pass='+month_pass,
+		success: function(result) {
+			searchResult=result.split('<syncdata>')[0]
+			searchResult_check=result.split('<syncdata>')[1]
+			$("#docList").val(result);
+			//alert ('Nadira')
+			if (searchResult==''){
+				alert ('Sorry Doctor not available');
+			}else{
+				
+				docName=searchResult.split('rdrd');	
+				docList=''
+			
+				for (i=0; i<docName.length; i++){
+					docNameStr = docName[i];
+					dName=docNameStr.split('|')[0];
+					docId =docNameStr.split('|')[1];
+					//alert (docNameStr)
+					//alert (searchResult_check)
+					if (searchResult_check.indexOf(docNameStr)!=-1){
+						docList=docList+'</br><label><table width="100%"  cellpadding="1" cellspacing="1" class=""><tr><td><input type="checkbox" class="chk" name="'+docId+'" value="'+docNameStr+'" id="'+docId+'" checked> '+docNameStr+'</label></td></tr></table>'
+					}
+					else{
+						docList=docList+'</br><label><table width="100%"  cellpadding="1" cellspacing="1" class=""><tr><td><input type="checkbox" class="chk" name="'+docId+'" value="'+docNameStr+'" id="'+docId+'"> '+docNameStr+'</label></td></tr></table>'
+					}
+				}
+				
+				docList=docList+'<br/><br/><table width="100%"  cellpadding="1" cellspacing="1" class="sample_border"><tr><td  colspan="3"  ><input type="submit" id="btn" style="width:100%;border:1px solid #527f8e;padding:4px;background-color:#afe0f3"value="Submit" onClick="clientSubmit()"></td></tr></table><br/><br/>'
+
+				localStorage.docList= docList;
+				var rpt_rep_ob=$("#doc_client_farm_NameList");
+
+				rpt_rep_ob.empty();	 
+				rpt_rep_ob.append(localStorage.docList);
+			}
+		}
+	});
+}
+
+
+function farmsearch(){
+	$("#heading_client").hide();
+	$("#heading_doc").hide();
+	$("#heading_farm").show();
+	
+	cid=$("#cid").val();
+	rep_id=$("#rep_id").val();
+	rep_pass=$("#rep_pass").val();
+	month_pass=$("#month_pass").val();
+	setDate=$("#setDate").val();
+	setTime=$("#setTime").val();
+	area=$("#area").val();
+//	alert (base_url+'doc_client_firm_list/farmsearch?cid='+cid+'&rep_id='+rep_id+'&rep_pass='+rep_pass+'&area_id='+area+'&setDate='+setDate+'&setTime='+setTime+'&month_pass='+month_pass)
+	
+	$.ajax({
+		url:base_url+'doc_client_firm_list/farmsearch?cid='+cid+'&rep_id='+rep_id+'&rep_pass='+rep_pass+'&area_id='+area+'&setDate='+setDate+'&setTime='+setTime+'&month_pass='+month_pass,
+		success: function(result) {
+			searchResult=result.split('<syncdata>')[0]
+			searchResult_check=result.split('<syncdata>')[1]
+			$("#docList").val(result);
+			//alert ('Nadira')
+			if (searchResult==''){
+				alert ('Sorry Doctor not available');
+			}else{
+				
+				docName=searchResult.split('rdrd');	
+				docList=''
+			
+				for (i=0; i<docName.length; i++){
+					docNameStr = docName[i];
+					dName=docNameStr.split('|')[0];
+					docId =docNameStr.split('|')[1];
+					//alert (docNameStr)
+					//alert (searchResult_check)
+					if (searchResult_check.indexOf(docNameStr)!=-1){
+						docList=docList+'</br><label><table width="100%"  cellpadding="1" cellspacing="1" class=""><tr><td><input type="checkbox" class="chk" name="'+docId+'" value="'+docNameStr+'" id="'+docId+'" checked> '+docNameStr+'</label></td></tr></table>'
+					}
+					else{
+						docList=docList+'</br><label><table width="100%"  cellpadding="1" cellspacing="1" class=""><tr><td><input type="checkbox" class="chk" name="'+docId+'" value="'+docNameStr+'" id="'+docId+'"> '+docNameStr+'</label></td></tr></table>'
+					}
+				}
+				
+				docList=docList+'<br/><br/><table width="100%"  cellpadding="1" cellspacing="1" class="sample_border"><tr><td  colspan="3"  ><input type="submit" id="btn" style="width:100%;border:1px solid #527f8e;padding:4px;background-color:#afe0f3"value="Submit" onClick="farmSubmit()"></td></tr></table><br/><br/>'
+
+				localStorage.docList= docList;
+				var rpt_rep_ob=$("#doc_client_farm_NameList");
+
+				rpt_rep_ob.empty();	 
+				rpt_rep_ob.append(localStorage.docList);
+			}
+		}
+	});
+}
+
+//======================Insert=====================
+
+function docSubmit(){
+	cid=$("#cid").val();
+	rep_id=$("#rep_id").val();
+	rep_pass=$("#rep_pass").val();
+	month_pass=$("#month_pass").val();
+	setDate=$("#setDate").val();
+	setTime=$("#setTime").val();
+	area=$("#area").val();
+	this_val=$("#this_val").val();
+
+	searchResult_1=$("#docList").val();
+	searchResult=searchResult_1.split('<syncdata>')[0]
+	//alert ('Nadira')
+	//alert (base_url+'doc_client_firm_list/docsearch?cid=NOVIVO'+'&rep_id='+'it03'+'&password='+'1234'+'&sync='+'4557'+'&area_id='+'DEMO',)
+	//alert(base_url+'doc_client_firm_list/docsearch?cid='+cid+'&rep_id='+rep_id+'&rep_pass='+rep_pass+'&area_id='+area+'&setDate='+setDate+'&setTime='+setTime+'&month_pass='+month_pass);
+
+			docName=searchResult.split('rdrd');	
+		
+			docListNew=''
+			for (i=0; i<docName.length; i++){
+				docNameStr = docName[i];
+				dName=docNameStr.split('|')[0];
+				docId =docNameStr.split('|')[1]
+				var getDoc= ($('#'+docId).is(':checked') ? 1 : 0);
+				if (getDoc==1){
+					if (docListNew==''){
+						docListNew=docListNew+docId+'|'+dName
+					}
+					else{
+						docListNew=docListNew+','+docId+'|'+dName
+					}
+				}
+			}
+			
+//			===================================
+			//alert (base_url+'doc_client_firm_list/insertDoc?cid='+cid+'&rep_id='+rep_id+'&rep_pass='+rep_pass+'&area_id='+area+'&setDate='+setDate+'&setTime='+setTime+'&month_pass='+month_pass+'&docListNew='+docListNew)
+			$.ajax({
+				url:base_url+'doc_client_firm_list/insertDoc?cid='+cid+'&rep_id='+rep_id+'&rep_pass='+rep_pass+'&area_id='+area+'&setDate='+setDate+'&setTime='+setTime+'&month_pass='+month_pass+'&docListNew='+docListNew+'&this_val='+this_val,
+				//----------Shima-----------
+				success:function(result2){
+					var resultGet=result2.split('<rdrd>')[0];	
+					if (resultGet=='Failed'){		
+						alert (result2.split('<rdrd>')[1])
+							//$("#msg").text("Please select checkbox");
+					}else if (resultGet=='Success'){
+						
+						alert (result2.split('<rdrd>')[0])
+					}else{
+						alert ("Failed")
+					}
+				}
+			});		
+		
+}
+
+
+function clientSubmit(){
+			// 2019-12-23 start
+
+	cid=$("#cid").val();
+	rep_id=$("#rep_id").val();
+	rep_pass=$("#rep_pass").val();
+	month_pass=$("#month_pass").val();
+	setDate=$("#setDate").val();
+	setTime=$("#setTime").val();
+	area=$("#area").val();
+	this_val=$("#this_val").val();
+
+
+	searchResult_1=$("#docList").val();
+	searchResult=searchResult_1.split('<syncdata>')[0]
+
+	client=searchResult.split('rdrd');	
+	
+
+		// 2019-12-23 end
+	clientListNew=''
+	for (i=0; i<client.length; i++){
+		clientStr = client[i];
+		clName=clientStr.split('|')[0];
+		clId =clientStr.split('|')[1];
+
+		var getclient= ($('#'+clId).is(':checked') ? 1 : 0);
+		if (getclient==1){
+			if (clientListNew==''){
+				clientListNew=clientListNew+clId+'|'+clName
+			}
+			else{
+				clientListNew=clientListNew+','+clId+'|'+clName
+			}
+		}
+	}
+	
+			//			===================================
+		//alert (base_url+'doc_client_firm_list/insertclient?cid='+cid+'&rep_id='+rep_id+'&rep_pass='+rep_pass+'&area_id='+area+'&setDate='+setDate+'&setTime='+setTime+'&month_pass='+month_pass+'&clientListNew='+clientListNew)
+	$.ajax({
+		url:base_url+'doc_client_firm_list/insertclient?cid='+cid+'&rep_id='+rep_id+'&rep_pass='+rep_pass+'&area_id='+area+'&setDate='+setDate+'&setTime='+setTime+'&month_pass='+month_pass+'&clientListNew='+clientListNew+'&this_val='+this_val,
+		
+		success:function(result2){
+			var resultGet=result2.split('<rdrd>')[0];	
+			if (resultGet=='Failed'){		
+				alert (result2.split('<rdrd>')[1])
+			}else if (resultGet=='Success'){
+				alert (result2.split('<rdrd>')[1])
+			}else{
+				alert ("Failed")
+			}
+			
+		}
+	});		
+}
+function farmSubmit(){
+
+	cid=$("#cid").val();
+	rep_id=$("#rep_id").val();
+	rep_pass=$("#rep_pass").val();
+	month_pass=$("#month_pass").val();
+	setDate=$("#setDate").val();
+	setTime=$("#setTime").val();
+	area=$("#area").val();
+	this_val=$("#this_val").val();
+
+	
+
+	searchResult_1=$("#docList").val();
+	searchResult=searchResult_1.split('<syncdata>')[0]
+	
+	farmName=searchResult.split('rdrd');	
+	
+	farmListNew=''
+
+	for (i=0; i<farmName.length; i++){
+		
+		farmNameStr = farmName[i];
+		fName=farmNameStr.split('|')[0];
+		farmId =farmNameStr.split('|')[1];
+
+		var getfarm= ($('#'+farmId).is(':checked') ? 1 : 0);
+		if (getfarm==1){
+			if (farmListNew==''){
+				farmListNew=farmListNew+farmId+'|'+fName
+			}
+			else{
+				farmListNew=farmListNew+','+farmId+'|'+fName
+			}
+		}
+	}
+
+//			===================================
+	//alert (base_url+'doc_client_firm_list/farmclient?cid='+cid+'&rep_id='+rep_id+'&rep_pass='+rep_pass+'&area_id='+area+'&setDate='+setDate+'&setTime='+setTime+'&month_pass='+month_pass+'&farmListNew='+farmListNew)
+	$.ajax({
+		url:base_url+'doc_client_firm_list/farmclient?cid='+cid+'&rep_id='+rep_id+'&rep_pass='+rep_pass+'&area_id='+area+'&setDate='+setDate+'&setTime='+setTime+'&month_pass='+month_pass+'&farmListNew='+farmListNew+'&this_val='+this_val,
+		//----------Shima-----------
+		success:function(result2){
+			var resultGet=result2.split('<rdrd>')[0];	
+			if (resultGet=='Failed'){		
+				alert (result2.split('<rdrd>')[1])
+					//$("#msg").text("Please select checkbox");
+			}else if (resultGet=='Success'){
+				alert (result2.split('<rdrd>')[1])
+			}else{
+				alert ("Failed")
+			}
+			
+		}
+	});	
+		
+}
+</script>
+
+<table width="100%"  cellpadding="1" cellspacing="1" class="">
+ 	<tr style="vertical-align:middle">
+    	<td>&nbsp;</td>
+    </tr>
+ 	<tr style="vertical-align:middle">
+        <td>&nbsp;</td>
+        <td>
+        	<input type="submit" style=" width: 100%;height: auto;padding: 6px;font-size: 14px;border: 1px solid #527f8e;" class="btn_h" value="Doctor List" onClick="docsearch()">
+        </td>
+    </tr>
+    <tr>
+    	<td>&nbsp;</td>
+        <td>
+		</br>
+        	<input type="submit" style=" width: 100%;height: auto;padding: 6px;font-size: 14px;border: 1px solid #527f8e;" class="btn_h" value="Client List" onClick="clientsearch()">
+        </td>
+    </tr>
+    <tr>
+    	<td>&nbsp;</td>	
+        <td>
+		</br>
+		<input type="submit" style=" width: 100%;height: auto;padding: 6px;font-size: 14px;border: 1px solid #527f8e;" class="btn_h" value="Farm List" onClick="farmsearch()"></td>
+    </tr>
+    <tr>
+        <td>&nbsp;</td><td ></td>
+    </tr>
+    <tr>
+        <td>&nbsp;</td>
+        <td>    
+		<input type="hidden" id="cid" name="cid" value="{{=session.cid}}" > 
+		<input type="hidden" id="rep_id" name="rep_id" value="{{=session.rep_id}}" > 
+		<input type="hidden" id="rep_pass" name="rep_pass" value="{{=session.password}}" > 
+		<input type="hidden" id="month_pass" name="month_pass" value="{{=session.monthPass}}" > 
+		
+		<input type="hidden" id="setDate" name="setDate" value="{{=setDate}}" > 
+		<input type="hidden" id="setTime" name="setTime" value="{{=setTime}}" > 
+		<input type="hidden" id="area" name="area" value="{{=area}}" > 
+		<input type="hidden" id="this_val" name="this_val" value="{{=this_val}}" > 
+		
+		
+		<input type="hidden" id="docList" name="docList" value="" > 
+	
+    
+    
+	
+            <div id="heading_doc" hidden="hidden">
+            	<span style=" padding:7px 58px;font-size: 15px;color: #020082;font-weight: bold;text-align: center;">Doctor List</span>
+            </div> 
+            <div id="heading_client" hidden="hidden">
+            	<span style=" padding:7px 58px;font-size: 15px;color: #020082;font-weight: bold;text-align: center;">Client List</span>
+            </div> 
+            <div id="heading_farm" hidden="hidden">
+            	<span style=" padding:7px 58px;font-size: 15px;color: #020082;font-weight: bold;text-align: center;">Farm List</span>
+            </div>      
+        </td>
+    </tr>
+    <tr>
+        <td >&nbsp;</td>
+        <td colspan="2" width="100%">                        
+            <div id="doc_client_farm_NameList"></div>      
+        </td>
+    </tr>
+</table>
+
+
+

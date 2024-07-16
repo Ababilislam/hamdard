@@ -1,0 +1,354 @@
+{{extend 'layout_sales_report.html'}}
+
+<html>
+
+<head>
+
+<script type="text/javascript">
+
+function print_page()
+
+  {
+
+    window.print()
+
+  }
+
+</script>
+
+
+
+</head>
+
+<body>
+
+
+
+<table width="900px;"> <tr><td style="text-align:right"><!--<a href="{{#=URL(c='report',f='downloadGoodsReceivedSummary',vars=dict(date_from=date_from,date_to=date_to,depot_id=depot_id,depot_name=depot_name,store_id=store_id,store_name=store_name,customer_id=customer_id,customer_name=customer_name,mso_id=mso_id,mso_name=mso_name))}}" >Downlaod</a>--></td></tr></table>
+
+
+
+<table width="700px" cellspacing="1" cellpadding="1">
+
+	<tr>
+
+		<td><table width="900px" style="border:none;" >
+		  <tr >
+		    <td >Date Range</td>
+		    <td >&nbsp;</td>
+		    <td >{{=date_from}} - {{=date_to}}</td>
+		    <td >&nbsp;</td>
+		    <td >&nbsp;</td>
+		    <td width="266" >&nbsp;</td>
+	      </tr>
+		  <tr >
+		    <td width="90" > Depot/Branch</td>
+		    <td width="10" >:</td>
+		    <td width="424" ><span >{{=depot_id}}|{{=depot_name}}</span></td>
+		    <td width="79" >Customer</td>
+		    <td width="3" >:</td>
+		    <td ><span >{{=customer_id}}
+		      {{=customer_name}}</span></td>
+	      </tr>
+		  <tr >
+		    <td >Store</td>
+		    <td >:</td>
+		    <td ><span >{{=store_id}}|{{=store_name}}</span></td>
+		    <td >MSO</td>
+		    <td >:</td>
+		    <td ><span >{{=mso_id}}
+		      {{=mso_name}}</span></td>
+	      </tr>
+		  <tr >
+		    <td >Teritory</td>
+		    <td >:</td>
+		    <td ><span >{{=teritory_id}}
+		      {{=teritory_name}}</span></td>
+		    <td >Market</td>
+		    <td >:</td>
+		    <td ><span >{{=market_id}}
+		      {{=market_name}}</span></td>
+	      </tr>
+		  </table>
+          <table width="900px" style="border:none; text-align:center; font-weight:bold;" >
+            <tr >
+              <td width="100" >&nbsp;</td>
+              <td align="center" ><span style="border-bottom:1px solid #333;">Product Wise Sales Statement </span></td>
+              <td width="100" ><img  height="30px" src="{{=URL('static','images/comp_logo1.png')}}"/></td>
+            </tr>
+        </table></td>
+
+	</tr>
+
+	<tr height="10px"></tr>
+
+	<tr>
+
+		<td>
+			<!--<table width="900" border="1" cellpadding="1" cellspacing="1" class="sample_border" >   
+             <tr align="left" class="blackCatHead" height="20px" ;  style="font-size:12px">
+                  <td width="600" rowspan="2"    ></td>
+                  <td width="80" rowspan="2"   align="right">Ret%</td>
+                  <td width="80" colspan="3"   ><div align="center">Invioce</div></td>
+                  <td width="80" colspan="3"   ><div align="center">Return</div></td>
+                  <td width="80" colspan="3"   ><div align="center">Net</div></td>
+              </tr>
+                <tr align="left" class="blackCatHead" height="20px"   style="font-size:12px">
+                  <td  width="80"   align="right">Qnty</td>
+                  <td width="80"    align="right">Bonus</td>
+                  <td width="80"   align="right">TradePrice</td>
+                  <td width="80"   align="right">Qnty</td>
+                  <td width="80"   align="right">Bonus</td>
+                  <td width="80"   align="right">TradePrice</td>
+                  <td width="80"   align="right">Qnty</td>
+                  <td width="80"   align="right">Bonus</td>
+                  <td width="80"   align="right">TradePrice</td>
+                </tr>  
+                 {{for i in range(len(records_rsm)):
+                  record_rsm=records_rsm[i]}}
+              <tr  align="left" style="vertical-align:middle; font-size:12px; background:#FBFBFB;">
+                <td  >RSM: {{=record_rsm['level1_id']}}</td>
+
+                {{netSoldRsm=record_rsm['actual_tp']-record_rsm['retTP']
+                saleRsm=record_rsm['actual_tp']
+                rSaleRsm=record_rsm['retTP']
+                }}
+                {{#=rSale}}
+                {{#eP=(netSold*100)/sale}}
+                {{
+                rPRsm=0
+                if (rSaleRsm > 0):
+                rPRsm=(rSaleRsm*100)/saleRsm
+                pass
+                }}
+                <td   align="right"  >{{='{:20,.2f}'.format(rPRsm)}}</td>
+                <td     align="right" >{{=record_rsm['inv_qty']}}</td>
+                <td    align="right" >{{=record_rsm['inv_bonus_qty']}}</td>
+                <td    align="right" >{{='{:20,.2f}'.format(record_rsm['actual_tp'])}}</td>
+                <td     align="right" >{{=record_rsm['ret_qty']}}</td>
+                <td    align="right" >{{=record_rsm['ret_bonus_qty']}}</td>
+                <td     align="right"  >{{='{:20,.2f}'.format(record_rsm['retTP'])}}</td>
+                <td    align="right" >{{=record_rsm['inv_qty']-record_rsm['ret_qty']}}</td>
+                <td width="75"    align="right" >{{=record_rsm['inv_bonus_qty']-record_rsm['ret_bonus_qty']}}</td>
+                <td width="150"    align="right" >{{='{:20,.2f}'.format(netSoldRsm)}}</td>
+              </tr>
+
+              
+              {{pass}}
+              
+              
+               {{for i in range(len(records_fp)):
+                  record_fp=records_fp[i]}}
+              <tr  align="left" style="vertical-align:middle; font-size:12px; background:#FBFBFB;">
+                <td  >FM: {{=record_fp['level2_id']}}</td>
+
+                {{netSoldFp=record_fp['actual_tp']-record_fp['retTP']
+                saleFp=record_fp['actual_tp']
+                rSaleFp=record_fp['retTP']
+                }}
+                {{#=rSale}}
+                {{#eP=(netSold*100)/sale}}
+                {{
+                rPFp=0
+                if (rSaleFp > 0):
+                rPFp=(rSaleFp*100)/saleFp
+                pass
+                }}
+                <td   align="right"  >{{='{:20,.2f}'.format(rPFp)}}</td>
+                <td     align="right" >{{=record_fp['inv_qty']}}</td>
+                <td    align="right" >{{=record_fp['inv_bonus_qty']}}</td>
+                <td    align="right" >{{='{:20,.2f}'.format(record_fp['actual_tp'])}}</td>
+                <td     align="right" >{{=record_fp['ret_qty']}}</td>
+                <td    align="right" >{{=record_fp['ret_bonus_qty']}}</td>
+                <td     align="right"  >{{='{:20,.2f}'.format(record_fp['retTP'])}}</td>
+                <td    align="right" >{{=record_fp['inv_qty']-record_fp['ret_qty']}}</td>
+                <td width="75"    align="right" >{{=record_fp['inv_bonus_qty']-record_fp['ret_bonus_qty']}}</td>
+                <td width="150"    align="right" >{{='{:20,.2f}'.format(netSoldFp)}}</td>
+              </tr>
+              {{pass}}
+              
+              {{for i in range(len(records_tr)):
+                  record_tr=records_tr[i]}}
+              <tr  align="left" style="vertical-align:middle; font-size:12px; background:#FBFBFB;">
+                <td  >TR: {{=record_tr['level3_id']}}</td>
+
+                {{netSoldTr=record_tr['actual_tp']-record_tr['retTP']
+                saleTr=record_tr['actual_tp']
+                rSaleTr=record_tr['retTP']
+                }}
+                {{#=rSale}}
+                {{#eP=(netSold*100)/sale}}
+                {{
+                rPTr=0
+                if (rSaleTr > 0):
+                rPTr=(rSaleTr*100)/saleTr
+                pass
+                }}
+                <td   align="right"  >{{='{:20,.2f}'.format(rPTr)}}</td>
+                <td     align="right" >{{=record_tr['inv_qty']}}</td>
+                <td    align="right" >{{=record_tr['inv_bonus_qty']}}</td>
+                <td    align="right" >{{='{:20,.2f}'.format(record_tr['actual_tp'])}}</td>
+                <td     align="right" >{{=record_tr['ret_qty']}}</td>
+                <td    align="right" >{{=record_tr['ret_bonus_qty']}}</td>
+                <td     align="right"  >{{='{:20,.2f}'.format(record_tr['retTP'])}}</td>
+                <td    align="right" >{{=record_tr['inv_qty']-record_tr['ret_qty']}}</td>
+                <td width="75"    align="right" >{{=record_tr['inv_bonus_qty']-record_tr['ret_bonus_qty']}}</td>
+                <td width="150"    align="right" >{{='{:20,.2f}'.format(netSoldTr)}}</td>
+              </tr>
+              {{pass}}
+              </table>-->
+            
+            
+            </br>
+            
+			<table width="900" border="1" cellpadding="1" cellspacing="1" class="sample_border" >
+            
+             <tr align="left" class="blackCatHead" height="20px" ;  style="font-size:12px">
+                  <td width="80" rowspan="2"    >ItemID</td>
+                  <td rowspan="2"   >ItemName</td>
+                  <td width="80" rowspan="2"   >UOM</td>
+                  <td width="80" rowspan="2"   >UnitPrice</td>
+                  <td width="80" rowspan="2"   align="right" >Ret%</td>
+                  <td width="80" colspan="3"   align="center">Invioce</td>
+                  <td width="80" colspan="3"   align="center">Return</td>
+               <td width="150" colspan="3"   align="center">Net</td>
+              </tr>
+                <tr align="left" class="blackCatHead" height="20px" ;  style="font-size:12px">
+                  <td  width="80"   align="right" >Qnty</td>
+                  <td width="80"    align="right" >Bonus</td>
+                  <td width="80"    align="right" >TradePrice</td>
+                  <td width="80"    align="right" >Qnty</td>
+                  <td width="80"    align="right" >Bonus</td>
+                  <td width="80"    align="right" >TradePrice</td>
+                  <td width="80"    align="right" >Qnty</td>
+                  <td width="80"    align="right" >Bonus</td>
+                  <td width="150"    align="right" >TradePrice</td>
+                </tr>  
+				{{p=0}}
+               
+                 {{for i in range(len(records)):
+                record=records[i]}}
+
+                
+         
+             {{ if (i % 2 == 0):}}
+              <tr  align="left" style="vertical-align:middle; font-size:12px; background:#F5F5F5;">
+                
+				{{pass}}
+
+                
+                <td  >{{=record['item_id']}}</td>
+               
+                
+                <td  >{{=record['item_name']}}</td>
+                <td   >{{=record['item_unit']}}</td>
+                <td    align="right" >{{='{:20,.2f}'.format(record['unitTP'])}}</td>
+                {{netSold=record['actual_tp']-record['retTP']
+                sale=record['actual_tp']
+                rSale=record['retTP']
+                }}
+                {{#=rSale}}
+                {{#eP=(netSold*100)/sale}}
+                {{
+                rP=0
+                if (rSale > 0):
+                rP=(rSale*100)/sale
+                pass
+                }}
+                <td   align="right"  >{{='{:20,.2f}'.format(rP)}}</td>
+                <td     align="right" >{{=record['inv_qty']}}</td>
+                <td    align="right" >{{=record['inv_bonus_qty']}}</td>
+                <td    align="right" >{{='{:20,.2f}'.format(record['actual_tp'])}}</td>
+                <td     align="right" >{{=record['ret_qty']}}</td>
+                <td    align="right" >{{=record['ret_bonus_qty']}}</td>
+                <td     align="right"  >{{='{:20,.2f}'.format(record['retTP'])}}</td>
+                <td    align="right" >{{=record['inv_qty']-record['ret_qty']}}</td>
+                <td width="80"    align="right" >{{=record['inv_bonus_qty']-record['ret_bonus_qty']}}</td>
+                <td width="150"    align="right" >{{='{:20,.2f}'.format(netSold)}}</td>
+              </tr>
+             
+              {{p=p+1}}
+				{{if p==20:}}
+                <span style="page-break-before:always"></span>
+                {{p=0}}
+                
+                
+                
+                
+                {{pass}}
+                {{pass}}
+
+        
+
+		  
+
+
+	
+{{for i in range(len(records_tr)):
+                  record_tr=records_tr[i]}}
+ <tr  align="left" class="blackCat"  style="vertical-align:middle; font-size:16px; color:#AB142F ">
+          
+            
+                
+
+                {{netSoldTr=record_tr['actual_tp']-record_tr['retTP']
+                saleTr=record_tr['actual_tp']
+                rSaleTr=record_tr['retTP']
+                }}
+                {{#=rSale}}
+                {{#eP=(netSold*100)/sale}}
+                {{
+                rPTr=0
+                if (rSaleTr > 0):
+                rPTr=(rSaleTr*100)/saleTr
+                pass
+                }}
+                <td colspan="2"  >TR: {{=record_tr['level3_id']}}</td>
+                <td  ></td>
+                <td  ></td>
+                <td   align="right"  >{{='{:20,.2f}'.format(rPTr)}}</td>
+                <td     align="right" >{{=record_tr['inv_qty']}}</td>
+                <td    align="right" >{{=record_tr['inv_bonus_qty']}}</td>
+                <td    align="right" >{{='{:20,.2f}'.format(record_tr['actual_tp'])}}</td>
+                <td     align="right" >{{=record_tr['ret_qty']}}</td>
+                <td    align="right" >{{=record_tr['ret_bonus_qty']}}</td>
+                <td     align="right"  >{{='{:20,.2f}'.format(record_tr['retTP'])}}</td>
+                <td    align="right" >{{=record_tr['inv_qty']-record_tr['ret_qty']}}</td>
+                <td width="80"    align="right" >{{=record_tr['inv_bonus_qty']-record_tr['ret_bonus_qty']}}</td>
+                <td width="150"    align="right" >{{='{:20,.2f}'.format(netSoldTr)}}</td>
+              </tr>
+        
+        
+            {{#=saleTotal}}
+            {{#=retTamn}}
+            {{pass}}
+            
+        </table>
+
+<br/>
+<br/>
+<table width="900px" >
+  <tr>
+    <td width="411" align="center">__________________</td>
+    <td width="225" align="center">&nbsp;</td>
+    <td width="248" align="left">________________________________</td>
+  </tr>
+  <tr>
+    <td width="411" align="center"><strong>Printed By</strong></td>
+    <td width="225" align="right">for</td>
+    <td width="248" align="left"><strong>{{=session.cName}}</strong></td>
+  </tr>
+</table>
+<br/>
+
+
+
+
+<br/>
+
+
+
+</body>
+
+</html>
+

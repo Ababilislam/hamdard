@@ -1,0 +1,166 @@
+{{extend 'layout_sample_report.html'}}
+
+<html>
+<head>
+</head>
+<body>
+<table width="900px" style="border:none; text-align:center; font-weight:bold;" >
+        <tr >
+            <td width="100" >&nbsp;</td>
+            <td align="center" ><span style="border-bottom:1px solid #333;">Tour Plan Details</span></td>
+            <td width="100" ><img  height="30px" src="{{=URL('static','images/comp_logo1.png')}}"/></td>
+        </tr>
+    </table>
+    
+    
+    <br/>
+    
+   <table width="900" border="1" cellpadding="1" style="border:1px solid #c7c4c4 " cellspacing="1" >
+    <tr style="background-color:#E6E6E6;">
+      <td width="300" >Date Range</td>
+      <td width="300" >Field Force</td>
+      <td >Territory</td>
+    </tr>
+    <tr style="background-color:#F0FAFF">
+      <td width="300" >{{=date_from}} <b> To</b> {{=date_to}}</td>
+      
+        <td width="300" ><span style="border-right-width:3px;">{{if pr_ff=='':}}ALL{{else:}}{{=pr_ff}}{{pass}}</span></td>
+       
+        <td width="300" ><span style="border-right-width:3px;">{{if pr_territory=='':}}ALL{{else:}}{{=pr_territory}}{{pass}}</span></td>
+        
+    </tr>
+</table>
+
+	
+    <br/>
+    <table width="900px" border="1" cellpadding="1" cellspacing="1" class="sample_border" >
+        <tr align="left" style="background-color:#EBEBEB; font-size:12px; font-weight:bold;" >		    
+            <td style="width:100px;">Date</td> 
+            <td style="width:150px;">Name of MPO</td>
+            <td style="width:100px;">Morning</td>
+            <td style="width:50px;">Type</td> 
+            <td style="width:150px;">Doctor </td>
+            
+           <td style="width:150px;">Client </td>
+            <td style="width:100px;">Evening</td>  
+            <td style="width:50px;">Type</td> 
+            <td style="width:150px;"><span style="width:150px;">Doctor</span></td>  
+            <td style="width:150px;"><span style="width:150px;">Client</span></td>  
+      </tr>
+      
+        {{Sstring=''}}
+       {{for i,record in enumerate(records):}}
+         
+        {{Sstring=str(record[db.sm_doctor_visit_plan.schedule_date])+'|'+str(record[db.sm_doctor_visit_plan.rep_id])}}  
+
+
+         {{ 
+         noteevening=''
+         if [s for s in eveningSearchList if Sstring in s]:
+                    index_element = eveningSearchList.index(Sstring)           
+                    noteevening=eveningList[index_element]
+                   
+             pass       
+          }}
+        
+          {{ 
+         eveningArea=''
+         if [s for s in eveningAreaSearchList if Sstring in s]:
+                    index_element = eveningAreaSearchList.index(Sstring)           
+                    eveningArea=eveningAreaList[index_element]
+                   #=eveningAreaSearchList
+             pass       
+          }}
+          {{
+         
+         try:
+         
+         noteevngDoc=strevngDoc.split('<'+Sstring+'>,')[1].split('<')[0]
+         except:
+         noteevngDoc=''
+         pass
+         }}
+         
+         {{
+         
+         try:
+         
+         noteevngClnt=strevngClnt.split('<'+Sstring+'>,')[1].split('<')[0]
+         except:
+         noteevngClnt=''
+         pass
+         }}
+         
+<!-- ============  Morning ==============-->
+          
+          {{ 
+         notemorning=''
+         if [s for s in morningSearchList if Sstring in s]:
+                    index_element = morningSearchList.index(Sstring)           
+                    notemorning=morningList[index_element]
+             pass       
+          }}
+          
+          {{#=morningSearchList}}
+          {{ 
+         morningArea=''
+         if [s for s in morningAreaSearchList if Sstring in s]:
+                    index_element = morningAreaSearchList.index(Sstring)           
+                    morningArea=morningAreaList[index_element]
+                   #=morningArea
+             pass       
+          }}
+          
+		
+         {{
+         
+         try:
+         
+         notemorDoc=strMorningDoc.split('<'+Sstring+'>,')[1].split('<')[0]
+         except:
+         notemorDoc=''
+         pass
+         }}
+         
+         {{
+         
+         try:
+         
+         notemorClnt=strMorningClnt.split('<'+Sstring+'>,')[1].split('<')[0]
+         except:
+         notemorClnt=''
+         pass
+         }}
+         
+        <tr  align="left" style="font-size:12px;">
+            <td >{{=record[db.sm_doctor_visit_plan.schedule_date]}}</td>
+            <td >{{=record[db.sm_doctor_visit_plan.rep_name]}}</td>
+            <td ><span style=" color: #FF6699">{{=morningArea}}</span></td>
+            
+            <td >HQ</td>
+            <td >{{=notemorDoc}}</td>
+            <td >{{=notemorClnt}}   </td>
+              
+            
+            <td ><span style=" color: #699">{{=eveningArea}}</span></td>
+            
+            
+            <td>Ex HQ</td>
+            
+            <td>{{=noteevngDoc}}</td>
+        
+            
+            <td>{{=noteevngClnt}}</td>
+      
+        </tr>
+        {{pass}}        
+        <tr  align="left" style=" background-color:#F4F4F4; font-size:11px; font-weight:bold;">
+            <td style="text-align:center" colspan="5"></td>  
+        </tr>
+        
+</table>		 
+
+</body>
+
+</html>
+

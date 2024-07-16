@@ -1,0 +1,297 @@
+{{extend 'layout.html'}}
+
+
+<link rel="stylesheet" href="{{=URL('static', 'js_and_css/ui.theme.css')}}" type="text/css" />
+<link rel="stylesheet" href="{{=URL('static', 'js_and_css/jquery-ui.css')}}" type="text/css" />
+<link rel="stylesheet" href="{{=URL('static', 'js_and_css/style.css')}}" type="text/css" />
+<script src="{{=URL('static','js_and_css/jquery-1.8.2.js')}}"></script>
+<script src="{{=URL('static','js_and_css/jquery-ui.js')}}"></script>
+
+<style>
+    body {
+        font-family: "Lato", sans-serif;
+    }
+
+    #main {
+        transition: margin-left .5s;
+        padding: 16px;
+    }
+
+    @media screen and (max-height: 450px) {
+        .sidenav {padding-top: 15px;}
+        .sidenav a {font-size: 18px;}
+    }
+</style>
+ 
+<style type="text/css">
+    input[type=text], input[type=password], select {
+        margin: 2px 0px 2px 0px;
+        width:250px;
+    }
+
+    select{ 
+        width:265px; margin:2px 0px 2px 0px;
+    }
+
+    textarea{
+        width:250px;
+        height:50px;
+        margin:2px 0px 2px 0px;
+    }
+
+    div.error {
+        margin-left:0px;
+        width:265px;
+    }
+    .page_color,body{
+        font-family:Arial, Helvetica, sans-serif;
+        font-size:13px;
+    }
+
+    #uni_middle_str4{
+        width:100px;
+    }
+</style>
+
+<!-- <script>
+    var base_url=location.protocol + "//" + location.hostname + (location.port && ":" + location.port) + "/{{=request.application}}/";
+  
+	$(function () {
+		//----------------------------------- BRANCH AUTOCOMPLETE
+
+		// alert(base_url+'branch_costing/get_branch')
+		$.ajax({
+			url: base_url + 'branch_costing/get_branch',
+			success: function (retStr) {
+				branch_dataStr = retStr
+				// alert (branch_dataStr)
+			}
+		});
+
+		$('#branch_value').keyup(function () {
+			//-------------------------
+			var ref_list = branch_dataStr.split(',');
+			var ref_name = $("#branch_value").val();
+
+			//---------------- auto complete combo list
+			var ref_list_new = new Array();
+			lc = 0;
+			i = 0;
+			var refStr = "";
+			while (i < ref_list.length) {
+				refStr = ref_list[i];
+				i = i + 1;
+				var res = refStr.toUpperCase().match(ref_name.toUpperCase());
+				if (res != null) {
+					ref_list_new[lc] = refStr;
+					lc = lc + 1;
+					if (lc == 30) {
+						break;
+					};
+				} else {
+					continue;
+				}
+			};
+			//alert (ref_list_new);
+
+			//-------------- auto complete source
+			$("input#branch_value").autocomplete({
+				source: ref_list_new
+			});
+
+		});
+
+
+		//----------------------------------- CATEGORY AUTOCOMPLETE
+
+		// alert(base_url+'branch_costing/get_Categories')
+		$.ajax({
+			url: base_url + 'branch_costing/get_Categories',
+			success: function (retStr) {
+				category_dataStr = retStr
+				// alert (category_dataStr)
+			}
+		});
+
+		$('#category_value').keyup(function () {
+			//-------------------------
+			var ref_list = category_dataStr.split(',');
+			var ref_name = $("#category_value").val();
+
+			//---------------- auto complete combo list
+			var ref_list_new = new Array();
+			lc = 0;
+			i = 0;
+			var refStr = "";
+			while (i < ref_list.length) {
+				refStr = ref_list[i];
+				i = i + 1;
+				var res = refStr.toUpperCase().match(ref_name.toUpperCase());
+				if (res != null) {
+					ref_list_new[lc] = refStr;
+					lc = lc + 1;
+					if (lc == 30) {
+						break;
+					};
+				} else {
+					continue;
+				}
+			};
+			//alert (ref_list_new);
+
+			//-------------- auto complete source
+			$("input#category_value").autocomplete({
+				source: ref_list_new
+			});
+
+		});
+
+
+		//----------------------------------- SUB-CATEGORY AUTOCOMPLETE
+
+		// alert(base_url+'branch_costing/get_subCategories')
+		$.ajax({
+			url: base_url + 'branch_costing/get_subCategories',
+			success: function (retStr) {
+				sub_category_dataStr = retStr
+				// alert (sub_category_dataStr)
+			}
+		});
+
+		$('#sub_category_value').keyup(function () {
+			//-------------------------
+			var ref_list = sub_category_dataStr.split(',');
+			var ref_name = $("#sub_category_value").val();
+
+			//---------------- auto complete combo list
+			var ref_list_new = new Array();
+			lc = 0;
+			i = 0;
+			var refStr = "";
+			while (i < ref_list.length) {
+				refStr = ref_list[i];
+				i = i + 1;
+				var res = refStr.toUpperCase().match(ref_name.toUpperCase());
+				if (res != null) {
+					ref_list_new[lc] = refStr;
+					lc = lc + 1;
+					if (lc == 30) {
+						break;
+					};
+				} else {
+					continue;
+				}
+			};
+			//alert (ref_list_new);
+
+			//-------------- auto complete source
+			$("input#sub_category_value").autocomplete({
+				source: ref_list_new
+			});
+
+		});
+
+	});
+
+
+	function get_sub_cat() {
+		var category = $("#category_type").val();
+		// alert(base_url + 'branch_costing/get_sub_categories?category_id=' +category),
+		$.ajax({
+			url: base_url + 'branch_costing/get_sub_categories?category_id=' + category,
+			success: function (retStr) {
+				var sub_catStr = retStr;
+				$("#sub_category_type").empty();
+				var valueList = sub_catStr.split(',');
+				var sub_catId = '';
+				var sub_catName = '';
+				var show_subCat = '';
+				show_subCat += '';
+				var i = 0;
+				var combStr='<option value=""></option>';
+				while (i < valueList.length) {
+					sub_catId = valueList[i].split('|')[0];  
+					sub_catName = valueList[i].split('|')[1];             
+					combStr += '<option value="'+sub_catId+'">'+sub_catName+'</option>';
+					i = i + 1;
+				}
+				$("#sub_category_type").empty(); 
+				$("#sub_category_type").append(combStr);
+			}
+		});
+	}
+
+</script>   -->
+
+
+<!-- page heading  -->
+<table width="100%"  border="0" cellspacing="0" cellpadding="0" style="background-color:#FFFFFF;" >
+	<tr height="30px" >
+		<td width="40%" style="background-color:#FFFFFF;">
+			<span class="blackCatTitle">&nbsp;Sub-Category Edit</span>
+		</td>
+		<!-- <form action="{{=URL(c='branch_cost_category',f='cost_category')}}" method="post">
+			<td width="250" align="left"><input name="" type="submit" value="Cost Category"/></td>
+		</form> -->
+		<td align="right" width="20px">&nbsp;</td>
+	</tr>
+	<tr  height="1px" style="background-color:#CCCCCC;">
+		<td colspan="3"></td>
+	</tr>
+</table>
+
+
+<table width="100%" height="500px" border="0" cellspacing="0" cellpadding="0" class="page_color">
+    <tr height="100%"  style="vertical-align:top;">
+        <td>
+            <table width="100%" border="0" cellpadding="0" cellspacing="0">
+				<tr>
+					<td width="10">&nbsp;</td>
+					<td valign="top">
+						<br/>
+						<table width="100%">
+							<tr>
+								<td width="">
+									<!-- update -->
+									<table width="100%" align="left" height="100%" border="0" cellpadding="0" cellspacing="0" style="margin-left: auto; margin-right: auto;">
+										<tr>
+											<td height="80%" valign="middle">
+												<table width="35%" align="left" cellpadding="2" class="rounded_corner">
+													<form name="form1" action="{{=URL(c='branch_cost_sub_category',f='sub_category_edit',args=[cat_id, sub_cat_id])}}" method="post" style="padding: 0;">
+														<tr>
+															<td width="30%" align="left" style="padding-top: 5px;">Cost Category</td>
+															<td width="250px">
+																<input type="text" name="cat_type" id="cat_type" size="10" style="width: 240px;" value="{{=cat_id}}" readonly/>
+															</td>
+														</tr>
+														<tr>
+															<td width="30%" align="left" style="padding-top: 5px;">Cost Sub-Category</td>
+															<td width="250px">
+																<input type="text" name="updated_sub_cat_type" id="updated_sub_cat_type" size="10" style="width: 240px;" placeholder="{{=sub_cat_id}}"/>
+															</td>
+														</tr>
+														<tr>
+															<td></td>
+															<td align="left">
+																<input type="submit" name="submit" id="submit" value="Update" style="vertical-align: middle; height: 30px; width: 80px;" class="button_update" title=""/>
+															</td>
+														</tr>
+													</form>
+												</table>
+											</td>
+										</tr>
+									</table>
+								</td>
+							</tr>
+						</table>
+					</td>
+				</tr>
+			</table>            
+        </td>
+    </tr>
+</table>
+
+
+
+
+

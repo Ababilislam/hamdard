@@ -1,0 +1,247 @@
+{{extend 'layout_sales_report.html'}}
+
+<html>
+
+<head>
+
+<script type="text/javascript">
+
+function print_page()
+
+  {
+
+    window.print()
+
+  }
+
+</script>
+
+
+
+</head>
+
+<body>
+
+
+<table width="900px" style="border:none;" >	
+
+		  <tr >
+		    <td >Date Range</td>
+		    <td >&nbsp;</td>
+		    <td >{{=date_from}} - {{=date_to}}</td>
+		    <td >&nbsp;</td>
+		    <td >&nbsp;</td>
+		    <td width="266" >&nbsp;</td>
+	      </tr>
+		  <tr >
+		    <td width="90" > Depot/Branch</td>
+		    <td width="10" >:</td>
+		    <td width="424" ><span >{{=depot_id}}|{{=depot_name}}</span></td>
+		    <td width="79" >Customer</td>
+		    <td width="3" >:</td>
+		    <td ><span >{{=customer_id}}
+		      {{=customer_name}}</span></td>
+	      </tr>
+		  <tr >
+		    <td >Store</td>
+		    <td >:</td>
+		    <td ><span >{{=store_id}}|{{=store_name}}</span></td>
+		    <td >MSO</td>
+		    <td >:</td>
+		    <td ><span >{{=mso_id}}
+		      {{=mso_name}}</span></td>
+	      </tr>
+		  <tr >
+		    <td >Teritory</td>
+		    <td >:</td>
+		    <td ><span >{{=teritory_id}}
+		      {{=teritory_name}}</span></td>
+		    <td >Market</td>
+		    <td >:</td>
+		    <td ><span >{{=market_id}}
+		      {{=market_name}}</span></td>
+	      </tr>
+		  <tr >
+		    <td >Item:</td>
+		    <td >:</td>
+		    <td >{{=item_id}}
+		      {{=item_name}}</td>
+		    <td >RSM</td>
+		    <td >:</td>
+		    <td >{{=rsm_id}}
+		      {{=rsm_name}}</td>
+	      </tr>
+		  <tr >
+		    <td >&nbsp;</td>
+		    <td >&nbsp;</td>
+		    <td >&nbsp;</td>
+		    <td >FM</td>
+		    <td >:</td>
+		    <td >{{=fm_id}}
+		      {{=fm_name}}</td>
+	      </tr>
+		  </table>
+          
+          
+		  <table width="900px" style="border:none; text-align:center; font-weight:bold;" >
+            <tr >
+              <td width="100" >&nbsp;</td>
+              <td align="center" ><span style="border-bottom:1px solid #333;">22 Discount and Bonus Statement- Product wise</span></td>
+              <td width="100" ><img  height="30px" src="{{=URL('static','images/comp_logo1.png')}}"/></td>
+            </tr>
+          </table>
+          <table width="918" border="1" cellpadding="1" cellspacing="1" class="sample_border" >
+<thead>	     
+            <tr align="left" class="blackCatHead" height="20px" ;  style="font-size:12px">
+	          <td width="80"  align="left"   >Item</td>
+	          <td width="200"  align="left"   >ItemName</td>
+	          <td width="80"  align="right"   >RcentPrice</td>
+	          <td width="100"  align="center"   >SoldQty</td>
+	          <td width="100"  align="left"   >BonusQty</td>
+	          <td width="50"  align="center"  >TradePrice</td>
+	          <td width="50"  align="center"  >TotalDisc</td>
+	          <td width="50"  align="center"  >RegularDisc</td>
+	          <td width="50"  align="center"  >SpecialDisc</td>
+	          <td width="50"  align="center"  >Discount%</td>
+	          <td width="50"  align="right"  >InvCount</td>
+             </tr>
+ </thead>        
+              {{TotalTP=0.00
+              	Tdisc=0.00
+                Rdisc=0.00
+                Sdisc=0.00
+                Tinv=0
+              
+              
+              }}
+              
+		      {{for record in records:}}
+              {{itm_id=record[db.sm_item.item_id]
+            	
+                soldQtyT=0
+                bonusQtyT=0
+                discount_amn_rdT=0
+                discount_amn_spT=0
+                acTPT=0
+                
+              if invString.find('<'+itm_id+'>')!=-1:
+                   
+    				itemStr1=invString.split('<'+itm_id+'>')[1]
+					itemSingle=itemStr1.split('<')[0]
+                    itemStrSingle=itemSingle.split('rdrd')
+                    soldQtyT=0
+                    bonusQtyT=0
+                    discount_amn_rdT=0
+                    discount_amn_spT=0
+                    acTPT=0
+                    i=0
+                    while i < len(itemStrSingle)-1:
+                    	discount_type=itemStrSingle[i].split(',')[0]
+                        discount_amn_rd=0
+                        discount_amn_sp=0
+                        if discount_type=='RD':
+                        	discount_amn_rd=itemStrSingle[i].split(',')[1]
+                        else:
+                        	discount_amn_sp=itemStrSingle[i].split(',')[1]
+                        	
+                        pass
+                        	
+                        discount_amn=itemStrSingle[i].split(',')[1]
+                        soldQty=itemStrSingle[i].split(',')[2]
+                        bonusQty=itemStrSingle[i].split(',')[3]
+                        acTP=itemStrSingle[i].split(',')[4]
+                        soldQtyT=soldQtyT+int(soldQty)
+                        bonusQtyT=bonusQtyT+int(bonusQty)
+                        discount_amn_rdT=discount_amn_rdT+float(discount_amn_rd)
+                        discount_amn_spT=discount_amn_spT+float(discount_amn_sp)
+                        #acTPT=float(acTP)*float(soldQty)
+                        acTPT=acTPT+float(acTP)
+                        i=i+1
+              		pass
+              pass
+              }} 
+   <tbody>           
+                        	
+	        <tr align="left" class="blackCatHead" height="20px" ;  style="font-size:12px">
+		        <td   align="left"   >{{=record[db.sm_item.item_id]}}</td>
+		        <td   align="left"   >{{=record[db.sm_item.name]}}</td>
+		        <td   align="right"   >{{=record[db.sm_item.price]}}</td>
+		        <td   align="center"   >{{=soldQtyT}}</td>
+		        <td   align="left"   >{{=bonusQtyT}}</td>
+		        <td   align="right"  >{{=acTPT}}{{TotalTP=TotalTP+acTPT}}</td>
+	          <td   align="right"  >{{='{:20,.2f}'.format(discount_amn_rdT+discount_amn_spT)}}
+              {{Tdisc=Tdisc+(discount_amn_rdT+discount_amn_spT)}}
+	            
+              </td>
+	          <td  align="right"  >{{='{:20,.2f}'.format(discount_amn_rdT)}}
+              {{Rdisc=Rdisc+discount_amn_rdT}}
+             </td>
+	          <td  align="right"  >{{='{:20,.2f}'.format(discount_amn_spT)}}
+              {{Sdisc=Sdisc+discount_amn_spT}}</td>
+              {{
+              dicP=0
+              if float(acTPT) > 0:
+              
+              dicP=((discount_amn_rdT+discount_amn_spT)/float(acTPT))*100
+              pass}}
+              
+	          <td  align="right"  >{{='{:20,.2f}'.format(dicP)}}</td>
+	           {{ invCount=0
+              if [s for s in itemList if itm_id in s]:
+              index_element = itemList.index(itm_id)           
+              invCount=invCountList[index_element]  
+                pass
+            }}
+           <td  align="right"  >{{=invCount}}
+           {{#Tinv=Tinv+invCount}}</td>
+            
+            </tr>
+           
+            {{pass}}
+	        <tr align="left" class="blackCatHead" height="20px" ;  style="font-size:14px; color:#903">
+	          <td   align="left"   >&nbsp;</td>
+	          <td   align="left"   >&nbsp;</td>
+	          <td   align="right"   >&nbsp;</td>
+	          <td   align="center"   >&nbsp;</td>
+	          <td   align="left"   >&nbsp;</td>
+	          <td   align="right"  >{{='{:20,.2f}'.format(TotalTP)}}</td>
+	          <td   align="right"  >{{='{:20,.2f}'.format(Tdisc)}}<br></td>
+	          <td  align="right"  >{{='{:20,.2f}'.format(Rdisc)}}<br></td>
+	          <td  align="right"  >{{='{:20,.2f}'.format(Sdisc)}}<br></td>
+             {{
+             TdicP=0
+              if float(TotalTP) > 0:
+              
+              TdicP=((Tdisc)/float(TotalTP))*100
+              pass}}
+	          <td  align="right"  >{{='{:20,.2f}'.format(TdicP)}}</td>
+	          <td  align="right"  >{{#=Tinv}}</td>
+            </tr>
+             
+       </tbody>      
+		      
+		     
+		    
+          </table>
+
+</br></br>
+
+
+
+<table width="900px" >
+  <tr>
+    <td width="411" align="center">__________________</td>
+    <td width="225" align="center">&nbsp;</td>
+    <td width="248" align="left">________________________________</td>
+  </tr>
+  <tr>
+    <td width="411" align="center"><strong>Printed By</strong></td>
+    <td width="225" align="right">for</td>
+    <td width="248" align="left"><strong>{{=session.cName}}</strong></td>
+  </tr>
+</table>
+<p>&nbsp;</p>
+</body>
+
+</html>
+

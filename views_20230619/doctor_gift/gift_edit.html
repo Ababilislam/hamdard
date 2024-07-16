@@ -1,0 +1,97 @@
+{{extend 'layout.html'}}
+ 
+  <style type="text/css">
+	input[type=text], input[type=password],  select {
+		margin: 2px 0px 2px 0px;
+		width:250px;
+	}
+	
+	div.error {
+		width: 250px;
+	}
+	
+	#sm_doctor_gift_status{
+	width:auto;
+	}
+ </style>
+ 
+<table width="100%"  border="0" cellspacing="0" cellpadding="0" style="background-color:#FFFFFF;" >
+  <tr height="30px" >
+    <td width="300"><span class="blackCatTitle">Gift-Edit</span></td>
+    
+	<form action="{{=URL(c='doctor_gift',f='gift_add',args=[page])}}" method="post">
+	<td width="200" align="right"><input name="" type="submit"  value="Back"/></td>
+	</form>
+    <td>&nbsp;</td>
+  </tr>
+  <tr  height="1px" style="background-color:#CCCCCC;">
+	    <td colspan="3" ></td>
+  </tr>
+  </table>
+  
+  
+  <table width="100%" height="500px"  border="0" cellspacing="0" cellpadding="0" class="page_color"  >
+  <tr height="100%"  style="vertical-align:top;">
+    <td>
+	<table width="100%"  border="0" cellpadding="0" cellspacing="0"  >
+      <tr>
+        <td>&nbsp;</td>
+        <td>&nbsp;</td>
+      </tr>
+      <tr>
+        <td>&nbsp;</td>
+        <td>{{=form.custom.begin}}
+          <table width="500" class="blackCat">
+            <tr>
+              <td width="100"> Gift ID </td>
+              <td>{{=giftID}}</td>
+              <td>&nbsp;</td>
+              <td>&nbsp;</td>
+            </tr>
+            <tr>
+              <td width="100">Name</td>
+              <td>{{=form.custom.widget.gift_name}}</td>
+              <td>&nbsp;</td>
+              <td>&nbsp;</td>
+            </tr>
+            <tr>
+              <td width="100">Description</td>
+              <td>{{=form.custom.widget.des}}</td>
+			  <td>&nbsp;</td>
+              <td>&nbsp;</td>
+            </tr>
+            
+            <tr>
+              <td width="100">Status</td>
+              <td>{{=form.custom.widget.status}}</td>
+              <td>&nbsp;</td>
+              <td>&nbsp;</td>
+            </tr>
+            
+            <tr>
+              <td width="100">Delete</td>
+              <td>{{=form.custom.deletable}}</td>
+              <td>&nbsp;</td>
+              <td>&nbsp;</td>
+            </tr>
+            <tr>
+              <td width="100">&nbsp;</td>
+              <td>{{=form.custom.submit}}</td>
+              <td>&nbsp;</td>
+              <td>&nbsp;</td>
+            </tr>
+			
+			<tr height="2px">
+              <td width="100"></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+          </table>
+          {{=form.custom.end}}</td>
+      </tr>
+    </table>
+	</td>
+  </tr>
+</table>
+

@@ -1,0 +1,65 @@
+{{extend 'layout_mobile.html'}}
+
+ <style type="text/css">
+
+ input[type=number]{
+    margin: 2px 0px 2px 0px;
+	width:100%;
+}
+.page_color,body{
+	font-family:Arial, Helvetica, sans-serif;
+	font-size:12px;
+}
+
+
+ </style>
+
+
+<script> 
+ /*window.onpopstate=function(){
+	 window.location.href;
+	 location.reload();
+}; history.pushState({},'');*/
+ 
+</script>
+
+
+<body >   
+
+<table style="border-collapse:collapse;width:100%;">
+    <tr style="background-color:#e6f5ff; font-weight:bold; font-size:12px;" >
+    	<td style="width:10%;">Today&nbsp;:</td><td align="center" style="width:25%;">ORD ({{=ordCount}})</td><td align="center" style="width:25%;">DCR ({{=dcrCount}})</td><td align="center" style="width:25%;">CHECKIN ({{=chkCount}})</td>
+    </tr>   
+</table>
+<br/>
+     
+<table style="border-collapse:collapse; width:100%;">	  
+    <tr style="background-color:#0099ff; color:#FFF; font-weight:bold; font-size:10px;" >
+    	<td style="width:20%;">Time<br/>Type</td><td style="width:50%;">Name<br/>ID</td><td style="width:10%;"></td>
+    </tr>
+    {{visited_latlong=''}}
+    {{for row in records:}}
+     {{
+     visited_latlong_s=str(row.visited_latlong).split(',')
+     
+     if str(visited_latlong_s[0])==str(visited_latlong_s[1]): 
+     	visited_latlong=''
+     else:
+        visited_latlong=row.visited_latlong
+     pass     
+     }}
+     
+        
+    <tr style="background-color:#e6f5ff; font-size:12px; height:35px; border-bottom:1px solid #E6E6E6;">
+        <td>{{=str(row.visit_time)[:19]}}<br/>{{if row.call_type=='SELL':}}ORD{{elif row.call_type=='DCR':}}DCR{{else:}}CHECKIN{{pass}}</td>        
+        <td>{{=row.visited_name}}<br/>{{=row.visited_id}}</td>
+        <td>{{if visited_latlong=='':}}Not Available{{else:}}<a href="https://maps.google.com/?q={{=visited_latlong}}">Location</a>{{pass}}</td>                           
+    </tr>            
+    {{pass}}
+</table>    
+<hr/>  
+
+   
+</body>
+
+

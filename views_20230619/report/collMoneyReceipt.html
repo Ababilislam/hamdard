@@ -1,0 +1,152 @@
+{{extend 'layout_invoice_landscap.html'}}
+
+<html>
+
+<head>
+<style>
+ #wrapper{ width:auto;} 
+</style> 
+
+</head>
+
+<body>
+
+<table width="1150" cellpadding="1" cellspacing="1" style="border:none;" >
+  <tr >
+      <td width="700" align="left"></td>
+      <td width="400" align="left">(Customer Copy)<span style="float:right">#3.1A</span></td>
+  </tr>
+ </table>           
+<table width="1150" cellpadding="1" cellspacing="1" >
+  <tr >
+      <td width="400" align="left">
+        <table width="400" cellpadding="1" cellspacing="1" style="border: solid 1px #C4C4C4;" >
+          <tr >
+              <td width="100" align="left">Branch</td>
+              <td width="2" align="left">:</td>
+              <td align="left">{{=depotName}}</td>
+           </tr>
+           <tr >
+              <td width="100" align="left">Print Date</td>
+              <td width="2" align="left">:</td>
+              <td align="left">{{=datetime.datetime.strptime(str(current_date),'%Y-%m-%d').strftime('%d-%b-%y')}}</td>
+           </tr>
+         </table>      
+      </td>
+      <td width="300" align="center" style="vertical-align:top;">
+        <div style=" width:100px; height:25px; background-color:#EAEAEA; font-weight:bold; margin-bottom:5px;">Money Receipt</div>
+        <img style="height:15px;" src="{{=URL('static','images/comp_logo1.png')}}"/>
+      </td>
+      <td width="400" align="right">
+             
+      <a href="{{=URL(c='report',f='collMoneyReceipt_download',vars=dict(fromDate=fromDate,toDate=toDate,depotID=depotID,storeID=storeID,deliveryManID=deliveryManID,territoryID=territoryID,msoID=msoID,coll_mrno=coll_mrno,coll_inv_sl_from=coll_inv_sl_from,coll_inv_sl_to=coll_inv_sl_to,coll_inv_term=coll_inv_term,coll_credit_type=coll_credit_type,coll_payment_mode=coll_payment_mode,coll_batchno=coll_batchno))}}" >Download</a>
+    </td>    
+  </tr>
+</table>
+ 
+
+<table width="1150" border="1" cellpadding="1" cellspacing="1" class="sample_border" style="border: solid 1px #C4C4C4">
+<thead> 
+  <tr align="left" class="blackCatHead" style="background-color:#E6E6E6;border-top:solid 2px #999999">
+	<td width="40" >Sl.No</td>
+    <td width="40" align="left" >MR.No</td>
+    <td width="80" align="center" >Batch Number</td>
+    <td width="100" align="left" >Inv.SL/Ref.No</td>	
+    <td width="60" align="center" >Doc Date</td>
+    <td width="150" align="left" >Cust. Name</td>	
+    <td width="70" align="right"  >Inv Amount</td>
+    <td width="70" align="right"  >Applied Amt</td>	
+    <td width="70" align="center"  >Invoice Term</td>
+    <td width="80" align="center"  >Payment Mode</td>
+    <td align="left"  >Payment Description</td>
+    <td width="150" align="left"  >Deliveryman Name</td>
+  </tr>
+</thead>
+<tfoot>
+<tr align="left" class="blackCatHead" >
+	<td colspan="12" style="border-left:none; border-right:none"></td>
+    </tr>
+</tfoot>
+
+
+	{{totalApAmount=0}}
+    {{rowSl=0}}
+	{{for i,record in enumerate(records):}}
+
+	{{rowSl+=1}}
+<tbody>
+  <tr  align="left" class="blackCat"  style="vertical-align:middle; background-color:#FBFBFB; font-size:10px;">	
+    <td width="40" >{{=rowSl}}</td>
+    <td width="40" align="left" >{{=record.id}}</td>
+    <td width="80" align="center" >{{=record.collection_batch}}</td>
+    <td width="100" align="left" >{{=session.prefix_invoice}}INV{{=record.depot_id}}-{{=record.sl}}</td>
+	
+    <td width="60" align="center" >{{=record.payment_collection_date.strftime('%d-%b-%y')}}</td>
+    <td width="150" align="left" >{{=record.client_name}}</td>
+	
+    <td width="70" align="right" >{{=easy_format(record.total_inv_amount)}}</td>
+    <td width="70" align="right" >{{=easy_format(record.collection_amount)}}{{totalApAmount+=record.collection_amount}}</td>
+
+    <td width="70" align="center" >{{=record.payment_mode}}</td>
+    <td width="80" align="center" >{{=record.payment_type}}</td>
+    <td align="left" >{{=record.collection_note}}</td>
+    <td width="150" align="left" >{{=record.d_man_name}}</td>	
+    </tr>  
+    {{pass}}
+    
+    <tr  align="left" class="blackCat"  style="vertical-align:middle; background-color:#FBFBFB">	
+    <td width="40" ></td>
+    <td width="40" align="left" ></td>
+    <td width="80" align="center" ></td>
+    <td width="100" align="left" ></td>
+	
+    <td width="60" align="center" ></td>
+    <td width="150" align="right" ></td>
+	
+    <td width="70" align="right" ><strong>Total:</strong></td>
+    <td width="70" align="right" ><strong>{{=easy_format(totalApAmount)}}<strong></td>
+
+    <td width="70" align="center" ></td>
+    <td width="80" align="center" ></td>
+    <td align="right" ></td>
+    <td width="150" align="right" ></td>	
+    </tr>
+</tbody>
+</table>
+<br>
+<table width="250" cellpadding="1" cellspacing="1" >
+    <tr >
+      <td align="left"><strong><span style="font-size:14px; font-weight:bold">TAKA:</span></strong></td>
+      <td width="150" align="right" style="border: solid 1px #C4C4C4">{{=easy_format(totalApAmount)}}</td>
+    </tr>
+</table>
+<br/>
+<strong> Taka in Words:</strong> {{try:}}{{=num2word(str(totalApAmount))}}{{except:}}-{{pass}}
+
+
+<br/><br/><br/>
+<table width="1150" >
+	<tr>
+	  <td width="150" align="center">__________________</td>
+	  <td width="150" align="center">___________________</td>
+	  <td width="150" align="center">_______________</td>
+	  <td width="20" align="center">&nbsp;</td>
+	  <td width="180" align="center">&nbsp;</td>
+	  <td width="30" rowspan="2" align="center">Stamp</td>
+  </tr>
+	<tr>
+	  <td width="150" align="center"><strong>Prepared By</strong></td>
+	  <td width="150" align="center"><strong>Approved By</strong></td>
+	  <td width="150" align="center"><strong>Receipt by</strong></td>
+	  <td width="20" align="center">for</td>
+	  <td width="180" align="center"><strong>{{=session.cName}}</strong></td>
+  </tr>
+</table>
+
+
+
+
+</body>
+
+</html>
+

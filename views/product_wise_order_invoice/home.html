@@ -1,0 +1,498 @@
+{{extend 'layout_mobile.html'}}
+
+<head>
+<link rel="stylesheet" href="{{=URL('static', 'js_and_css/ui.theme.css')}}" type="text/css" />
+<link rel="stylesheet" href="{{=URL('static', 'js_and_css/jquery-ui.css')}}" type="text/css" />
+<link rel="stylesheet" href="{{=URL('static', 'js_and_css/style.css')}}" type="text/css" />
+<script src="{{=URL('static','js_and_css/jquery-1.8.2.js')}}"></script>
+<script src="{{=URL('static','js_and_css/jquery-ui.js')}}"></script>
+<style type="text/css">
+
+ input[type=number]{
+    margin: 2px 0px 2px 0px;
+    width:100%;
+}
+.page_color,body{
+    font-family:Arial, Helvetica, sans-serif;
+    font-size:12px;
+}
+input[type=submit]{
+    background-color:#3399ff;
+    color:#FFF;
+    width:100%;
+    height:25px;
+    border-radius:10px; 
+    }
+
+ </style>
+
+
+<script> 
+var base_url=location.protocol + "//" + location.hostname + (location.port && ":" + location.port) + "/{{=request.application}}/";
+
+function getZone(k){    
+    // alert('Hello')
+    var pr_region=$("#pr_region"+k).val();
+    $("#pr_zone"+k).empty();
+    $("#pr_area"+k).empty();
+    $("#pr_territory"+k).empty();   
+    $("#pr_pocket_market"+k).empty();   
+     
+ // alert(base_url+'product_wise_order_invoice/get_zone?region='+pr_region) 
+
+    $.ajax({
+          url: base_url+'product_wise_order_invoice/get_zone?region='+pr_region,
+          success: function(resStr) {
+              retStr1=resStr.split("<rd>");
+              // alert(retStr1)
+              retStrLen=retStr1.length;
+              var combStr='<option  value="">ALL</option>';
+              for(i=0;i<retStrLen;i++){
+                  retStr2=retStr1[i].split('<fd>');               
+                  combStr+='<option value="'+retStr2[0]+'|'+retStr2[1]+'">'+retStr2[1]+'</option>';
+                  }
+              $("#pr_zone"+k).empty();
+              $("#pr_zone"+k).append(combStr);
+              zone_count = length(combStr)
+              alert(zone_count)
+          }
+        });
+    }
+
+//------------ get area
+function getArea(k){    
+    // var pr_region=$("#pr_region"+k).val();
+    var pr_zone=$("#pr_zone"+k).val();
+    $("#pr_area"+k).empty();
+    $("#pr_territory"+k).empty();
+    $("#pr_pocket_market"+k).empty(); 
+    // alert(base_url+'product_wise_order_invoice/get_area?zone='+pr_zone)
+    $.ajax({
+          // url: base_url+'product_wise_order_invoice/get_area?region='+pr_region+'&zone='+pr_zone,
+          url: base_url+'product_wise_order_invoice/get_area?zone='+pr_zone,
+          success: function(resStr) {
+              retStr1=resStr.split("<rd>");
+              retStrLen=retStr1.length; 
+              var combStr='<option value="">ALL</option>';        
+              for(i=0;i<retStrLen;i++){
+                  retStr2=retStr1[i].split('<fd>');               
+                  combStr+='<option value="'+retStr2[0]+'|'+retStr2[1]+'">'+retStr2[1]+'</option>';
+                  }
+              $("#pr_area"+k).append(combStr);
+          }
+        });
+}
+
+//------------ get area
+function getTerritory(k){
+    // var pr_region=$("#pr_region"+k).val();
+    // var pr_zone=$("#pr_zone"+k).val();
+    var pr_area=$("#pr_area"+k).val();
+    $("#pr_territory"+k).empty();
+    $("#pr_pocket_market"+k).empty(); 
+    // alert('hello');
+
+    // alert(base_url+'product_wise_order_invoice/get_territory?area='+pr_area);
+    $.ajax({
+          url: base_url+'product_wise_order_invoice/get_territory?area='+pr_area,
+          success: function(resStr) {
+              retStr1=resStr.split("<rd>");
+              retStrLen=retStr1.length;           
+              var combStr='<option value="">ALL</option>';
+              for(i=0;i<retStrLen;i++){
+                  retStr2=retStr1[i].split('<fd>');               
+                  combStr+='<option value="'+retStr2[0]+'|'+retStr2[1]+'">'+retStr2[1]+'</option>';
+                  }
+              $("#pr_territory"+k).empty(); 
+              $("#pr_territory"+k).append(combStr);
+          }
+        });
+}
+
+//------------ get pocket market
+function getpocket_market(k){
+    // var pr_region=$("#pr_region"+k).val();
+    // var pr_zone=$("#pr_zone"+k).val();
+    // var pr_area=$("#pr_area"+k).val();
+    var pr_territory=$("#pr_territory"+k).val();
+    $("#pr_pocket_market"+k).empty(); 
+
+    // alert(base_url+'product_wise_order_invoice/get_pocket_market?region='+pr_region+'&zone='+pr_zone+'&area='+pr_area+'&territory='+pr_territory)
+
+    $.ajax({
+          url: base_url+'product_wise_order_invoice/get_pocket_market?territory='+pr_territory,
+          success: function(resStr) {
+              retStr1=resStr.split("<rd>");
+              retStrLen=retStr1.length;           
+              var combStr='<option value="">ALL</option>';
+              for(i=0;i<retStrLen;i++){
+                  retStr2=retStr1[i].split('<fd>');               
+                  combStr+='<option value="'+retStr2[0]+'|'+retStr2[1]+'">'+retStr2[1]+'</option>';
+                  }
+              $("#pr_pocket_market"+k).empty(); 
+              $("#pr_pocket_market"+k).append(combStr);
+
+          }
+        });
+}
+function get_product() {
+    var category = $("#item_category4").val();
+    // alert(base_url + 'product_wise_order_invoice/get_active_item?category_id=' +category),
+    $.ajax({
+        url: base_url + 'product_wise_order_invoice/get_active_item?category_id=' + category,
+        success: function (resStr) {
+            var product_str = resStr;
+            $("#product_container").empty();
+            var valueList = product_str.split(',');
+            var productId = '';
+            var productName = '';
+            var add_product = '';
+            add_product += '';
+            var i = 0;
+            while (i < valueList.length) {
+                
+                productId = valueList[i].split('|')[0];
+                productName = valueList[i].split('|')[1];
+                add_product +='<div class="checkbox_item" style="display: block;">'
+                add_product += '&nbsp;&nbsp;&nbsp;'
+                add_product += '<input type="checkbox" class="product_checkbox" name="item_id" id="item_id" value="'+productId+'|'+productName+'">'+'&nbsp;' + productName;
+                add_product += '</div>';
+                i = i + 1;
+            }
+            add_product += '</div>';
+            if (valueList.length == 1 && valueList[0] =='') {
+                $("#product_container").html("&nbsp;&nbsp;No product found !");
+            } else {
+                $("#product_container").html(add_product);
+            }
+
+        }
+    });
+}
+
+</script>
+
+<script>
+    $(document).ready(function() {
+        
+        $('.checkbox_item').show();
+
+        
+        $('#product_search').on('input', function() {
+            var searchText = $(this).val().toLowerCase();
+            $('.checkbox_item').each(function() {
+                var checkboxItem = $(this);
+                var specialtyText = checkboxItem.text().toLowerCase();
+                if (specialtyText.includes(searchText)) {
+                    checkboxItem.show();
+                } else {
+                    checkboxItem.hide();
+                }
+            });
+        });
+    });
+</script>
+ 
+</head>
+
+<body >   
+
+<table style="border-collapse:collapse;width:100%;">
+    <tr style="background-color:#ECF4FD; font-weight:bold; font-size:14px;" >
+        <td align="center" style="width:100%;">Product Wise Report</td></tr>
+    </tr>
+</table>
+
+
+<div style="width: 95%;height: 60px;margin-top:10px;margin-right: 10px;">
+    <table width="100%" style="margin:10px;">
+        <tr align="center" style="height:25%;">
+            <td style="background-color: #D8ECCB;">{{=session.division_count}}</td>
+            <td></td>
+            <td style="background-color: #D8ECCB;">{{=session.zone_count}}</td>
+            <td></td>
+            <td style="background-color: #D8ECCB;">{{=session.area_count}}</td>
+            <td></td>
+            <td style="background-color: #D8ECCB;">{{=session.territory_count}}</td>
+        </tr>
+        <tr align="center" style="height:25%;">
+            <td style="background-color: #7DC84A;">Divison</td>
+            <td></td>
+            <td style="background-color: #7DC84A;">Zone</td>
+            <td></td>
+            <td style="background-color: #7DC84A;">Area</td>
+            <td></td>
+            <td style="background-color: #7DC84A;">Market</td>
+        </tr>
+    </table>
+</div>
+
+
+<form action="{{=URL(c='product_wise_order_invoice',f='home')}}" >
+<table style="border-collapse:collapse; width:100%;">
+    <tr >
+        <td>Date Range(max 1 month):<span style="color:red;">*</span></td>
+        <td style="width:25%;">
+            {{if session.from_date==None:}}
+                <input type="text" class="date" name="from_date" placeholder="From Date" style=" width:80px;"/>
+            {{else:}}
+                <input type="text" class="date" name="from_date" value="{{=session.from_date}}" style=" width:80px;"/>
+            {{pass}}
+        To &nbsp; &nbsp;
+            {{if session.to_date==None:}}
+                <input type="text" class="date" name="to_date" placeholder="To Date" style=" width:80px;"/>
+            {{else:}}
+                <input type="text" class="date" name="to_date" value="{{=session.to_date}}" style=" width:80px;"/>
+            {{pass}}
+        </td>
+        <td style="width:60%;"></td>
+     </tr>
+
+     {{if session.level_depth_no == 0 :}} 
+     <tr>
+        <td>Division:<span style="color:red;" >*</span></td>
+        <td style="width:25%;">
+            <select id= "pr_region4" name="pr_region4" style="width:220px" required onChange="getZone(4)">
+                {{ if len(division_list) < 4:}}
+                {{if session.division == '' or session.division == 'None' or session.division == None : }}
+                    <option value="" selected>ALL</option>
+                {{else:}}
+                    <option value="{{=session.division}}" selected>{{=session.division}}</option>
+                {{pass}}
+                {{pass}}
+                {{ if len(division_list) >= 4:}}
+                <option value="National" >National</option>
+                {{pass}}
+                {{for k in range(len(division_list)):}}
+                    {{level_list_z=division_list[k]}} 
+                    {{divsion_value = level_list_z['division_id']}}           
+                   
+                    <option value="{{=level_list_z['division_id']}}|{{=level_list_z['division_name']}}" >{{=level_list_z['division_name']}}</option>
+                {{pass}}   
+            </select>
+        </td>
+        <td style="width:60%;"></td>
+     </tr>    
+     <tr >
+         <td>Zone :</td>
+         <td style="width:25%;">
+            {{if session.zone == '' or session.zone == 'None' or session.zone == None :}}
+                <select id="pr_zone4" name="pr_zone4" style="width:220px" onChange="getArea(4)"></select>
+            {{else:}}
+                <select id="pr_zone4" name="pr_zone4" style="width:220px" onChange="getArea(4)">
+                    <option value="{{=session.zone}}">{{=session.zone}}</option>
+                </select>
+            {{pass}}
+         </td>
+         <td></td>
+    </tr>
+    <tr >
+        <td>Area :</td>
+         <td style="width:25%;">
+            {{if session.area == '' or session.area == 'None' or session.area == None :}}
+             <select id="pr_area4" name="pr_area4" style="width:220px" onChange="getTerritory(4)"></select>
+            {{else:}} 
+             <select id="pr_area4" name="pr_area4" style="width:220px" onChange="getTerritory(4)">
+                <option value="{{=session.area}}">{{=session.area}}</option>
+            </select>
+            {{pass}}
+        </td>
+    </tr>
+    <tr >
+         <td>Market :</td>
+         <td style="width:25%;">
+            {{if session.territory == '' or session.territory == 'None' or session.territory == None :}}
+                <select id="pr_territory4" name="pr_territory4" style="width:220px" onChange = "getpocket_market(4)" ></select>
+            {{else:}}
+                <select id="pr_territory4" name="pr_territory4" style="width:220px" onChange = "getpocket_market(4)" >
+                    <option value="{{=session.territory}}">{{=session.territory}}</option>
+                </select>
+            {{pass}}
+         </td>
+    </tr>
+
+     {{elif session.level_depth_no == 1:}} 
+     <tr>
+        <td>Zone:<span style="color:red;">*</span></td>
+        <td>
+            <select name="pr_zone4" id="pr_zone4" required style="width:220px" onChange="getArea(4)">
+            {{if session.zone == '' or session.zone == 'None' or session.zone == None :}}
+                <option value="" selected>Select Zone</option>
+            {{else:}}
+                <option value="{{=session.zone}}" selected>{{=session.zone}}</option>
+            {{pass}}
+            {{for k in range(len(zone_list)):}}
+                {{level_list_z=zone_list[k]}}               
+                <option value="{{=level_list_z['zone_id']}}|{{=level_list_z['zone_name']}}" >{{=level_list_z['zone_name']}}</option>
+            {{pass}}
+            </select>
+        </td>
+        <td style="width:60%;"></td>
+    </tr>  
+    <tr >
+        <td>Area :</td>
+        <td style="width:25%;">
+           {{if session.area == '' or session.area == 'None' or session.area == None :}}
+            <select id="pr_area4" name="pr_area4" style="width:220px" onChange="getTerritory(4)"></select>
+           {{else:}} 
+            <select id="pr_area4" name="pr_area4" style="width:220px" onChange="getTerritory(4)">
+               <option value="{{=session.area}}">{{=session.area}}</option>
+           </select>
+           {{pass}}
+        </td>
+    </tr>
+   <tr >
+        <td>Market :</td>
+        <td style="width:25%;">
+           {{if session.territory == '' or session.territory == 'None' or session.territory == None :}}
+               <select id="pr_territory4" name="pr_territory4" style="width:220px" onChange = "getpocket_market(4)" ></select>
+           {{else:}}
+               <select id="pr_territory4" name="pr_territory4" style="width:220px" onChange = "getpocket_market(4)" >
+                   <option value="{{=session.territory}}">{{=session.territory}}</option>
+               </select>
+           {{pass}}
+        </td>
+    </tr>
+
+
+    {{elif session.level_depth_no == 2 :}}
+
+        <tr>
+            <td>Area:<span style="color:red;">*</span></td>
+            <td>
+                <select id="pr_area4" name="pr_area4" required  style="width:220px" onChange="getTerritory(4)">
+                    {{if session.area == '' or session.area == 'None' or session.area == None :}}
+                        <option value="" selected>Select Area</option>
+                    {{else:}}
+                        <option value="{{=session.area}}" selected>{{=session.area}}</option>
+                    {{pass}}
+                    {{for k in range(len(area_list)):}}
+                        {{level_list_s=area_list[k]}}               
+                        <option value="{{=level_list_s['area_id']}}|{{=level_list_s['area_name']}}" >{{=level_list_s['area_name']}}</option>
+                    {{pass}}
+                    
+                </select>
+            </td>
+            <td style="width:60%;"></td>
+         </tr>
+         <tr >
+            <td>Market :</td>
+            <td style="width:25%;">
+               {{if session.territory == '' or session.territory == 'None' or session.territory == None :}}
+                   <select id="pr_territory4" name="pr_territory4" style="width:220px" onChange = "getpocket_market(4)" ></select>
+               {{else:}}
+                   <select id="pr_territory4" name="pr_territory4" style="width:220px" onChange = "getpocket_market(4)" >
+                       <option value="{{=session.territory}}">{{=session.territory}}</option>
+                   </select>
+               {{pass}}
+            </td>
+        </tr>
+
+
+        {{ elif session.user_type == 'rep' :}}
+        <tr>
+            <td>Market : <span style="color:red;" >*</span></td>
+            <td>
+                <select id="pr_territory4" name="pr_territory4" required style="width:220px"  onChange = "getpocket_market(4)">
+                {{if session.territory == '' or session.territory == 'None' or session.territory == None :}}
+                    <option value="" selected>Select Market</option>
+                {{else:}}
+                    <option value="{{=session.territory}}" selected>{{=session.territory}}</option>
+                {{pass}}
+                {{for i in range(len(level_area_list)):}}
+                    {{level_area_list_s=level_area_list[i]}}            
+                    <option value="{{=level_area_list_s['area_id']}}|{{=level_area_list_s['area_name']}}" >{{=level_area_list_s['area_name']}}</option>
+                {{pass}}
+                </select>
+            </td>
+            <td style="width:60%;"></td>
+        </tr>
+
+        {{pass}}
+
+     <tr>
+        <td>Basket / Group:</td>
+        <td>
+            <select id="item_category4" name="item_category" style="width:220px" onChange = "get_product()">
+                {{if session.product_category != '' and session.product_category != 'None' and session.product_category != None :}}
+                <option value="{{=session.product_category}}" selected>{{=session.product_category}}</option>
+                {{else:}}
+                <option value="" selected>Select Basket / All</option>
+                {{pass}}
+                {{for i in range(len(basket_type_record)):}}
+                     {{basket=basket_type_record[i]}}                               
+                    <option value="{{=basket['cat_type_id']}}">{{=basket['cat_type_id']}}</option>
+                {{pass}}
+            </select>
+        </td>
+        <td style="width:60%;"></td>
+     </tr>
+
+
+
+     <tr>
+     <td >Product:</td>
+      <td>
+          <div style="width: 100%; height: 130px; border: 1px solid #ccc; position: relative; ">
+              <input type="text" name="product_search" id="product_search" placeholder="  Search Product" style="position: absolute; top: 0; width: calc(100% - 20px); height: 17%; border: 1px solid #d1cdcd; margin-left: 2%;border-radius:5px;" autocomplete="off">
+              <div id="product_container" style="overflow-y: auto; height: calc(100% - 45px); margin-top: 35px;">
+                  {{for i in range(len(product_record)):}}
+                    {{products=product_record[i]}}
+                  <div class="checkbox_item" style="align-items: center;">
+                   &nbsp;&nbsp;&nbsp;
+
+                   <input type="checkbox" name="item_id" id ="item_id" class="product_checkbox" value="{{=products['item_id']}}|{{=products['name']}}">&nbsp;{{=products['name']}}
+                  </div>
+                  {{pass}}
+              </div>
+          </div>
+      </td>
+  </tr>
+
+<tr><td></td></tr>
+
+     <tr>
+        <td></td>
+        <td width="100%" style="text-align:right;display: flex; justify-content: space-between;padding:5px 0px 5px 0px;">
+            <input type="submit" name="btn_report" value="Show" style="height:35px; width:30%;background-color: #68be45; font-weight:bold""/>
+            <input type="submit" name="btn_reset" value="Reset" style="height:35px; width: 30%;background-color: #c29d17; font-weight:bold"/>
+        </td>
+        <td style="width:60%;"></td>
+        
+    </tr>
+    <tr ><td style="padding:2px;"></td></tr>
+</table>
+</form>
+<table style="border-collapse:collapse; width:100%;">   
+</table>
+
+<table style="border-collapse:collapse; width:100%;border-top:2px solid #E6E6E6;">     
+    <tr style="background-color:#ECF4FD; font-weight:bold; font-size:14px;">
+        <td colspan="3">Product Cover : {{=product_cover}}</td>
+        <td colspan="3" align="right">Total Product: {{=len(get_order_invocie_records)}}</td>
+    </tr>
+    <tr style="background-color:#0099ff; color:#FFF; font-size:10px;border-bottom:1px solid #E6E6E6;">
+        <td>Basket</td>
+        <td width="25%">Product</td> 
+        <td>Order Unit </td>
+        <td>Order Amount</td>
+        <td>Invoice Unit</td>
+        <td>Invoice Amount</td>
+    </tr>
+
+    {{for i in range(len(get_order_invocie_records)):}}
+        {{order_invocie_record=get_order_invocie_records[i]}}
+        <tr style="border-bottom:1px solid #E6E6E6;">
+            <td>{{=order_invocie_record['basket']}}</td>
+            <td>{{=order_invocie_record['name']}}</td>
+            <td>{{=order_invocie_record['order_count']}}</td>
+            <td>{{=order_invocie_record['order_amount']}}</td>
+            <td>{{=order_invocie_record['invoice_count']}}</td>
+            <td>{{=order_invocie_record['invoice_amount']}}</td>
+        </tr>
+    {{pass}}
+
+</table>
+</body>
+
+

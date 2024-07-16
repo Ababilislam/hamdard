@@ -1,0 +1,239 @@
+{{extend 'layout_webreport.html'}}
+
+<head>
+	<link rel="stylesheet" href="{{=URL('static', 'jchart/styles/jchartfx.css')}}" type="text/css" />
+	<script src="{{=URL('static','jchart/js/jchartfx.system.js')}}"></script>
+	<script src="{{=URL('static','jchart/js/jchartfx.coreVector.js')}}"></script>
+	<script src="{{=URL('static','jchart/js/jchartfx.advanced.js')}}"></script>
+
+	<link rel="stylesheet" href="{{=URL('static', 'js_and_css/ui.theme.css')}}" type="text/css" />
+	<link rel="stylesheet" href="{{=URL('static', 'js_and_css/jquery-ui.css')}}" type="text/css" />
+	<link rel="stylesheet" href="{{=URL('static', 'js_and_css/style.css')}}" type="text/css" />
+
+	<script src="{{=URL('static','js_and_css/jquery-1.8.2.js')}}"></script>
+	<script src="{{=URL('static','js_and_css/jquery-ui.js')}}"></script>
+
+	<style type="text/css">
+		.jchartfx .Title {
+			 font-size:12pt;
+			 font-weight: bold;
+			 color:#000000;
+		}
+
+		<!--Chart color-->
+		.jchartfx .Attribute3{
+			 fill:#C44000;
+		}
+		.jchartfx .Attribute0{
+			 fill:#4F81BD; 
+		}
+		.jchartfx .Attribute1{
+			 fill:#C0504D;
+		}
+		
+		.jchartfx .Attribute0Line{
+			 stroke:#C0504D;
+			 stroke-width:2;
+		}
+		 .jchartfx .Attribute1Line{
+			 stroke:#4F81BD;
+			 stroke-width:2;	
+		}
+		<!--color-->
+		
+		input[type=submit] {
+			margin: 2px 0px 2px 0px;
+			padding: 0px 0px 2px 0px;
+			width:200px;
+		}
+		
+		input[type=text] {
+			width:120px;
+		}
+		
+		.checkbox{
+		padding-left:0px;
+		}
+		
+		.multiselect{ 
+				text-align:left;
+				height:28px;
+		}
+		
+		.page_color,body{
+				font-family:Arial, Helvetica, sans-serif;
+				font-size:13px;	
+				}
+
+			#accordion ul{	list-style-type:none;margin:0;}
+			#accordion li{ margin:1px; border-radius:5px; border-bottom:1px solid #CCCCCC; font-size:10px; background-color:#F7F7F7; height:20px; padding:5px 2px 2px 15px;}/*:#F7F7F7*/
+			#accordion li a{ text-decoration:none;}
+			#accordion li:hover{ height:21px;background-color:#F5F5F5;}
+			
+		
+		/*#home{ margin-top:0px; width:16px; height:16px;background:url('{{=URL('static','images/ui-icon.png')}}') 0 -110px;}*/
+		
+		#AM{ width:32px; height:25px;background:url('{{=URL('static','images/vicon.png')}}') -307px -289px;}
+		#RSM{ width:32px; height:25px;background:url('{{=URL('static','images/vicon.png')}}') -115px -194px;}	
+
+	</style>
+
+
+	<script>
+		 $(function() { 
+			
+			$( "#accordionReport" ).accordion({
+			  active:0,
+		      heightStyle: "content",
+			  collapsible: true
+		    });
+
+			
+		  });
+	</script>
+	  
+   
+	<script>
+		var base_url=location.protocol + "//" + location.hostname + (location.port && ":" + location.port) + "/{{=request.application}}/";
+
+		$(function() {
+			 	
+			
+		});
+	</script>
+
+
+	<style>
+		.rptlist{font-size:15px; height:auto; }
+		.rptlist:hover{ height:auto;}
+		.rptul{color:#0076AE; background-color:#F0F0F0;}
+		.rptdiv{  font-size:16px; color:#0076AE; background-color:#F0F0F0;}
+		
+		#accordionReport ul{	list-style-type:none;margin:0; font-size:15px; }
+		#accordionReport li{ margin:1px; border-radius:5px; border-bottom:1px solid #CCCCCC; font-size:15px; background-color:#F7F7F7; height:20px; padding:5px 2px 2px 15px;}/*:#F7F7F7*/
+		
+		#accordionReport li:hover{ height:21px;background-color:#F5F5F5; font-size:15px;}
+		
+		/*table.sample_border {
+		border-width: 1px;
+		border-style: solid;
+		border-color: #F7F7F7;
+		margin-left: 9px;
+	}
+	*/
+		
+		
+		
+	</style>
+
+</head>
+<body id="htmlbody">
+	<!--<input type="hidden" value="{{#=salesTrendList}}" id="chartDataSalesTrend"/>-->
+
+	{{currYear=str(date_fixed)[0:4]}}
+	{{currMonth=str(date_fixed)[5:7]}}
+
+	<!--Form Title -->
+	<!--Nazma Azam 2020-03-05 start design-->
+	<!--<table width="100%" border="0" cellspacing="0" cellpadding="0" style="background-color:#FFFFFF;">
+	<tr height="30px">
+	<td style="text-align:center; font-size:24px; font-weight:bold"><div class="blackCatTitle" >Team Details</div></td>
+	</tr>
+	<tr >
+	<td height="1px" style="background-color:#CCCCCC;"></td>
+	</tr>
+
+	<tr >
+	<td height="1px" style="background-color:#CCCCCC;"></td>
+	</tr>
+
+	</table>-->
+
+	<!--<br>
+	<br>
+	<br>-->
+
+	<div class="table-responsive-sm">
+	  	<table class="table table-striped table-hover table-bordered tbl " > 
+	  		<tbody>
+      			<tr class="table-primary">
+					<td class="text-left"  width="50%" style="font-size:16px; color:#000;text-transform: uppercase;">
+						{{=session.uid}} | {{=session.user_name}}
+					</td>
+					<!-- <td  width="25%" align="right">
+					<form id="form1" name="form1" method="post" action="{{=URL(c='tour_web_members',f='kpl_visit_details')}}" target="_blank">
+					<input type="submit" style="border-radius: 5px;" name="btn_rsm_wise_report" value="Report" title="Report"/>
+
+					</form>
+					</td> -->
+				</tr>
+			</tbody>
+		</table>
+
+		{{if (session.msg_1== ''):}}  
+			{{for i in range(len(step_Rows_1)):}}
+				{{recRsmSingle=step_Rows_1[i]}}
+				{{if session.depthNo_user!=2:}}
+				{{memId_1=recRsmSingle[(db.sm_supervisor_level.sup_id)]}}
+				{{memName_1=recRsmSingle[(db.sm_supervisor_level.sup_name)]}}
+			{{#pass}}
+		{{else:}}
+			{{memId_1=recRsmSingle[(db.sm_rep_area.rep_id)]}}
+			{{memName_1=recRsmSingle[(db.sm_rep_area.rep_name)]}}
+		{{pass}}
+		<table class="table mb-0 table-striped table-hover table-bordered tbl " >
+			<tbody>
+				{{if i%2==0:}}
+
+					<!-- <tr align="left" style="vertical-align:middle;background-color:#EBEBEB; font-size:12px;height:35px;"> -->
+
+      				<tr class="table-success">
+				{{else:}}
+
+      				<tr style="background: #d6d8db">
+					<!-- <tr align="left" style="vertical-align:middle;background-color:#D6F9F9; font-size:12px;height:35px;"> -->
+
+				{{pass}}
+				<!-- <tr  align="left" style="font-size:13px" style="border:1px">-->
+
+					<td  width="10%" align="center" >
+						<!--    <a href="{{#=URL(c='tour_web',f='tourShowSup_web',args=[memId_1,session.cid])}}"  target="_blank">Tour</a>&nbsp;&nbsp;&nbsp;-->
+						<form id="form1" name="form1" method="post" action="{{=URL(c='tour_web',f='tourShowSup_web',args=[memId_1,session.cid])}}" target="_blank">   
+
+							<input class="form-control form-control-sm bg-secondary  text-light" type="submit" name="btn_tour" value="Tour" title="Tour"/> 
+						</form> 
+
+						<!--&nbsp;&nbsp; &nbsp;&nbsp;-->
+					</td>
+
+					<td  width="60%">
+						<!-- <a href="{{#=URL(c='tour_web_members',f='members_step_2',args=[memId_1,memName_1])}}"  target="_blank">{{#=memId_1}} | {{#=memName_1}}</a>-->
+
+						<!-- <form id="form1" name="form1" method="post" action="{{=URL(c='tour_web_members',f='members_step_2',args=[memId_1,memName_1])}}" target="_blank"> -->   
+						{{=memId_1}} | {{=memName_1}}     
+						<!-- <input style="-moz-border-radius: 5px;-webkit-border-radius: 5px; height:25px;background:#4899d9;color:#FFF;width:90%;" type="submit" name="btn_tour" value="{{=memId_1}} | {{=memName_1}}" title="{{=memId_1}} | {{=memName_1}}"/> 
+						</form>  -->
+					</td>
+				</tr>
+			</tbody>
+		</table> 
+		{{pass}}
+
+		{{else:}}
+			<font style="font-size:16px; color:#B90000" >No members available !</font>
+
+		{{pass}}
+	</div>
+		<br>
+		<br>
+		<br>
+		<br>
+		<br>
+		<br>
+		<script type="text/javascript">
+		$(document).ready(function() {
+
+
+		});
+		</script>
+</body> 

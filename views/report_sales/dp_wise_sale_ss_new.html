@@ -1,0 +1,224 @@
+{{extend 'layout_sales_report.html'}}
+
+<html>
+
+<head>
+
+<script type="text/javascript">
+
+function print_page()
+
+  {
+
+    window.print()
+
+  }
+
+</script>
+
+
+
+</head>
+
+<body>
+
+
+
+<table width="900px;"> <tr><td style="text-align:right"><!--<a href="{{#=URL(c='report',f='downloadGoodsReceivedSummary',vars=dict(date_from=date_from,date_to=date_to,depot_id=depot_id,depot_name=depot_name,store_id=store_id,store_name=store_name,customer_id=customer_id,customer_name=customer_name,mso_id=mso_id,mso_name=mso_name))}}" >Downlaod</a>--></td></tr></table>
+
+
+
+<table width="900px" cellspacing="1" cellpadding="1">
+
+	<tr>
+
+		<td><table width="900px" style="border:none;" >
+		  <tr >
+		    <td >Date Range</td>
+		    <td >&nbsp;</td>
+		    <td >{{=date_from}} - {{=date_to}}</td>
+		    <td >DeliveryMan</td>
+		    <td >&nbsp;</td>
+		    <td width="266" ><span >{{=dman_id}}
+		      {{=dman_name}}</span></td>
+	      </tr>
+		  <tr >
+		    <td width="90" > Depot/Branch</td>
+		    <td width="10" >:</td>
+		    <td width="424" ><span >{{=depot_id}}|{{=depot_name}}</span></td>
+		    <td width="79" >Customer</td>
+		    <td width="3" >:</td>
+		    <td ><span >{{=customer_id}}
+		      {{=customer_name}}</span></td>
+	      </tr>
+		  <tr >
+		    <td >Store</td>
+		    <td >:</td>
+		    <td ><span >{{=store_id}}|{{=store_name}}</span></td>
+		    <td >MSO</td>
+		    <td >:</td>
+		    <td ><span >{{=mso_id}}
+		      {{=mso_name}}</span></td>
+	      </tr>
+		  <tr >
+		    <td >Teritory</td>
+		    <td >:</td>
+		    <td ><span >{{=teritory_id}}
+		      {{=teritory_name}}</span></td>
+		    <td >Market</td>
+		    <td >:</td>
+		    <td ><span >{{=market_id}}
+		      {{=market_name}}</span></td>
+	      </tr>
+		  <tr >
+		    <td >&nbsp;</td>
+		    <td >&nbsp;</td>
+		    <td >&nbsp;</td>
+		    <td >&nbsp;</td>
+		    <td >:</td>
+		    <td >&nbsp;</td>
+	      </tr>
+		  </table>
+		  <table width="900px" style="border:none; text-align:center; font-weight:bold;" >
+            <tr >
+              <td width="100" >&nbsp;</td>
+              <td align="center" ><span style="border-bottom:1px solid #333;">Delivery Person Wise Sales Statement</span></td>
+              <td width="100" ><img  height="30px" src="{{=URL('static','images/comp_logo1.png')}}"/></td>
+            </tr>
+        </table>
+          <table width="900" border="1" cellpadding="1" cellspacing="1" class="sample_border" >
+            <tr align="left" class="blackCatHead" height="20px"   style="font-size:12px">
+              <td width="100"    >DP ID</td>
+              <td width="80"  >Delivery Person Name</td>
+              <td width="80"   >No. of Inv.              </td>
+              <td width="80"   align="right">Full Return No</td>
+              <td  width="80"  align="right" >Inv Amnt.</td>
+              <td width="80" align="right"  >Ret Amnt</td>
+              <td width="80" align="right"  >Exec%</td>
+              <td  width="80"  align="right" >Ret%</td>
+              <td width="80" align="right"  >Net Sold TP</td>
+            </tr>
+           {{
+           	invTotal=0
+            retTotal=0
+            invTamn=0
+            retTamn=0
+            ntTotal=0
+            saleTotal=0
+            netSoldTotal=0
+           }}
+
+             {{#for i,records in enumerate(records):}}
+              {{for i in range(len(records)):
+        		record=records[i]}}
+             
+             
+   			{{ if (i % 2 == 0):}}
+              <tr  align="left" style="vertical-align:middle; font-size:12px; background:#FBFBFB;">
+                {{else:}}
+              <tr  align="left" style="vertical-align:middle; font-size:12px; background:#F5F5F5;">
+                
+				{{pass}}
+        {{
+        retCount=0
+        d_man_id=record['d_man_id']
+         if [s for s in dmanList if d_man_id in s]:
+            index_element = dmanList.index(d_man_id)           
+            retCount=invCList[index_element]
+        pass}}
+    <td  >
+   
+    {{=record['d_man_id']}}
+   
+    </td>
+    <td    >
+
+    {{=record['d_man_name']}}
+    </td>
+    <td    >{{=record['idTotal']}}
+    {{invTotal=invTotal+records['idTotal']}}
+  
+    <td    align="right">{{=retCount}}{{retTotal=retTotal+retCount}}</td>
+    <td  align="right"  >
+    
+{{
+invAmn=record['actual_total_tp']
+}}    
+{{='{:20,.2f}'.format(invAmn)}}
+    
+    {{invTamn=invTamn+records['actual_total_tp']}}
+    </td>
+    {{retAmn=records['return_tp']}}
+    <td align="right"   >{{='{:20,.2f}'.format(retAmn)}}	{{retTamn=retTamn+retAmn}}</td>
+   
+    <td align="right"   >{{#='{:20,.2f}'.format(eP)}}</td>
+     
+    <td  align="right"  >{{#='{:20,.2f}'.format(rP)}}</td>
+    <td align="right"   >{{#='{:20,.2f}'.format(invAmn-retAmn)}}
+    
+    	{{ntTotal=ntTotal+(invAmn-retAmn)}}
+    </td>
+       </tr>{{pass}}
+       
+      <tr align="left" class="blackCatHead"  height="20px"   style="font-size:12px; background-color:#FFF">
+          <td width="100"  style=" border-style:none"  >&nbsp;</td>
+          <td width="80"  style=" border-style:none">&nbsp;</td>
+          <td width="80"  style="  border-style:none" >{{=invTotal}}</td>
+          <td width="80"  style="  border-style:none" align="right"></td>
+          <td  width="80"  align="right" style="  border-style:none">{{='{:20,.2f}'.format(invTamn)}}</td>
+          <td width="80" align="right"  style="  border-style:none">{{='{:20,.2f}'.format(retTamn)}}</td>
+          
+            {{saleTotal=saleTotal+saleTotal
+            netSoldTotal=netSoldTotal+netSold}}
+            {{ePTotal=(netSoldTotal*100)/saleTotal}}
+            {{rPTotal=(retTamn*100)/saleTotal}}
+          <td width="80" align="right"  style="  border-style:none">{{='{:20,.2f}'.format(ePTotal)}} </td>
+          <td  width="80"  align="right" style="  border-style:none">{{='{:20,.2f}'.format(rPTotal)}}</td>
+          <td width="80" align="right"  style="  border-style:none">{{='{:20,.2f}'.format(ntTotal)}}</td>
+        </tr>
+        
+            {{#=saleTotal}}
+            {{#=retTamn}}
+            
+            
+        </table></td>
+
+	</tr>
+
+	<tr height="10px"></tr>
+
+	<tr>
+
+		<td></br></td>
+
+			
+
+	</tr>
+
+</table>
+
+<br/>
+
+
+
+
+<br/>
+
+
+
+<table width="900px" >
+  <tr>
+    <td width="411" align="center">__________________</td>
+    <td width="225" align="center">&nbsp;</td>
+    <td width="248" align="left">________________________________</td>
+  </tr>
+  <tr>
+    <td width="411" align="center"><strong>Printed By</strong></td>
+    <td width="225" align="right">for</td>
+    <td width="248" align="left"><strong>{{=session.cName}}</strong></td>
+  </tr>
+</table>
+</body>
+
+</html>
+

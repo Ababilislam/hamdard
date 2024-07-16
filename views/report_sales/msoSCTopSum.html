@@ -1,0 +1,163 @@
+{{extend 'layout_sales_report.html'}}
+
+<html>
+
+<head>
+
+<script type="text/javascript">
+
+function print_page()
+
+  {
+
+    window.print()
+
+  }
+
+</script>
+
+
+
+</head>
+
+<body>
+
+
+
+
+
+<table width="1724" cellspacing="1" cellpadding="1">
+
+	<tr>
+
+		<td width="1718"><table width="546" style="border:none;" >
+		  <tr >
+		    <td >Date Range</td>
+		    <td >&nbsp;</td>
+		    <td >{{=date_from}} - {{=date_to}}</td>
+	      </tr>
+		  <tr >
+		    <td width="90" > Depot/Branch</td>
+		    <td width="10" >:</td>
+		    <td width="424" ><span >{{=depot_id}}|{{=depot_name}}</span></td>
+	      </tr>
+		  <tr >
+		    <td >Store</td>
+		    <td >:</td>
+		    <td ><span >{{=store_id}}|{{=store_name}}</span></td>
+	      </tr>
+		  </table>
+          
+      <table width="900px" style="border:none; text-align:center; font-weight:bold;" >
+            <tr >
+              <td width="100" >&nbsp;</td>
+              <td align="center" ><span style="border-bottom:1px solid #333;">Item Wise Sales Statement Summary </span></td>
+              <td width="100" ><img  height="30px" src="{{=URL('static','images/comp_logo1.png')}}"/></td>
+            </tr>
+          </table>
+          <table width="900" border="1" cellpadding="1" cellspacing="1" class="sample_border" >
+	        <tr align="left" class="blackCatHead" height="20px" ;  style="font-size:12px">
+	          <td width="50"  align="left"  >StockA</td>
+              <td width="50"  align="left"  >StockB</td>
+              <td width="50"  align="left"  >StockC</td>
+              <td width="50"  align="left"  >StockBONUS</td>
+	         
+	          <td width="50" align="right"  >RSM</td>
+	          <td width="50" align="right"  >FM</td>
+	          <td width="50" align="right"  >TR</td>
+             
+	          <td width="50" align="right"  >A</td>
+	          <td width="50" align="right"  >B</td>
+	          <td width="50" align="right"  >C</td>
+	          <td width="50" align="right"  >Bonus</td>
+           
+            
+             </tr>
+				{{pastRsm=''}}
+              {{pastFm=''}}
+              {{pastTr=''}}
+		      {{for records_sum in records_sum:}}
+               {{if pastTr!=records_sum[db.sm_invoice.level3_id]:}}
+		     	{{trStr=qty_str.split(records_sum[db.sm_invoice.level3_id])[1].split('<fdrd>')[0]
+                trStrList=trStr.split('<rd>')
+               
+                ATotal=0
+                BTotal=0
+                CTotal=0
+                BONUSTotal=0
+                AC=0
+                BC=0
+                C=0
+                BONUS=0
+                i=0
+                while i < len(trStrList):
+                
+                	trGet=trStrList[i]
+                    trGetList=trGet.split(',')
+                    A=int(trGetList[0])
+                    =A
+                   
+                    
+                   i=i+1 
+                pass
+                }}
+	         
+	          <tr align="left" class="blackCatHead" height="20px" ;  style="font-size:12px">
+	          <td   align="left"  >StockA</td>
+              <td   align="left"  >StockB</td>
+              <td   align="left"  >StockC</td>
+              <td   align="left"  >StockBONUS</td>
+	         
+	          <td  align="right"  >
+              {{if pastRsm!=records_sum[db.sm_invoice.level1_id]:}}
+              {{=records_sum[db.sm_invoice.level1_id]}}
+              {{pass}}</td>
+	          <td  align="right"  >
+              {{if pastFm!=records_sum[db.sm_invoice.level2_id]:}}
+              {{=records_sum[db.sm_invoice.level2_id]}}
+              {{pass}}
+              </td>
+	          <td  align="right"  >
+              {{if pastTr!=records_sum[db.sm_invoice.level3_id]:}}
+              {{=records_sum[db.sm_invoice.level3_id]}}
+              {{pass}}
+              </td>
+             
+	          <td  align="right"  >{{=trStr}}</td>
+	          <td  align="right"  >B</td>
+	          <td  align="right"  >C</td>
+	          <td  align="right"  >Bonus</td>
+           
+            
+             </tr>
+             {{pastRsm=records_sum[db.sm_invoice.level1_id]}}
+             {{pastFm=records_sum[db.sm_invoice.level2_id]}}
+             {{pastTr=records_sum[db.sm_invoice.level3_id]}}
+             {{pass}}
+              {{pass}}
+		      
+		     
+		     
+          </table>
+
+</br></br>
+
+
+
+<table width="900px" >
+  <tr>
+    <td width="411" align="center">__________________</td>
+    <td width="225" align="center">&nbsp;</td>
+    <td width="248" align="left">________________________________</td>
+  </tr>
+  <tr>
+    <td width="411" align="center"><strong>Printed By</strong></td>
+    <td width="225" align="right">for</td>
+    <td width="248" align="left"><strong>{{=session.cName}}</strong></td>
+  </tr>
+</table>
+<p>&nbsp;</p>
+</body>
+
+</html>
+

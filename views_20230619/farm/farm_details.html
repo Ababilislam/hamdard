@@ -1,0 +1,253 @@
+
+{{extend 'layout.html'}}
+  
+  <style type="text/css">
+ input[type=text], input[type=password],  select {
+    margin: 2px 0px 2px 0px;
+}
+div.error {
+    width: 250px;
+}
+
+.catCol{font-size:18px; color:#09F}
+.rptlist{font-size:15px; height:auto; }
+.rptlist:hover{ height:auto;}
+.rptul{color:#0076AE; background-color:#F0F0F0;}
+.rptdiv{  font-size:16px; color:#0076AE; background-color:#F0F0F0; overflow:auto;}
+
+#accordionReport ul{ list-style-type:none;margin:0; font-size:15px; }
+#accordionReport li{ margin:1px; border-radius:5px; border-bottom:1px solid #CCCCCC; font-size:15px; background-color:#F7F7F7; height:20px; padding:5px 2px 2px 15px;}/*:#F7F7F7*/
+
+#accordionReport li:hover{ height:21px;background-color:#F5F5F5; font-size:15px;}
+/*.vImage img{
+	-webkit-transform:scale(1);
+	-moz-transform:scale(1);
+	-o-transform:scale(1);
+	-webkit-transition-duration:0.5;
+	-moz-transition-duration:0.5;
+	-o-transition-duration:0.5;
+	opacity:1;
+	display:inline-block;
+	
+	}
+
+.vImage img:hover{
+	-webkit-transform:scale(1.3);
+	-moz-transform:scale(1.3);
+	-o-transform:scale(1.3);
+	box-shadow:0px 0px 10px gray;
+	-webkit-box-shadow:0px 0px 10px gray;
+	-o-box-shadow:0px 0px 10px gray;
+	opacity:1;
+	display:block;
+			
+	}*/
+	
+.vImage {
+    position: relative;
+    display: inline-block;
+}
+
+.vImage-content {
+    display: none;
+    position: absolute;
+    background-color: #f9f9f9;
+    min-width: 300px;
+    box-shadow: 0px 0px 10px gray;
+	-webkit-box-shadow:0px 0px 10px gray;
+	-o-box-shadow:0px 0px 10px gray;
+	margin:5px;
+	padding:3px;
+	z-index:1;
+	overflow:auto;
+}
+
+.vImage:hover .vImage-content {
+    display: block;
+	z-index:1;
+}
+
+ </style>
+
+<script>
+ $(function() { 
+		
+	$( "#accordionReport" ).accordion({
+	 // active:false,
+      heightStyle: "content",
+	  collapsible: true
+    });
+	
+  });
+  </script>
+  
+  <table width="100%"  border="0" cellspacing="0" cellpadding="0" style="background-color:#FFFFFF;" >
+  <tr height="30px">
+    <td width="450"><span class="blackCatTitle">Farm - Details</span></td>
+    <form action="{{=URL(c='farm',f='farm_details')}}" method="post">
+    <td width="510" style="text-align:right"><input name="" type="submit"  value="Back"/></td>
+    </form>
+    <td>&nbsp;</td>
+  </tr>
+  <tr  height="1px" style="background-color:#CCCCCC;">
+	    <td colspan="3" ></td>
+  </tr>
+  </table>
+  
+    
+  <table width="100%" height="500px"  border="0" cellspacing="0" cellpadding="0" class="page_color"  >
+  <tr height="100%"  style="vertical-align:top;">
+    <td>
+	<table width="100%"  border="0" cellpadding="0" cellspacing="0"  >
+      <tr>
+        <td width="5">&nbsp;</td>
+        <td>
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        <table width="900">
+        	<tr>
+           	  <td valign="top">
+               	<table width="450">
+                        <tr>
+                          <td width="120">Farm Id</td>
+                          <td>: {{=farm_id}}</td>
+                      </tr>
+  
+                      <tr>
+                          <td width="120">Farm Name</td>
+                          <td>: {{=farm_name}}</td>
+                      </tr>
+
+                      <tr>
+                          <td width="120">Latitude</td>
+                          <td>: {{=latitude}}</td>
+                      </tr>
+                      
+                        <tr>
+                          <td width="120">Longitude</td>
+                          <td>: {{=longitude}}</td>
+                      </tr>
+                        
+
+                        <tr>
+                          <td width="120">Image</td>
+                          <td>: {{=image}}</td>
+                      </tr>
+                        <tr>
+                          <td width="120">Farm Type</td>
+                          <td>: {{=farm_type}}</td>
+                      </tr>
+                        <tr>
+                          <td width="120">Owner Name</td>
+                          <td>: {{=owner_name}}</td>
+                      </tr>
+                      <tr>
+                          <td width="120">Address</td>
+                          <td>:&nbsp;{{=address}}</td>
+                      </tr>
+                              <tr>
+                          <td width="120">Manager Name</td>
+                          <td>: {{=manger_name}}</td>
+                      </tr>
+  
+                      <tr>
+                          <td width="120">Consultant Name</td>
+                          <td>: {{=consultant_name}}</td>
+                      </tr>
+
+                      <tr>
+                          <td width="120">Category</td>
+                          <td>: {{=category}}</td>
+                      </tr>
+                      
+                        <tr>
+                          <td width="120">Birds/Animal</td>
+                          <td>: {{=birds_animal}}</td>
+                      </tr>
+                        
+                       
+                        <tr>
+                          <td width="120">Housing</td>
+                          <td>: {{=rearing_housing}}</td>
+                      </tr>
+                        <tr>
+                          <td width="120">Feeding</td>
+                          <td>: {{=feeding}}</td>
+                      </tr>
+                        <tr>
+                          <td width="120">Watering</td>
+                          <td>: {{=watering}}</td>
+                      </tr>
+                      <tr>
+                          <td width="120">Brooding</td>
+                          <td>:&nbsp;{{=brooding}}</td>
+                      </tr>
+
+                        <tr>
+                          <td width="120">Ponds Size</td>
+                          <td>: {{=poandsSize}}</td>
+                      </tr>
+  
+                      <tr>
+                          <td width="120">Status</td>
+                          <td>: {{=status}}</td>
+                      </tr>
+
+                      <tr>
+                          <td width="120">Anniversary</td>
+                          <td>: {{=anniversary}}</td>
+                      </tr>
+                      
+                        <tr>
+                          <td width="120">Date Of Birth</td>
+                          <td>: {{=dob}}</td>
+                      </tr>
+                       
+                      <tr>
+                          <td width="120">Medicine</td>
+                          <td>:&nbsp;{{=medicine}}</td>
+                      </tr>
+                        
+                        </table>
+                        
+                        
+                
+              </td>
+                
+                <td><!--<span style=" border:2px #CCCCCC; border-radius:5px; background-color:#000; box-shadow:3px 3px 5px #CCCCCC; text-align:center; color:#E9E9E9;width:400px; height:400px;">--><img src="{{=URL('static','pharma-18IBN-001/www/farm.png')}}" style="width:400px; height:400px;"  /><!--</span>-->
+                </td>
+				
+            </tr>
+                        
+                                
+                                        
+                                                        </table>
+				
+		</td>
+      </tr>
+     
+          
+      
+           
+          </table>
+          
+          
+          
+
+         
+              
+<br />
+<br />
+
+

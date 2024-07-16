@@ -1,0 +1,124 @@
+{{extend 'layout.html'}}
+
+ <link rel="stylesheet" href="{{=URL('static', 'js_and_css/ui.theme.css')}}" type="text/css" />
+  <link rel="stylesheet" href="{{=URL('static', 'js_and_css/jquery-ui.css')}}" type="text/css" />
+  <link rel="stylesheet" href="{{=URL('static', 'js_and_css/style.css')}}" type="text/css" />
+  <script src="{{=URL('static','js_and_css/jquery-1.8.2.js')}}"></script>
+  <script src="{{=URL('static','js_and_css/jquery-ui.js')}}"></script>
+<style>
+body {
+  font-family: "Lato", sans-serif;
+}
+
+
+
+#main {
+
+/*  transition: margin-left .5s;
+  padding: 20px;*/
+}
+
+</style>
+ 
+  <style type="text/css">
+ input[type=text], input[type=password],  select {
+    margin: 2px 0px 2px 0px;
+	width:250px;
+}
+
+select{ width:100px; margin:2px 0px 2px 0px;}
+
+textarea{
+    width:100px;
+	height:50px;
+	margin:2px 0px 2px 0px;
+}
+
+div.error {
+    margin-left:0px;
+	width:100px;
+}
+.page_color,body{
+	font-family:Arial, Helvetica, sans-serif;
+	font-size:13px;
+	}
+	
+#uni_middle_str4{
+width:50px;
+}
+
+ </style>
+
+
+<body>
+
+  <table align="left" style="margin-left:auto;margin-right:auto; background-color: #F5F5F5; height:600px; width:100%"> 
+    <form action="{{=URL(c='doctor',f='microunion')}}" method="post">
+    <tr>
+      <td height="20px"  style="color: #212F3C; background-color: #ffffff; font-size: 20px;padding-top: 4px;"> &nbsp;Pocket Market Update</td>
+    <td align="right" style="background-color: #ffffff; padding-bottom: 2px;"><input name="" type="submit" style="background-color: #EBEBEB; color: #212F3C; height:25px" value=" Back "/></td>
+    <td align="right">&nbsp;&nbsp;&nbsp;</td>
+
+    </tr>
+    </form>
+    <tr>
+      <td colspan="16" style=" background-color: #B2BABB;  height: 1px"> </td>
+    </tr>
+    <tr>
+      
+    </tr>
+    <form action="{{=URL(c='doctor',f='microunion_update',args=[record_id])}}" method="post">            
+          <tr >   
+          <td align="left" style="padding-top: 10px;padding-left: 10px;">      
+          <table>
+                
+                <tr>
+                  <td  style="vertical-align:middle;color: #212F3C;">&nbsp; Pocket Market ID <font style="color:#B93976; font-size:20px"></font></td>
+                  <td style="padding-left: 10px;">
+                  <input  name="microunion_id" type="text" id="microunion_id" size="25" value="{{=microunion_id}}" placeholder="Microunion Id" autocomplete="off" readonly  style="width:180px; height: 25px;"/>            
+                  </td>
+                </tr>
+                <tr>
+                  <td  style="vertical-align:middle;color: #212F3C;">&nbsp;&nbsp;Pocket Market Name</td>
+                  <td style="padding-left: 10px;">
+
+                  <input  name="microunion_name" type="text" id="microunion_name" size="25" value="{{=microunion_name}}" placeholder="Microunion name" autocomplete="off" style="width:180px; height: 25px;"/>
+                  
+                  </td>
+                    
+                </tr>
+                <tr>
+                    
+                  <td  style="vertical-align:middle;color: #212F3C;">&nbsp;&nbsp;Area ID</td>
+                  <td style="padding-left: 10px;">
+
+                  <input  name="area_id" type="text" id="area_id" size="25" value="{{=area_id}}" placeholder="Area Id" autocomplete="off" style="width:180px; height: 25px;"/>
+                  
+                  </td>
+                </tr>
+                <tr>
+                    
+                  <td  style="vertical-align:middle;color: #212F3C;">&nbsp;&nbsp;Area Name</td>
+                  <td style="padding-left: 10px;">
+
+                  <input  name="area_name" type="text" id="area_name" size="25" value="{{=area_name}}" placeholder="Area Name" autocomplete="off" style="width:180px; height: 25px;"/>
+                  
+                  </td>
+                </tr>
+                
+
+                <tr>         
+                  <td  align="right" colspan="3" style="margin-top: 30px;" >
+                    <br>
+                  &nbsp;&nbsp;&nbsp;
+                  <!-- <a href="{{#=URL(c='poi',f='poi_select',args=[record_poi_id])}}" style="text-align:left;"> -->
+                  <input type="submit" name="update_btn" id="update_btn" value=" Update " style="height: 35px; width: 60%; align-content: center; font-size:20px; background-color: #EBEBEB; color: #212F3C ">
+                  <!-- </a> -->
+                  </td>                                       
+                </tr>
+    </table>
+    </td> 
+    </tr>
+</form>
+</table>      
+</body>

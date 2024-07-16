@@ -1,0 +1,220 @@
+{{extend 'layout.html'}}
+
+<link rel="stylesheet" href="{{=URL('static', 'js_and_css/ui.theme.css')}}" type="text/css" />
+<link rel="stylesheet" href="{{=URL('static', 'js_and_css/jquery-ui.css')}}" type="text/css" />
+<link rel="stylesheet" href="{{=URL('static', 'js_and_css/style.css')}}" type="text/css" />
+
+<script src="{{=URL('static','js_and_css/jquery-1.8.2.js')}}"></script>
+<script src="{{=URL('static','js_and_css/jquery-ui.js')}}"></script>
+
+<style>
+	body {
+		font-family: "Lato", sans-serif;
+	}
+
+	#main {
+		transition: margin-left .5s;
+		padding: 16px;
+	}
+
+	@media screen and (max-height: 450px) {
+		.sidenav {padding-top: 15px;}
+		.sidenav a {font-size: 18px;}
+	}
+</style>
+  
+<style type="text/css">
+	input[type=text], input[type=password], select {
+		margin: 2px 0px 2px 0px;
+		width:250px;
+	}
+
+	select { 
+		width:265px; margin:2px 0px 2px 0px;
+	}
+
+	textarea {
+		width:250px;
+		height:50px;
+		margin:2px 0px 2px 0px;
+	}
+
+	div.error {
+		margin-left:0px;
+		width:265px;
+	}
+
+	.page_color, body {
+		font-family:Arial, Helvetica, sans-serif;
+		font-size:13px;
+	}
+		
+	#uni_middle_str4 {
+		width:100px;
+	}
+
+</style>
+
+<script>
+	var base_url=location.protocol + "//" + location.hostname + (location.port && ":" + location.port) + "/{{=request.application}}/";
+	
+	$(function() {
+	
+			 var valueListStr="";
+			$('#territory_id').keyup(function(){
+				$.ajax({
+					  url: base_url+'active_market_list/territory_list',
+					  success: function(resStr) {
+						  valueListStr=resStr
+						  console.log(valueListStr)
+					  }
+					});
+	
+	
+				//-------------------------
+		  
+				var valueList = valueListStr.split(',');				
+				var searchValue=$("#territory_id").val();
+	
+				//---------------- auto complete combo list
+	
+				var valueList_new=new Array();
+	
+				lc=0;
+	
+				i =0;
+	
+				var valueStr="";				
+	
+				while (i < valueList.length)
+	
+				{
+	
+					valueStr=valueList[i];
+	
+					i=i+1;					
+	
+					var res=valueStr.toUpperCase().match(searchValue.toUpperCase());
+	
+					if (res!=null){
+	
+						valueList_new[lc]=valueStr;
+	
+						lc=lc+1;
+	
+						if (lc==30){
+	
+							break;
+	
+						};
+	
+					}else{
+	
+						continue;
+	
+					}					
+	
+				};
+	
+				//alert (ref_list_new);
+	
+				//-------------- auto complete source
+				$( "input#territory_id" ).autocomplete({
+					source: valueList_new
+				});
+		  }); 
+	
+		   //==============	   
+	
+	}); 
+	
+	</script>
+
+<!-- top table  -->
+<table>
+	<tr height="1px"> 
+		<td colspan="3"></td>
+	</tr>
+	<tr height="30px">
+		<td width="100%" style="background-color:#FFFFFF;"><span class="blackCatTitle">&nbsp;Active Market List</span></td>
+		<td width="500">&nbsp;</td>
+		<td>&nbsp;</td>
+	</tr>
+	<tr height="1px" style="background-color:#CCCCCC;">
+		<td colspan="3"></td>
+	</tr>
+	<form  name="form1" action="{{=URL(c='active_market_list',f='active_market_list')}}" method="post">
+		<!-- form row -->
+		<table width="410" border="0" style="background-color: #F5F5F5; margin-top: 15px; margin-left: 10px;">
+			<tr style="background-color:#F5F5F5">
+				<td width="300px"">
+					<input type="text" name="territory_id" id="territory_id" size="10" placeholder="Territory ID | Name" style="width:300px"/>
+				</td>
+				<td align="right" width="90px" style="padding-left: 10px;">
+					<input align="right" type="submit" name="btn_submit" id="btn_submit" value="Add" style="vertical-align: middle; height: 30px; width: 90px; background-color: #95d8d7; color: black; border: 1px solid #95d8d7; border-radius: 4px;"/>
+				</td> 
+				
+				<td>
+					<a href="{{=URL(c='active_market_list',f='batch_upload')}}">
+						<input type="button" name="batch_upload" id="batch_upload" value="Batch Upload" style="vertical-align: middle; height: 30px; width: 120px; background-color: #95d8d7; color: black; border: 1px solid #95d8d7; border-radius: 4px; margin-left: 40px;"/>
+					</a>
+				</td>
+			</tr>
+		</table>
+	</form>
+</table>
+<br>
+
+<!-- data table  -->
+<table style="margin-left: 10px;">
+	<tr>
+		<td style="font-family: sans-serif;  font-weight: bold;">Total: {{=totals}}</td>
+	</tr>
+
+	<tr width="700">
+	</tr>
+	<tr align="left" class="blackCatHead" height="30px" style="background-color: #c4e2e1;">
+		<td width="140px">Market ID</td>
+		<td width="540px">Market Name</td>
+		<td width="20px"></td>
+	</tr>
+
+	{{for i in range(len(pagination_sql_data)):
+		records_ov_dict = pagination_sql_data[i]        
+		market_id = str(records_ov_dict["market_id"])      
+		market_name = str(records_ov_dict["market_name"])                                         
+	}}
+		{{if i == items_per_page: break}}
+		<tr align="left" class="blackCat" style="vertical-align:middle; font-size:12px; height: 20px; border-bottom: 1px solid #d8d8d8;"> 
+			<td  width="140px">{{=market_id}}</td>
+			<td width="540px">{{=market_name}}</td>
+			<form name="form1" action="{{=URL(c='active_market_list',f='record_delete',args=[market_id])}}" method="post">
+				<td align="right" width="20px">
+					<button type="submit" name="btn_delete" id="btn_delete" value="" style="background-color: transparent; border: none; color: red;" onclick="if (!confirm('Do you really want to delete?')) { return false }">X</button> 
+				</td>
+			</form> 
+		</tr>
+		{{pass}}
+	{{pass}}
+
+
+    <tr>
+		<table>
+			<tr>
+				<td>
+					{{if page:}}&nbsp;&nbsp;
+					<a href="{{=URL(args=[0])}}">First</a> | &nbsp;&nbsp;
+					<a href="{{=URL(args=[page-1 if page>0 else 0])}}">Previous</a> |
+					{{pass}}
+					{{if len(pagination_sql_data)>items_per_page:}}
+					&nbsp;&nbsp;
+					<a href="{{=URL(args=[page+1])}}">Next&nbsp;&nbsp;</a>
+					{{pass}}
+				  </td>
+			</tr>
+		</table>
+	</tr>
+	
+</table>
+
+

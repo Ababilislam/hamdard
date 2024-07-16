@@ -1,0 +1,201 @@
+{{extend 'layout.html'}}
+  <link rel="stylesheet" href="{{=URL('static', 'js_and_css/ui.theme.css')}}" type="text/css" />
+  <link rel="stylesheet" href="{{=URL('static', 'js_and_css/jquery-ui.css')}}" type="text/css" />
+  <link rel="stylesheet" href="{{=URL('static', 'js_and_css/style.css')}}" type="text/css" />
+   <script src="{{=URL('static','js_and_css/jquery-1.8.2.js')}}"></script>
+    <script src="{{=URL('static','js_and_css/jquery-ui.js')}}"></script>
+    
+ <style type="text/css">
+	input[type=text], input[type=password],  select {
+		margin: 2px 0px 2px 0px;
+		width:150px;
+	}
+	div.error {
+		margin-left:0px;
+		width:auto;
+	}
+	#sm_doctor_area_field2{
+	width:50px;
+	text-align:right;
+	}
+	.page_color,body{
+		font-family:Arial, Helvetica, sans-serif;
+		font-size:13px;	
+		}
+ </style>
+<script>
+var base_url=location.protocol + "//" + location.hostname + (location.port && ":" + location.port) + "/{{=request.application}}/";
+
+$(function() {
+	 	var valueListStr="";
+		
+		$('#search_type').blur(function(){
+			if ($('#search_type').val()=='territory'){
+				
+				$.ajax({
+					  url: base_url+'visitPlan/get_territory_list',
+					  success: function(resStr) {
+						  valueListStr=resStr
+					  }
+					});
+			}else if ($('#search_type').val()=='Status'){
+				valueListStr='ACTIVE,INACTIVE'
+				
+			}else if ($('#search_type').val()=='empID'){
+				$.ajax({
+					  url: base_url+'visitPlan/get_empID_list',
+					  success: function(resStr) {
+						  valueListStr=resStr
+					  }
+					});
+			
+			}else if ($('#search_type').val()=='DepotID'){
+				$.ajax({
+					  url: base_url+'default/get_depot_list',
+					  success: function(resStr) {
+						  valueListStr=resStr
+					  }
+					});
+			
+			}else if ($('#search_type').val()=='Region'){
+				$.ajax({
+					  url: base_url+'default/get_region_list',
+					  success: function(resStr) {
+						  valueListStr=resStr
+					  }
+					});
+			
+			}else if ($('#search_type').val()=='RepID'){
+				$.ajax({
+					  url: base_url+'default/get_all_ff_list',
+					  success: function(resStr) {
+						  valueListStr=resStr
+					  }
+					});
+			};		
+			
+	 	});
+	 
+		$('#search_value').keyup(function(){
+			//-------------------------
+			var valueList = valueListStr.split(',');				
+			var searchValue=$("#search_value").val();
+			
+			//---------------- auto complete combo list
+			var valueList_new=new Array();
+			lc=0;
+			i =0;
+			var valueStr="";				
+			while (i < valueList.length)
+			{
+				valueStr=valueList[i];
+				i=i+1;					
+				var res=valueStr.toUpperCase().match(searchValue.toUpperCase());
+				if (res!=null){
+					valueList_new[lc]=valueStr;
+					lc=lc+1;
+					if (lc==30){
+						break;
+					};
+				}else{
+					continue;
+				}					
+			};
+			//alert (valueList_new);
+			
+			//-------------- auto complete source
+			$( "input#search_value" ).autocomplete({
+				source: valueList_new
+			});
+		
+	  }); 
+	  
+}); 
+
+</script>
+ 
+<body class="claro">   
+<table width="100%"  border="0" cellspacing="0" cellpadding="0" style="background-color:#FFFFFF;" >
+  <tr height="30px" >
+    <td width="500"><span class="blackCatTitle">Detail</span></td>
+	<form action="{{=URL(c='visitPlan',f='summary',vars=dict(from_date=from_date,to_date=to_date),args=[page])}}" method="post">
+	<td width="200" align="right"><input name="btn_back" type="submit"  value="Back"/></td>
+	</form>	
+    <td>&nbsp;</td>
+  </tr>
+  <tr  height="1px" style="background-color:#CCCCCC;">
+	    <td colspan="3" ></td>
+  </tr>
+</table>
+  
+  <table width="100%" height="500px"  border="0" cellspacing="0" cellpadding="0" class="page_color" id="table_big"  >
+  <tr height="100%"  style="vertical-align:top;">
+    <td width="10px">&nbsp;</td>
+    <td>
+	<table width="100%"  border="0" cellpadding="0" cellspacing="0"  >
+      <tr>
+        <td>&nbsp;</td>
+      </tr>
+      <tr>
+        <td>
+		
+		<table width="700" border="1"  class="sample_border" >
+          <form id="form1" name="form1" method="post" action="{{=URL(c='visitPlan',f='summary')}}">
+            <tr align="left" class="blackCatHead"  height="20px">
+              <td width="490" height="28" >{{=rep_name}}-{{=repID}}</td>
+              <td>
+              <a href="{{=URL(c='visitPlan',f='visitConfirm',vars=dict(repID=repID,firstDate=firstDate))}}" target="_blank">
+		    <input type="button" name="btn_detail" id="btn_detail" value=" Confirm "  class="button_update"/>
+		    </a>
+            </td>
+            <td>
+              <a href="{{=URL(c='visitPlan',f='visitCancel',vars=dict(repID=repID,firstDate=firstDate))}}" target="_blank">
+		    <input type="button" name="btn_detail" id="btn_detail" value=" Cancel "  class="button_update"/>
+		    </a>
+            </td>
+              
+              <td width="100" align="right"  ><a href="{{=URL(c='visitPlan',f='download_visitDetail',vars=dict(repID=repID,rep_name=rep_name,firstDate=firstDate))}}">
+
+                <input type="button" name="btn_download" id="btn_download" value="Download" class="button_download"/></a></td>
+          </tr>
+		  </form>
+        </table>
+		Total: {{=totalCount}}<br />
+         <table width="700" border="1" cellpadding="1" cellspacing="1" class="sample_border" >
+           <tr align="left" class="blackCatHead"  height="20px" ;"vertical-align:middle">
+             <td width="100" >ScheduleDate</td>
+             <td width="250" align="left" >Level/Territory</td>
+             <td width="150" align="left" >Note</td>
+             <!--<td width="150" align="left" >Submit Date</td>-->
+             <td width="150" align="left" >Status</td>
+             
+           </tr>
+           
+			   
+	   {{ p=0}}
+       {{pastDate=''}} 		  
+	   {{for i,record in enumerate(records):}}
+	  
+  
+		  <tr  align="left" class="blackCat"  style="vertical-align:middle; font-size:11px;"> 
+		  <td >
+          {{if (pastDate!=record[db.sm_doctor_visit_plan.schedule_date]):}}
+          {{=record[db.sm_doctor_visit_plan.schedule_date]}}
+          {{pastDate=record[db.sm_doctor_visit_plan.schedule_date]}}
+          {{pass}}
+          
+          </td>
+		  <td >{{=record[db.sm_doctor_visit_plan.route_id]}} | {{=record[db.sm_doctor_visit_plan.route_name]}}</td>
+		  <td>{{=record[db.sm_doctor_visit_plan.note]}}</td>
+		  <!--<td>{{=record[db.sm_doctor_visit_plan.schedule_date]}}</td>-->
+		  <td>{{=record[db.sm_doctor_visit_plan.status]}}</td>
+		</tr>
+			   {{pass}}
+		    </table>
+		  <p>&nbsp;</p>
+        </td></tr>
+    </table></td>
+  </tr>
+</table>
+
+</body>

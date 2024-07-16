@@ -1,0 +1,96 @@
+{{extend 'layout_mobile.html'}}
+
+<head>
+ <link rel="stylesheet" href="{{=URL('static', 'js_and_css/ui.theme.css')}}" type="text/css" />
+  <link rel="stylesheet" href="{{=URL('static', 'js_and_css/jquery-ui.css')}}" type="text/css" />
+  <link rel="stylesheet" href="{{=URL('static', 'js_and_css/style.css')}}" type="text/css" />
+  <script src="{{=URL('static','js_and_css/jquery-1.8.2.js')}}"></script>
+  <script src="{{=URL('static','js_and_css/jquery-ui.js')}}"></script>
+ <style type="text/css">
+
+ input[type=number]{
+    margin: 2px 0px 2px 0px;
+    width:100%;
+}
+.page_color,body{
+    font-family:Arial, Helvetica, sans-serif;
+    font-size:12px;
+}
+input[type=submit]{
+    background-color:#3399ff;
+    color:#FFF;
+    width:100%;
+    height:25px;
+    border-radius:10px; 
+    }
+
+/*#btn_img{ width:18px; background:url('{{=URL('static','images/photo.png')}}') }*/
+
+ </style>
+ 
+</head>
+
+<body >   
+
+<table style="border-collapse:collapse;width:100%;">
+    <tr style="background-color:#ECF4FD; font-weight:bold; font-size:14px;" >
+        <td align="center" style="width:100%;">Doctor Wise Report Details</td></tr>
+    </tr>
+</table>
+
+
+
+<table style="border-collapse:collapse; width:100%;">  
+    <tr style="width:50%">
+        <td width="100px" align="left">Date Range: {{=session.from_date}} &nbsp;To  &nbsp;{{=session.to_date}}</td>
+     </tr>
+     <tr style="width:50%">
+         <td>Doctor&nbsp;Type: {{=doc_type_name}}</td>
+     </tr>
+     <tr style="width:50%">
+         <td>Doctor&nbsp;Name: {{=doctor_name}}</td>
+     </tr>
+     
+
+
+<table style="border-collapse:collapse; width:100%;">   
+
+    <tr style="background-color:#ECF4FD; font-size:10px;border-bottom:1px solid #E6E6E6;">
+        <td width="50%" style="text-align:left;">Rx Count : {{=len(doctor_records)}}&nbsp; &nbsp;</td>
+    </tr>
+</table>
+
+  
+</body>
+
+
+<table style="border-collapse:collapse; width:100%; border: 1px;">     
+    <tr style="background-color:#0099ff; color:#FFF; font-size:10px;border-bottom:1px solid #E6E6E6;">
+       <td >Date</td>
+        <td  >Product</td>
+        <td >Photo</td>
+
+    </tr>
+
+    {{
+        image = ''
+        for doc in range(len(doctor_records)):
+            records_single=doctor_records[doc]   
+            submit_date=str(records_single["submit_date"])
+            medicine_name=str(records_single["medicine_name"])
+            image=str(records_single["image"])
+    }}
+    <tr style="background-color:#e6f2ff; font-size:10px;border-bottom:1px solid #E6E6E6;">
+        <td style="height: 25px;">{{=submit_date}}</td>
+        <td style="height: 25px;">{{=medicine_name}} | {{=image}}</td>
+        <form id="form1" name="form1" method="post" action="{{=URL(c='doctor_wise_report',f='prescription_view',args=[image])}}"onsubmit="window.open('', 'new_window', 'width=800,height=600');"target="new_window" >
+            <td align="left" width="40px"style="vertical-align:top;">
+                <button type="submit" name="btn_img" id="btn_img" value="" style="background-color: transparent;border: none;width: 20px; height: 20px;">
+                    <img src="{{=URL('static', 'images/Photo.png')}}">
+                </button> 
+            </td>
+        </form>
+    </tr>
+    {{pass}}
+
+</table>

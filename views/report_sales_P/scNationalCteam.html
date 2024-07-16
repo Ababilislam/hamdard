@@ -1,0 +1,212 @@
+{{extend 'layout_sales_report.html'}}
+
+<html>
+
+<head>
+
+<script type="text/javascript">
+
+function print_page()
+
+  {
+
+    window.print()
+
+  }
+
+</script>
+
+
+
+</head>
+
+<body>
+
+
+
+
+
+<table width="1724" cellspacing="1" cellpadding="1">
+
+	<tr>
+
+		<td width="1718"><table width="1443" style="border:none;" >
+		  <tr >
+		    <td >Date Range</td>
+		    <td >:</td>
+		    <td >{{=date_from}} - {{=date_to}}</td>
+		    <td >RSM</td>
+		    <td >:</td>
+		    <td >{{=rsm_id}}|{{=rsm_name}}</td>
+	      </tr>
+		  <tr >
+		    <td width="90" > Depot/Branch</td>
+		    <td width="10" >:</td>
+		    <td width="426" ><span >{{=depot_id}}|{{=depot_name}}</span></td>
+		    <td width="60" >FM</td>
+		    <td width="10" >:</td>
+		    <td width="819" >{{=fm_id}}|{{=fm_name}}</td>
+	      </tr>
+		  <tr >
+		    <td >Store</td>
+		    <td >:</td>
+		    <td ><span >{{=store_id}}|{{=store_name}}</span></td>
+		    <td >TR</td>
+		    <td >:</td>
+		    <td >{{=tr_id}}|{{=tr_name}}</td>
+	      </tr>
+		  <tr >
+		    <td >&nbsp;</td>
+		    <td >&nbsp;</td>
+		    <td >&nbsp;</td>
+		    <td >Item</td>
+		    <td >:</td>
+		    <td >{{=product_name}}|{{=product_id}}</td>
+	      </tr>
+		  </table>
+		  <table width="900px" style="border:none; text-align:center; font-weight:bold;" >
+            <tr >
+              <td width="100" >&nbsp;</td>
+              <td align="center" ><span style="border-bottom:1px solid #333;">Sales Comparison National C Team</span></td>
+              <td width="100" ><img  height="30px" src="{{=URL('static','images/comp_logo1.png')}}"/></td>
+        </tr>
+          </table>
+          <table width="900" border="1" cellpadding="1" cellspacing="1" class="sample_border" >
+	        <tr align="left" class="blackCatHead" height="20px" ;  style="font-size:12px">
+	          <td width="100" rowspan="2"  align="left"   >Zone</td>
+               <td rowspan="2"   align="100"  >Cteam</td>
+               <td rowspan="2"   align="100"  >Category</td>
+	          <td rowspan="2"   align="100"  >InvCount</td>
+	          <td width="100" rowspan="2"  align="right"  >Total TP</td>
+	          <td colspan="3"  align="center"  >TP</td>
+            </tr>
+	        <tr align="left" class="blackCatHead" height="20px" ;  style="font-size:12px">
+	          <td width="150"  align="right"  >A</td>
+	          <td width="150" align="right"  >B</td>
+	          <td width="150" align="right"  >C</td>
+            </tr>
+
+           
+            
+             </tr>
+              
+              {{pastRsm=''
+              pastCteam=''
+              pastCategory=''
+              ATotal=0
+              BTotal=0
+              CTotal=0
+              Total=0
+              invCount=0
+              }}
+              
+		      {{for i in range(len(records)):
+        		record=records[i]}}
+              {{rsm=record['level0_id']
+              	Cteam=record['special_territory_code']
+                rsm_check=str(record['level0_id'])+'-'+str(record['special_territory_code'])+'-'+str(record['category_id'])
+              }}
+              {{invCount=0
+                CteamL=''
+              }}
+               {{ if [s for s in rsmList if rsm_check in s]:
+                  index_element = rsmList.index(rsm_check)           
+                  invCount= invCountList[index_element]
+                  CteamL = specialList[index_element]
+      			 # =CteamL	
+                  pass  
+                }}
+                {{
+                ATotal=0
+                BTotal=0
+                CTotal=0
+                Total=0
+      
+      spStr='<fdrd'+str(record['level0_id'])+'-'+str(record['special_territory_code'])+'-'+str(record['category_id'])+'>'
+
+                #=cat_str.find(spStr)
+                if (cat_str.find(spStr)!=-1):
+                    rsmStr=cat_str.split(spStr)[1].split('<fdrd')[0]}}
+                    {{
+                    rsmStrList=rsmStr.split('<rd>')
+                    i=0
+                    while i < len(rsmStrList)-1:
+                        catA=rsmStrList[i].split(',')[0]
+                        catB=rsmStrList[i].split(',')[1]
+                        catC=rsmStrList[i].split(',')[2]
+                        i=i+1
+                    pass
+                    ATotal=ATotal+float(catA)
+                    BTotal=BTotal+float(catB)
+                    CTotal=CTotal+float(catC)
+                    Total=float(catA)+float(catB)+float(catC)
+                pass
+                }}
+                {{#=pastRsm}}
+                {{#=pastCteam}}
+            {{if pastRsm!=record['level0_id'] or pastCteam!=record['special_territory_code'] or pastCategory!=record['category_id']:}} 
+            {{if (pastRsm!=record['level0_id'] or pastCteam!=record['special_territory_code']) or (pastRsm==record['level0_id'] or pastCteam==record['special_territory_code']):}}	
+            
+		      <tr align="left" class="blackCatHead" height="20px" ;  style="font-size:12px">
+	          <td   align="left"   >
+              {{=record['level0_id']}}
+              </td>
+	          
+              <td  align="left"  >
+              {{=CteamL}}
+              </td>
+               <td  align="left"  >
+              {{=record['category_id']}}
+              </td>
+              <td  align="left"  >
+              {{=invCount}}
+              </td>
+	          <td  align="right"  >{{='{:20,.2f}'.format(Total)}}
+              
+              </td>
+	          <td   align="right"  >{{='{:20,.2f}'.format(ATotal)}}
+              
+              </td>
+	          <td align="right"  >{{='{:20,.2f}'.format(BTotal)}}
+              
+              </td>
+	          <td  align="right"  >{{='{:20,.2f}'.format(CTotal)}}
+	            
+	            </td>
+	          
+           
+            
+             </tr>
+             
+             {{pastRsm=record['level0_id']
+               pastCteam=record['special_territory_code']
+               pastCategory=record['category_id']
+             }}
+             {{pass}}
+              {{pass}}
+		      
+		     {{pass}}
+		     
+          </table>
+
+</br></br>
+
+
+
+<table width="900px" >
+  <tr>
+    <td width="411" align="center">__________________</td>
+    <td width="225" align="center">&nbsp;</td>
+    <td width="248" align="left">________________________________</td>
+  </tr>
+  <tr>
+    <td width="411" align="center"><strong>Printed By</strong></td>
+    <td width="225" align="right">for</td>
+    <td width="248" align="left"><strong>{{=session.cName}}</strong></td>
+  </tr>
+</table>
+<p>&nbsp;</p>
+</body>
+
+</html>
+

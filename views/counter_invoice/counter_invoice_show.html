@@ -1,0 +1,388 @@
+{{extend 'layout.html'}}
+
+
+ <link rel="stylesheet" href="{{=URL('static', 'js_and_css/ui.theme.css')}}" type="text/css" />
+  <link rel="stylesheet" href="{{=URL('static', 'js_and_css/jquery-ui.css')}}" type="text/css" />
+  <link rel="stylesheet" href="{{=URL('static', 'js_and_css/style.css')}}" type="text/css" />
+  <script src="{{=URL('static','js_and_css/jquery-1.8.2.js')}}"></script>
+  <script src="{{=URL('static','js_and_css/jquery-ui.js')}}"></script>
+<style>
+body {
+  font-family: "Lato", sans-serif;
+}
+
+
+
+#main {
+  transition: margin-left .5s;
+  padding: 16px;
+}
+
+@media screen and (max-height: 450px) {
+  .sidenav {padding-top: 15px;}
+  .sidenav a {font-size: 18px;}
+}
+</style>
+ 
+  <style type="text/css">
+.password-mask {
+/*  display: inline-block;*/
+/*  padding: 2px;
+  background-color: black;
+  color: black;
+  font-size: 0;
+  line-height: 1;
+  letter-spacing: 0.5em;*/
+  -webkit-text-security: disc;
+  -moz-binding: url('https://example.com#fake_moz_binding');
+}
+
+
+ input[type=text], input[type=password],  select {
+    margin: 2px 0px 2px 0px;
+	width:250px;
+}
+
+select{ width:265px; margin:2px 0px 2px 0px;}
+
+textarea{
+    width:250px;
+	height:50px;
+	margin:2px 0px 2px 0px;
+}
+
+div.error {
+    margin-left:0px;
+	width:265px;
+}
+.page_color,body{
+	font-family:Arial, Helvetica, sans-serif;
+	font-size:13px;
+	}
+	
+#uni_middle_str4{
+width:100px;
+}
+
+ </style>
+
+<script>
+
+
+var base_url=location.protocol + "//" + location.hostname + (location.port && ":" + location.port) + "/{{=request.application}}/";
+
+$(function() {
+
+// ====================================== DEPOT ID NAME AUTO COMPLETE START ================================
+    var depot_Str="";  
+      // alert(url: base_url+'default/get_depot_list',)
+      $.ajax({
+        url: base_url+'default/get_depot_list',
+        success: function(retStr) {
+          depot_Str=retStr 
+        }
+      }); 
+
+  $('#depot_ID').keyup(function(){
+        var ref_list = depot_Str.split(',');  
+        var ref_name=$("#depot_ID").val();
+        //---------------- auto complete combo list
+        var ref_list_new1 =new Array();
+        lc=0;
+        i =0;
+        var refStr="";        
+        while (i < ref_list.length)
+        {
+          refStr=ref_list[i];
+          i=i+1;          
+          var res=refStr.toUpperCase().match(ref_name.toUpperCase());
+          if (res!=null){
+            ref_list_new1[lc]=refStr;
+            lc=lc+1;
+            if (lc==30){
+              break;
+            };
+          }else{
+            continue;
+          }         
+        };
+        //-------------- auto complete source
+        $( "input#depot_ID" ).autocomplete({
+          source: ref_list_new1
+        });
+      
+      }); 
+// ============================================ DEPOT ID NAME AUTO COMPLETE END ==============================
+ 
+// ============================================ DISCOUNT TYPE AUTO COMPLETE START =============================
+var discount_typeStr="";  
+   
+    // alert(base_url+'doctor_speciality/speciality_list')
+    $.ajax({
+      url: base_url+'discount_type/discount_type_list',
+      success: function(retStr) {
+        discount_typeStr=retStr 
+      }
+    }); 
+
+$('#discount_type').keyup(function(){
+      // alert('ok')
+      //-------------------------
+      var ref_list = discount_typeStr.split(',');  
+      var ref_name=$("#discount_type").val();
+      //---------------- auto complete combo list
+      var ref_list_new1 =new Array();
+      lc=0;
+      i =0;
+      var refStr="";        
+      while (i < ref_list.length)
+      {
+        refStr=ref_list[i];
+        i=i+1;          
+        var res=refStr.toUpperCase().match(ref_name.toUpperCase());
+        if (res!=null){
+          ref_list_new1[lc]=refStr;
+          lc=lc+1;
+          if (lc==30){
+            break;
+          };
+        }else{
+          continue;
+        }         
+      };
+      
+      //-------------- auto complete source
+      $( "input#discount_type" ).autocomplete({
+        source: ref_list_new1
+      });
+    
+    }); 
+// ============================================ DISCOUNT TYPE AUTO COMPLETE END =============================
+ 
+// ============================================ PHYSICIAN ID AUTO COMPLETE START =============================
+var physicianListStr="";  
+   
+    // alert(base_url+'counter/physician_list_depot_wise')
+    $.ajax({
+      url: base_url+'counter/physician_list_depot_wise',
+      success: function(retStr) {
+        physicianListStr=retStr 
+      }
+    }); 
+
+// =================================
+$('#physician_id').keyup(function(){
+      var ref_list = physicianListStr.split(',');  
+      var ref_name=$("#physician_id").val();
+      //---------------- auto complete combo list
+      var ref_list_new=new Array();
+      lc=0;
+      i =0;
+      var refStr="";        
+      while (i < ref_list.length)
+      {
+        refStr=ref_list[i];
+        i=i+1;          
+        var res=refStr.toUpperCase().match(ref_name.toUpperCase());
+        if (res!=null){
+          ref_list_new[lc]=refStr;
+          lc=lc+1;
+          if (lc==30){
+            break;
+          };
+        }else{
+          continue;
+        }         
+      };
+      
+      //-------------- auto complete source
+      $( "input#physician_id" ).autocomplete({
+        source: ref_list_new
+      });
+    
+    }); 
+// ============================================ PHYSICIAN ID AUTO COMPLETE END =============================
+// -----------------------------------
+});
+
+
+</script>  
+
+
+<table width="100%"   border="0" cellspacing="0" cellpadding="0" style="background-color:#F5F5F5;" >
+ 
+  <tr  height="1px" >
+    <td colspan="3" ></td>
+  </tr>
+
+  <tr>
+    <td>
+
+<table border="0" cellspacing="0" cellpadding="0" style="background-color:#FFFFFF;" >
+  <tr height="30px" >
+    <td width="100%" style="background-color:#FFFFFF;" ><span class="blackCatTitle">&nbsp;Counter Invoice List</span></td>
+  <td width="500" >&nbsp;</td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr  height="1px" style="background-color:#CCCCCC;">
+    <td colspan="3" ></td>
+  </tr>
+</table>
+
+<table width="100%" align="left" height="100%" border="0"  cellpadding="0" cellspacing="0" style="margin-left:auto;margin-right:auto;background-color:#F5F5F5;" >
+  
+  <tr>
+    <td valign="middle">
+
+      <form  name="form1" action="{{=URL(c='counter_invoice',f='counter_invoice_show')}}" method="post"  >
+                        <!-- FILTERING BY USER TYPE -->
+
+          <table width="100%" border="1" class="sample_border" style="background-color: #EBEBEB;" >
+            
+                 <tr align="left" height="30px"; class="filterRow" style="background:#eee">
+
+                  {{ if session.user_type == 'Admin':}}
+                   <td align="left" width="200px" style="padding-left: 10px;">
+                       {{if session.depot_ID=='' or session.depot_ID=='None' or session.depot_ID == None:}}                                         
+                       <input  name="depot_ID" type="text" id="depot_ID" size="25" value="" autocomplete="off" placeholder="Depot ID / Name" style="width:200px"/>
+                       {{else:}}
+                       <input  name="depot_ID" type="text" id="depot_ID" size="25" value="{{=session.depot_ID}} | {{=session.depot_name}}" autocomplete="off" style="width:200px"/>
+                       {{pass}}
+                   </td>
+                   {{pass}}
+
+                   <td align="left" width="50px" style="padding-left: 10px;">
+                     {{if session.sl=='' or session.sl=='None':}}                                         
+                     <input  name="sl" type="text" id="sl" size="25" value="" autocomplete="off" placeholder="SL" style="width:50px"/>
+                     {{else:}}
+                     <input  name="sl" type="text" id="sl" size="25" value="{{=session.sl}}" autocomplete="off" style="width:50px"/>
+                     {{pass}}
+                 </td>
+
+                 <td align="left" width="100px" style="padding-left: 10px;">
+                     {{if session.from_dt=='' or session.from_dt=='None':}}                                         
+                     <input  name="from_dt" type="text" id="from_dt" size="25" value="" autocomplete="off" placeholder="From Date" style="width:100px" class="date" />
+                     {{else:}}
+                     <input  name="from_dt" type="text" id="from_dt" size="25" value="{{=session.from_dt}}" autocomplete="off" style="width:100px" class="date" />
+                     {{pass}}
+                 </td>
+
+                 <td align="left" width="100px" style="padding-left: 10px;">    
+                     {{if session.to_dt=='' or session.to_dt=='None':}} 
+                     <input align="left" name="to_dt" type="text" id="to_dt" size="25" placeholder="To Date" autocomplete="off"  value="" style="width:100px" class="date"/>
+                     {{else:}}
+                     <input  name="to_dt" type="text" id="to_dt" size="25" placeholder="To Date"  autocomplete="off" value="{{=session.to_dt}}" style="width:100px" class="date" />
+                     {{pass}}
+                 </td >
+                 
+                 <td align="left" width="120px" style="padding-left: 10px;">
+                     {{if session.discount_type=='' or session.discount_type=='None':}}                                         
+                     <input  name="discount_type" type="text" id="discount_type" size="25" value="" autocomplete="off" placeholder="Discount Type" style="width:120px"/>
+                     {{else:}}
+                     <input  name="discount_type" type="text" id="discount_type" size="25" value="{{=session.discount_type}}" autocomplete="off" style="width:120px"/>
+                     {{pass}}
+                 </td>
+                 <td align="left" width="120px" style="padding-left: 10px;">
+                     {{if session.physician_id=='' or session.physician_id=='None':}}                                         
+                     <input  name="physician_id" type="text" id="physician_id" size="25" value="" autocomplete="off" placeholder="Physician" style="width:120px"/>
+                     {{else:}}
+                     <input  name="physician_id" type="text" id="physician_id" size="25" value="{{=session.physician_id}}" autocomplete="off" style="width:120px"/>
+                     {{pass}}
+                 </td>
+                  <td class="tdDecoratoin inputSubmitStyle" align="left" style="padding-left: 10px;" >
+                   <input  type="submit" name="btn_filter" id="btn_filter" value="Filter" style="vertical-align:middle;height:30px ; width:60px" class="button_update" title=""/>
+                   <input type="submit" name="btn_all" id="btn_all" value="All" style="vertical-align:middle;height:30px ; width: 50px;"  class="button_update"/>
+                     
+                   </td>
+                   <td align="right">
+                  <a href="{{=URL(c='counter_invoice',f='counter_invoice_list_Download')}}" style="text-align:left;">
+                    <input type="button" name="Input2" id="Input2" value="Download" style="vertical-align:middle;height:30px ;"  class="button_update"/>&nbsp;
+                  </a>
+                 </td>
+                 </tr>
+                 <tr>
+                   <td style="font-family: sans-serif;  font-weight: bold;">Total: {{=len(get_total_record_count)}}</td>
+                 </tr>
+        </table>
+
+    </form>
+
+        
+                            <!-- SHOW ALL USER  -->
+
+      <table width="100%" border="1" cellpadding="0" cellspacing="0" class="sample_border" style="background-color:#F5F5F5;margin-left:5px;margin-right:auto;" >
+            <tr class="blackCatHead" style="font-size:15px;">
+              <td width="100px">Invoice SL</td>
+               <td width="120px">Branch Name</td>
+               <td width="120px">Physician</td>
+               <td width="120px">Discount&nbsp;Type</td>
+               <td width="120px">Invoice Date</td>
+               <td width="120px">Status</td>
+               <td width="80px" align="right">TP</td>
+               <td width="150px" align="right" >Discount</td>
+               <td width="80px"  align="right">Total&nbsp;Amount</td>
+               <td width="80px"  ></td>
+            </tr>
+
+               {{
+                for i in range(len(counter_invoiceRows)):
+                    records_ov_dict=counter_invoiceRows[i]   
+                    record_id=str(records_ov_dict["id"])
+                    sl=str(records_ov_dict["order_sl_counter"])
+                    depot_id=str(records_ov_dict["depot_id"]) 
+                    depot_name=str(records_ov_dict["depot_name"])
+                    physician_id=str(records_ov_dict["physician_id"])
+                    physician_name=str(records_ov_dict["physician_name"])
+                    discount_type=str(records_ov_dict["discount_type"])                                         
+                    order_datetime=str(records_ov_dict["invoice_date"])
+                    status=str(records_ov_dict["status"])
+                    actual_total_tp=records_ov_dict["actual_total_tp"]
+                    discount= records_ov_dict["discount"]
+                    total_amount= records_ov_dict["total_amount"]
+                }}
+
+               <tr align="left" class="blackCat"  style="vertical-align:middle; font-size:12px;"> 
+                  <td width="100px" >{{=sl}}</td>
+                  <td width="200px">{{=depot_id}}|{{=depot_name}}</td>
+                  {{if physician_id != '':}}
+                  <td width="200px">{{=physician_id}}|{{=physician_name}}</td>
+                  {{else:}}
+                  <td width="200px"></td>
+                  {{pass}}
+                  <td width="200px">{{=discount_type}}</td>
+                  <td width="200px">{{=order_datetime}}</td>
+                  <td width="120px">{{=status}}</td>
+                  <td width="80px" align="right" >{{=actual_total_tp}}</td>
+                  <td width="200px" align="right" >{{=easy_format(discount)}}</td>
+                  <td width="200px" align="right" >{{=round(total_amount)}}</td>
+                
+                   <form  name="form2" action="{{=URL(c='counter_invoice',f='counter_invoice_details',args=[sl, depot_id])}}" method="post" target = blank >
+                        <td align="right" width="20px"style="vertical-align:top;">
+                            <button type="submit" name="btn_details" id="btn_details"  value="" style="border: none;">Details</button> 
+                        </td>
+                  </form> 
+              </tr>
+
+              {{pass}}
+      </table>
+
+  </td>
+  </tr>
+  <tr>
+    <td>
+      {{if page_Number:}}
+      <a href="{{=URL(args=[0])}}">First</a> | &nbsp;&nbsp;
+      <a href="{{=URL(args=[page_Number-1 if page_Number>0 else 0])}}">Previous</a> |
+      {{pass}}
+      {{if len(counter_invoiceRows)>=item_per_page:}}
+      &nbsp;&nbsp;
+      <a href="{{=URL(args=[page_Number+1])}}">Next &nbsp;&nbsp;</a>
+      {{pass}}
+    </td>
+  </tr>
+
+</table>
+</td>
+
+</tr>
+</table>

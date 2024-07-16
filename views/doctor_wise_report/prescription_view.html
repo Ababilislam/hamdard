@@ -1,0 +1,61 @@
+{{#extend 'layout.html'}}
+ 
+  <style type="text/css">
+	input[type=text], input[type=password],  select {
+		margin: 2px 0px 2px 0px;
+		width:250px;
+	}
+	
+	div.error {
+		width: 250px;
+	}
+	
+ </style>
+ <script>
+var base_url=location.protocol + "//" + location.hostname + (location.port && ":" + location.port) + "/{{=request.application}}/";
+
+function check_delete() {
+    // pr_deleteVal=$("#pr_delete").val() 
+     
+    var x=confirm("Are you sure you want to delete?");
+    
+    if (x){
+      $("#pr_delete").val('yes'); 
+    }else{
+      $("#pr_delete").val('no');
+    }
+        
+    
+} 
+
+
+</script>
+<table width="150%"  border="0" cellspacing="0" cellpadding="0" style="background-color:#FFFFFF; margin: 0 auto;">
+<!-- <table width="150%"  border="0" cellspacing="0" cellpadding="0" style="background-color:#FFFFFF;" > -->
+    <tr height="30px" >
+        <td align="center" width="500"><span class="blackCatTitle" style="font-size: 20px;">Employee Details</span></td>    
+        
+        <td>&nbsp;</td>
+    </tr>
+    <tr  height="1px" style="background-color:#CCCCCC;">
+    	<td colspan="3" ></td>
+    </tr>
+</table>
+ 
+<!-- <table align="center" width="100%"  border="0" cellpadding="0" cellspacing="0" style="padding-left: 10px;" > -->
+<table width="100%"  border="0" cellpadding="0" cellspacing="0" style="padding-left: 10px; margin: 0 auto;">
+
+
+        
+
+    <tr align="center">
+        <td align="center" valign="top" style="padding-top: 10px;" >
+            <div style=" border:2px #CCCCCC;align-content: center; border-radius:5px; background-color:#000; box-shadow:3px 3px 5px #CCCCCC;color:#E9E9E9;width:400px; height:400px;">
+            <img src="{{=image_url}}" style="width:400px; height:400px;" alt="Image" />
+            </div>        
+        </td>
+    </tr>  
+    </form>
+</table>
+
+

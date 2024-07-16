@@ -1,0 +1,103 @@
+{{extend 'layout.html'}}
+ 
+  <style type="text/css">
+	input[type=text], input[type=password],  select {
+		margin: 2px 0px 2px 0px;
+		width:250px;
+	}
+	
+	div.error {
+		width: 250px;
+	}
+	
+ </style>
+ 
+<table width="100%"  border="0" cellspacing="0" cellpadding="0" style="background-color:#FFFFFF;" >
+  <tr height="30px" >
+    <td width="300"><span class="blackCatTitle">Doctor Route-Edit</span></td>
+    
+	<form action="{{=URL(c='doctor_route',f='doctor_route_add',args=[page])}}" method="post">
+	<td width="200" align="right"><input name="" type="submit"  value="Back"/></td>
+	</form>
+    <td>&nbsp;</td>
+  </tr>
+  <tr  height="1px" style="background-color:#CCCCCC;">
+	    <td colspan="3" ></td>
+  </tr>
+  </table>
+  
+  
+  <table width="100%" height="500px"  border="0" cellspacing="0" cellpadding="0" class="page_color"  >
+  <tr height="100%"  style="vertical-align:top;">
+    <td>
+	<table width="100%"  border="0" cellpadding="0" cellspacing="0"  >
+      <tr>
+        <td>&nbsp;</td>
+        <td>&nbsp;</td>
+      </tr>
+      <tr>
+        <td>&nbsp;</td>
+        <td>{{=form.custom.begin}}
+          <table width="500" class="blackCat">
+            <tr>
+              <td width="120"> Doctor ID </td>
+              <td>:&nbsp;{{=docID}}</td>
+              <td>&nbsp;</td>
+              </tr>
+            <tr>
+              <td width="120">Doctor Name</td>
+              <td>:&nbsp;{{=docRow[0].str2}}</td>
+              <td>&nbsp;</td>
+              </tr>
+            <tr>
+              <td width="120">Route ID </td>
+              <td>:&nbsp;{{=form.custom.widget.str3}}</td>
+			  <td>&nbsp;</td>
+              </tr>
+            
+            <tr>
+              <td width="120">Route Name</td>
+              <td>:&nbsp;{{=docRow[0].str4}}</td>
+              <td>&nbsp;</td>
+              </tr>
+            
+            <tr>
+              <td width="120">Client ID </td>
+              <td>:&nbsp;{{=form.custom.widget.str5}}</td>
+              <td>&nbsp;</td>
+            </tr>
+            <tr>
+              <td width="120">Client Name </td>
+              <td>:&nbsp;{{=docRow[0].str6}}</td>
+              <td>&nbsp;</td>
+            </tr>
+            <tr>
+              <td width="120">Address</td>
+              <td>:&nbsp;{{=form.custom.widget.str7}}</td>
+              <td>&nbsp;</td>
+            </tr>
+            
+            <tr>
+              <td width="120">Delete</td>
+              <td>:&nbsp;{{=form.custom.deletable}}</td>
+              <td>&nbsp;</td>
+              </tr>
+            <tr>
+              <td width="120">&nbsp;</td>
+              <td>{{=form.custom.submit}}</td>
+              <td>&nbsp;</td>
+              </tr>
+			
+			<tr height="2px">
+              <td width="120"></td>
+              <td></td>
+              <td></td>
+              </tr>
+          </table>
+          {{=form.custom.end}}</td>
+      </tr>
+    </table>
+	</td>
+  </tr>
+</table>
+

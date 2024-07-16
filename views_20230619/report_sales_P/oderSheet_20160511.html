@@ -1,0 +1,223 @@
+{{extend 'layout_orderSheet.html'}}
+
+<html>
+
+<head>
+
+<script type="text/javascript">
+
+function print_page()
+
+  {
+
+    window.print()
+
+  }
+
+</script>
+
+
+
+</head>
+
+<body>
+
+
+
+
+
+
+
+
+
+
+
+
+				{{past_vsl=0}}
+				{{x=0}}
+                 {{for r in records:
+                 x=x+1
+                 pass
+                 }}
+                
+                
+                {{for i,record in enumerate(records):}}
+				
+                {{vsl = int(record.sm_order.vsl)}}
+				
+
+				
+                
+               
+             {{if  (past_vsl > 0):}}
+              {{ if (vsl != past_vsl) :}}
+<table width="900" border="1" cellpadding="1" cellspacing="1" class="sample_border" style="background-color:#FFF" >
+                    <tr  align="left"   style="vertical-align:middle; font-size:11px; font-size:14px">
+                    
+                    <td width="27"  align="left" style="border-right-width:3px; text-align:left; border-left:hidden; border-right:hidden "></span></td>
+                    <td width="27"  align="left" style="border-right-width:3px; text-align:left;border-left:hidden; border-right:hidden"></span></td>
+                    <td width="27"  align="center" style="border-right-width:3px; text-align:center;border-left:hidden; border-right:hidden"></span></td>
+                    <td width="27"  align="center" style="border-right-width:3px; text-align:center;border-left:hidden; border-right:hidden"></span></td>
+                    <td width="27"  align="right" style="border-right-width:3px; text-align:right;border-left:hidden; border-right:hidden"></span></td>
+                    <!--<td  align="right" style="border-right-width:3px; text-align:right;border-left:hidden; border-right:hidden"></td>-->
+                 <td width="621"  align="right" style="border-right-width:3px; text-align:right;border-left:hidden; border-right:hidden">Net Total</td>
+                    <td width="106"  align="right" style="border-right-width:3px; text-align:right;border-left:hidden; border-right:hidden">{{=grantTotal}}</spa></td>	
+                    </tr>
+                  
+                        </table>
+                        
+                        <span style="page-break-before:always"></span>
+                        {{pass}}
+                        
+                        
+                        
+                        
+                          
+                        
+                        
+                        
+                        
+               {{pass}}
+               
+                {{if  (vsl != past_vsl):}}
+                {{grantTotal=0}}
+               	
+               		<table width="902">
+
+				<tr>
+					<td width="100" ><img width="25px" height="40px" src="{{=URL('static','images/comp_logo2.png')}}"/></td>
+					<td style="text-align:center; font-size:24px; font-weight:bold">{{=session.cName}}</td>
+					<td width="100">&nbsp;</td>
+                  </tr>
+                
+</table>
+<table width="900" border="0" cellpadding="0" cellspacing="1" style=" font-size:14px"  >
+                 
+              
+                  <tr>
+                    <td width="84">Branch</td>
+                    <td width="3">:</td>
+                    <td width="293"><span style="border-right-width:3px; text-align:left;">{{=record.sm_order.depot_id}}|{{=record.sm_order.depot_name}}</span></td>
+                    <td width="42">&nbsp;</td>
+                    <td width="71">Client/Retailer</td>
+                    <td >:</td>
+                    <td width="400"><span style="border-right-width:3px; text-align:left;"><span style="border-right-width:3px; text-align:left;"><strong>{{=record.sm_order.client_id}} | {{=record.sm_order.client_name}}</strong></span></span></td>
+                  </tr>
+                  <tr>
+                    <td>B.O.SL</td>
+                    <td>:</td>
+                    <td><span style="border-right-width:3px; text-align:left;">{{=record.sm_order.sl}}</span></td>
+                    <td>&nbsp;</td>
+                    <td>Address</td>
+                     <td >:</td>
+                    <td><span style="border-right-width:3px; text-align:left;">{{=record.sm_client.address}}</span></td>
+                  </tr>
+                  <tr>
+                    <td>Status</td>
+                    <td>:</td>
+                    <td>{{=record.sm_order.status	}}</td>
+                    <td>&nbsp;</td>
+                    <td>Zone</td>
+                     <td >:</td>
+                    <td><span style="border-right-width:3px; text-align:left;">{{=record.sm_order.level0_id}} | {{=record.sm_order.level0_name	}}</span></td>
+                  </tr>
+                  <tr>
+                    <td>SM/RSM/MSO</td>
+                    <td>:</td>
+                    <td><span style="border-right-width:3px; text-align:left;"><strong>{{=record.sm_order.rep_id	}} | {{=record.sm_order.rep_name}}</strong></span></td>
+                    <td>&nbsp;</td>
+                    <td>Region</td>
+                     <td >:</td>
+                    <td><span style="border-right-width:3px; text-align:left;">{{=record.sm_order.level1_id	}} | {{=record.sm_order.level1_name	}}</span></td>
+                  </tr>
+                  <tr>
+                    <td>Order Date</td>
+                    <td>:</td>
+                    <td><span style="border-right-width:3px; text-align:left;">{{=record.sm_order.order_datetime	}}</span></td>
+                    <td>&nbsp;</td>
+                    <td>Area</td>
+                     <td >:</td>
+                    <td><span style="border-right-width:3px; text-align:left;">{{=record.sm_order.level2_id	}} | {{=record.sm_order.level2_name	}}</span></td>
+                  </tr>
+                  <tr>
+                    <td>Market</td>
+                    <td>:</td>
+                    <td><span style="border-right-width:3px; text-align:left;"><strong>{{=record.sm_client.market_id	}} | {{=record.sm_client.market_name	}}</strong></span></td>
+                    <td>&nbsp;</td>
+                    <td>Territory</td>
+                     <td >:</td>
+                    <td><span style="border-right-width:3px; text-align:left;"><strong>{{=record.sm_order.area_id	}} | {{=record.sm_order.area_name	}}</strong></span></td>
+                  </tr>
+                  
+                </table>	
+					 <table width="900" border="1" cellpadding="1" cellspacing="1" class="sample_border" style="background-color:#FFF" >
+                    <tr  align="left" class="blackCat"  style="vertical-align:middle; font-size:16px;">
+                    <td  align="left" style="border-right-width:3px; text-align:left; ">ItemName</td>
+                    <td  width="100" align="left" style="border-right-width:3px; text-align:left;">ItemID</td>
+                   <!-- <td  align="center" style="border-right-width:3px; text-align:center;">Category	</span></td>-->
+                      <td  width="100" align="center" style="border-right-width:3px; text-align:center;">Qty</span></td>
+                      <td  width="100" align="right" style="border-right-width:3px; text-align:right;">Rate</span></td>
+                      <td width="100" align="right" style="border-right-width:3px; text-align:right;">Vat</td>
+                      <td width="100" align="right" style="border-right-width:3px; text-align:right;">Total</td>
+                      <td width="100" align="right" style="border-right-width:3px; text-align:right;">Item Total</span></td>	
+                    </tr>
+                   
+                {{pass}}
+                
+                
+               
+                
+             <tr  align="left" class="blackCat"  style="vertical-align:middle; font-size:11px;">
+		
+              <td  align="left" style="border-right-width:3px; text-align:left;font-size:14px">{{=record.sm_order.item_name}}</span></td>
+               <td  align="left" style="border-right-width:3px; text-align:left;font-size:14px"><strong>{{=record.sm_order.item_id}}</span></strong></td>
+				<!--<td  align="center" style="border-right-width:3px; text-align:center;">{{=record.sm_order.category_id	}}</span></td>-->
+                  <td  align="center" style="border-right-width:3px; text-align:center;font-size:14px"><strong>{{=record.sm_order.quantity	}}</span></strong></td>
+                  <td  align="right" style="border-right-width:3px; text-align:right;font-size:14px">{{=record.sm_order.price-record.sm_order.item_vat	}}</span></td>
+                  <td  align="right" style="border-right-width:3px; text-align:right;font-size:14px">{{=record.sm_order.item_vat}}</td>
+                  <td  align="right" style="border-right-width:3px; text-align:right;font-size:14px">{{=record.sm_order.price  }}</td>
+                  <td  align="right" style="border-right-width:3px; text-align:right;font-size:14px">{{=float(record.sm_order.price )* float(record.sm_order.quantity)	}}</span>
+                  
+                  {{grantTotal=grantTotal+(float(record.sm_order.price )* float(record.sm_order.quantity))}}
+               </td>	
+				</tr>
+                
+                
+                
+				{{ if (i == x-1) :}}
+                        <table width="900" border="1" cellpadding="1" cellspacing="1" class="sample_border" style="background-color:#FFF" >
+                    <tr  align="left"   style="vertical-align:middle; font-size:11px; font-size:14px">
+                    
+                    <td width="27"  align="left" style="border-right-width:3px; text-align:left; border-left:hidden; border-right:hidden "></span></td>
+                    <td width="27"  align="left" style="border-right-width:3px; text-align:left;border-left:hidden; border-right:hidden"></span></td>
+                    <td width="27"  align="center" style="border-right-width:3px; text-align:center;border-left:hidden; border-right:hidden"></span></td>
+                    <td width="27"  align="center" style="border-right-width:3px; text-align:center;border-left:hidden; border-right:hidden"></span></td>
+                    <td width="27"  align="right" style="border-right-width:3px; text-align:right;border-left:hidden; border-right:hidden"></span></td>
+                    <!--<td  align="right" style="border-right-width:3px; text-align:right;border-left:hidden; border-right:hidden"></td>-->
+                 <td width="621"  align="right" style="border-right-width:3px; text-align:right;border-left:hidden; border-right:hidden">Net Total</td>
+                    <td width="106"  align="right" style="border-right-width:3px; text-align:right;border-left:hidden; border-right:hidden">{{=grantTotal}}</spa></td>	
+                    </tr>
+                  
+                        </table>
+                        
+                        
+                        {{pass}}  
+                
+                
+                 {{past_vsl=vsl}}
+               
+                	
+                 
+                {{pass}}
+                
+                
+				 
+              </table>
+
+		  
+
+
+</body>
+
+</html>
+

@@ -1,0 +1,209 @@
+{{extend 'layout.html'}}
+
+ 
+
+  <style type="text/css">
+
+  input[type=text], input[type=password]{
+		margin: 2px 0px 2px 0px;
+		width: 200px;
+	}
+	select{
+		margin: 2px 0px 2px 0px;
+		width: 215px;
+	}
+
+div.error {
+    width: 170px;
+}
+
+ </style>
+
+ 
+
+  <table width="100%"  border="0" cellspacing="0" cellpadding="0" style="background-color:#FFFFFF;" >
+
+  <tr height="30px" >
+
+    <td width="300"><span class="blackCatTitle">Approve Reject Notice</span></td>
+
+	<form action="{{=URL(c='leave_application',f='approve_reject_notice')}}" method="post">
+
+	<td width="500" align="right"><input name="" type="submit"  value="Back"/></td>
+
+	<td align="left">&nbsp;</td>
+
+	</form>
+
+  </tr>
+
+  <tr  height="1px" style="background-color:#CCCCCC;">	
+
+	<td width="300" align="left">	</td>
+
+	<td colspan="2" align="right">	</td>
+
+  </tr>
+
+  </table>
+
+  
+
+  
+
+  <table width="100%" height="500px"  border="0" cellspacing="0" cellpadding="0" class="page_color"  >
+
+  <tr height="100%"  style="vertical-align:top;">
+
+    <td>
+
+	<table width="100%"  border="0" cellpadding="0" cellspacing="0"  >
+
+      <tr>
+
+        <td width="10px">&nbsp;</td>
+
+        <td>&nbsp;</td>
+
+      </tr>
+
+      <tr>
+
+        <td>&nbsp;</td>
+
+        <td align="left" valign="top">
+
+          <table width="800">
+
+            <tr>
+
+              <td width="485" valign="top"><table width="400" class="blackCat">
+
+                {{#=form.custom.begin}}
+
+                <tr>
+
+              <td width="140"> Rep </td>
+
+                  <td>{{=emp_id}}|{{=emp_name}}</td>
+
+                </tr>
+
+            <tr>
+
+              <td width="140">From Date</td>
+
+              <td>{{=from_date}}</td>
+
+            </tr>
+
+            <tr>
+
+              <td width="140">To Date</td>
+
+              <td>{{=to_date}}</td>
+
+            </tr>
+
+            <tr>
+
+              <td width="140">Total Leave</td>
+
+              <td>{{=total_leave}}</td>
+
+            </tr>
+
+            <tr>
+              <td width="140">Leave Type</td>
+              <td>{{=leave_type}}</td>
+            </tr>
+            
+            <tr>
+
+              <td width="140">Area Head </td>
+
+              <td>{{=ared_head_id}}|{{=ared_head_name}}</td>
+
+            </tr>
+
+            <tr>
+
+              <td width="140">Area Head Status </td>
+
+              <td>{{=area_head_status}}</td>
+
+            </tr>
+
+              </table></td>
+
+              <td width="303" valign="top"><table width="400" class="blackCat">
+
+            
+
+
+            <tr>
+
+              <td width="140">Zonal Head </td>
+
+              <td>{{=zonal_head_id}}|{{=zonal_head_name}}</td>
+
+            </tr>
+
+
+            <tr>
+
+              <td width="140">Zonal Head Status </td>
+
+              <td>{{=zonal_head_status}}</td>
+
+            </tr>
+
+
+
+                  <tr>
+
+                    <td>Divisional Head</td>
+
+                    <td>{{=divisional_head_id}}|{{=divisional_head_name}}</td>
+
+                  </tr>
+
+                  <tr>
+                    <td>Divisional Head Status</td>
+                    <td>{{=divisional_head_status}}</td>
+                  </tr>
+                  <tr>
+
+                    <td>Director</td>
+
+                    <td>{{=director_id}}|{{=director_name}}</td>
+
+                  </tr>
+
+                  <tr>
+
+                    <td>Director Status</td>
+
+                    <td>{{=director_marktng_status}}</td>
+
+                  </tr>
+
+                  
+
+              </table></td>
+
+            </tr>
+
+          </table>
+
+		  </td>
+
+      </tr>
+
+		  </table>
+
+	</td>
+
+  </tr>
+
+</table>

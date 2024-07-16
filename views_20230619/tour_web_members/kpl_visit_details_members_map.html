@@ -1,0 +1,266 @@
+{{extend 'layout_wap.html'}}
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+    <meta charset="utf-8">
+  
+    <style>
+	
+	
+/*	         .gm-style .gm-style-iw {
+            background-color:#C0F2BB !important;
+            top: 0 !important;
+            left: 0 !important;
+            width: 100% !important;
+            height: 100% !important;
+            min-height: 120px !important;
+            padding-top: 2px;
+            display: block !important;
+         }    
+*/
+	
+	
+	
+      html, body, #map-canvas {
+        height: 100%;
+        margin: 0px;
+        padding: 0px
+      }
+    </style>
+     <style type="text/css">
+      html { height: 100% }
+      body { height: 100%; margin: 0; padding: 0 font-family: Helvetica;}
+	  
+      #map_canvas { height: 100% }
+      .InfoWindow {
+       height: 80px;
+	   color:#3FC
+      }
+	  
+	  
+    </style>
+     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDu--SRHoHCMbwyIhDv29b_uTHkTa6sh3o&sensor=true&region=BD"></script>
+
+    <!-- <script src="https://maps.googleapis.com/maps/api/js?key=http://127.0.0.1:8000/pallydut/showMap/&sensor=true&region=BD"></script>-->
+
+    <script>
+	
+	
+	
+//	======================Auto Complete=====================
+	var base_url=location.protocol + "//" + location.hostname + (location.port && ":" + location.port) + "/{{=request.application}}/";
+
+$(function() {
+
+}); 
+	
+//	===============================================
+	
+	
+	
+// This example adds a predefined symbol (an arrow) to a polyline.
+// Setting offset to 100% places the arrow at the end of the line.
+//var abc={{=center_point}};
+
+function initialize() {
+  
+  	
+  var myLatlng = new google.maps.LatLng({{=center_point}});
+  //var myLatlng = new google.maps.LatLng(20.291, 153.027);
+ // var a= $("#description").val();
+   //alert (a);
+  
+  var mapOptions = {
+    zoom: 12,
+    center: myLatlng,
+	
+    //mapTypeId: google.maps.MapTypeId.TERRAIN
+  };
+  
+  var map = new google.maps.Map(document.getElementById('map-canvas'),
+      mapOptions);
+
+	//alert( $("#map-canvas").val())
+
+	//	Nazma Azam 2018-07-26 start 
+ 
+ 
+ //  ==================================Outlet Start======================
+
+ var p_station= $("#desc_p").val();
+ //alert(p_station)
+ var pSearchList = p_station.split('rdrd');
+ var total_pSearch=p_station.split("rdrd").length-1 
+ //alert (total_pSearch)
+ var infowindow_p = new google.maps.InfoWindow();
+ var marker_p, ip;
+ 
+// var fields_p = p_station.split('rdrd');
+//// alert(fields_p)
+// var total_fields_p=p_station.split("rdrd").length-1
+ var locations_p = [];
+ var field_p=[];
+ //var arr_p=[];
+ var p=0;
+ //alert (total_fields_p)
+ for (p = 0; p < total_pSearch; p++){
+	 var st=0;
+	 //field.push(fields[j])
+//	 alert(pSearchList)
+	 var fields_single_p = pSearchList[p].split(',');
+	// alert(fields_single_p)
+  	 //var total_fields_single_p=fields_single_p[p].split(",").length-1
+  	 var total_fields_single_p=pSearchList[p].split(",").length-1
+
+	// alert (fields_single_p);
+	 var arr_p=[];
+	 for (st = 0; st < total_fields_single_p; st++){
+		 
+		arr_p.push(fields_single_p[st]);
+		// alert(arr_p)
+  		}
+	locations_p.push(arr_p);
+	//alert(locations_p)
+	
+ }
+ // alert(locations_p)
+ var infowindow = new google.maps.InfoWindow();
+ var marker_p, ip;
+ var icons_p="{{=URL('static','images/uni_small.png')}}";
+
+ for (ip = 0; ip < locations_p.length; ip++) {  
+ 		
+		
+		
+		var outletPdut= locations_p[ip][0]
+		//alert(outletPdut)
+		for (pS1 = 0; pS1 < total_pSearch; pS1++) { 
+				//alert (pSearchList[pS1])
+				var pSearch= pSearchList[pS1].split(',')[0]
+				//alert (locations_p[ip][1]+','+ locations_p[ip][2])
+
+						icons_p="{{=URL('static','images/uni_small.png')}}";
+
+				}
+
+		
+		
+		
+		
+        marker_p = new google.maps.Marker({
+        position: new google.maps.LatLng(locations_p[ip][1], locations_p[ip][2]),
+		map: map,
+		icon: icons_p   
+      });
+
+//	  ===============================================================
+      google.maps.event.addListener(marker_p, 'click', (function(marker_p, ip) {
+        return function() {
+
+		  
+		//check double shop==============
+	    var searchS_p=locations_p[ip][1]+','+locations_p[ip][2];
+
+		  var mOutlet_p = p_station.split('rdrd');
+
+  	      var total_mOutlet_p=p_station.split("rdrd").length-1
+
+		  var show_result_p='<div style="height:200px;"><table style="background:#FFECFF"  width="100%" border="0" cellpadding="0" cellspacing="0">';
+		  
+		 var check_string_past= ''
+		 var latlongStr=''
+		 
+		 var saved_dataShow=''
+		 
+		  for (var pp = 0; pp < total_mOutlet_p; pp++){
+			
+			
+			 
+			if ( (mOutlet_p[pp].search(searchS_p))!= -1 ){
+				
+				 var gOutlet_p=mOutlet_p[pp].split(',');
+				 //alert (mOutlet_p[pp])
+				//alert (gOutlet_p[7])
+				// var town_pd = gOutlet_p[5]
+				 var check_string=gOutlet_p[0]
+				 
+					  if  ((latlongStr!='') && (latlongStr.search(searchS_p)!= -1)){
+						  show_result_p=show_result_p+' <tr  style="background-color:#CCC; font-size:2px" > <td  colspan="6" >&nbsp;</td></tr>'
+					  }
+		
+					
+					var pp_string=pp.toString()
+
+					
+					show_result_p=show_result_p+'<tr style="height:20px;"><td style="color:#006A6A; font-size:14px;">'+gOutlet_p[0]+' </td></tr>'
+
+				 if (latlongStr!=''){  latlongStr=latlongStr+'|'+searchS_p}
+			   	  else {latlongStr=searchS_p}
+				
+						
+			 }	//  if ( (mOutlet_po[po].search(searchS_p))!= -1 ){
+				 
+			  
+			check_string_past=check_string
+			  
+		  } //  for (var po = 0; po < total_mOutlet_po; po++){
+		  
+		   show_result_p=show_result_p+'</table></div>'
+	   //======check double shop end========
+		  infowindow.setContent(show_result_p);
+          infowindow.open(map, marker_p);
+        }
+      })(marker_p, ip));
+  
+ 
+ 
+	}  
+	  
+
+}
+
+google.maps.event.addDomListener(window, 'load', initialize);
+
+
+
+
+    </script>
+  </head>
+  <body>
+ 
+ <table width="100%" border="0" cellspacing="0" cellpadding="0">
+  <tr >
+   
+    <td >
+    </td>
+   </tr>
+  <tr>
+  
+  
+    <td width="100%" >
+    <div style="width:100%" align="left"> 
+ &nbsp;&nbsp;<img src="{{=URL('static','images/uni_small.png')}}" alt="" /> :  Visit &nbsp;&nbsp;
+  </div>
+	<div  id="map-canvas" style="height:600px; width:100%"></div>	</td>
+   
+    
+  </tr>
+</table>
+  
+  <br>
+ 
+  <table width="100%" border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <td>&nbsp;</td>
+  
+  <!--  <td width="600px">
+ 	<div  id="map-canvas" style="height:600px; width:100%"></div>	</td>-->
+    
+
+    
+	<input name="desc_p" id="desc_p" placesholder="" value="{{=map_string_name}}" type="hidden"><!--Outlet-->
+
+   
+  </body>
+</html>

@@ -1,0 +1,113 @@
+{{extend 'layout_sample_report.html'}}
+<html>
+<head>
+<script type="text/javascript">
+function print_page()
+  {
+    window.print()
+  }
+</script>
+
+</head>
+<body>
+<table width="900px" style="border:none; text-align:center; font-weight:bold;" >
+  <tr >
+    <td width="100" >&nbsp;</td>
+    <td align="left" style="font-size:18px" ></td>
+    <td width="100" ><img src="{{=URL('static','images/comp_logo1.png')}}" alt=""  height="30px"/></td>
+  </tr>
+  
+
+</table>
+<div style="background-color:#333; height:1px; font-size:1px"></div>
+<table width="900px" style="border:none;" >
+  <tr >
+    <td >DateFrom </td>
+    <td >:</td>
+    <td >{{=date_from}} To {{=date_to}}</td>
+    <td >&nbsp;</td>
+    <td >&nbsp;</td>
+    <td width="266" >&nbsp;</td>
+  </tr>
+  <tr >
+    <td width="90" >RMBS</td>
+    <td width="10" >:</td>
+    <td width="438" ><span style="border-right-width:3px;">{{=rsm_id}}
+    {{=rsm_name}}</span></td>
+    <td >&nbsp;</td>
+    <td >&nbsp;</td>
+    <td >&nbsp;</td>
+  </tr>
+  <tr >
+    <td >&nbsp;</td>
+    <td >&nbsp;</td>
+    <td >&nbsp;</td>
+    <td >&nbsp;</td>
+    <td >&nbsp;</td>
+    <td >&nbsp;</td>
+  </tr>
+</table>
+
+
+<table width="700px" cellspacing="1" cellpadding="1">
+
+  <tr height="10px"></tr>
+	<tr>
+		<td><table width="900px" border="1" cellpadding="1" cellspacing="1" class="sample_border" >
+		  <tr align="left" class="blackCatHead"  height="20px" ;>
+		    <td width="70" >ASMBS_CD</td>
+		    <td width="70" > ASBS_NM</td>
+		    <td width="70" >RMBS_CD</td>
+		    <td width="70" >RMBS_NM</td>
+		    <td width="70" >FMBS_CD</td>
+		    <td width="70" >FMBS_NM</td>
+		    <td  width="80" >FPBS_CD</td>
+		    <td width="70" >FPBS_NM</td>
+		    <td  width="80" >FP_ID</td>
+		    <td  width="80" >FP_NM</td>
+		    <td  width="80" >DCRCount</td>
+		    <td  width="80" >RXCount</td>
+	      </tr>
+		  {{ p=0}} 		  
+		  
+		  {{for i,record in enumerate(records):}}
+          {{
+            vCount=0
+            Vcheck=str(record[db.sm_rep_area.area_id])+'|'+str(record[db.sm_rep_area.rep_id])
+             if [s for s in vChecklist if Vcheck in s]:
+                index_element = vChecklist.index(Vcheck)           
+                vCount=vCountList[index_element]
+            pass}}
+           {{
+            vCountP=0
+            
+             if [s for s in vChecklistP if Vcheck in s]:
+                index_element = vChecklistP.index(Vcheck)           
+                vCountP=vCountListP[index_element]
+            pass}}
+            
+            
+  <tr  align="left" class="blackCat"  style="vertical-align:middle; font-size:10px;">
+    <td width="50" >{{=record[db.sm_level.level0]}}</td>
+    <td width="50" >{{=record[db.sm_level.level0_name]}}</td>
+    <td width="50" >{{=record[db.sm_level.level1]}}</td>
+    <td width="50" >{{=record[db.sm_level.level1_name]}}</td>
+    <td width="50" >{{=record[db.sm_level.level2]}}</td>
+    <td width="50" >{{=record[db.sm_level.level2_name]}}</td>
+    <td width="50" >{{=record[db.sm_rep_area.area_id]}}</td>
+    <td width="50" >{{=record[db.sm_rep_area.area_name]}}</td>
+    <td width="50" align="center" >{{=record[db.sm_rep_area.rep_id]}}</td>
+    <td  >{{=record[db.sm_rep_area.rep_name]}}</td>
+
+    <td width="50" align="center" >{{#=Vcheck}}{{=vCount}}</td>
+    <td width="50" align="center" >{{=vCountP}}</td>
+    </tr>
+		  {{pass}}
+	    </table></td>
+			
+	</tr>
+</table>
+
+
+</body>
+</html>

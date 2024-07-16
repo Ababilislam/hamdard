@@ -1,0 +1,94 @@
+{{extend 'layout.html'}}
+ 
+  <style type="text/css">
+	input[type=text], input[type=password],  select {
+		margin: 2px 0px 2px 0px;
+		width:250px;
+	}
+	
+	div.error {
+		width: 250px;
+	}
+	
+	#sm_doctor_gift_status{
+	width:auto;
+	}
+
+ </style>
+
+ 
+<table width="100%"  border="0" cellspacing="0" cellpadding="0" style="background-color:#FFFFFF;" >
+  <tr height="30px" >
+    <td width="300"><span class="blackCatTitle">Counter Item Discount Edit</span></td>
+    
+	<form action="{{=URL(c='counter_item_discount',f='counter_item_discount_add')}}" method="post">
+	<td width="200" align="right"><input name="" type="submit"  value="Back"/></td>
+	</form>
+    <td>&nbsp;</td>
+  </tr>
+  <tr  height="1px" style="background-color:#CCCCCC;">
+	    <td colspan="3" ></td>
+  </tr>
+  </table>
+  
+ <table>
+   <tr>
+     <td>
+       <form action="{{=URL(c='counter_item_discount',f='counter_item_discount_edit', args=[row_id,item_id,name,discount_type,discount_percentage])}}" method="post">
+         
+            <tr>
+              <td width="100" style="padding:10px"> Item ID </td>
+              
+              <td>
+              <input type="text" class="text" name="item_id" id="item_id" value="{{=item_id}}" readonly style="width:150px;padding: 5px;"/></td>
+              <td>&nbsp;</td>
+            </tr>
+            <tr>
+                <td width="100" style="padding:10px">Item Name</td>                
+                <td>
+                <input type="text" class="text" name="item_name" id="item_name" value="{{=name}}" readonly style="width:150px;padding: 5px"/></td>
+                <td>&nbsp;</td>
+            </tr>
+            <tr>
+                <td width="100" style="padding:10px">Discount Type</td>
+                
+                <td>
+                <input type="text" class="text" name="discount_type" id="discount_type" value="{{=discount_type}}" readonly style="width:150px;padding: 5px"/></td>
+                <td>&nbsp;</td>
+            </tr>
+            <tr>
+              <td width="100" style="padding:10px">Discount Percentage</td>                    
+              <td>
+              <input type="text" class="text" name="discount_percentage" id="discount_percentage" value="{{=discount_percentage}}"style="width:150px;padding: 5px"/></td>
+              <td>&nbsp;</td>
+            </tr>
+              
+            <tr>
+              <td width="100" style="padding:10px"></td>
+              <td >
+              <input type="submit" name="update_btn" id="update_btn" value=" Update " style="vertical-align:middle;height:25px ;">                
+              </td>                    
+            </tr>
+
+       </form>
+      
+
+         <tr>
+            <form action="{{=URL(c='counter_item_discount',f='counter_item_discount_delete', args=[row_id])}}" method="post">
+                  <td width="100" style="padding:10px"></td>
+                  <td >
+                  <input type="submit" name="btn_delete" id="btn_delete" value="Delete" style="vertical-align:middle;height:25px ;width: 65px" onclick="if (!confirm('Do you really want to delete?')) { return false }">           
+                  </td>                    
+               
+            </form> 
+        </tr>   
+        
+
+
+
+
+
+     </td>
+   </tr>
+ </table>
+ 

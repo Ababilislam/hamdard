@@ -1,0 +1,191 @@
+{{extend 'layout_invoice.html'}}
+
+<html>
+
+<head>
+
+<script type="text/javascript">
+
+function print_page()
+
+  {
+
+    window.print()
+
+  }
+
+</script>
+
+
+
+</head>
+
+<body>
+
+<table width="900px" style="border:none;" >
+    <tr >
+      <td width="140" >Stock at Depot/Branch</td>
+      <td width="2" >:</td>
+      <td width="250" >{{=depotID}}|{{=depotName}}</td>
+      <td width="100" >Stock at Store</td>
+      <td width="2" >:</td>
+      <td >{{=storeID}}|{{=storeName}}</td>
+    </tr>
+</table>
+<table width="900px" style="border:none; text-align:center; font-weight:bold;" >
+    <tr >
+      <td width="100" >&nbsp;</td>
+      <td align="center" ><span style="border-bottom:1px solid #333;">IC Stock Status- Batch Wise</span></td>
+      <td width="100" >&nbsp;</td>      
+    </tr>
+    <tr >
+      <td width="100" ><span style="border-bottom:1px solid #333;">LOTNUM</span></td>
+      <td align="center" ><img style="width:100px;" src="{{=URL('static','images/comp_logo1.png')}}"/></td>
+      <td width="100" >&nbsp;</td>      
+    </tr>
+</table>
+<table width="900px;"> <tr>
+  <td style="text-align:right"><a href="{{=URL(c='report',f='downloadStockStatusWithBatch',vars=dict(depotID=depotID,depotName=depotName,storeID=storeID,storeName=storeName))}}" >Download</a></td></tr></table>
+
+
+    <table width="900" border="1" cellpadding="1" cellspacing="1" class="sample_border" >                
+
+        <tr align="left" class="blackCatHead" height="20px" ;  style="font-size:11px">
+          <td width="40"  >SL</td>
+          <td width="70"  >Product ID</td>
+
+          <td  >Name</td>
+
+          <td width="70"  >Batch</td>
+          <td width="70" align="left"  >Unit</td>
+          <td width="70" align="center"  >Status</td>
+          <td width="60" align="right"  >Qty</td>
+          <td width="70" align="right"  >TP</td>
+          <td width="70" align="right"  >TP X Qty</td>
+          <td width="70" align="right"  >M. Carton</td>
+          <td width="70" align="center"  >Exp. Date</td>
+      </tr>
+      	
+        {{itemIdSubPre=''}}
+        {{itemNameSubPre=''}}
+        {{itemUnitSubPre=''}}
+        
+        {{itemIdPre=''}}  
+        {{itemNamePre=''}}
+        {{itemUnitPre=''}}   
+        
+        {{itemIdNew=''}}
+        {{itemNameNew=''}}           
+        {{itemUnitNew=''}}
+        
+        {{totalQty=0}}
+        {{newRecFlag=0}}
+        
+        {{rowsl=0}}
+        {{totalTp=0}}
+        {{totalMCarton=0}}
+        
+        {{preItem=''}}
+        {{newItem=''}}
+        
+        {{for i,record in enumerate(records):}}
+        	
+            {{ #if i==items_per_page: break}}
+            
+            {{itemIdNew=record.sm_item.item_id}} 
+            {{itemNameNew=record.sm_item.name}}
+            {{itemUnitNew=record.sm_item.unit_type}}
+            
+            {{newItem=str(itemNameNew)+'_'+str(itemIdNew)}}
+            
+            {{if preItem!='' and newItem!='' and  preItem!=newItem:}}
+                {{itemIdSubPre=itemIdPre}}
+                {{itemNameSubPre=itemNamePre}}
+                {{itemUnitSubPre=itemUnitPre}}                
+                {{newRecFlag=1}}            
+            {{pass}}            
+            {{preItem=newItem}}
+            
+            {{itemIdPre=itemIdNew}}
+            {{itemNamePre=itemNameNew}}
+            {{itemUnitPre=itemUnitNew}}
+            
+            {{if newRecFlag==1:}}
+              <tr  align="left" style="vertical-align:middle; font-size:12px; background:#EBEBEB;">
+                      <td width="40" >{{rowsl+=1}}{{=rowsl}}</td>
+                      <td width="70" >{{=itemIdSubPre}}</td>        
+                        <td >{{=itemNameSubPre}}</td>        
+                        <td width="-2" style="text-align:center;"></td>
+                        <td width="0" align="left" style="text-align:left;">{{=itemUnitSubPre}}</td>
+                        <td width="70" align="center" style="text-align:center;">&nbsp;</td>
+                        <td width="60" align="right" style=" text-align:right; font-weight:bold;">{{=totalQty}}</td>
+                        <td width="70" align="right" style=" text-align:right;" colspan="4"></td>                       
+              </tr>                    
+                 {{totalQty=0}}   
+                 {{newRecFlag=0}}             
+            {{pass}}
+        	
+          <tr  align="left" class="blackCat"  style="vertical-align:middle; background-color:#FBFBFB; font-size:11px;">
+            <td width="40" >&nbsp;</td>
+            <td width="70" >{{=record.sm_item.item_id}}</td>    
+            <td >{{=record.sm_item.name}}</td>    
+            <td width="70" >{{=record.sm_depot_stock_balance.batch_id}}</td>
+            <td width="70" align="left" >{{=record.sm_item.unit_type}}</td>
+            <td width="70" align="center" >ACTIVE</td>
+            <td width="60" align="right" style=" text-align:right;">{{qty=record[db.sm_depot_stock_balance.quantity.sum()]}}{{=qty}}{{totalQty+=qty}}</td>
+            <td width="70" align="right" style=" text-align:right;">{{price=record.sm_item.price}}{{=easy_format(price)}}</td>
+            <td width="70" align="right" style=" text-align:right;">{{=easy_format(qty*price)}}{{totalTp+=(qty*price)}}</td>
+            <td width="70" align="right" style=" text-align:right;">{{if record.sm_item.item_carton>0:}}{{mCarton=qty/record.sm_item.item_carton}}{{=mCarton}}{{totalMCarton+=mCarton}}{{else:}}-{{pass}}</td>
+            <td width="70" align="center" >{{=record.sm_depot_stock_balance.expiary_date.strftime('%d-%b-%y')}}</td>
+          </tr>
+         {{pass}}
+         
+         {{if newRecFlag==0 and totalQty>0:}}
+         <tr  align="left" style="vertical-align:middle; font-size:12px; background:#EBEBEB;">
+              <td width="40" >{{rowsl+=1}}{{=rowsl}}</td>
+              <td width="70" >{{=itemIdPre}}</td>        
+                <td >{{=itemNamePre}}</td>        
+                <td width="-2" style="text-align:center;"></td>
+                <td width="0" align="left" style="text-align:left;">{{=itemUnitPre}}</td>
+                <td width="70" align="center" style="text-align:center;">&nbsp;</td>
+                <td width="60" align="right" style=" text-align:right; font-weight:bold;">{{=totalQty}}</td>
+                <td width="70" align="right" style=" text-align:right;" colspan="4"></td>                       
+         </tr> 
+          {{pass}}
+         
+  </table>
+<table width="900" style="border:none; margin:3px 0px;" >
+  <tr align="left" >          		
+       <td height="18" align="right" >&nbsp;</td>
+      <td width="100" align="right" style="border-bottom-style:double;">{{=easy_format(totalTp)}}</td>
+        <td width="60" align="right" style=" text-align:right;">{{=easy_format(totalMCarton)}}</td>
+        <td width="60" align="right" style=" text-align:right;">&nbsp;</td>          	                      
+ 	</tr>  
+</table>
+<div>{{=rowsl}} Item(s) Printed</div>
+<div>NB: Zero Quantity Excluded</div>   
+<br/>
+<table width="900" >
+	<tr>
+	  <td width="150" align="left">__________________</td>
+	  <td align="center">____________________________________</td>
+	  <td width="20" align="center">&nbsp;</td>
+	  <td width="180" align="center">&nbsp;</td>
+  </tr>
+	<tr>
+	  <td width="150" align="left"><strong>Store Department</strong></td>
+	  <td width="150" align="center"><span style=" font-style:italic;">for</span>&nbsp;<strong>{{=session.cName}}</strong></td>
+	  <td width="20" align="center">&nbsp;</td>
+	  <td width="180" align="center">&nbsp;</td>
+  </tr>
+</table>
+
+
+<br/>
+
+
+
+</body>
+
+</html>
+

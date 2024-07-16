@@ -1,0 +1,220 @@
+{{extend 'layout_invoice.html'}}
+
+<html>
+
+<head>
+<style type="text/css">
+	@media print{
+	body{-webkit-print-color-adjust: exact;}
+		}
+</style>
+
+
+</head>
+
+<body>
+
+
+	{{pageFlag=1}}
+
+	{{for i in sorted(range(len(data_List))):}}
+
+		{{dictData=data_List[i]}}
+
+<!--page break-->
+
+		{{if pageFlag==0:}}
+
+			<span style="page-break-before:always"></span>	
+
+			<!-- Report header-->	
+			
+		<table width="902">
+            <tr>
+              <td width="50" >&nbsp;</td>
+                <td width="15" rowspan="2" style="padding:0px; margin-bottom:0px;"><img width="25px" height="40px" src="{{=URL('static','images/comp_logo2.png')}}"/></td>
+                <td style="text-align:center; font-size:24px; font-weight:bold">{{=session.cName}}</td>
+                <td width="100">&nbsp;</td>
+          </tr>
+            <tr style="height:10px; background-color:#F0F0F0">
+              <td width="50" style="border-bottom:solid 1px #999; border-top:solid 1px #999;"></td>
+              <td style="border-bottom:solid 1px #999; border-top:solid 1px #999;"></td>
+              <td style="border-bottom:solid 1px #999; border-top:solid 1px #999;"></td>
+            </tr>        
+        </table>
+        			
+<table width="900" >
+                <tr style="border-bottom:solid 2px #999;border-left:none; border-right:none; border-top:none">
+                  <td align="center">{{=session.user_depot_address}}</td>
+              </tr>
+</table>
+            		
+			<!--<hr/>-->
+			<!-- end report header  -->
+
+		{{pass}}
+
+		{{pageFlag=0}}
+
+		<!--end page break-->
+
+<table width="900" border="0" cellspacing="1" cellpadding="1" >          
+
+		<tr style="font-size:15px; font-weight:bold">
+		  <th colspan="8" align="center" ><!--SKSH--><span style="font-size:25px; font-weight:bold;border-bottom:solid; border-bottom-color:#999">Internal Transfer</span><span style="float:right">#2.02B</span></th>
+  </tr>
+		<tr >
+	      <td colspan="3" valign="top" >&nbsp;</td>
+	      <td rowspan="3" align="center" valign="middle" ><img src="{{=URL('static','images/comp_logo1.png')}}"/></td>
+	      <td valign="top" >&nbsp;</td>
+	      <td colspan="3" valign="top" >&nbsp;</td>
+  </tr>
+		  <tr >
+		    <td width="120" valign="top" >&nbsp;</td>
+		    <td width="1" valign="top" >&nbsp;</td>
+		    <td width="240" valign="top" ></td>
+		    <td width="5" valign="top" >&nbsp;</td>
+		    <td width="100" align="center" valign="top" >&nbsp;</td>
+		    <td align="center" valign="top" >&nbsp;</td>
+		    <td align="left" valign="top" ><strong style="font-size:20px">{{=depotName}}</strong></td>
+	      </tr>
+		  <tr >
+		    <td width="120" valign="top" >Transaction Date</td>
+		    <td width="1" valign="top" ><strong>:</strong></td>
+		    <td valign="top" >{{if not(dictData['issue_date']==None or dictData['issue_date']==''):}}{{=dictData['issue_date'].strftime('%d-%b-%Y')}}{{pass}}</td>
+		    <td valign="top" >&nbsp;</td>
+		    <td width="100" align="right" valign="top" >Doc No</td>
+		    <td width="1" valign="top" ><b>:</b></td>
+		    <td width="180" valign="top" style="font-size:20px"><strong>{{=session.prefix_invoice}}TR{{=dictData['depot_id']}}-{{=dictData['type_sl']}}</strong></td>
+	      </tr>
+		  <tr >
+		    <td width="120" valign="top" >&nbsp;</td>
+		    <td width="1" valign="top" >&nbsp;</td>
+		    <td colspan="3" valign="top" >&nbsp;</td>
+		    <td width="100" valign="top" >&nbsp;</td>
+		    <td width="1" valign="top" >&nbsp;</td>
+		    <td width="180" valign="top" >&nbsp;</td>
+	      </tr>
+</table>
+		
+<table width="600"  class="sample_border" style="border: solid 1px #C4C4C4">
+      <tr class="blackCatHead" style="vertical-align:middle; background-color:#E6E6E6">
+        <td width="180" align="left"><strong>Transec.Type</strong></td>
+        <td width="50" align="left"><strong>Status</strong></td>
+        <td align="left"><strong>Cause</strong></td>
+        <td align="left"><strong>Description</strong></td>
+      </tr>
+      <tr class="blackCat" style="vertical-align:middle; background-color:#FBFBFB">
+        <td width="180" align="left">Internal Transfer</td>
+        <td width="50" align="left">{{=dictData['status']}}</td>
+        <td align="left">{{=dictData['cause']}}</td>
+        <td align="left">{{=dictData['note']}}</td>
+      </tr>
+    </table>
+<br>
+
+    <table width="900" border="1" cellpadding="1" cellspacing="1" class="sample_border" style="border: solid 1px #C4C4C4">
+<thead>
+  <tr align="left" class="blackCatHead"  height="20px" style="vertical-align:middle; background-color:#E6E6E6;border-top:solid 2px #999999">
+    <td colspan="2" align="center" >ITEM</td>
+    <td width="60" rowspan="2" align="center" >UOM</td>
+    <td colspan="2" align="center" >LOCATION</td>
+    <td colspan="4" align="center"  >QUANTITY</td>
+    <td width="60" rowspan="2" align="right"  >TP Rate</td>
+    <td width="80" rowspan="2" align="right"  >TP Amount </td>
+  </tr>
+  <tr align="left" class="blackCatHead"  height="20px" style="vertical-align:middle; background-color:#E6E6E6">
+
+    <td width="60" >ID</td>
+    <td > Name</td>
+    <td width="120" >From</td>
+    <td width="80" >To</td>
+
+    <td width="50" align="right"  >Qty</td>
+    <td width="60" align="center"  >M.Carton</td>
+    <td width="50" align="left"  >Batch No</td>
+    <td width="100" align="center"  >Expiry Date</td>
+    </tr>
+ </thead>
+    <tbody>
+	{{total_qty=0}}
+    {{total_tp=0}}
+    {{mCartonTotal=0}}
+    
+    {{vdList=dictData['vdList']}}
+
+	  {{for j in sorted(range(len(vdList))):}}
+
+          {{vdDict=vdList[j]}}
+    		
+    	 {{qty=0;rate=0;mCarton=0}}
+
+          <tr  align="left" class="blackCat"  style="vertical-align:middle; background-color:#FBFBFB">
+        
+            <td width="60" >{{=vdDict['item_id']}}</td>
+            <td >{{=vdDict['item_name']}}</td>
+            <td width="60" ><span style="font-size:14px;">{{=vdDict['item_unit']}}</span></td>
+            <td width="120" >{{=vdDict['store_name']}}</td>
+            <td width="80" >{{=vdDict['depot_to_name']}}</td>
+        
+            <td width="50" align="right" >{{qty=int(vdDict['quantity'])}}{{=qty}} {{total_qty+=qty}}</td>
+            <td width="60" align="center" >{{cartonQty=vdDict['item_carton']}}{{try:}}{{mCarton=round(float(qty)/cartonQty,2)}}{{except:}}{{pass}} {{=mCarton}}{{mCartonTotal+=mCarton}}</td>
+            <td width="50" align="left" >{{=vdDict['batch_id']}}</td>
+            <td width="100" align="center" >{{try:}}{{=vdDict['expiary_date'].strftime('%d-%b-%Y')}}{{except:}}-{{pass}}</td>
+            <td width="60" align="right" >{{rate=vdDict['price']}}{{=rate}}</td>
+        
+            <td width="80" align="right" >{{amt=qty*rate}}{{=easy_format(amt)}}{{total_tp+=amt}}</td>
+        
+          </tr>
+
+    {{pass}}
+
+{{total_tp=round(total_tp,2)}}
+
+  <tr  align="left" class="blackCat"  style="background-color:#FBFBFB">
+    <td align="left" style="border-bottom-style:none; border-left:none; border-top:none">&nbsp;</td>
+    <td align="left" style="border-bottom-style:none; border-left:none; border-top:none">&nbsp;</td>
+    <td align="right" style="border-bottom-style:none; border-left:none; border-top:none">&nbsp;</td>
+    <td width="120" align="right" style="border-bottom-style:none; border-left:none; border-top:none">&nbsp;</td>
+    <td width="80" align="right" style="border-bottom-style:none; border-left:none; border-top:none"><strong>Total</strong></td>
+    <td width="50" align="right" style="border-bottom-style:none; border-left:none; border-top:none"><strong>{{=total_qty}}</strong></td>
+    <td align="center" style="border-bottom-style:none; border-left:none; border-top:none"><strong>{{=mCartonTotal}}</strong></td>
+    <td width="50" align="left" style="border-bottom-style:none; border-left:none; border-top:none">&nbsp;</td>
+    <td width="100" align="center" style="border-bottom-style:none; border-left:none; border-top:none">&nbsp;</td>
+    <td align="right" style="border-bottom-style:none; border-left:none; border-top:none">&nbsp;</td>
+    <td width="80" align="right" ><strong>{{=easy_format(total_tp)}}</strong></td>
+  </tr>
+  </tbody>
+</table>
+<table width="900" >
+    <tr>
+      <td width="100" align="left"><strong>Comments:</strong></td>
+      <td align="left"><strong><!--Transcom Distribution Co. Ltd.-->
+      </strong></td>
+    </tr>
+</table>
+<br/>
+<table width="900" >
+	<tr>
+	  <td >{{=dictData['updatedBy']}}</td>
+	  <td >&nbsp;</td>
+	  <td >&nbsp;</td>
+  </tr>
+ <tr style="height:2px;">
+	  <td align="center" style="height:2px;">____________________</td>
+	  <td align="center" style="height:2px;">&nbsp;</td>
+	  <td width="150" align="right" style="height:2px;">_______________</td>
+  </tr>
+	<tr>
+	  <td width="150" align="left"><strong>Prepared By</strong></td>
+	  <td align="center">&nbsp;</td>
+	  <td width="150" align="right"><strong>Authorised By</strong></td>
+  </tr>
+</table>
+
+<br/>
+
+{{pass}}
+</body>
+</html>
+

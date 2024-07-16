@@ -1,0 +1,267 @@
+{{extend 'layout_sales_report.html'}}
+
+<html>
+
+<head>
+
+<script type="text/javascript">
+
+function print_page()
+
+  {
+
+    window.print()
+
+  }
+
+</script>
+
+
+
+</head>
+
+<body>
+
+
+<table width="900px" style="border:none;" >
+		  <tr >
+		    <td >Date Range</td>
+		    <td >&nbsp;</td>
+		    <td >{{=date_from}} - {{=date_to}}</td>
+		    <td >&nbsp;</td>
+		    <td >&nbsp;</td>
+		    <td width="266" >&nbsp;</td>
+	      </tr>
+		  <tr >
+		    <td width="90" > Depot/Branch</td>
+		    <td width="10" >:</td>
+		    <td width="424" ><span >{{=depot_id}}|{{=depot_name}}</span></td>
+		    <td width="79" >Customer</td>
+		    <td width="3" >:</td>
+		    <td ><span >{{=customer_id}}
+		      {{=customer_name}}</span></td>
+	      </tr>
+		  <tr >
+		    <td >Store</td>
+		    <td >:</td>
+		    <td ><span >{{=store_id}}|{{=store_name}}</span></td>
+		    <td >MSO</td>
+		    <td >:</td>
+		    <td ><span >{{=mso_id}}
+		      {{=mso_name}}</span></td>
+	      </tr>
+		  <tr >
+		    <td >Teritory</td>
+		    <td >:</td>
+		    <td ><span >{{=teritory_id}}
+		      {{=teritory_name}}</span></td>
+		    <td >Market</td>
+		    <td >:</td>
+		    <td ><span >{{=market_id}}
+		      {{=market_name}}</span></td>
+	      </tr>
+		  <tr >
+		    <td >Item:</td>
+		    <td >:</td>
+		    <td >{{=item_id}}
+		      {{=item_name}}</td>
+		    <td >RSM</td>
+		    <td >:</td>
+		    <td >{{=rsm_id}}
+		      {{=rsm_name}}</td>
+	      </tr>
+		  <tr >
+		    <td >&nbsp;</td>
+		    <td >&nbsp;</td>
+		    <td >&nbsp;</td>
+		    <td >FM</td>
+		    <td >:</td>
+		    <td >{{=fm_id}}
+		      {{=fm_name}}</td>
+	      </tr>
+		  </table>
+		  <table width="900px" style="border:none; text-align:center; font-weight:bold;" >
+            <tr >
+              <td width="100" >&nbsp;</td>
+              <td align="center" ><span style="border-bottom:1px solid #333;">10.9,11.4 Product Wise Invoice Detail </span></td>
+              <td width="100" ><img  height="30px" src="{{=URL('static','images/comp_logo1.png')}}"/></td>
+            </tr>
+        </table>
+		<br>
+        <table width="900" border="1" cellpadding="1" cellspacing="1" class="sample_border" >
+          <thead>     
+          <tr align="left" class="blackCatHead" height="20px" ;  style="font-size:12px">
+                  <td width="150" rowspan="2"    >Date</td>
+                  <td rowspan="2"   >Inv Number</td>
+                  <td width="80" rowspan="2"   >CustomerID</td>
+                  <td width="80" rowspan="2"   >CustomerNmae</td>
+                  <td  colspan="3"   align="center">Invioce</td>
+                  <td  colspan="3"   align="center">Return</td>
+               <td  colspan="3"   align="center">Net</td>
+              </tr>
+                <tr align="left" class="blackCatHead" height="20px" ;  style="font-size:10px">
+                  <td  width="70"  align="right">Qnty</td>
+                  <td width="70"   align="right">Bonus</td>
+                  <td width="70"   align="right">TradePrice</td>
+                  <td width="70"   align="right">Qnty</td>
+                  <td width="70"   align="right">Bonus</td>
+                  <td width="70"   align="right">TradePrice</td>
+                  <td width="70"   align="right">Qnty</td>
+                  <td width="70"   align="right">Bonus</td>
+                  <td width="70"  style=" font-size:10" align="right" >TradePrice</td>
+                </tr> 
+            </thead>       
+                 
+				{{p=0}}
+                {{itemID=''
+                actual_tpT=0
+                retTPT=0
+                netSoldT=0
+                }}
+                {{for i in range(len(records)):
+		  			record=records[i]}}
+                
+				{{item_check= record['item_id']}}
+                {{#=item_check}}
+                
+                {{if itemID != record['item_id']:}}
+                
+                
+                
+                 {{ if [s for s in itemList if item_check in s]:
+                  index_element = itemList.index(item_check)           
+                  head_data=reportHeadList[index_element] 
+                 #  =index_element
+                  pass  
+                }}
+          <tbody>
+               <tr  align="left" class="blackCat"  style="vertical-align:middle; font-size:11px; background-color:#FFF">
+
+                
+                <td  style=" border-left:hidden; border-right:hidden">{{=record['item_id']}}</td>
+               
+                
+                <td colspan="2"  style=" border-left:hidden; border-right:hidden">{{=record['item_name']}}&nbsp;&nbsp;{{=head_data['head_unit']}}</td>
+                
+                <td  style=" border-left:hidden; border-right:hidden" align="right">{{='{:20,.2f}'.format(head_data['head_price'])}}</td>
+              
+                <td  style=" border-left:hidden; border-right:hidden" align="right" >{{=head_data['head_qty']}}</td>
+                <td  style=" border-left:hidden; border-right:hidden" align="right">{{=head_data['head_Bonusqty']}}</td>
+                <td  style=" border-left:hidden; border-right:hidden" align="right">{{='{:20,.2f}'.format(head_data['head_invTotal'])}}</td>
+                
+                <td  style=" border-left:hidden; border-right:hidden" align="right">{{=head_data['head_ret_qty']}}</td>
+                <td  style=" border-left:hidden; border-right:hidden" align="right">{{=head_data['head_ret_bonus_qty']}}</td>
+                <td  style=" border-left:hidden; border-right:hidden" align="right">{{='{:20,.2f}'.format(head_data['head_retTotal'])}}</td>
+                <td  style=" border-left:hidden; border-right:hidden" ></td>
+                <td  style=" border-left:hidden; border-right:hidden" >&nbsp;</td>
+                <td  style=" border-left:hidden; border-right:hidden" align="right">{{='{:20,.2f}'.format(float(head_data['head_invTotal'])-float(head_data['head_retTotal']))}}</td>
+              </tr>
+             
+                {{pass}}
+         
+         {{ if (i % 2 == 0):}}
+              <tr  align="left" style="vertical-align:middle; font-size:12px; background:#FBFBFB;">
+                {{else:}}
+              <tr  align="left" style="vertical-align:middle; font-size:12px; background:#F5F5F5;">
+                
+				{{pass}}
+
+             
+                <td  >{{#=record[delivery_date]}}
+                {{import datetime            
+                 =record['max(invoice_date)'].strftime('%d-%b-%Y')           
+                 }}
+                </td>
+               
+                
+                <td  >INV{{=record['max(depot_id)']}}-{{=record['sl']}}</td>
+                <td   >{{=record['client_id']}}</td>
+                {{netSold=record['actual_tp']-record['retTP']
+                sale=record['actual_tp']
+                rSale=record['retTP']
+                }}
+                {{#=rSale}}
+                {{#eP=(netSold*100)/sale}}
+                {{
+                rP=0
+                if (rSale > 0):
+                rP=(rSale*100)/sale
+                pass
+                }}
+                <td   >{{=record['max(client_name)']}}</td>
+                <td    align="right">{{=record['inv_qty']}}</td>
+                <td   align="right">{{=record['inv_bonus_qty']}}</td>
+                <td  align="right" >{{='{:20,.2f}'.format(record['actual_tp'])}}
+                {{actual_tpT=actual_tpT+record['actual_tp']}}
+                </td>
+                <td    align="right">{{=record['ret_qty']}}</td>
+                <td   align="right">{{=record['ret_bonus_qty']}}</td>
+                <td    align="right">{{='{:20,.2f}'.format(record['retTP'])}}
+                {{retTPT=retTPT+record['retTP']}}
+                </td>
+                <td   align="right">{{=record['inv_qty']-record['ret_qty']}}</td>
+                <td width="80"  align="right" >{{=record['inv_bonus_qty']-record['ret_bonus_qty']}}</td>
+                <td width="150"   align="right" >{{='{:20,.2f}'.format(netSold)}}
+                {{netSoldT=netSoldT+netSold}}
+                </td>
+              </tr>
+              {{itemID=record['item_id']}}
+              {{p=p+1}}
+				
+                {{pass}}
+
+</tbody>
+		 
+  <tr  align="left" style="vertical-align:middle; font-size:12px; background:#FBFBFB;color:#B10721; font-size:14px">
+    <td  ></td>
+    <td  ></td>
+    <td  ></td>
+   
+   
+   
+   
+    <td   align="right"  >&nbsp;</td>
+    <td     align="right" >&nbsp;</td>
+    <td    align="right" >&nbsp;</td>
+    <td    align="right" >{{='{:20,.2f}'.format(actual_tpT)}}</td>
+    <td     align="right" >&nbsp;</td>
+    <td    align="right" >&nbsp;</td>
+    <td     align="right"  >{{='{:20,.2f}'.format(retTPT)}}</td>
+    <td    align="right" >&nbsp;</td>
+    <td width="75"    align="right" >&nbsp;</td>
+    <td width="150"    align="right" >{{='{:20,.2f}'.format(netSoldT)}}</td>
+  </tr>
+         
+          </table>
+
+		  
+
+	  
+
+<br/>
+<br/>
+<table width="900px" >
+  <tr>
+    <td width="411" align="center">__________________</td>
+    <td width="225" align="center">&nbsp;</td>
+    <td width="248" align="left">________________________________</td>
+  </tr>
+  <tr>
+    <td width="411" align="center"><strong>Printed By</strong></td>
+    <td width="225" align="right">for</td>
+    <td width="248" align="left"><strong>{{=session.cName}}</strong></td>
+  </tr>
+</table>
+<br/>
+
+
+
+
+<br/>
+
+
+
+</body>
+
+</html>
+

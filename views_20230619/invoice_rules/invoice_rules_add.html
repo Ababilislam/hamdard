@@ -1,0 +1,1321 @@
+{{extend 'layout.html'}}
+
+
+   <style type="text/css">
+
+
+ input[type=text], input[type=password],  select {
+
+
+    margin: 2px 0px 2px 0px;
+
+
+	width:150px;
+
+
+}
+
+
+div.error {
+
+
+    margin-left:0px;
+
+
+	width:auto;
+
+
+}
+
+
+#sm_tpcp_rules_from_amt_qty,#sm_tpcp_rules_to_amt_qty,#sm_tpcp_rules_disc_amt_per{	
+
+
+	text-align:right;
+
+
+	}
+
+
+#sm_tpcp_rules_b_item_qty1,#sm_tpcp_rules_b_item_qty2,#sm_tpcp_rules_b_item_qty3{
+
+
+	width:50px;
+
+
+	text-align:right;
+
+
+	}
+
+
+
+
+
+
+
+
+
+
+
+ </style>
+
+
+
+
+
+ <script>
+
+
+ 
+
+
+  $(function() {
+
+
+	  $('#helpTable').hide();
+
+
+	  
+
+
+	  jQuery("#helpButtonTable").click(function(){
+
+
+	  	$('#helpTable').show();
+
+
+	  });
+
+
+	  
+
+
+	  
+
+
+		localStorage.errorMsg="";
+
+
+		jQuery('#dragSenStatusRowId').show()
+
+
+	   //=======================jQuery('#dr_amt').css('background-color','#F4F4F4');	
+
+
+	   jQuery("#sm_tpcp_rules_bonus_type").change(function(){		   	
+
+
+			var bonus_type=$("#sm_tpcp_rules_bonus_type").val();
+
+
+			if(bonus_type=="Item"){				
+
+
+				jQuery('#sm_tpcp_rules_b_item_id1').removeAttr('readonly');			
+
+
+				jQuery("#sm_tpcp_rules_b_item_id1").val("");
+
+
+				jQuery("#sm_tpcp_rules_b_item_id1").css("background-color","white");
+
+
+				jQuery('#sm_tpcp_rules_b_item_qty1').removeAttr('readonly');			
+
+
+				jQuery("#sm_tpcp_rules_b_item_qty1").val("");
+
+
+				jQuery("#sm_tpcp_rules_b_item_qty1").css("background-color","white");
+
+
+				
+
+
+				jQuery('#sm_tpcp_rules_b_item_id2').removeAttr('readonly');			
+
+
+				jQuery("#sm_tpcp_rules_b_item_id2").val("");
+
+
+				jQuery("#sm_tpcp_rules_b_item_id2").css("background-color","white");
+
+
+				jQuery('#sm_tpcp_rules_b_item_qty2').removeAttr('readonly');			
+
+
+				jQuery("#sm_tpcp_rules_b_item_qty2").val("");
+
+
+				jQuery("#sm_tpcp_rules_b_item_qty2").css("background-color","white");
+
+
+				
+
+
+				jQuery('#sm_tpcp_rules_b_item_id3').removeAttr('readonly');			
+
+
+				jQuery("#sm_tpcp_rules_b_item_id3").val("");
+
+
+				jQuery("#sm_tpcp_rules_b_item_id3").css("background-color","white");
+
+
+				jQuery('#sm_tpcp_rules_b_item_qty3').removeAttr('readonly');			
+
+
+				jQuery("#sm_tpcp_rules_b_item_qty3").val("");
+
+
+				jQuery("#sm_tpcp_rules_b_item_qty3").css("background-color","white");
+
+
+				
+
+
+				jQuery('#sm_tpcp_rules_disc_amt_per').attr('readonly','True');				
+
+
+				jQuery("#sm_tpcp_rules_disc_amt_per").val("");
+
+
+				jQuery('#sm_tpcp_rules_disc_amt_per').css("background-color","#EFEFEF");
+
+
+				
+
+
+			}else{
+
+
+				jQuery('#sm_tpcp_rules_b_item_id1').attr('readonly','True');		
+
+
+				jQuery("#sm_tpcp_rules_b_item_id1").val("");
+
+
+				jQuery("#sm_tpcp_rules_b_item_id1").css("background-color","#EFEFEF");
+
+
+				jQuery('#sm_tpcp_rules_b_item_qty1').attr('readonly','True');
+
+
+				jQuery("#sm_tpcp_rules_b_item_qty1").val("");
+
+
+				jQuery("#sm_tpcp_rules_b_item_qty1").css("background-color","#EFEFEF");
+
+
+				
+
+
+				jQuery('#sm_tpcp_rules_b_item_id2').attr('readonly','True');
+
+
+				jQuery("#sm_tpcp_rules_b_item_id2").val("");
+
+
+				jQuery("#sm_tpcp_rules_b_item_id2").css("background-color","#EFEFEF");
+
+
+				jQuery('#sm_tpcp_rules_b_item_qty2').attr('readonly','True');
+
+
+				jQuery("#sm_tpcp_rules_b_item_qty2").val("");
+
+
+				jQuery("#sm_tpcp_rules_b_item_qty2").css("background-color","#EFEFEF");
+
+
+				
+
+
+				jQuery('#sm_tpcp_rules_b_item_id3').attr('readonly','True');
+
+
+				jQuery("#sm_tpcp_rules_b_item_id3").val("");
+
+
+				jQuery("#sm_tpcp_rules_b_item_id3").css("background-color","#EFEFEF");
+
+
+				jQuery('#sm_tpcp_rules_b_item_qty3').attr('readonly','True');
+
+
+				jQuery("#sm_tpcp_rules_b_item_qty3").val("");
+
+
+				jQuery("#sm_tpcp_rules_b_item_qty3").css("background-color","#EFEFEF");
+
+
+				
+
+
+				jQuery('#sm_tpcp_rules_disc_amt_per').removeAttr('readonly');
+
+
+				jQuery("#sm_tpcp_rules_disc_amt_per").val("");
+
+
+				jQuery("#sm_tpcp_rules_disc_amt_per").css("background-color","white");
+
+
+				
+
+
+				}
+
+
+	   }); 		
+
+
+	   //=====================	   						
+
+
+});
+
+
+
+
+
+  </script>
+
+
+  
+
+
+  {{currentDate=datetime.datetime.strptime(str(current_date),'%Y-%m-%d')}}
+
+
+  
+
+
+<table width="100%" border="0" cellspacing="0" cellpadding="0" style="background-color:#FFFFFF;" >
+
+
+  <tr height="30px" >
+
+
+    <td width="500"><span class="blackCatTitle">TP/CP Rules</span></td>
+
+
+    
+
+
+	<form action="{{=URL(c='utility',f='settings_home')}}" method="post">
+
+
+	<td width="500" align="right"><!--<input name="" type="submit"  value="Back"/>--></td>
+
+
+	</form>
+
+
+	
+
+
+    <td>&nbsp;</td>
+
+
+  </tr>
+
+
+  <tr  height="1px" style="background-color:#CCCCCC;">
+
+
+	    <td colspan="3" ></td>
+
+
+  </tr>
+
+
+  </table>
+
+
+  
+
+
+  
+
+
+  <table width="100%" height="500px"  border="0" cellspacing="0" cellpadding="0" class="page_color"  >
+
+
+  <tr height="100%"  style="vertical-align:top;">
+
+
+    <td>
+
+
+	
+
+
+	<table width="900px"  border="0" cellpadding="0" cellspacing="0"  >
+
+
+      <tr>
+
+
+        <td width="10">&nbsp;</td>
+
+
+        <td>&nbsp;</td>
+
+
+        <td>&nbsp;</td>
+
+
+      </tr>
+
+
+      <tr>
+
+
+        <td width="10">&nbsp;</td>
+
+
+        <td>&nbsp;</td>
+
+
+        <td>
+
+
+		{{#if access_permission==True:}} 
+
+
+          <table width="650" class="blackCat"  style="background-color:#F0F0F0">
+
+
+		  {{=form.custom.begin}}            
+
+
+            <tr>
+
+
+              <td align="left">Campaign Ref</td>
+
+
+              <td>{{=form.custom.widget.campaign_ref}}</td>
+
+
+              <td align="center">&nbsp;</td>
+
+
+              <td>&nbsp;</td>
+
+
+              <td>&nbsp;</td>
+
+
+            </tr>
+
+
+            <tr>
+
+
+              <td width="220" align="left"> Client Category </td>
+
+
+              <td width="150">{{#=form.custom.widget.client_cat}}
+              <select name="client_cat" id="client_cat" style="width:162px">
+              	<option value="ALL">ALL</option>
+                
+                {{for crow in categoryRecords:}}
+              		<option value="{{=crow.cat_type_id}}">{{=crow.cat_type_id}}</option>
+                {{pass}}
+                
+              </select>
+              
+              </td>
+
+
+              <td width="20" align="center">&nbsp;</td>
+
+
+              <td width="200">&nbsp;</td>
+
+
+              <td>&nbsp;</td>
+
+
+            </tr>
+
+
+            <tr>
+
+
+              <td width="220" height="21" align="left">Campaign&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Date&nbsp;From</td>
+
+
+              <td width="150" >{{=form.custom.widget.from_date}}</td>
+
+
+              <td width="20" align="center">To</td>
+
+
+              <td width="200">{{=form.custom.widget.to_date}}</td>
+
+
+              <td>&nbsp;</td>
+
+
+            </tr>
+
+
+            
+
+
+            <tr style="height:15px">
+
+
+              <td width="220" align="left"></td>
+
+
+              <td width="150"></td>
+
+
+              <td width="20" align="center"></td>
+
+
+              <td width="200"></td>
+
+
+              <td></td>
+
+
+            </tr>
+
+
+                        
+
+
+            <tr >
+
+
+              <td width="220" align="left">Bonus For  (ANY/Item Code) </td>
+
+
+              <td width="150" title="ANY:for Voucher Total Amount; Item Code: for Specific item">{{=form.custom.widget.for_any_item}}</td>
+
+
+              <td width="20" align="center">&nbsp;</td>
+
+
+              <td width="200">&nbsp;</td>
+
+
+              <td>&nbsp;</td>
+
+
+            </tr>
+
+
+            
+
+
+            <tr>
+
+
+              <td width="220" align="left">Amount/Qty &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Range&nbsp;From</td>
+
+
+              <td width="150" >{{=form.custom.widget.from_amt_qty}}</td>
+
+
+              <td width="20" align="center">To</td>
+
+
+              <td width="200">{{=form.custom.widget.to_amt_qty}}</td>
+
+
+              <td>&nbsp;</td>
+
+
+            </tr>
+
+
+            
+
+
+            <tr style="height:15px">
+
+
+              <td width="220" align="left"></td>
+
+
+              <td width="150"></td>
+
+
+              <td width="20" align="center"></td>
+
+
+              <td width="200"></td>
+
+
+              <td></td>
+
+
+            </tr>
+
+
+			
+
+
+            <tr>
+
+
+              <td align="left">Bonus Type </td>
+
+
+              <td width="150" >{{=form.custom.widget.bonus_type}}</td>
+
+
+              <td width="20" align="center">&nbsp;</td>
+
+
+              <td width="200">&nbsp;</td>
+
+
+              <td>&nbsp;</td>
+
+
+            </tr>
+
+
+            <tr>
+
+
+              <td align="left">Bonus Item 1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ID</td>
+
+
+              <td width="150" >{{=form.custom.widget.b_item_id1}}</td>
+
+
+              <td width="20" align="center">Qty</td>
+
+
+              <td width="200">{{=form.custom.widget.b_item_qty1}}</td>
+
+
+              <td>&nbsp;</td>
+
+
+            </tr>
+
+
+            <tr>
+
+
+              <td align="left">Bonus Item 2&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ID</td>
+
+
+              <td >{{=form.custom.widget.b_item_id2}}</td>
+
+
+              <td align="center">Qty</td>
+
+
+              <td>{{=form.custom.widget.b_item_qty2}}</td>
+
+
+              <td>&nbsp;</td>
+
+
+            </tr>
+
+
+            <tr>
+
+
+              <td align="left">Bonus Item 3&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ID</td>
+
+
+              <td >{{=form.custom.widget.b_item_id3}}</td>
+
+
+              <td align="center">Qty</td>
+
+
+              <td>{{=form.custom.widget.b_item_qty3}}</td>
+
+
+              <td>&nbsp;</td>
+
+
+            </tr>
+
+
+            <tr>
+
+
+              <td width="220" align="left">DiscAmt/DiscPercent </td>
+
+
+              <td width="150" >{{=form.custom.widget.disc_amt_per}}</td>
+
+
+              <td width="20" align="center">&nbsp;</td>
+
+
+              <td width="200">&nbsp;</td>
+
+
+              <td>&nbsp;</td>
+
+
+            </tr>
+
+
+            
+
+
+            
+
+
+            <tr style="height:15px">
+
+
+              <td width="220" align="left"></td>
+
+
+              <td width="150"></td>
+
+
+              <td width="20" align="center"></td>
+
+
+              <td width="200"></td>
+
+
+              <td></td>
+
+
+            </tr>
+
+
+            <tr>
+
+
+              <td align="left">Status</td>
+
+
+              <td width="150">{{=form.custom.widget.status}}</td>
+
+
+              <td width="20" align="center">&nbsp;</td>
+
+
+              <td width="200">&nbsp;</td>
+
+
+              <td>&nbsp;</td>
+
+
+            </tr>
+
+
+            <tr>
+
+
+              <td width="220" align="left">&nbsp;</td>
+
+
+              <td width="150">{{=form.custom.submit}}</td>
+
+
+              <td width="20" align="center">&nbsp;</td>
+
+
+              <td width="200">&nbsp;</td>
+
+
+              <td>&nbsp;</td>
+
+
+            </tr>
+
+
+            <tr>
+
+
+              <td width="220" align="left">&nbsp;</td>
+
+
+              <td width="150">&nbsp;</td>
+
+
+              <td width="20" align="center">&nbsp;</td>
+
+
+              <td width="200">&nbsp;</td>
+
+
+              <td>&nbsp;</td>
+
+
+            </tr>
+
+
+		{{=form.custom.end}}
+
+
+		</table>     
+
+
+		{{#pass}}
+
+
+            
+
+
+			 <br />
+
+
+			 <table width="1000" border="1" cellpadding="1" cellspacing="1" class="sample_border" >
+
+
+			 <form id="form1" name="form1" method="post" action="{{=URL(c='invoice_rules',f='invoice_rules_add')}}">
+
+
+               <tr align="left" height="20px" ;"vertical-align:middle">
+
+
+                 <td colspan="10"  >
+
+
+                   
+
+
+                   <select name="searchType" id="searchType" style="width:150px" title="Search Type">
+
+
+                     <option value="" selected="selected">Select a Type</option>
+
+
+                      {{if session.searchType_tpcp=='Reference':}}<option value="Reference" selected="selected">Campaign Ref</option>{{else:}}<option value="Reference" >Campaign Ref</option>{{pass}}
+
+
+                      {{if session.searchType_tpcp=='Category':}}<option value="Category" selected="selected">Client Category</option>{{else:}}<option value="Category" >Client Category</option>{{pass}}
+
+
+                      {{if session.searchType_tpcp=='Status':}}<option value="Status" selected="selected">Status</option>{{else:}}<option value="Status" >Status</option>{{pass}}
+
+
+                   </select>
+
+
+                   
+
+
+                   {{if session.searchValue_tpcp=='' or session.searchValue_tpcp==None:}}
+
+
+                   <input  name="searchValue" type="text" id="searchValue" size="25" value="" placeholder="Enter value" autocomplete="off" style="width:300px"/>
+
+
+                   {{else:}}
+
+
+                   <input  name="searchValue" type="text" id="searchValue" size="25" value="{{=session.searchValue_tpcp}}" placeholder="Enter value" autocomplete="off" style="width:300px"/>
+
+
+                   {{pass}}
+
+
+                   
+
+
+                 </td>
+
+
+                 <td colspan="2" align="right"  ><input type="submit" name="btn_filter" id="btn_filter" value="Filter"   class="button_update"/>
+
+
+                   <input type="submit" name="btn_all" id="btn_all" value="All"   class="button_update"/></td>
+
+
+                </tr>
+
+
+			   </form>
+
+
+			   
+
+
+               <tr align="left" class="blackCatHead" height="20px" ;"vertical-align:middle">
+
+
+                 <td width="80"  >Campaign<br />
+
+
+                 Ref</td>
+
+
+                 <td width="80"  >Client<br />
+
+
+                 Category </td>
+
+
+                 <td width="80"  >Campaign<br />
+
+
+                 Date From </td>
+
+
+                 <td width="80"  >Campaign<br />
+
+
+                 Date To </td>
+
+
+                 <td width="80"  >Bonus For
+
+
+                 (ANY/ ItemCode) </td>
+
+
+                 <td width="100"  >Amount/Qty<br />
+
+
+                 Range From </td>
+
+
+                 <td width="100"  >Amount/Qty<br />
+
+
+                 Range To </td>
+
+
+                 <td width="60"  >Bonus <br />
+
+
+                 Type </td>
+
+
+                 <td  >Bonus<br />
+
+
+                   Item</td>
+
+
+                 <td width="60" align="right"  >DiscAmt/ DiscPercent</td>
+
+
+                 <td width="80" align="center" s="s" >Status</td>
+
+
+                 <td width="30" s="s" ></td>
+
+
+               </tr>
+
+
+	  
+
+
+			   {{for i,record in enumerate(records):}}
+
+
+			    {{ if i==items_per_page: break}} 
+
+
+                {{toDay=datetime.datetime.strptime(str(record.to_date),'%Y-%m-%d')}}
+
+
+                
+
+
+                {{if toDay < currentDate:}}
+
+
+					<tr  align="left" class="blackCat"  style="vertical-align:middle; font-size:11px; background-color:#FFEAEE;">
+
+
+                {{else:}}
+
+
+                	<tr  align="left" class="blackCat"  style="vertical-align:middle; font-size:11px;">
+
+
+                {{pass}}
+
+
+				  <td width="80" >{{=record.campaign_ref}}</td> 
+
+
+				  <td width="80" >{{=record.client_cat}}</td>
+
+
+				  <td width="80" >{{=record.from_date}}</td>
+
+
+				  <td width="80" >{{=record.to_date}}</td>
+
+
+				  <td width="80" >{{=record.for_any_item}}</td>
+
+
+				  <td width="100" >{{=record.from_amt_qty}}</td>
+
+
+				  <td width="100" >{{=record.to_amt_qty}}</td>
+
+
+				  <td width="60" >{{=record.bonus_type}}</td>
+
+
+				  <td ><textarea style="background-color:inherit; border:none">{{=record.b_item_id1}}-{{=record.b_item_qty1}}, {{=record.b_item_id2}}-{{=record.b_item_qty2}}, {{=record.b_item_id3}}-{{=record.b_item_qty3}}</textarea></td>
+
+
+				  <td width="60" align="right" >{{=record.disc_amt_per}}</td>
+
+
+				  <td width="80" align="center"  >{{=record.status}}</td>
+
+
+				  <form id="form1" name="form1" method="post" action="{{=URL(c='invoice_rules',f='invoice_rules_edit',args=[page,record.id])}}">
+
+
+				  <td width="30" align="right"  ><input type="submit" name="btn_go" id="btn_go" value="&gt;&gt;"  class="button_update"/></td>
+
+
+			      </form>
+
+
+				</tr>
+
+
+
+
+
+			   {{pass}}
+
+
+		    </table>
+
+
+			 
+
+
+		  </td>
+
+
+      </tr>
+
+
+    </table>
+
+
+
+
+
+
+
+
+{{if page:}}
+
+
+&nbsp;&nbsp;<a href="{{=URL(args=[page-page])}}">first</a> |
+
+
+&nbsp;&nbsp;<a href="{{=URL(args=[page-1])}}">previous</a> |
+
+
+{{pass}}
+
+
+
+
+
+{{if len(records)>items_per_page:}}
+
+
+&nbsp;&nbsp;<a href="{{=URL(args=[page+1])}}">next</a>
+
+
+{{pass}}
+
+
+	<br />
+
+
+    
+
+
+    
+
+
+    
+
+
+    </td>
+
+
+  </tr>
+
+
+</table>
+
+
+<span id="helpButtonTable" style="background-color: #E5E5E5">Help</span>
+
+
+
+
+
+<br />
+
+
+
+
+
+<table width="800" id="helpTable" border="1" cellpadding="0" cellspacing="0" style="border-style:solid; border-color:#999; border-width:thin">
+
+
+  <tr>
+
+
+    <td colspan="4" valign="top"><strong>Invoice  rules apply in many ways:-</strong></td>
+
+
+  </tr>
+
+
+  <tr>
+
+
+    <td colspan="4" valign="top"><ol>
+
+
+      <ol style="list-style-type:lower-alpha">
+
+
+        <li>If Campaign Client category is 'ALL' or Invoice Client category is same with Campaign Client category.</li>
+
+
+        <li>In a date  range campaign will be applicable. Previous 'ACTIVE' settings will check first and only one matching rules apply for a voucher.</li>
+
+
+        <li>If Bonus for <strong>ANY</strong> (Voucher total amount) present then other rules not applied. In this case bonus  type will apply -</li>
+
+
+        <ol>
+
+
+          <li>Item (Maximum three)</li>
+
+
+          <li>Discount Amount</li>
+
+
+          <li>Discount Percent of total voucher amount<br />
+
+
+            * only one bonus type applicable at a time</li>
+
+
+        </ol>
+
+
+        <li>If Bonus  for <strong>Item Code</strong> then bonus type will  apply-</li>
+
+
+        <ol>
+
+
+          <li>Item (Maximum three, one can be same item)</li>
+
+
+          <ol style="list-style-type:lower-roman">
+
+
+            <li>Range of  quantity</li>
+
+
+            <li>Per a fixed  quantity</li>
+
+
+          </ol>
+
+
+          <li>Discount Amount</li>
+
+
+          <li>Discount Percent of Item total amount</li>
+
+
+        </ol>
+
+
+      </ol>
+
+
+    </ol>
+
+
+      <ol>
+
+
+    </ol></td>
+
+
+  </tr>
+
+
+  <tr style="border-style:solid; border-color:#999; border-width:thin">
+
+
+    <td width="150" valign="top"><strong>Bonus For</strong></td>
+
+
+    <td width="200" valign="top"><strong>Range (From-To)</strong></td>
+
+
+    <td width="150" valign="top"><strong>Bonus Type</strong></td>
+
+
+    <td width="200" valign="top"><strong>Bonus Details</strong></td>
+
+
+  </tr>
+
+
+  <tr>
+
+
+    <td width="150" valign="top">ANY (Voucher Total)</td>
+
+
+    <td width="200" valign="top">Amount range</td>
+
+
+    <td width="150" valign="top">Item</td>
+
+
+    <td width="200" valign="top">Maximum three bonus item</td>
+
+
+  </tr>
+
+
+  <tr>
+
+
+    <td width="150" valign="top">ANY (Voucher Total)</td>
+
+
+    <td width="200" valign="top">Amount range</td>
+
+
+    <td width="150" valign="top">DiscountAmount</td>
+
+
+    <td width="200" valign="top">Any Amount</td>
+
+
+  </tr>
+
+
+  <tr>
+
+
+    <td width="150" valign="top">ANY (Voucher Total)</td>
+
+
+    <td width="200" valign="top">Amount range</td>
+
+
+    <td width="150" valign="top">DiscountPercent</td>
+
+
+    <td width="200" valign="top">Any percent</td>
+
+
+  </tr>
+
+
+  <tr style="border-style:solid; border-color:#999; border-width:thin">
+
+
+    <td width="150" valign="top">Item</td>
+
+
+    <td width="200" valign="top">Per number of qty (per 100pc, From 100 To 100)</td>
+
+
+    <td width="150" valign="top">Item</td>
+
+
+    <td width="200" valign="top">Maximum three bonus item</td>
+
+
+  </tr>
+
+
+  <tr>
+
+
+    <td width="150" valign="top">Item</td>
+
+
+    <td width="200" valign="top">Qty range</td>
+
+
+    <td width="150" valign="top">Item</td>
+
+
+    <td width="200" valign="top">Maximum three bonus item</td>
+
+
+  </tr>
+
+
+  <tr>
+
+
+    <td width="150" valign="top">Item</td>
+
+
+    <td width="200" valign="top">Qty range</td>
+
+
+    <td width="150" valign="top">DiscountAmount</td>
+
+
+    <td width="200" valign="top">Any Amount</td>
+
+
+  </tr>
+
+
+  <tr>
+
+
+    <td width="150" valign="top">Item</td>
+
+
+    <td width="200" valign="top">Qty range</td>
+
+
+    <td width="150" valign="top">DiscountPercent</td>
+
+
+    <td width="200" valign="top">Any percent</td>
+
+
+  </tr>
+
+
+</table>
+
+
+
+
+
+<br />
+
+

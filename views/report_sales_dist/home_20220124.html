@@ -1,0 +1,433 @@
+{{extend 'layout.html'}}
+
+<head>
+
+<link rel="stylesheet" href="{{=URL('static', 'js_and_css/ui.theme.css')}}" type="text/css" />
+
+<link rel="stylesheet" href="{{=URL('static', 'js_and_css/jquery-ui.css')}}" type="text/css" />
+
+<link rel="stylesheet" href="{{=URL('static', 'js_and_css/style.css')}}" type="text/css" />
+<script src="{{=URL('static','js_and_css/jquery-1.8.2.js')}}"></script>
+<script src="{{=URL('static','js_and_css/jquery-ui.js')}}"></script>
+
+
+<script src="{{=URL('static','js/bootstrap-multiselect.js')}}"></script>
+<script src="{{=URL('static','js/bootstrap.min.js')}}"></script>
+ 
+<style type="text/css">
+
+	<!--color-->
+
+	input[type=submit] {
+
+		margin: 2px 0px 2px 0px;
+
+		padding: 0px 0px 2px 0px;
+
+		width:200px;
+
+	}
+
+	
+
+	input[type=text] {
+
+		width:120px;
+
+	}
+
+	
+
+	.checkbox{
+
+	padding-left:0px;
+
+	}
+
+	
+
+	.multiselect{ 
+
+			text-align:left;
+
+			height:28px;
+
+	}
+
+	
+
+	.page_color,body{
+
+			font-family:Arial, Helvetica, sans-serif;
+
+			font-size:13px;	
+
+			}
+
+
+
+</style>
+
+
+
+<script>
+
+ $(function() { 
+
+	/*$( "#htmlbody" ).click(function(){		
+
+		$("#ChartDivSalesTrend").empty();		
+
+		 loadChart();
+
+    });*/
+
+	
+
+	$( "#accordionReport" ).accordion({
+
+	  active:0,
+
+      heightStyle: "content",
+
+	  collapsible: true
+
+    });
+
+	
+
+  });
+
+  </script>
+
+  
+
+   
+
+<script>
+
+var base_url=location.protocol + "//" + location.hostname + (location.port && ":" + location.port) + "/{{=request.application}}/";
+
+
+
+$(function() {
+//========================distributor	
+		
+    var scListStr="";
+	$.ajax({
+		  url: base_url+'report_sales_dist/get_dist_list',
+		  success: function(resStr) {
+			  scListStr=resStr			  
+		  }
+		});   
+ 
+//=======================distributor
+	$('#dist').keyup(function(){	
+		
+		//-------------------------
+		var ref_list = scListStr.split(',');				
+		var ref_name=$("#dist").val();
+		
+				
+		//---------------- auto complete combo list
+		var ref_list_new=new Array();
+		lc=0;
+		i =0;
+		var refStr="";				
+		while (i < ref_list.length)
+		{
+			refStr=ref_list[i];
+			i=i+1;					
+			var res=refStr.toUpperCase().match(ref_name.toUpperCase());
+			if (res!=null){
+				ref_list_new[lc]=refStr;
+				lc=lc+1;
+				if (lc==30){
+					break;
+				};
+			}else{
+				continue;
+			}					
+		};
+		
+		//-------------- auto complete source
+		$( "input#dist" ).autocomplete({
+			source: ref_list_new
+		});	
+  });
+  
+
+//========================depot/Branch
+	var scListStr1='';	
+	$('#dist').blur(function(){
+		var dist=$('#dist').val();
+		if(dist!=''){
+			var dist=dist.split("|");
+			
+			var dist=dist[0];
+			
+			$.ajax({
+			  url: base_url+'report_sales_dist/get_dist_depot_list?dist_id='+dist,
+			  success: function(resStr2) {
+				  scListStr1=resStr2;
+			  }
+			});
+			
+		}		
+	});
+	
+	
+ 
+//=======================Depot
+	$('#depot_id').keyup(function(){	
+		
+		//-------------------------
+		var ref_list = scListStr1.split(',');				
+		var ref_name=$("#depot_id").val();
+		
+		//---------------- auto complete combo list
+		var ref_list_new=new Array();
+		lc=0;
+		i =0;
+		var refStr="";				
+		while (i < ref_list.length)
+		{
+			refStr=ref_list[i];
+			i=i+1;					
+			var res=refStr.toUpperCase().match(ref_name.toUpperCase());
+			if (res!=null){
+				ref_list_new[lc]=refStr;
+				lc=lc+1;
+				if (lc==30){
+					break;
+				};
+			}else{
+				continue;
+			}					
+		};
+		
+		//-------------- auto complete source
+		$( "input#depot_id" ).autocomplete({
+			source: ref_list_new
+		});	
+  });    
+
+
+});
+
+</script>
+
+
+<style>
+	.rptlist{font-size:15px; height:auto; }
+	.rptlist:hover{ height:auto;}
+	.rptul{color:#0076AE; background-color:#F0F0F0;}
+	.rptdiv{  font-size:16px; color:#0076AE; background-color:#F0F0F0;}	
+
+	#accordionReport ul{	list-style-type:none;margin:0; font-size:15px; }
+	#accordionReport li{ margin:1px; border-radius:5px; border-bottom:1px solid #CCCCCC; font-size:15px; background-color:#F7F7F7; height:20px; padding:5px 2px 2px 15px;}/*:#F7F7F7*/
+	#accordionReport li:hover{ height:21px;background-color:#F5F5F5; font-size:15px;}
+</style>
+
+
+
+</head>
+
+<body id="htmlbody">
+
+<!--Form Title -->
+
+<table width="100%" border="0" cellspacing="0" cellpadding="0" style="background-color:#FFFFFF;">
+
+  <tr height="30px">
+
+    <td><div class="blackCatTitle">Report Distributor</div></td>
+
+  </tr>
+
+  <tr >
+
+    <td height="1px" style="background-color:#CCCCCC;"></td>
+
+  </tr>
+
+</table>
+
+<!--Form Content -->
+
+<table width="100%" border="0" cellspacing="0" cellpadding="0" class="page_color">
+
+  
+
+  <tr height="20px">
+
+  	<td width="10px"></td>
+
+  	<td> </td>	
+
+  </tr>
+
+  
+
+  <tr >
+
+    <td width="10px"></td>
+
+	<td valign="top">					
+
+		 <div id="accordionReport"  style="width:90%">
+
+		 	
+
+           
+           <!--Billal-->
+           <div  class="rptdiv">
+
+                <ul class="rptul">
+
+                    <li class="rptlist"> Sales</li>
+
+                </ul>
+
+		   </div>
+
+		   <div style="height:700px;">
+			<table width="900" border="0" cellpadding="0" cellspacing="0">
+
+				<form name="form2" id="form2" action="{{=URL(c='report_sales_dist',f='home')}}" target="_blank">
+				
+                <tr>
+                	<td valign="top">
+                   	  <table width="500" height="300px;" style="background-color:#F8F8F8;">
+
+                          <tr style="background-color:#E9E9E9; height:25px">
+                              <td width="10">&nbsp;</td>
+                              <td width="160">&nbsp;</td>
+                              <td width="2">&nbsp;</td>
+                              <td>&nbsp;</td>
+                          </tr>
+                          <tr >
+                            <td>&nbsp;</td>
+                            <td width="160">Date </td>
+                            <td width="2">:</td>
+                            <td><span style="vertical-align:middle;"><!--{{#=search_form.custom.widget.from_dt_2}}&nbsp;To&nbsp;-->{{=search_form.custom.widget.to_dt_2}}</span></td>
+                          </tr>
+                          <tr >
+                            <td>&nbsp;</td>
+                            <td width="160">Distributor</td>
+                            <td width="2">:</td>
+                            <td>
+                            {{if (session.user_type=='Depot' and session.user_depot_category=='DEPOT'):}}
+                            	{{if depotDistRows:}}
+                            		<input  name="dist" type="text" id="dist" class="depot_id" size="25" value="{{=depotDistRows[0].dist_id}}|{{=depotDistRows[0].dist_name}}" placeholder="Select Distributor" autocomplete="off" style="width:288px" readonly />
+                                 {{pass}}
+                             {{else:}}
+                             	<input  name="dist" type="text" id="dist" class="depot_id" size="25" value="" placeholder="Select Distributor" autocomplete="off" style="width:288px"/>
+                              {{pass}}                    
+                            </td>
+                          </tr>
+                          <tr >
+                            <td>&nbsp;</td>
+                            <td width="160">Branch/Depot</td>
+                            <td width="2">:</td>
+                            <td>
+                            	{{if (session.user_type=='Depot' and session.user_depot_category=='DEPOT'):}}
+                                	{{if depotDistRows:}}
+                                    <input type="text" name="depot_id" id="depot_id" size="25" value="{{=depotDistRows[0].depot_id}}|{{=depotDistRows[0].depot_name}}" placeholder="Select Branch/Depot" autocomplete="off" style="width:288px" readonly />
+                                    {{pass}}
+                                {{else:}}
+                                  <input  name="depot_id" type="text" id="depot_id"   size="25" value="" placeholder="Select Branch/Depot" autocomplete="off" style="width:288px"/>
+                                 {{pass}}
+                            </td>
+                          </tr>
+                          <tr >
+                            <td>&nbsp;</td>
+                            <td width="160">&nbsp;</td>
+                            <td width="2">&nbsp;</td>
+                            <td>&nbsp;</td>
+                          </tr>
+                          <tr >
+                            <td>&nbsp;</td>
+                            <td width="160">&nbsp;</td>
+                            <td width="2">&nbsp;</td>
+                            <td>&nbsp;</td>
+                          </tr>
+                          <tr >
+                            <td>&nbsp;</td>
+                            <td width="160">&nbsp;</td>
+                            <td width="2">&nbsp;</td>
+                            <td>&nbsp;</td>
+                          </tr>
+                          <tr >
+                            <td>&nbsp;</td>
+                            <td width="160">&nbsp;</td>
+                            <td width="2">&nbsp;</td>
+                            <td>&nbsp;</td>
+                          </tr>
+                          <tr >
+                            <td>&nbsp;</td>
+                            <td width="160">&nbsp;</td>
+                            <td width="2">&nbsp;</td>
+                            <td>&nbsp;</td>
+                          </tr>
+                          <tr >
+                            <td>&nbsp;</td>
+                            <td width="160">&nbsp;</td>
+                            <td width="2">&nbsp;</td>
+                            <td>&nbsp;</td>
+                          </tr>
+                                                 
+                      </table>
+
+                  </td>
+
+                    <td width="400" valign="top">
+
+                    	<table width="350">
+                        	
+
+                            <tr style="background-color:#E9E9E9; height:25px">
+
+                              <td>&nbsp;</td>
+                            </tr>
+							<tr >
+                              <td><input type="submit" style="width:400px" name="btn_inv_preview" value="(6.2)Preview- Invoice" title="Date,Dist"/></td>
+                            </tr>
+                            
+                            <tr >
+                              <td><input type="submit" style="width:400px" name="btn_return_note_preview" value="5.2 Return Note Preview (Returned)" title="Date,Dist"/></td>
+                            </tr>
+                            <tr >
+                              <td>&nbsp;</td>
+                            </tr>
+                            <tr >
+                              <td><input type="submit" style="width:400px" name="btn_invoice_item_sd_afterDel" value="5.1 Preview Synopsis SD With Batch After Delivery" title="Date,Dist"/></td>
+                            </tr>
+                            
+                           
+                          
+                            
+                          <tr >
+
+                              <td>&nbsp;</td>
+                            </tr>
+						</table>
+
+                    </td>                    
+
+                </tr>
+
+               </form>
+
+            </table>
+           
+		   </div>           
+
+	  </div>
+
+      </td>
+
+  </tr>
+
+</table>
+

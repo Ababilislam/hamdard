@@ -1,0 +1,49 @@
+
+    
+{{extend 'layout_wap.html'}}
+    
+
+<table width="100%"  border="0" cellpadding="0" cellspacing="0">
+  
+   
+	<tr style="background-color:#DDDDDD">
+      
+      <td colspan="2" align="left" >Select Route</a></td>
+      </tr>
+    
+  
+  {{for record in records:}}
+   
+    <form  name="form1" action="{{=URL(c='wap',f='route')}}" method="post"  >
+    
+	<tr  {{if (record.area_id==session.wap_area_id):}}
+	    style="color: #008000"
+		
+	   {{pass}}>
+	
+      <td width="15px" align="left"  >
+	  <input type="radio" name="Radio_route" id="Radio_route" value="{{=record.area_id}}"  />
+	  </td>
+      <td  align="left" >{{=record.area_name}}[{{=record.area_id}}]</a></td>
+    </tr>
+	 {{pass}}
+	
+	
+    
+    <tr>
+      <td align="left" >&nbsp;</td>
+      <td align="left" ><input type="submit" name="login" id="login" value="Set Route" /></td>
+    </tr>
+    <tr>
+      <td align="left" >&nbsp;</td>
+      <td align="left" ><a href="{{=URL(c='wap',f='menu')}}">Menu</a></td>
+    </tr>
+	</form>
+   
+
+  </td>
+  </tr>
+  
+</table>
+
+

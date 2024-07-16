@@ -1,0 +1,378 @@
+{{extend 'layout.html'}}
+ 
+ 
+<link rel="stylesheet" href="{{=URL('static', 'js_and_css/ui.theme.css')}}" type="text/css" />
+<link rel="stylesheet" href="{{=URL('static', 'js_and_css/jquery-ui.css')}}" type="text/css" />
+<link rel="stylesheet" href="{{=URL('static', 'js_and_css/style.css')}}" type="text/css" />
+<script src="{{=URL('static','js_and_css/jquery-1.8.2.js')}}"></script>
+<script src="{{=URL('static','js_and_css/jquery-ui.js')}}"></script>
+  
+<style type="text/css">
+ 
+ input[type=text], input[type=password],  select {
+    margin: 2px 0px 2px 0px;
+	width:250px;
+}
+
+div.error {
+    margin-left:0px;
+	width: 200px;
+}
+
+.page_color,body{
+	font-family:Arial, Helvetica, sans-serif;
+	font-size:13px;	
+	}
+	
+ </style>
+ 
+<script>
+var base_url=location.protocol + "//" + location.hostname + (location.port && ":" + location.port) + "/{{=request.application}}/";
+
+$(function() {
+	 	var valueListStr="";		
+		$('#target_vs_achievement_client_id').keyup(function(){
+			$.ajax({
+				  url: base_url+'default/get_client_list',
+				  success: function(resStr) {
+					  valueListStr=resStr
+				  }
+				});
+			
+			//-------------------------
+			
+			var valueList =valueListStr.split(',');
+			
+			var searchValue=$("#target_vs_achievement_client_id").val();
+			
+			//---------------- auto complete combo list
+			var valueList_new=new Array();
+			lc=0;
+			i =0;
+			var valueStr="";				
+			while (i < valueList.length)
+			{
+				valueStr=valueList[i];
+				i=i+1;					
+				var res=valueStr.toUpperCase().match(searchValue.toUpperCase());
+				if (res!=null){
+					valueList_new[lc]=valueStr;
+					lc=lc+1;
+					if (lc==30){
+						break;
+					};
+				}else{
+					continue;
+				}					
+			};
+			//alert (ref_list_new);
+			
+			//-------------- auto complete source
+			$( "input#target_vs_achievement_client_id" ).autocomplete({
+				source: valueList_new
+			});
+		
+	  }); 
+	   //==============
+	   var valueListStr2="";		
+		$('#target_vs_achievement_item_id').keyup(function(){
+			$.ajax({
+				  url: base_url+'default/get_item_list',
+				  success: function(resStr) {
+					  valueListStr2=resStr
+				  }
+				});
+			
+			//-------------------------
+			
+			var valueList2 =valueListStr2.split(',');
+			
+			var searchValue2=$("#target_vs_achievement_item_id").val();
+			
+			//---------------- auto complete combo list
+			var valueList_new2=new Array();
+			lc=0;
+			i =0;
+			var valueStr2="";				
+			while (i < valueList2.length)
+			{
+				valueStr2=valueList2[i];
+				i=i+1;					
+				var res2=valueStr2.toUpperCase().match(searchValue2.toUpperCase());
+				if (res2!=null){
+					valueList_new2[lc]=valueStr2;
+					lc=lc+1;
+					if (lc==30){
+						break;
+					};
+				}else{
+					continue;
+				}					
+			};
+			//alert (ref_list_new);
+			
+			//-------------- auto complete source
+			$( "input#target_vs_achievement_item_id" ).autocomplete({
+				source: valueList_new2
+			});
+		
+	  }); 
+	   //==============
+}); 
+</script>
+ 
+ 
+ 
+<table width="100%"  border="0" cellspacing="0" cellpadding="0" style="background-color:#FFFFFF;" >
+  <tr height="30px" >
+    <td><span class="blackCatTitle">Lifting Plan</span></td>
+  </tr>
+  <tr  height="1px" style="background-color:#CCCCCC;">
+	    <td ></td>
+  </tr>
+</table>
+  
+  
+  <table width="100%" height="500px"  border="0" cellspacing="0" cellpadding="0" class="page_color"  >
+  <tr height="100%"  style="vertical-align:top;">
+    <td width="10px">&nbsp;</td>
+    <td>
+	<table width="100%"  border="0" cellpadding="0" cellspacing="0"  >
+      <tr>
+        <td>&nbsp;</td>
+      </tr>
+      <tr>
+        <td align="left" valign="top">
+		
+          <br />
+          <table width="800" border="1"  class="sample_border" >
+		  <form id="form1" name="form1" method="post" action="{{=URL(c='target',f='lifting_plan_add')}}">
+            <tr align="left" class="blackCatHead"  height="20px" ;"vertical-align:middle">
+              <td width="100" >
+              <select name="searchType" id="searchType" style="width:150px" title="Search Type">
+                 <option value="" selected="selected">Select a Type</option>
+                  {{if session.searchType_lp=='DistributorID':}}<option value="DistributorID" selected="selected">Distributor ID</option>{{else:}}<option value="DistributorID" >Distributor ID</option>{{pass}}
+                  {{if session.searchType_lp=='SuperDepotID':}}<option value="SuperDepotID" selected="selected">Super Depot ID</option>{{else:}}<option value="SuperDepotID" >Super Depot ID</option>{{pass}}
+               </select>
+               </td>
+              <td width="300" >
+              {{if session.searchValue_lp=='' or session.searchValue_lp==None:}}
+                <input  name="searchValue" type="text" id="searchValue" size="25" value="" placeholder="Enter value" autocomplete="off" style="width:300px"/>
+               {{else:}}
+                <input  name="searchValue" type="text" id="searchValue" size="25" value="{{=session.searchValue_lp}}" placeholder="Enter value" autocomplete="off" style="width:300px"/>
+               {{pass}}
+               </td>
+                <td align="left"  ><input type="submit" name="btn_filter" id="btn_filter" value="Filter"   class="button_update"/>
+                &nbsp;
+                <input type="submit" name="btn_all" id="btn_all" value="All"   class="button_update"/>
+                &nbsp;
+                </td>
+            
+			  <td width="80" height="28" align="right"  >
+              <a href="{{=URL(c='target',f='lifting_plan_batch_upload')}}">
+			    <input type="button" name="input" id="input" value="Batch Upload"   class="button_update" title=""/>
+			  </a></td>
+            </tr></form>
+          </table>
+  
+			 <br />
+			 <table width="4000" border="1" cellpadding="1" cellspacing="1" class="sample_border" >
+               <tr align="left" class="blackCatHead"  height="20px" ;"vertical-align:middle">
+                 <td width="100" rowspan="2" style="border-right-width:3px;">Year-Month</td>
+                 <td colspan="2" align="center" style="border-right-width:3px;">Distributor</td>
+                 <td colspan="2" align="center" style="border-right-width:3px;">Depot</td>
+                 <td width="60" rowspan="2" align="center" style="border-right-width:3px;">Mode</td>
+                 <td width="60" colspan="2" align="center" style="border-right-width:3px;">D-01</td>
+                 <td width="60" colspan="2" align="center" style="border-right-width:3px;">D-02</td>
+                 <td width="60" colspan="2" align="center" style="border-right-width:3px;">D-03</td>
+                 <td width="60" colspan="2" align="center" style="border-right-width:3px;">D-04</td>
+                 <td width="60" colspan="2" align="center" style="border-right-width:3px;">D-05</td>
+                 <td width="60" colspan="2" align="center" style="border-right-width:3px;">D-06</td>
+                 <td width="60" colspan="2" align="center" style="border-right-width:3px;">D-07</td>
+                 <td width="60" colspan="2" align="center" style="border-right-width:3px;">D-08</td>
+                 <td width="60" colspan="2" align="center" style="border-right-width:3px;">D-09</td>
+                 <td width="60" colspan="2" align="center" style="border-right-width:3px;">D-10</td>
+                 <td width="60" colspan="2" align="center" style="border-right-width:3px;">D-11</td>
+                 <td width="60" colspan="2" align="center" style="border-right-width:3px;">D-12</td>
+                 <td width="60" colspan="2" align="center" style="border-right-width:3px;">D-13</td>
+                 <td width="60" colspan="2" align="center" style="border-right-width:3px;">D-14</td>
+                 <td width="60" colspan="2" align="center" style="border-right-width:3px;">D-15</td>
+                 <td width="60" colspan="2" align="center" style="border-right-width:3px;">D-16</td>
+                 <td width="60" colspan="2" align="center" style="border-right-width:3px;">D-17</td>
+                 <td width="60" colspan="2" align="center" style="border-right-width:3px;">D-18</td>
+                 <td width="60" colspan="2" align="center" style="border-right-width:3px;">D-19</td>
+                 <td width="60" colspan="2" align="center" style="border-right-width:3px;">D-20</td>
+                 <td width="60" colspan="2" align="center" style="border-right-width:3px;">D-21</td>
+                 <td width="60" colspan="2" align="center" style="border-right-width:3px;">D-22</td>
+                 <td width="60" colspan="2" align="center" style="border-right-width:3px;">D-23</td>
+                 <td width="60" colspan="2" align="center" style="border-right-width:3px;">D-24</td>
+                 <td width="60" colspan="2" align="center" style="border-right-width:3px;">D-25</td>
+                 <td width="60" colspan="2" align="center" style="border-right-width:3px;">D-26</td>
+                 <td width="60" colspan="2" align="center" style="border-right-width:3px;">D-27</td>
+                 <td width="60" colspan="2" align="center" style="border-right-width:3px;">D-28</td>
+                 <td width="60" colspan="2" align="center" style="border-right-width:3px;">D-29</td>
+                 <td width="60" colspan="2" align="center" style="border-right-width:3px;">D-30</td>
+                 <td width="60" colspan="2" align="center" style="border-right-width:3px;">D-31</td>
+               </tr>
+               <tr align="left" class="blackCatHead"  height="20px" ;"vertical-align:middle">
+                 <td width="50" >ID</td>
+                 <td width="120" >Name</td>
+                 <td width="50" >ID</td>
+                 <td width="120" >Name</td>
+                 <td width="50" align="right" >Tar</td>
+                 <td width="50" align="right" style="border-right-width:3px;">Ach</td>
+                 <td width="50" align="right" >Tar</td>
+                 <td width="50" align="right" style="border-right-width:3px;">Ach</td>
+                 <td width="50" align="right" >Tar</td>
+                 <td width="50" align="right" style="border-right-width:3px;">Ach</td>
+                 <td width="50" align="right" >Tar</td>
+                 <td width="50" align="right" style="border-right-width:3px;">Ach</td>
+                 <td width="50" align="right" >Tar</td>
+                 <td width="50" align="right" style="border-right-width:3px;">Ach</td>
+                 <td width="50" align="right" >Tar</td>
+                 <td width="50" align="right" style="border-right-width:3px;">Ach</td>
+                 <td width="50" align="right" >Tar</td>
+                 <td width="50" align="right" style="border-right-width:3px;">Ach</td>
+                 <td width="50" align="right" >Tar</td>
+                 <td width="50" align="right" style="border-right-width:3px;">Ach</td>
+                 <td width="50" align="right" >Tar</td>
+                 <td width="50" align="right" style="border-right-width:3px;">Ach</td>
+                 <td width="50" align="right" >Tar</td>
+                 <td width="50" align="right" style="border-right-width:3px;">Ach</td>
+                 <td width="50" align="right" >Tar</td>
+                 <td width="50" align="right" style="border-right-width:3px;">Ach</td>
+                 <td width="50" align="right" >Tar</td>
+                 <td width="50" align="right" style="border-right-width:3px;">Ach</td>
+                 <td width="50" align="right" >Tar</td>
+                 <td width="50" align="right" style="border-right-width:3px;">Ach</td>
+                 <td width="50" align="right" >Tar</td>
+                 <td width="50" align="right" style="border-right-width:3px;">Ach</td>
+                 <td width="50" align="right" >Tar</td>
+                 <td width="50" align="right" style="border-right-width:3px;">Ach</td>
+                 <td width="50" align="right" >Tar</td>
+                 <td width="50" align="right" style="border-right-width:3px;">Ach</td>
+                 <td width="50" align="right" >Tar</td>
+                 <td width="50" align="right" style="border-right-width:3px;">Ach</td>
+                 <td width="50" align="right" >Tar</td>
+                 <td width="50" align="right" style="border-right-width:3px;">Ach</td>
+                 <td width="50" align="right" >Tar</td>
+                 <td width="50" align="right" style="border-right-width:3px;">Ach</td>
+                 <td width="50" align="right" >Tar</td>
+                 <td width="50" align="right" style="border-right-width:3px;">Ach</td>
+                 <td width="50" align="right" >Tar</td>
+                 <td width="50" align="right" style="border-right-width:3px;">Ach</td>
+                 <td width="50" align="right" >Tar</td>
+                 <td width="50" align="right" style="border-right-width:3px;">Ach</td>
+                 <td width="50" align="right" >Tar</td>
+                 <td width="50" align="right" style="border-right-width:3px;">Ach</td>
+                 <td width="50" align="right" >Tar</td>
+                 <td width="50" align="right" style="border-right-width:3px;">Ach</td>
+                 <td width="50" align="right" >Tar</td>
+                 <td width="50" align="right" style="border-right-width:3px;">Ach</td>
+                 <td width="50" align="right" >Tar</td>
+                 <td width="50" align="right" style="border-right-width:3px;">Ach</td>
+                 <td width="50" align="right" >Tar</td>
+                 <td width="50" align="right" style="border-right-width:3px;">Ach</td>
+                 <td width="50" align="right" >Tar</td>
+                 <td width="50" align="right" style="border-right-width:3px;">Ach</td>
+                 <td width="50" align="right" >Tar</td>
+                 <td width="50" align="right" style="border-right-width:3px;">Ach</td>
+                 <td width="50" align="right" >Tar</td>
+                 <td width="50" align="right" style="border-right-width:3px;">Ach</td>
+                 <td width="50" align="right" >Tar</td>
+                 <td width="50" align="right" style="border-right-width:3px;">Ach</td>
+               </tr>
+			    
+			   {{for i,record in enumerate(records):}}
+			   	{{ if i==items_per_page: break}}
+              
+                <tr  align="left" class="blackCat"  style="vertical-align:middle"> 
+                  <td width="100"  style="border-right-width:3px;">{{=record.first_date.strftime('%Y-%b')}}</td>
+                  <td width="50"  >{{=record.distributor_id}}</td>
+                  <td width="120"  style="border-right-width:3px;">{{=record.distributor_name}}</td>
+                  <td width="50"  >{{=record.super_depot_id}}</td>
+                  <td width="120"  style="border-right-width:3px;">{{=record.super_depot_name}}</td>
+                  <td width="60" align="center"  style="border-right-width:3px;">{{=record.mode}}&nbsp;</td>
+                  <td width="50" align="right"  >{{=record.t_1}}</td>
+                  <td width="50" align="right"  style="border-right-width:3px;">{{=record.a_1}}</td>
+                  <td width="50" align="right"  >{{=record.t_2}}</td>
+                  <td width="50" align="right"  style="border-right-width:3px;">{{=record.a_2}}</td>
+                  <td width="50" align="right"  >{{=record.t_3}}</td>
+                  <td width="50" align="right"  style="border-right-width:3px;">{{=record.a_3}}</td>
+                  <td width="50" align="right"  >{{=record.t_4}}</td>
+                  <td width="50" align="right"  style="border-right-width:3px;">{{=record.a_4}}</td>
+                  <td width="50" align="right"  >{{=record.t_5}}</td>
+                  <td width="50" align="right"  style="border-right-width:3px;">{{=record.a_5}}</td>
+                  <td width="50" align="right"  >{{=record.t_6}}</td>
+                  <td width="50" align="right"  style="border-right-width:3px;">{{=record.a_6}}</td>
+                  <td width="50" align="right"  >{{=record.t_7}}</td>
+                  <td width="50" align="right"  style="border-right-width:3px;">{{=record.a_7}}</td>
+                  <td width="50" align="right"  >{{=record.t_8}}</td>
+                  <td width="50" align="right"  style="border-right-width:3px;">{{=record.a_8}}</td>
+                  <td width="50" align="right"  >{{=record.t_9}}</td>
+                  <td width="50" align="right"  style="border-right-width:3px;">{{=record.a_9}}</td>
+                  <td width="50" align="right"  >{{=record.t_10}}</td>
+                  <td width="50" align="right"  style="border-right-width:3px;">{{=record.a_10}}</td>
+                  <td width="50" align="right"  >{{=record.t_11}}</td>
+                  <td width="50" align="right"  style="border-right-width:3px;">{{=record.a_11}}</td>
+                  <td width="50" align="right"  >{{=record.t_12}}</td>
+                  <td width="50" align="right"  style="border-right-width:3px;">{{=record.a_12}}</td>
+                  <td width="50" align="right"  >{{=record.t_13}}</td>
+                  <td width="50" align="right"  style="border-right-width:3px;">{{=record.a_13}}</td>
+                  <td width="50" align="right"  >{{=record.t_14}}</td>
+                  <td width="50" align="right"  style="border-right-width:3px;">{{=record.a_14}}</td>
+                  <td width="50" align="right"  >{{=record.t_15}}</td>
+                  <td width="50" align="right"  style="border-right-width:3px;">{{=record.a_15}}</td>
+                  <td width="50" align="right"  >{{=record.t_16}}</td>
+                  <td width="50" align="right"  style="border-right-width:3px;">{{=record.a_16}}</td>
+                  <td width="50" align="right"  >{{=record.t_17}}</td>
+                  <td width="50" align="right"  style="border-right-width:3px;">{{=record.a_17}}</td>
+                  <td width="50" align="right"  >{{=record.t_18}}</td>
+                  <td width="50" align="right"  style="border-right-width:3px;">{{=record.a_18}}</td>
+                  <td width="50" align="right"  >{{=record.t_19}}</td>
+                  <td width="50" align="right"  style="border-right-width:3px;">{{=record.a_19}}</td>
+                  <td width="50" align="right"  >{{=record.t_20}}</td>
+                  <td width="50" align="right"  style="border-right-width:3px;">{{=record.a_20}}</td>
+                  <td width="50" align="right"  >{{=record.t_21}}</td>
+                  <td width="50" align="right"  style="border-right-width:3px;">{{=record.a_21}}</td>
+                  <td width="50" align="right"  >{{=record.t_22}}</td>
+                  <td width="50" align="right"  style="border-right-width:3px;">{{=record.a_22}}</td>
+                  <td width="50" align="right"  >{{=record.t_23}}</td>
+                  <td width="50" align="right"  style="border-right-width:3px;">{{=record.a_23}}</td>
+                  <td width="50" align="right"  >{{=record.t_24}}</td>
+                  <td width="50" align="right"  style="border-right-width:3px;">{{=record.a_24}}</td>
+                  <td width="50" align="right"  >{{=record.t_25}}</td>
+                  <td width="50" align="right"  style="border-right-width:3px;">{{=record.a_25}}</td>
+                  <td width="50" align="right"  >{{=record.t_26}}</td>
+                  <td width="50" align="right"  style="border-right-width:3px;">{{=record.a_26}}</td>
+                  <td width="50" align="right"  >{{=record.t_27}}</td>
+                  <td width="50" align="right"  style="border-right-width:3px;">{{=record.a_27}}</td>
+                  <td width="50" align="right"  >{{=record.t_28}}</td>
+                  <td width="50" align="right"  style="border-right-width:3px;">{{=record.a_28}}</td>
+                  <td width="50" align="right"  >{{=record.t_29}}</td>
+                  <td width="50" align="right"  style="border-right-width:3px;">{{=record.a_29}}</td>
+                  <td width="50" align="right"  >{{=record.t_30}}</td>
+                  <td width="50" align="right"  style="border-right-width:3px;">{{=record.a_30}}</td>
+                  <td width="50" align="right"  >{{=record.t_31}}</td>
+                  <td width="50" align="right"  style="border-right-width:3px;">{{=record.a_31}}</td>
+                                    
+                </tr>
+              
+			   
+			   {{pass}}
+		    </table>
+	    <p>&nbsp;</p>
+        </td></tr>
+    </table>
+      
+{{if page:}}
+<a href="{{=URL(args=[page-page])}}">first</a> |
+<a href="{{=URL(args=[page-1])}}">previous</a> |
+{{pass}}
+
+{{if len(records)>items_per_page:}}
+<a href="{{=URL(args=[page+1])}}">next</a>
+{{pass}}	</td>
+  </tr>
+</table>
+

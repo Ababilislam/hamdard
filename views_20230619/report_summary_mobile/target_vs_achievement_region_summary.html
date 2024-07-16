@@ -1,0 +1,64 @@
+{{extend 'layout_report_mobile.html'}}
+<html>
+    <head>
+    </head>
+    <body style="font-size:60%;"> 
+    <table width="500" style="margin-bottom:10px; font-weight:bold;" >    	    
+        <tr style="background-color:#F0FAFF">
+            <td width="100" >Month</td>
+            <td width="2" >:</td>
+            <td >{{=datetime.datetime.strptime(str(current_date)[0:7] + '-01', '%Y-%m-%d').strftime('%Y-%b')}}</td>
+        </tr>        
+    </table>
+        			
+    {{if len(targetAchRows)==0:}}
+    	Data not available.
+    {{else:}}
+        <table width="500" border="1" cellpadding="1" cellspacing="1" class="sample_border" >
+            <tr align="left" class="blackCatHead" height="20px" ;  style="font-size:12px; background-color:#E9E9E9;">
+            	<!--<td width="100" align="left"  >Region</td>-->      
+                <td width="300" align="left"  >Item </td>
+                <td width="100"   style=" text-align:center;" >Target (Qty)</td>
+                <td width="100"   style=" text-align:center;" >Ach.(In qty)</td> 
+                <td width="100"   style=" text-align:center;" >Ach. (%)</td> 
+                <td width="10"   style=" text-align:center;" ></td>      
+            </tr>
+            {{totalTgt=0}}
+            {{totalAch=0}}
+            {{AchPer=0}}
+            {{i=0}}
+            {{for row in targetAchRows:}}
+             {{totalTgt+=row[db.target_vs_achievement_route_item.target_qty.sum()]}}
+             {{totalAch+=row[db.target_vs_achievement_route_item.achievement_qty.sum()]}}
+             
+             {{if row[db.target_vs_achievement_route_item.target_qty.sum()]>0:}}
+             {{AchPer=(float(row[db.target_vs_achievement_route_item.achievement_qty.sum()])/float(row[db.target_vs_achievement_route_item.target_qty.sum()])*100)}}
+             {{pass}}
+             {{i+=1}}
+             <form action="{{=URL(c='report_summary_mobile',f='target_vs_achievement_region_summary',vars=dict(item_id=row[db.target_vs_achievement_route_item.item_id]))}}" method="post">
+             {{if i%2==0:}}
+             <tr  align="left" class="blackCat"  style="vertical-align:middle; font-size:11px; background-color:#F0FAFF">
+             {{else:}}
+            <tr  align="left" class="blackCat"  style="vertical-align:middle; font-size:11px;">
+            {{pass}}
+            	<!--<td style=" text-align:left;">{{#=row[db.target_vs_achievement_route_item.region_id]}}</td>-->
+                <td style=" text-align:left;">{{=row[db.target_vs_achievement_route_item.item_name]}}|{{=row[db.target_vs_achievement_route_item.item_id]}}</td> 
+                <td style=" text-align:center;">{{=row[db.target_vs_achievement_route_item.target_qty.sum()]}}</td>
+                <td style=" text-align:center;">{{=row[db.target_vs_achievement_route_item.achievement_qty.sum()]}}</td>
+                <td style=" text-align:center;">{{=round(AchPer,2)}}%</td>
+                <td style=" text-align:center;"><input type="submit" name="btn_submit" value=" >> "/></td>             
+            </tr>
+            </form>
+            {{pass}}
+            <!--<tr  align="left" class="blackCat"  style="vertical-align:middle; font-size:11px; background-color:#F4F4F4;">
+                <td colspan="2"  style=" text-align:right;">Total=</td> 
+                <td style=" text-align:center;">{{=totalTgt}}</td>
+                <td style=" text-align:center;">{{=totalAch}}</td> 
+                <td style=" text-align:right;"></td>            
+            </tr>-->
+        </table>
+     {{pass}}
+   
+    </body>
+</html>
+

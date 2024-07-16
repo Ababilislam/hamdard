@@ -1,0 +1,56 @@
+{{extend 'layout_sample_report.html'}}
+
+<html>
+<head>
+</head>
+<body>
+<table width="900px" style="border:none; text-align:center; font-weight:bold;" >
+        <tr >
+            <td width="100" >&nbsp;</td>
+            <td align="center" ><span style="border-bottom:1px solid #333;">Orphan Medicine List</span></td>
+            <td width="100" ><img  height="30px" src="{{=URL('static','images/comp_logo1.png')}}"/></td>
+        </tr>
+    </table>
+
+    <table width="900" style="border:none;" >
+        <tr >
+            <td width="100" >Date Range</td>
+            <td width="2" >:</td>
+            <td width="200" >{{=date_from}}&nbsp;&nbsp; To &nbsp;&nbsp; {{=date_to}}</td>    
+            <td width="100" style="text-align:right;" ></td>
+            <td width="2" ></td>
+            <td></td>
+        </tr>		  
+    </table>
+	
+    <table width="500px" border="1" cellpadding="1" cellspacing="1" class="sample_border" >
+        <tr align="left" style="background-color:#EBEBEB; font-size:12px; font-weight:bold;" >		    
+            <td style="width:50px;">SL</td>
+            <td style="width:100px;">Name</td>
+            <td style="width:100px;">Submitted by</td>
+            <td style="width:250px;">Submitted Name</td>
+      </tr>
+        
+        {{sl=0}}
+        {{for i,record in enumerate(records):}}
+        {{sl+=1}}
+        <tr  align="left" style="font-size:11px;">
+            <td >{{=sl}}</td>
+            <td >{{=record.medicine_name}}</td>
+            <td >{{=record.submit_by_id}}</td>
+            <td >{{=record.submit_by_name}}</td>
+        </tr>
+        {{pass}}        
+        <tr  align="left" style=" background-color:#F4F4F4; font-size:11px; font-weight:bold;">
+            <td style="text-align:center"></td>                                 
+            <td style="text-align:right;"></td>
+            <td style="text-align:right;"></td>
+            <td style="text-align:right;"></td>
+        </tr>
+        
+</table>		 
+
+</body>
+
+</html>
+

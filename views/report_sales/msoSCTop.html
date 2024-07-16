@@ -1,0 +1,178 @@
+{{extend 'layout_sales_report.html'}}
+
+<html>
+
+<head>
+
+<script type="text/javascript">
+
+function print_page()
+
+  {
+
+    window.print()
+
+  }
+
+</script>
+
+
+
+</head>
+
+<body>
+
+
+
+
+
+<table width="1724" cellspacing="1" cellpadding="1">
+
+	<tr>
+
+		<td width="1718"><table width="546" style="border:none;" >
+		  <tr >
+		    <td >Date Range</td>
+		    <td >&nbsp;</td>
+		    <td >{{=date_from}} - {{=date_to}}</td>
+	      </tr>
+		  <tr >
+		    <td width="90" > Depot/Branch</td>
+		    <td width="10" >:</td>
+		    <td width="424" ><span >{{=depot_id}}|{{=depot_name}}</span></td>
+	      </tr>
+		  <tr >
+		    <td >Store</td>
+		    <td >:</td>
+		    <td ><span >{{=store_id}}|{{=store_name}}</span></td>
+	      </tr>
+		  </table>
+          
+      <table width="900px" style="border:none; text-align:center; font-weight:bold;" >
+            <tr >
+              <td width="100" >&nbsp;</td>
+              <td align="center" ><span style="border-bottom:1px solid #333;">Item Wise Sales Statement Detail </span></td>
+              <td width="100" ><img  height="30px" src="{{=URL('static','images/comp_logo1.png')}}"/></td>
+            </tr>
+          </table>
+          <table width="900" border="1" cellpadding="1" cellspacing="1" class="sample_border" >
+	        <tr align="left" class="blackCatHead" height="20px" ;  style="font-size:12px">
+	          <td width="80"  align="left"   >Item</td>
+	          <td   align="left"  >ItemName</td>
+	          <td width="50"  align="left"  >TP</td>
+	          <td width="50"  align="left"  >Stock</td>
+	          <td width="50" align="right"  >RSM</td>
+	          <td width="50" align="right"  >FM</td>
+	          <td width="50" align="right"  >TR</td>
+             
+	          <td width="50" align="right"  >A</td>
+	          <td width="50" align="right"  >B</td>
+	          <td width="50" align="right"  >C</td>
+	          <td width="50" align="right"  >Bonus</td>
+           
+            
+             </tr>
+              {{pastItem=''}}
+              {{pastRsm=''}}
+              {{pastFm=''}}
+              {{pastTr=''}}
+		      {{for records in records:}}
+              {{item_id=records[db.sm_item.item_id]}}
+              
+               {{ if [s for s in itemList if item_id in s]:
+                  index_element = itemList.index(item_id)           
+                  itemCount= itemList.count(item_id)	
+                   c=index_element
+                  pass  
+                }}
+              {{while c < index_element+itemCount:}}	
+		      <tr align="left" class="blackCatHead" height="20px" ;  style="font-size:12px">
+	          <td   align="left"   >
+              {{if pastItem!=records[db.sm_item.item_id]:}}
+              {{=records[db.sm_item.item_id]}}
+              {{pass}}
+              </td>
+	          <td  align="left"  >
+              {{if pastItem!=records[db.sm_item.item_id]:}}
+              {{=records[db.sm_item.name]}}
+              {{pass}}
+              </td>
+	          <td  align="left"  >
+              {{if pastItem!=records[db.sm_item.item_id]:}}
+              {{=records[db.sm_item.price]}}
+              {{pass}}
+              </td>
+	          <td   align="left"  >
+              {{if pastItem!=records[db.sm_item.item_id]:}}
+              {{=records[db.sm_depot_stock_balance.quantity.sum()]}}
+              {{pass}}
+              </td>
+	          <td align="right"  >
+              {{if pastRsm!=invList[c]['rsm']:}}
+              {{=invList[c]['rsm']}}
+              {{pass}}
+              </td>
+	          <td  align="right"  >
+              {{if pastFm!=invList[c]['fm']:}}
+              {{=invList[c]['fm']}}
+              {{pass}}
+              </td>
+	          <td  align="right"  >
+              {{if pastTr!=invList[c]['tr']:}}
+              {{=invList[c]['tr']}}
+               {{pass}}
+              </td>
+             
+	          <td  align="right"  >
+              {{if invList[c]['category_id']=='A':}}
+              {{=invList[c]['itemQty']}}
+              {{pass}}
+              </td>
+	          <td  align="right"  >
+              {{if invList[c]['category_id']=='B':}}
+              {{=invList[c]['itemQty']}}
+              {{pass}}</td>
+	          <td  align="right"  >
+              {{if invList[c]['category_id']=='C':}}
+              {{=invList[c]['itemQty']}}
+              {{pass}}</td>
+	          <td   align="right"  >
+              {{if invList[c]['category_id']=='BONUS':}}
+              {{=invList[c]['itemQty']}}
+              {{pass}}</td>
+           
+            
+             </tr>
+             {{pastItem=records[db.sm_item.item_id]}}
+             {{pastRsm=invList[c]['rsm']}}
+             {{pastFm=invList[c]['fm']}}
+             {{pastTr=invList[c]['tr']}}
+             {{c=c+1}}
+             {{pass}}
+              {{pass}}
+		      
+		     
+		     
+          </table>
+
+</br></br>
+
+
+
+<table width="900px" >
+  <tr>
+    <td width="411" align="center">__________________</td>
+    <td width="225" align="center">&nbsp;</td>
+    <td width="248" align="left">________________________________</td>
+  </tr>
+  <tr>
+    <td width="411" align="center"><strong>Printed By</strong></td>
+    <td width="225" align="right">for</td>
+    <td width="248" align="left"><strong>{{=session.cName}}</strong></td>
+  </tr>
+</table>
+<p>&nbsp;</p>
+</body>
+
+</html>
+

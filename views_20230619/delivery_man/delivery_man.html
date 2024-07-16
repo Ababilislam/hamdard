@@ -1,0 +1,559 @@
+{{extend 'layout.html'}}
+
+
+
+  <link rel="stylesheet" href="{{=URL('static', 'js_and_css/ui.theme.css')}}" type="text/css" />
+
+  <link rel="stylesheet" href="{{=URL('static', 'js_and_css/jquery-ui.css')}}" type="text/css" />
+
+  <link rel="stylesheet" href="{{=URL('static', 'js_and_css/style.css')}}" type="text/css" />
+
+  <script src="{{=URL('static','js_and_css/jquery-1.8.2.js')}}"></script>
+
+  <script src="{{=URL('static','js_and_css/jquery-ui.js')}}"></script>
+
+  
+
+  <style type="text/css">
+
+	 input[type=text], input[type=password]{
+
+		margin: 2px 0px 2px 0px;
+
+	}
+
+	div.error {
+
+		width: auto;
+
+	}
+
+	
+
+	#sm_delivery_man_d_man_id{
+
+		width: 100px;
+
+	}
+
+	#sm_delivery_man_name{
+
+		width: 250px;
+
+	}
+
+	#sm_delivery_man_mobile_no{
+
+		width: 140px;
+
+	}
+	
+	#sm_delivery_man_status{
+
+		width: 100px;
+
+	}
+	
+.page_color,body{
+
+	font-family:Arial, Helvetica, sans-serif;
+
+	font-size:13px;	
+
+	}
+
+ </style>
+
+ 
+
+ <script>
+
+var base_url=location.protocol + "//" + location.hostname + (location.port && ":" + location.port) + "/{{=request.application}}/";
+
+
+
+$(function() {
+
+	 	var valueListStr="";
+
+		
+
+		$('#search_type').blur(function(){
+
+			if ($('#search_type').val()=='DManID'){
+
+				//alert(base_url+'default/get_route_list');
+
+				$.ajax({
+
+					  url: base_url+'default/get_delivery_man_list',
+
+					  success: function(resStr) {
+
+						  valueListStr=resStr
+
+					  }
+
+					});
+
+			}else if ($('#search_type').val()=='Status'){
+
+				valueListStr='ACTIVE,INACTIVE'
+
+				
+
+			}else if ($('#search_type').val()=='Depot'){
+
+				$.ajax({
+
+					  url: base_url+'default/get_depot_list',
+
+					  success: function(resStr) {
+
+						  valueListStr=resStr
+
+					  }
+
+					});
+
+			
+
+			};
+
+			
+
+	 	});
+
+	 
+
+		$('#search_value').keyup(function(){
+
+			//-------------------------
+
+			var valueList = valueListStr.split(',');				
+
+			var searchValue=$("#search_value").val();
+
+			
+
+			//---------------- auto complete combo list
+
+			var valueList_new=new Array();
+
+			lc=0;
+
+			i =0;
+
+			var valueStr="";				
+
+			while (i < valueList.length)
+
+			{
+
+				valueStr=valueList[i];
+
+				i=i+1;					
+
+				var res=valueStr.toUpperCase().match(searchValue.toUpperCase());
+
+				if (res!=null){
+
+					valueList_new[lc]=valueStr;
+
+					lc=lc+1;
+
+					if (lc==30){
+
+						break;
+
+					};
+
+				}else{
+
+					continue;
+
+				}					
+
+			};
+
+			//alert (ref_list_new);
+
+			
+
+			//-------------- auto complete source
+
+			$( "input#search_value" ).autocomplete({
+
+				source: valueList_new
+
+			});
+
+		
+
+	  }); 
+
+	  
+
+	   //==============	 
+
+	   var valueListStr2="";		
+
+		$('#depot_id').keyup(function(){
+
+			$.ajax({
+
+				  url: base_url+'default/get_depot_list',
+
+				  success: function(resStr) {
+
+					  valueListStr2=resStr
+
+				  }
+
+				});
+
+			
+
+			//-------------------------
+
+			var valueList = valueListStr2.split(',');				
+
+			var searchValue=$("#depot_id").val();
+
+			
+
+			//---------------- auto complete combo list
+
+			var valueList_new=new Array();
+
+			lc=0;
+
+			i =0;
+
+			var valueStr="";				
+
+			while (i < valueList.length)
+
+			{
+
+				valueStr=valueList[i];
+
+				i=i+1;					
+
+				var res=valueStr.toUpperCase().match(searchValue.toUpperCase());
+
+				if (res!=null){
+
+					valueList_new[lc]=valueStr;
+
+					lc=lc+1;
+
+					if (lc==30){
+
+						break;
+
+					};
+
+				}else{
+
+					continue;
+
+				}					
+
+			};
+
+			//alert (ref_list_new);
+
+			
+
+			//-------------- auto complete source
+
+			$( "input#depot_id" ).autocomplete({
+
+				source: valueList_new
+
+			});
+
+		
+
+	  }); 
+
+	   //==============	  
+
+}); 
+
+
+
+</script>
+
+
+
+<body >   
+
+<table width="100%"  border="0" cellspacing="0" cellpadding="0" style="background-color:#FFFFFF;" >
+
+  <tr height="30px" >
+
+    <td width="500"><span class="blackCatTitle">Delivery Man</span></td>
+
+    
+
+	<td width="415" align="right">&nbsp;</td>
+
+	
+
+    <td>&nbsp;</td>
+
+  </tr>
+
+  <tr  height="1px" style="background-color:#CCCCCC;">
+
+	    <td colspan="3" ></td>
+
+  </tr>
+
+</table>
+
+
+
+<table width="100%" height="500px"  border="0" cellspacing="0" cellpadding="0" class="page_color" id="table_big"  >
+
+  <tr height="100%"  style="vertical-align:top;">
+
+    <td width="10px">&nbsp;</td>
+
+    <td>
+
+	<table width="100%"  border="0" cellpadding="0" cellspacing="0"  >
+
+      <tr>
+
+        <td>&nbsp;</td>
+
+      </tr>
+
+      <tr>
+
+        <td>
+
+		
+
+		<table width="900" border="1"  class="sample_border" >
+
+          <form id="form1" name="form1" method="post" action="{{=URL(c='delivery_man',f='delivery_man')}}">
+
+            <tr align="left" class="blackCatHead"  height="20px" ;"vertical-align:middle">
+
+              <td width="100" height="28" >                
+
+                <select name="search_type" id="search_type" style="width:180px" >
+
+                  	<option selected="selected">Select a Type</option>
+
+                	{{if session.search_type_dman=='DManID':}}<option value="DManID" selected="selected">Delivery Man ID/Name</option>{{else:}}<option value="DManID" >Delivery Man ID/Name</option>{{pass}}
+
+                    {{if session.search_type_dman=='Status':}}<option value="Status" selected="selected">Status</option>{{else:}}<option value="Status" >Status</option>{{pass}}
+
+					
+
+                    {{if session.user_type!='Depot':}}
+
+                    	{{if session.search_type_dman=='Depot':}}<option value="Depot" selected="selected">Branch</option>{{else:}}<option value="Depot" >Branch</option>{{pass}}
+
+                    {{pass}}
+
+                    
+
+				</select>
+
+              </td>
+
+              <td width="120" >
+
+              {{if session.search_value_dman=='' or session.search_value_dman==None:}}
+
+              	<input  name="search_value" type="text" id="search_value" size="25" value="" placeholder="Select a value" autocomplete="off" style="width:300px"/>
+
+              {{else:}}
+
+              	<input  name="search_value" type="text" id="search_value" size="25" value="{{=session.search_value_dman}}" placeholder="Select a value" autocomplete="off" style="width:300px"/>
+
+              {{pass}}
+
+              
+
+              </td>
+
+              <td align="left"  ><input type="submit" name="btn_filter" id="btn_filter" value="Filter"   class="button_update"/>
+
+                &nbsp;
+
+                <input type="submit" name="btn_rep_all" id="btn_rep_all" value="All"   class="button_update"/>
+
+                &nbsp;&nbsp;</td>
+
+              <td width="200" align="right"  >
+
+              <a href="{{=URL(c='delivery_man',f='download_delivery_man')}}">
+
+                <input type="button" name="Input2" id="Input2" value="Download"   class="button_update"/>
+
+              </a>
+
+			  {{if access_permission==True:}} 
+
+			  <a href="{{=URL(c='delivery_man',f='delivery_man_batch_upload')}}">
+
+            <input type="button" name="Input" id="Input" value="Batch Upload"   class="button_update"/>
+
+              </a>
+
+		  {{pass}}
+
+          </td>
+
+              </tr>
+
+		  </form>
+
+        </table>
+
+			<strong>Total:</strong> {{=totalCount}}
+<table width="900" border="1" cellpadding="1" cellspacing="1" class="sample_border" >
+
+              <tr align="left" class="blackCatHead"  height="20px" ;"vertical-align:middle">
+
+                 <td width="100" >Delivery Man ID</td>
+
+                 <td >Name</td>
+
+                 <td width="150" >Mobile</td>
+
+                 <td width="60" >Password</td>
+
+                 <td width="100" >Status</td>
+
+                 <td width="80" >Branch</td>
+
+                 <td width="30" align="right" ></td>
+
+              </tr>
+
+			   {{if access_permission==True:}} 
+
+                    {{=form.custom.begin}}
+
+                  <tr  align="left" class="blackCat"  style="vertical-align:middle">
+
+                    <td width="100" >{{=form.custom.widget.d_man_id}}</td>
+
+                    <td >{{=form.custom.widget.name}}</td>
+
+                    <td width="150" >{{=form.custom.widget.mobile_no}}</td>
+
+                    <td width="60" >&nbsp;</td>
+
+                    <td width="100" >{{=form.custom.widget.status}}</td>
+
+                    <td width="80"  >
+
+                    {{if session.user_type=='Depot':}}
+
+                      <input  name="depot_id" type="text" id="depot_id" style="width:150px" value="{{=str(session.depot_id)+'|'+str(session.user_depot_name)}}" readonly/>
+
+                    {{else:}}
+
+                      <input  name="depot_id" type="text" id="depot_id" style="width:150px" value="" placeholder="Select Branch" autocomplete="off"/>
+
+                    {{pass}}
+
+                    
+
+                    </td>
+
+                <td width="30" align="right"  >{{=form.custom.submit}}</td>
+
+              </tr>
+
+              {{=form.custom.end}}
+
+              {{pass}}
+
+			   
+
+			   		  
+
+			   {{for i,record in enumerate(records):}}
+
+                   {{ if i==items_per_page: break}}
+
+                  
+
+                    <tr  align="left" class="blackCat"  style="vertical-align:middle"> 
+
+                      <td width="100" >{{=record.d_man_id}}</td>
+
+                      <td >{{=record.name}}</td>
+
+                      <td width="150" >{{=record.mobile_no}}</td>
+
+                      <td width="60" >*****</td>
+
+                      <td width="100" >{{=record.status}}</td>
+
+                      <td width="80"  >{{=record.depot_id}}</td>
+
+                      <form id="form1" name="form1" method="post" action="{{=URL(c='delivery_man',f='delivery_man_edit',args=[page,record.id])}}">
+
+                      <td width="30" align="right">
+
+                      {{if access_permission==True:}}
+
+                      	<input type="submit" name="btn_go" id="btn_go" value="&gt;&gt;" class="button_update"/>
+
+                      {{pass}}
+
+                      </td>
+
+                      </form>
+
+                    </tr>
+
+                  
+
+			   {{pass}}
+
+		    </table>
+
+          </td>
+
+         </tr>
+
+    </table>
+
+
+
+{{if page:}}
+
+<a href="{{=URL(args=[page-page])}}">first</a> |   
+
+<a href="{{=URL(args=[page-1])}}">previous</a> |
+
+{{pass}}
+
+
+
+{{if len(records)>items_per_page:}}
+
+<a href="{{=URL(args=[page+1])}}">next</a>
+
+{{pass}}	</td>
+
+  </tr>
+
+</table>
+
+
+
+</body>
+

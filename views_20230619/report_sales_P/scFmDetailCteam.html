@@ -1,0 +1,199 @@
+{{extend 'layout_sales_report.html'}}
+
+<html>
+
+<head>
+
+<script type="text/javascript">
+
+function print_page()
+
+  {
+
+    window.print()
+
+  }
+
+</script>
+
+
+
+</head>
+
+<body>
+
+
+
+
+
+<table width="1724" cellspacing="1" cellpadding="1">
+
+	<tr>
+
+		<td width="1718"><table width="1443" style="border:none;" >
+		  <tr >
+		    <td >Date Range</td>
+		    <td >:</td>
+		    <td >{{=date_from}} - {{=date_to}}</td>
+		    <td >RSM</td>
+		    <td >:</td>
+		    <td >{{=rsm_id}}|{{=rsm_name}}</td>
+	      </tr>
+		  <tr >
+		    <td width="90" > Depot/Branch</td>
+		    <td width="10" >:</td>
+		    <td width="426" ><span >{{=depot_id}}|{{=depot_name}}</span></td>
+		    <td width="60" >FM</td>
+		    <td width="10" >:</td>
+		    <td width="819" >{{=fm_id}}|{{=fm_name}}</td>
+	      </tr>
+		  <tr >
+		    <td >Store</td>
+		    <td >:</td>
+		    <td ><span >{{=store_id}}|{{=store_name}}</span></td>
+		    <td >TR</td>
+		    <td >:</td>
+		    <td >{{=tr_id}}|{{=tr_name}}</td>
+	      </tr>
+		  <tr >
+		    <td >&nbsp;</td>
+		    <td >&nbsp;</td>
+		    <td >&nbsp;</td>
+		    <td >Item</td>
+		    <td >:</td>
+		    <td >{{=product_name}}|{{=product_id}}</td>
+	      </tr>
+		  </table>
+		  <table width="900px" style="border:none; text-align:center; font-weight:bold;" >
+            <tr >
+              <td width="100" >&nbsp;</td>
+              <td align="center" ><span style="border-bottom:1px solid #333;">Sales Comparison FM Detail</span></td>
+              <td width="100" ><img  height="30px" src="{{=URL('static','images/comp_logo1.png')}}"/></td>
+            </tr>
+          </table>
+          <table width="900"  class="sample_border"  >
+          
+          <!--<table width="900" border="1" cellpadding="1" cellspacing="1" class="sample_border" >-->
+	        <tr align="left" class="blackCatHead" height="20px" ;  style="font-size:12px; background-color:#CCC">
+	          <td width="80"  align="left"   >Item</td>
+	          <td width="200"  align="left"   >ItemName</td>
+	          <td width="80"  align="right"   >TP</td>
+	          <td width="100"  align="center"   >Stock</td>
+	          <td width="100"  align="left"   >RSM</td>
+	          <td width="100"  align="left"   >FM</td>
+	          <td width="50"  align="center"  >A</td>
+	          <td width="50"  align="center"  >B</td>
+	          <td width="50"  align="center"  >C</td>
+	          <td width="50"  align="right"  >TotalSalesTP</td>
+             </tr>
+	       
+              
+              {{
+              ATotal=0
+              BTotal=0
+              CTotal=0
+              Total=0
+              }}
+              
+		      {{for i in range(len(records)):
+        		record=records[i]}}
+              {{item=record['item_id']}}
+              
+               {{ if [s for s in itemList if item in s]:
+                  index_element = itemList.index(item)           
+                  stockList= prodList[index_element]
+                  stock=stockList['stockBalance']
+                  pass  
+                }}
+                {{
+                qtyA=0
+                qtyB=0
+                qtyC=0
+                
+                
+                }}
+           
+            	
+		      <tr align="left" class="blackCatHead" height="20px" ;  style="font-size:12px">
+		        <td   align="left"   >{{=record['item_id']}}</td>
+		        <td   align="left"   >{{=record['item_name']}}</td>
+		        <td   align="right"   >{{=record['actual_tp']}}</td>
+		        <td   align="center"   >{{=stock}}</td>
+		        <td   align="left"   >{{=record['special_rsm_code']}}</td>
+		        <td   align="left"   >{{=record['special_fm_code']}}</td>
+	          <td   align="center"  >
+              {{if record['category_id']=='A':
+              qtyA=record['qty']
+              ATotal=ATotal+(float(qtyA)*float(record['actual_tp']))
+              pass}}
+              {{=qtyA}}
+              </td>
+	          <td align="center"  >
+              {{if record['category_id']=='B':
+              qtyB=record['qty']
+              pass
+              BTotal=BTotal+(float(qtyB)*float(record['actual_tp']))
+              }}
+              {{=qtyB}}
+              </td>
+	          <td  align="center"  >{{if record['category_id']=='C':
+              qtyC=record['qty']
+              pass
+              CTotal=CTotal+(float(qtyC)*float(record['actual_tp']))
+              }}
+              {{=qtyC}} </td>
+	 <td  align="right"  >{{SaleT=int(qtyA)+int(qtyB)+int(qtyC)}}{{=record['actual_tp']*SaleT}}</td>
+	          
+           
+            
+             </tr>
+             
+             
+		      
+		     {{pass}}
+		     <tr align="left" class="blackCatHead" height="20px" ;  style="font-size:12px">
+		        <td   align="left"   >Summary</td>
+		        <td   align="left"   ></td>
+		        <td   align="left"   ></td>
+		        <td colspan="3"    align="right"  style=" color:#903">&nbsp;</td>
+	           <td   align="center"  >&nbsp;</td>
+	          <td align="center"  >&nbsp;</td>
+	          <td  align="center"  >&nbsp;</td>
+	          <td  align="center"  >&nbsp;</td>
+	          
+           
+            
+             </tr>
+		     <tr align="left" class="blackCatHead" height="20px"  ;  style="font-size:12px; color:color:#903">
+		       <td   align="left"   >&nbsp;</td>
+		       <td   align="left"   ></td>
+		       <td   align="left"   ></td>
+		       <td colspan="3"    align="right"  style=" ">SaleTP</td>
+		       <td   align="right"  style=" color:#903">{{='{:20,.2f}'.format(ATotal)}} </td>
+		       <td align="right"  style=" color:#903">{{='{:20,.2f}'.format(BTotal)}} </td>
+		       <td  align="right"  style=" color:#903">{{='{:20,.2f}'.format(CTotal)}} </td>
+		       <td  align="right" style=" color:#903">{{='{:20,.2f}'.format(ATotal+BTotal+CTotal)}}
+	        </tr>
+          </table>
+
+</br></br>
+
+
+
+<table width="900px" >
+  <tr>
+    <td width="411" align="center">__________________</td>
+    <td width="225" align="center">&nbsp;</td>
+    <td width="248" align="left">________________________________</td>
+  </tr>
+  <tr>
+    <td width="411" align="center"><strong>Printed By</strong></td>
+    <td width="225" align="right">for</td>
+    <td width="248" align="left"><strong>{{=session.cName}}</strong></td>
+  </tr>
+</table>
+<p>&nbsp;</p>
+</body>
+
+</html>
+

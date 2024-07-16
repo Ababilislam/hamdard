@@ -1,0 +1,478 @@
+{{extend 'layout.html'}}
+
+
+<link rel="stylesheet" href="{{=URL('static', 'js_and_css/ui.theme.css')}}" type="text/css" />
+<link rel="stylesheet" href="{{=URL('static', 'js_and_css/jquery-ui.css')}}" type="text/css" />
+<link rel="stylesheet" href="{{=URL('static', 'js_and_css/style.css')}}" type="text/css" />
+<script src="{{=URL('static','js_and_css/jquery-1.8.2.js')}}"></script>
+<script src="{{=URL('static','js_and_css/jquery-ui.js')}}"></script>
+
+<style>
+    body {
+        font-family: "Lato", sans-serif;
+    }
+
+    #main {
+        transition: margin-left .5s;
+        padding: 16px;
+    }
+
+    @media screen and (max-height: 450px) {
+        .sidenav {padding-top: 15px;}
+        .sidenav a {font-size: 18px;}
+    }
+</style>
+ 
+<style type="text/css">
+    input[type=text], input[type=password], select {
+        margin: 2px 0px 2px 0px;
+        width:250px;
+    }
+
+    select{ 
+        width:265px; margin:2px 0px 2px 0px;
+    }
+
+    textarea{
+        width:250px;
+        height:50px;
+        margin:2px 0px 2px 0px;
+    }
+
+    div.error {
+        margin-left:0px;
+        width:265px;
+    }
+    .page_color,body{
+        font-family:Arial, Helvetica, sans-serif;
+        font-size:13px;
+    }
+
+    #uni_middle_str4{
+        width:100px;
+    }
+</style>
+
+<script>
+    var base_url=location.protocol + "//" + location.hostname + (location.port && ":" + location.port) + "/{{=request.application}}/";
+  
+	$(function () {
+		//----------------------------------- BRANCH AUTOCOMPLETE
+
+		// alert(base_url+'branch_costing/get_branch')
+		$.ajax({
+			url: base_url + 'branch_costing/get_branch',
+			success: function (retStr) {
+				branch_dataStr = retStr
+				// alert (branch_dataStr)
+			}
+		});
+
+		$('#branch_value').keyup(function () {
+			//-------------------------
+			var ref_list = branch_dataStr.split(',');
+			var ref_name = $("#branch_value").val();
+
+			//---------------- auto complete combo list
+			var ref_list_new = new Array();
+			lc = 0;
+			i = 0;
+			var refStr = "";
+			while (i < ref_list.length) {
+				refStr = ref_list[i];
+				i = i + 1;
+				var res = refStr.toUpperCase().match(ref_name.toUpperCase());
+				if (res != null) {
+					ref_list_new[lc] = refStr;
+					lc = lc + 1;
+					if (lc == 30) {
+						break;
+					};
+				} else {
+					continue;
+				}
+			};
+			//alert (ref_list_new);
+
+			//-------------- auto complete source
+			$("input#branch_value").autocomplete({
+				source: ref_list_new
+			});
+
+		});
+
+
+		//----------------------------------- CATEGORY AUTOCOMPLETE
+
+		// alert(base_url+'branch_costing/get_Categories')
+		$.ajax({
+			url: base_url + 'branch_costing/get_Categories',
+			success: function (retStr) {
+				category_dataStr = retStr
+				// alert (category_dataStr)
+			}
+		});
+
+		$('#category_value').keyup(function () {
+			//-------------------------
+			var ref_list = category_dataStr.split(',');
+			var ref_name = $("#category_value").val();
+
+			//---------------- auto complete combo list
+			var ref_list_new = new Array();
+			lc = 0;
+			i = 0;
+			var refStr = "";
+			while (i < ref_list.length) {
+				refStr = ref_list[i];
+				i = i + 1;
+				var res = refStr.toUpperCase().match(ref_name.toUpperCase());
+				if (res != null) {
+					ref_list_new[lc] = refStr;
+					lc = lc + 1;
+					if (lc == 30) {
+						break;
+					};
+				} else {
+					continue;
+				}
+			};
+			//alert (ref_list_new);
+
+			//-------------- auto complete source
+			$("input#category_value").autocomplete({
+				source: ref_list_new
+			});
+
+		});
+
+
+		//----------------------------------- SUB-CATEGORY AUTOCOMPLETE
+
+		// alert(base_url+'branch_costing/get_subCategories')
+		$.ajax({
+			url: base_url + 'branch_costing/get_subCategories',
+			success: function (retStr) {
+				sub_category_dataStr = retStr
+				// alert (sub_category_dataStr)
+			}
+		});
+
+		$('#sub_category_value').keyup(function () {
+			//-------------------------
+			var ref_list = sub_category_dataStr.split(',');
+			var ref_name = $("#sub_category_value").val();
+
+			//---------------- auto complete combo list
+			var ref_list_new = new Array();
+			lc = 0;
+			i = 0;
+			var refStr = "";
+			while (i < ref_list.length) {
+				refStr = ref_list[i];
+				i = i + 1;
+				var res = refStr.toUpperCase().match(ref_name.toUpperCase());
+				if (res != null) {
+					ref_list_new[lc] = refStr;
+					lc = lc + 1;
+					if (lc == 30) {
+						break;
+					};
+				} else {
+					continue;
+				}
+			};
+			//alert (ref_list_new);
+
+			//-------------- auto complete source
+			$("input#sub_category_value").autocomplete({
+				source: ref_list_new
+			});
+
+		});
+
+	});
+
+
+	function get_sub_cat() {
+		var category = $("#category_type").val();
+		// alert(base_url + 'branch_costing/get_sub_categories?category_id=' +category),
+		$.ajax({
+			url: base_url + 'branch_costing/get_sub_categories?category_id=' + category,
+			success: function (retStr) {
+				var sub_catStr = retStr;
+				$("#sub_category_type").empty();
+				var valueList = sub_catStr.split(',');
+				var sub_catId = '';
+				var sub_catName = '';
+				var show_subCat = '';
+				show_subCat += '';
+				var i = 0;
+				var combStr='<option value=""></option>';
+				while (i < valueList.length) {
+					sub_catId = valueList[i].split('|')[0];  
+					sub_catName = valueList[i].split('|')[1];             
+					combStr += '<option value="'+sub_catId+'">'+sub_catName+'</option>';
+					i = i + 1;
+				}
+				$("#sub_category_type").empty(); 
+				$("#sub_category_type").append(combStr);
+			}
+		});
+	}
+
+</script>  
+
+
+<!-- page heading  -->
+<table width="100%"  border="0" cellspacing="0" cellpadding="0" style="background-color:#FFFFFF;" >
+	<tr height="30px" >
+		<td width="40%" style="background-color:#FFFFFF;">
+			<span class="blackCatTitle">&nbsp;Branch Cost</span>
+		</td>
+		<td align="right" width="50%">&nbsp;&nbsp;</td>
+		{{if session.user_type == 'Admin':}}
+			<form action="{{=URL(c='branch_cost_category',f='cost_category')}}" method="post">
+				<td width="250" align="right"><input name="" type="submit" value="Cost Category" style="width: 120px;"/></td>
+			</form>
+		{{else:}}
+			<td align="right">&nbsp;</td>
+		{{pass}}
+		<td align="right">&nbsp;</td>
+	</tr>
+	<tr height="1px" style="background-color:#CCCCCC;">
+		<td colspan="4"></td>
+	</tr>
+</table>
+
+
+<table width="100%" height="500px" border="0" cellspacing="0" cellpadding="0" class="page_color">
+    <tr height="100%"  style="vertical-align:top;">
+        <td>
+            <table width="100%" border="0" cellpadding="0" cellspacing="0">
+				<tr>
+					<td width="10">&nbsp;</td>
+					<td valign="top">
+						<br/>
+						<table width="100%">
+							<tr>
+								<td width="">
+									<!-- new add -->
+									 {{if session.user_id == 'DEMO':}}
+										<table width="100%" align="left" height="100%" border="0" cellpadding="0" cellspacing="0" style="margin-left: auto; margin-right: auto;">
+											<tr>
+												<td height="80%" valign="middle">
+													<table width="35%" align="left" cellpadding="2" class="rounded_corner">
+														<form name="form1" id="form1" action="{{=URL(c='branch_costing',f='branch_costing',vars=dict(page=0))}}" method="post" style="padding: 0;">
+															<tr>
+																<td align="right" style="padding-top: 5px;">Ref. Number</td>
+																<td width="20%" style="padding-left: 15px;">
+																	<input type="text" name="ref_number" id="ref_number" size="10" style="width: 236px" placeholder=""/>
+																</td>
+															</tr>
+															<tr>
+																<td align="right" style="padding-top: 5px;">Cost Category</td>
+																<td width="20%" style="padding-left: 15px;">
+																	<select name="category_type" id="category_type" style="width: 250px; height: 30px;" onChange="get_sub_cat()">
+																		{{if session.category_type != 'None' and session.category_type != None:}}
+																			<option value="{{=session.category_type}}" selected="selected">{{=session.category_type}}</option>
+																		{{else:}}
+																			<option value="" selected></option>
+																		{{pass}}
+																		{{for i in range(len(categoryRows)):
+																			data = categoryRows[i]}}
+																			<option value="{{=data['category_name']}}">{{=data['category_name']}}</option>
+																		{{pass}}
+																	</select>
+																</td>
+															</tr>
+															<tr>
+																<td align="right" style="padding-top: 5px;">Cost Sub-Category</td>
+																<td width="20%" style="padding-left: 15px;">
+																	<select name="sub_category_type" id="sub_category_type" style="width: 250px; height: 30px;">
+																		<!-- options appended -->
+																	</select>
+																</td>
+															</tr>
+															<tr>
+																<td align="right" style="padding-top: 5px;">Cost/Amount</td>
+																<td width="20%" style="padding-left: 15px;">
+																	<input type="text" name="amount" id="amount" size="10" style="width: 236px" placeholder=""/>
+																</td>
+															</tr>
+															<tr>
+																<td></td>
+																<td align="left" style="padding-left: 15px;">
+																	<input type="submit" name="submit_btn" id="submit_btn" value="Save" style="vertical-align: middle; height: 30px; width: 80px;" title=""/>
+																</td>
+															</tr>
+															<tr>
+																<td>&nbsp;</td>
+																<td>&nbsp;</td>
+															</tr>
+														</form>
+													</table>
+												</td>
+											</tr>
+										</table>
+									{{pass}}
+
+									
+									<!-- filter row  -->
+									<table width="100%" align="left" height="100%" border="0" cellpadding="0" cellspacing="0" style="margin-left: auto; margin-right: auto; margin-bottom: 10px;">
+										<tr>
+											<td height="80%" valign="middle">
+												<table width="100%" border="1" class="sample_border" >
+													<form name="form1" action="{{=URL(c='branch_costing',f='branch_costing',vars=dict(page=0))}}" method="post" style="padding: 0;">
+														<tr align="left" height="30px"; class="filterRow" style="background:#eee">
+															<td width="80px">
+																{{if session.from_dt != '' or  session.from_dt != 'None':}}
+																	<input class="date" id="sm_search_date_to_dt_2" name="to_dt_2" type="text" value="{{=session.from_dt}}" placeholder="Date" autocomplete="off" style="width: 80px;">
+																{{else:}}
+																	{{=search_form.custom.widget.to_dt_2}} 
+																{{pass}}
+															</td>
+															<td align="center" style="padding-top: 7px;">
+																&nbsp;To&nbsp;
+															</td>
+															<td width="80px">
+																{{if session.to_date != '' or  session.to_date != 'None':}}
+																	<input class="date" id="sm_search_date_to_dt_3" name="to_dt_3" type="text" value="{{=session.to_date}}" placeholder="Date" autocomplete="off" style="width: 80px;">
+																{{else:}}
+																	{{=search_form.custom.widget.to_dt_3}} 
+																{{pass}}
+															</td>
+															{{if session.user_type == 'Admin':}}
+															<td width="50px">
+																{{if session.branch_value=='' or session.branch_value==None:}}
+																	<input name="branch_value" type="text" id="branch_value" size="25" value="" placeholder="Branch" autocomplete="off" style="width:200px"/>
+																{{else:}}
+																	<input name="branch_value" type="text" id="branch_value" size="25" value="{{=session.branch_value}}" placeholder="Branch" autocomplete="off" style="width:200px"/>
+																{{pass}}                
+															</td>
+															{{elif session.user_type == 'Depot':}}
+															<td width="50px">
+																{{if session.branch_value=='' or session.branch_value==None:}}
+																	<input name="branch_value" type="text" id="branch_value" size="25" value="{{=session.depot_id}}|{{=session.user_depot_name}}" autocomplete="off" style="width:200px" readonly/>
+																{{else:}}
+																	<input name="branch_value" type="text" id="branch_value" size="25" value="{{=session.depot_id}}|{{=session.user_depot_name}}" autocomplete="off" style="width:200px" readonly/>
+																{{pass}}                
+															</td>
+															{{pass}}
+															<td width="50px">
+																{{if session.category_value=='' or session.category_value==None:}}
+																	<input name="category_value" type="text" id="category_value" size="25" value="" placeholder="Category" autocomplete="off" style="width:200px"/>
+																{{else:}}
+																	<input name="category_value" type="text" id="category_value" size="25" value="{{=session.category_value}}" placeholder="Category" autocomplete="off" style="width:200px"/>
+																{{pass}}                
+															</td>
+															<td width="50px">
+																{{if session.sub_category_value=='' or session.sub_category_value==None:}}
+																	<input name="sub_category_value" type="text" id="sub_category_value" size="25" value="" placeholder="Sub-Category" autocomplete="off" style="width:200px"/>
+																{{else:}}
+																	<input name="sub_category_value" type="text" id="sub_category_value" size="25" value="{{=session.sub_category_value}}" placeholder="Sub-Category" autocomplete="off" style="width:200px"/>
+																{{pass}}                
+															</td>
+															<td width="80px" align="left">
+																<input type="submit" name="btn_filter" id="btn_filter" value="Filter" class="button_update" style="height: 30px; width: 80px;"/> 
+															</td>
+															<td width="80px" align="left">
+																<input type="submit" name="btn_all" id="btn_all" value="All" class="button_update" style="height: 30px; width: 80px;"/>
+															</td>
+													</form>
+															<td align="right">
+																<a href="{{=URL(c='branch_costing',f='download_data')}}">
+																	<input type="button" name="download_btn" id="download_btn" value="Download" style="height: 30px; width: 100px;"/> 
+																</a>
+															</td>
+														</tr>
+												</table>
+											</td>
+										</tr>
+									</table> 
+
+									<!-- total row & amount  -->
+									<table width="100%">
+										<tr>
+											<td align="left" width="60px">Total: {{=total_count}} |</td>
+											<td align="left">Total Amount: {{=whole_total_amount}}</td>
+										</tr>
+									</table>
+
+									
+
+									<!-- data show -->
+									<table width="100%" border="1" cellpadding="1" cellspacing="1" class="sample_border">
+										<tr align="left" class="blackCatHead" height="20px" vertical-align:middle>
+											<td align="left">Date</td>
+											<td align="left">Branch</td> 
+											<td align="left">Ref. Number</td> 
+											<td align="left">Cost Category</td> 
+											<td align="left">Sub-Category</td> 
+											<td align="right">Amount</td>
+										</tr>
+										{{total_amount = 0.0}}
+										{{for i in range(len(branch_costRows)):
+
+											if i == items_per_page: 
+												break
+
+											data_rec = branch_costRows[i]   
+											depot_id = str(data_rec["depot_id"])  
+											depot_name = str(data_rec["depot_name"])  
+											date = str(data_rec["submitted_on_date"])       
+											ref_number = str(data_rec["ref_number"])       
+											cat_id = str(data_rec["cost_cat_id"])  
+											cat_name = str(data_rec["cost_cat_id"])  
+											sub_cat_id = str(data_rec["cost_sub_cat_id"])  
+											sub_cat_name = str(data_rec["cost_sub_cat_name"])  
+											amount = str(data_rec["amount"])  
+
+											total_amount += float(amount)
+										}}
+											<tr align="left" class="blackCat" style="vertical-align:middle; font-size:12px;"> 
+												<td>{{=date}}</td>
+												<td align="left">{{=depot_name}} | {{=depot_id}}</td>
+												<td>{{=ref_number}}</td>
+												<td align="left">{{=cat_name}} | {{=cat_id}}</td>
+												<td align="left">{{=sub_cat_name}} | {{=sub_cat_name}}</td>
+												<td align="right">{{=amount}}</td>
+											</tr>
+										{{pass}}
+										<tr align="left" class="blackCat" style="vertical-align:middle; font-size:12px; background-color: #eee;"> 
+											<td align="right" colspan="5">Total</td>
+											<td align="right">{{=total_amount}}</td>
+										</tr>
+									</table>
+
+
+
+									<!-- pagination  -->
+									<table width="100%">
+										<tr>
+											<td align="left" style="padding-right: 5px;">
+												{{if page:}}
+													<a href="{{=URL(args=[page-page])}}">First&nbsp;</a>| 
+													<a href="{{=URL(args=[page-1])}}">Previous&nbsp;</a>|
+												{{pass}}
+
+												{{if len(branch_costRows) >= items_per_page:}}
+													<a href="{{=URL(args=[page+1])}}">Next</a>
+												{{pass}}
+											</td>
+										</tr>
+									</table>
+								</td>
+							</tr>
+						</table>
+					</td>
+				</tr>
+			</table>            
+        </td>
+    </tr>
+</table>
+
+
+
+
+

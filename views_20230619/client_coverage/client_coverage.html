@@ -1,0 +1,207 @@
+{{extend 'layout_salesreport.html'}}
+
+<link rel="stylesheet" href="{{=URL('static', 'js_and_css/ui.theme.css')}}" type="text/css" />
+<link rel="stylesheet" href="{{=URL('static', 'js_and_css/jquery-ui.css')}}" type="text/css" />
+<!-- <link rel="stylesheet" href="{{=URL('static', 'js_and_css/style.css')}}" type="text/css" /> -->
+<script src="{{=URL('static','js_and_css/jquery-1.8.2.js')}}"></script>
+<script src="{{=URL('static','js_and_css/jquery-ui.js')}}"></script>
+<script>
+var base_url=location.protocol + "//" + location.hostname + (location.port && ":" + location.port) + "/{{=request.application}}/";
+
+$(function() {
+
+    var repId=$("#rep_id").val();    
+    var tmListStr='';
+    // alert(base_url+'client_coverage/get_territory?rep_id='+repId)
+
+      $.ajax({
+        type:'POST',
+        // url: base_url+'sales_report/get_territory',
+        url: base_url+'client_coverage/get_territory?rep_id='+repId,//+'password='+password+'synccode='+synccode,
+        success: function(lvlStr) {
+          tmListStr=lvlStr
+        }
+      }); 
+
+    $('#levelId_name').keyup(function(){
+      // alert('ok')
+      //-------------------------
+      var tmList_no = tmListStr.split(',');   
+      var tmName=$("#levelId_name").val();
+      
+      //---------------- auto complete combo list
+      var tmListNew=new Array();
+      lc_no=0;
+      i =0;
+      var tmStr_no="";        
+      while (i < tmList_no.length)
+      {
+        tmStr_no=tmList_no[i];
+        i=i+1;          
+        var res=tmStr_no.toUpperCase().match(tmName.toUpperCase());
+        if (res!=null){
+          tmListNew[lc_no]=tmStr_no;
+          lc_no=lc_no+1;
+          if (lc_no==30){
+            break;
+          };
+        }else{
+          continue;
+        }         
+      };
+        //-------------- auto complete source
+      $( "input#levelId_name" ).autocomplete({
+        source: tmListNew
+      });
+    });
+});
+
+</script>
+<html>
+    <head>    
+    </head>
+    <body>    
+    <div class="blackCatTitle">Client Coverage</div>       
+    <br/>
+    <table width="100%"  >
+        
+        <form action="{{=URL(c='client_coverage',f='client_coverage_url',vars=dict(cid=cid,rep_id=rep_id,rep_pass=rep_pass))}}">
+            <input type="hidden" name="cid" value="{{=cid}}">
+            <input type="hidden" name="rep_id" id="rep_id" value="{{=rep_id}}">
+            <input type="hidden" name="rep_pass" id="rep_pass" value="{{=rep_pass}}">
+        
+        <tr>            
+            <td>Date Range:</td>
+            <td align="left">
+                
+                {{if session.from_dt!='' or  session.from_dt!='None'  :}}
+                    <input class="date" id="sm_search_date_to_dt_2" name="to_dt_2" type="text" value="{{=session.from_dt}} "autocomplete="off">
+                {{else:}}
+                    {{=search_form.custom.widget.to_dt_2}} 
+                {{pass}}
+
+                To
+                 {{if session.to_date!='' or  session.to_date!='None'  :}}
+                    <input class="date" id="sm_search_date_to_dt_3" name="to_dt_3" type="text" value="{{=session.to_date}}" autocomplete="off">
+                 {{else:}}
+                   {{=search_form.custom.widget.to_dt_3}} 
+                 {{pass}}
+
+            </td>
+     </tr>
+
+
+        <tr>
+            
+            <td>Market:</td>
+
+            <td align="left">
+                {{#=session.levelIdstr}}
+                {{if session.levelIdstr!='' and session.levelIdstr!='None' and session.levelIdstr!=None:}}
+                    <input type="text" name="levelId_name" id="levelId_name"  value="{{=session.levelIdstr}}" placeholder="Select Market" autocomplete="off" style="width:250px"/>
+
+
+                {{else:}}
+                    <input type="text" name="levelId_name" id="levelId_name" size="25" value=""  autocomplete="off" style="width:250px" placeholder="Select Market"/>
+                {{pass}}
+
+              <input type="submit" name="btn_filter" id="btn_filter" value="Filter"   class="button_update"/>
+              <input type="submit" name="btn_all" id="btn_all" value="Remove Filter"   class="button_update"/>
+
+            </td>
+     </tr>
+
+     </form>
+    </table>		
+    <br/>
+      
+        <table width="100%" style="margin-bottom:10px;" >            
+                        
+            <tr>
+                <td width="300" >
+                    <div style="background-color:#6dbb60; color:#FFF; margin:1px; text-align:center; border-radius:5px;">                    	                 	
+                        <h4>Total Client Count</h4>
+                        <h3 style="background-color:#cbe5c6; color:#000;">{{=total_client}}</h3>
+                    </div>
+                </td>
+                                            
+                <td width="300" >
+                    <div style="background-color:#6dbb60; color:#FFF; margin:1px; text-align:center; border-radius:5px;">
+                                         
+                        <h4>Unique Client Cover</h4>
+                        <h3 style="background-color:#cbe5c6; color:#000;">{{=unique_client_cover_show}}</h3>
+                    </div>
+                </td>
+
+                <td width="300" >
+                    <div style="background-color:#6dbb60; color:#FFF; margin:1px; text-align:center; border-radius:5px;">
+                                             
+                        <h4>Client Cover Percentage</h4>
+                        <h3 style="background-color:#cbe5c6; color:#000;">{{=unique_client_cover_per}}</h3>
+                    </div>
+                </td>
+
+
+            </tr>
+
+             {{pass}}
+        </table>                    
+                			
+        
+        <table width="100%" border="1" cellpadding="1" cellspacing="1" class="sample_border" >
+            <tr align="left" class="blackCatHead" height="20px" ;  style="font-size:12px; background-color:#E9E9E9;">
+                <td align="left"  >Client ID</td>
+                <td align="left"  >Client Name</td>
+                <td align="center"  >Inv. Count</td>
+                             
+            </tr> 
+            {{total_inv_count=0}}
+            {{for i in range(len(records_ov)):}}
+              {{recStr=records_ov[i]}}
+               
+            <tr  align="left" class="blackCat"  style="vertical-align:middle; font-size:11px;">
+                <td align="left" >{{=recStr['client_id']}}</td>
+                <td align="left" >{{=recStr['name']}}</td>
+                <td align="center" >
+                    
+                    {{
+                    #aa='1'
+                    inv_count=0
+                    #try:
+                        Vcheck=str(recStr['client_id'])  
+                        #= Vcheck                                             
+                        if [s for s in vChecklist if Vcheck in s]:                           
+                            index_element = vChecklist.index(Vcheck)     
+                            inv_count=vCountList[index_element]
+                        pass
+                   # except:
+                    #      inv_count=0
+                   # pass
+                   
+
+                    }} 
+
+                    {{=inv_count}}
+
+
+                    {{
+                      total_inv_count+=int(inv_count)
+                      }}
+
+                </td>
+                                       
+            </tr>
+            
+            {{pass}} 
+
+            <tr align="left" class="blackCatHead" height="20px" ;  style="font-size:12px; background-color:#E9E9E9;">
+                <td></td>
+                <td  style="font-weight: bold; text-align: right;">Total Invoice</td>
+                <td  class="text-center">{{=total_inv_count}}</td>
+            </tr>      
+        </table>
+     
+    
+    </body>
+</html>
+

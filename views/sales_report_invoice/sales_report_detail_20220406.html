@@ -1,0 +1,260 @@
+{{extend 'layout_salesreport.html'}}
+<style>
+  #sm_search_date_to_dt_2,#sm_search_date_to_dt_3{
+    width: 100px;
+    height:25px;
+    padding: 0px 5px;
+  }
+  #btn_filter,#btn_all{
+    
+  }
+
+
+  .table tr:nth-child(even) {background-color: transparent;}
+
+</style>
+
+<link rel="stylesheet" href="{{=URL('static', 'js_and_css/ui.theme.css')}}" type="text/css" />
+<link rel="stylesheet" href="{{=URL('static', 'js_and_css/jquery-ui.css')}}" type="text/css" />
+<!-- <link rel="stylesheet" href="{{=URL('static', 'js_and_css/style.css')}}" type="text/css" /> -->
+<script src="{{=URL('static','js_and_css/jquery-1.8.2.js')}}"></script>
+<script src="{{=URL('static','js_and_css/jquery-ui.js')}}"></script>
+<script>
+var base_url=location.protocol + "//" + location.hostname + (location.port && ":" + location.port) + "/{{=request.application}}/";
+
+$(function() {
+
+    var repId=$("#rep_id").val();
+    // var password=$("#password").val();
+    // var synccode=$("#synccode").val();
+
+    var tmListStr='';
+    // alert(base_url+'sales_report/get_territory?rep_id='+repId)
+
+      $.ajax({
+        type:'POST',
+        // url: base_url+'sales_report/get_territory',
+        url: base_url+'sales_report_invoice/get_territory?rep_id='+repId,//+'password='+password+'synccode='+synccode,
+        success: function(lvlStr) {
+          tmListStr=lvlStr
+        }
+      }); 
+
+    $('#levelId_name').keyup(function(){
+      // alert('ok')
+      //-------------------------
+      var tmList_no = tmListStr.split(',');   
+      var tmName=$("#levelId_name").val();
+      
+      //---------------- auto complete combo list
+      var tmListNew=new Array();
+      lc_no=0;
+      i =0;
+      var tmStr_no="";        
+      while (i < tmList_no.length)
+      {
+        tmStr_no=tmList_no[i];
+        i=i+1;          
+        var res=tmStr_no.toUpperCase().match(tmName.toUpperCase());
+        if (res!=null){
+          tmListNew[lc_no]=tmStr_no;
+          lc_no=lc_no+1;
+          if (lc_no==30){
+            break;
+          };
+        }else{
+          continue;
+        }         
+      };
+        //-------------- auto complete source
+      $( "input#levelId_name" ).autocomplete({
+        source: tmListNew
+      });
+    });
+});
+
+</script>
+<div class="table-responsive-sm">
+  <table class="table mb-0" >
+    <tbody>
+      <form action="{{=URL(c='sales_report_invoice',f='sales_report_detail_url',vars=dict(cid=cid,rep_id=rep_id,password=password,synccode=synccode,se_market_report=se_market_report))}}">
+        <input type="hidden" name="cid" value="{{=cid}}">
+        <input type="hidden" name="rep_id" id="rep_id" value="{{=rep_id}}">
+        <input type="hidden" name="password" id="password" value="{{=password}}">
+        <input type="hidden" name="synccode" id="synccode" value="{{=synccode}}">
+        <input type="hidden" name="se_market_report" value="{{=se_market_report}}">
+        <tr class="bg-light"><td style="border:0px solid #fff;padding: 0px 7px;font-weight: bold; " class="table-responsive-sm" colspan="3"> Order Date </td></tr>
+        <tr class="bg-light">
+          <td style="border:0px solid #fff" class="table-responsive-sm">
+           From 
+            {{if session.from_dt!='' or  session.from_dt!='None'  :}}
+             <input class="date" id="sm_search_date_to_dt_2" name="to_dt_2" type="text" value="{{=session.from_dt}}">
+             {{else:}}
+             {{=search_form.custom.widget.to_dt_2}} 
+             {{pass}}
+             To
+              {{if session.to_date!='' or  session.to_date!='None'  :}}
+             <input class="date" id="sm_search_date_to_dt_3" name="to_dt_3" type="text" value="{{=session.to_date}}">
+             {{else:}}
+              To{{=search_form.custom.widget.to_dt_3}} 
+             {{pass}}
+            <!-- /*<div class="form-group" style="margin-bottom:0px">*/ -->
+            <!-- <input type="text" style="color: #000"  class=" form-control-sm "  id="levelId_name" name="levelId_name"  value=""  placeholder="Select Territory" />  -->
+               <select id="levelId_name" name="levelId_name" style="width:100px;padding:6px 5px" data-native-menu="false" >
+
+                            <option value=""></option> 
+                            {{for levelRows in levelRows:}}
+                              <option value="{{=levelRows.area_id}}" >{{=levelRows.area_id}}</option> 
+                            
+                           {{pass}} 
+                          
+                          </select>
+            <!-- levelRows -->
+           <!-- </div> -->
+           </td> 
+ 
+          <td style="border:0px solid #fff;" class="table-responsive-sm " >
+            <!-- <div class="form-group" style="margin-bottom:0px"> -->
+            <input type="submit"  class="form-control-sm bg-dark text-light" name="btn_filter" id="btn_filter" value="Filter" style="width: 49%;" />
+
+            <input type="submit"  class=" form-control-sm bg-dark text-light " name="btn_all" id="btn_all" value="All" style="width: 49%;" />
+            <!-- </div> -->
+          </td>
+      </tr>
+
+      </form>
+    </tbody>  
+  </table>
+
+  <table class="table table-striped table-hover table-bordered table-responsive-sm " style="padding: 0px;" > 
+    
+    <thead class="table-dark">
+      <!-- <th scope="col">Order Date</th> -->
+        <th scope="col">Territory</th>
+        <th scope="col">Visit Count</th>
+        <th scope="col">Order Count</th>
+        <th scope="col" class="text-right">Order Amount</th>
+        <th scope="col">Invoice Count</th>
+        <th scope="col" class="text-right">Invoice Amount</th>
+        <th scope="col"></th>
+    </thead>
+    <tbody>
+      {{gtotalprice=0}}
+      {{gintotalprice=0}}
+      {{t_v_count=0}}
+      {{t_o_count=0}}
+      {{t_i_count=0}}
+      
+      {{for i in range(len(records_ov)):
+        records_ov_dict=records_ov[i]        
+        area_name=str(records_ov_dict["area_name"])      
+        area_id=str(records_ov_dict["area_id"])            
+        order_date=str(records_ov_dict["order_date"])            
+
+        totalprice=0  
+      }}
+      {{
+        visit_count=0
+        Vcheck=str(area_id) 
+          
+        if [s for s in vChecklist if Vcheck in s]:
+          index_element = vChecklist.index(Vcheck)           
+          visit_count=vCountList[index_element]
+           
+        pass 
+
+       }}   
+       {{
+          order_count=0
+          Ocheck=str(area_id) 
+
+          if [s for s in OChecklist if Ocheck in s]:
+            index_element = OChecklist.index(Ocheck)           
+            order_count=OCountList[index_element]
+           
+          pass 
+       }}    
+      {{
+        totalprice=0
+        Oacheck=str(area_id) 
+        if [s for s in OAmountChecklist if Oacheck in s]:
+          index_element = OAmountChecklist.index(Oacheck)           
+          totalprice=OamountList[index_element] 
+        pass 
+      }} 
+      {{
+        invoice_count=0
+        invcCheck=str(area_id) 
+
+        if [s for s in invcChecklist if invcCheck in s]:
+          index_element = invcChecklist.index(invcCheck)           
+          invoice_count=invcCountList[index_element]
+         
+        pass 
+      }}      
+      {{
+          invoice_totalprice=0
+          invcAmountCheck=str(area_id) 
+
+          if [s for s in invcAmntChecklist if invcAmountCheck in s]:
+            index_element = invcAmntChecklist.index(invcAmountCheck)           
+            invoice_totalprice=invcAmntList[index_element]
+           
+          pass 
+       }}   
+      <tr class="table-primary">
+        <!-- <th scope="row" class="text-center">{{#=order_date}}</th> -->
+        <td class="text-center" >{{=area_name}}|{{=area_id}}</td>
+
+ 
+        {{
+          if (int(order_count)>0):
+            gtotalprice+=totalprice
+          else:
+            totalprice=0
+          pass
+          
+          }}
+        {{
+          if (int(invoice_count)>0):
+            gintotalprice+=invoice_totalprice
+          else:
+            invoice_totalprice=0
+          pass
+          
+          }}
+          {{#=qset_tp_str}}
+          {{#=qset_inv_amount}}
+          {{#=qset_invoice_str}}
+        <td class="text-center">{{=visit_count}}{{t_v_count=t_v_count+visit_count}}</td>
+        <td class="text-center">{{=order_count}}{{t_o_count=t_o_count+order_count}}</td>
+        <td class="text-right">
+ 
+          {{=totalprice}}
+        </td>
+        <td class="text-center">{{=invoice_count}}{{t_i_count=t_i_count+invoice_count}}</td>
+        <td class="text-right">
+ 
+          {{=invoice_totalprice}}
+        </td>
+        <td class="text-right"><a style="text-decoration: none;font-size: 20px"  href="{{=URL(c='sales_report_invoice',f='sales_report_area_wise_url', vars=dict(cid=cid,rep_id=rep_id,password=password,synccode=synccode,se_market_report=se_market_report,area_id=area_id,to_date=session.to_date,from_date=session.from_dt,invoice_count=invoice_count))}}" >
+          &raquo;
+        </a>
+        </td>
+      </tr>
+      {{pass}}
+      <tr class="table-light">
+        <td  class="text-right text-danger">Total </td>
+        <td  class="text-center">{{=t_v_count}}</td>
+        <td  class="text-center">{{=t_o_count}}</td>
+
+        <!-- <td  class="text-right text-danger">Total Amount</td> -->
+        <td  class="text-right">{{=gtotalprice}}</td>
+        
+        <td class="text-center">{{=t_i_count}}</td>
+        <td class="text-right">{{=gintotalprice}}</td> 
+        <td ></td>
+      </tr>
+    </tbody>
+  </table>
+</div>

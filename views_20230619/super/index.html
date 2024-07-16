@@ -1,0 +1,60 @@
+
+{{extend 'layout_login.html'}}
+
+<table width="900" height="520" border="0"  cellpadding="0" cellspacing="0" >
+  <tr>
+    <td width="318" rowspan="3" align="center" valign="middle">&nbsp;</td>
+    <td width="343" height="116" align="center" valign="middle">&nbsp;  </td>
+    <td width="239" rowspan="3" align="center" valign="middle">&nbsp;</td>
+  </tr>
+  <tr>
+    <td height="132" align="center" valign="middle">
+	<table width="343" class="rounded_corner" align="left" cellpadding="2" style="background-color:#CCCCCC">
+  
+  <form  name="form1" action="{{=URL(c='super',f='check_super_admin')}}" method="post"  >
+    
+    <tr >
+      <td width="5" align="left" >&nbsp;</td>
+      <td colspan="3" align="left" ><font color="#C04029" size="3">M-Reporting:Super</font></td>
+      </tr>
+    
+    <tr style=" font:Arial, Helvetica, sans-serif; color:#666666; font-size:14px;">
+      <td align="left" >&nbsp;</td>
+      <td align="left" >CID </td>
+      <td align="left" ><input  type="text" name="cid" id="cid" size="15" /></td>
+      <td align="left" >&nbsp;</td>
+    </tr>
+    <tr style=" font:Arial, Helvetica, sans-serif; color:#666666; font-size:14px;">
+      <td width="5" align="left" >&nbsp;</td>
+      <td width="43%" align="left" >User Id </td>
+      <td width="38%" align="left" ><input  type="text" name="user_id" id="user_id" size="15" /></td>
+      <td width="19%" align="left" >&nbsp;</td>
+    </tr>
+    <tr style=" font:Arial, Helvetica, sans-serif; color:#666666; font-size:14px;">
+      <td width="5" align="left" >&nbsp;</td>
+      <td align="left" >Password</td>
+      <td align="left" ><input  type="password" name="password" id="password" size="15" /></td>
+      <td align="left" >&nbsp;</td>
+    </tr>
+    <tr>
+      <td width="5" align="center" >&nbsp;</td>
+      <td align="center" >&nbsp;</td>
+      <td align="center" ><div align="left">
+        &nbsp;<input type="submit" name="btn_login" id="btn_login" value="Login" />
+      </div></td>
+      <td align="center" >&nbsp;</td>
+    </tr>
+    <tr>
+      <td width="5" align="center" >&nbsp;</td>
+      <td align="center" >&nbsp;</td>
+      <td align="center" >&nbsp;</td>
+      <td align="center" >&nbsp;</td>
+    </tr>
+	</form>
+</table>
+	</td>
+  </tr>
+  <tr>
+    <td height="264" align="center" valign="middle">&nbsp;</td>
+  </tr>
+</table>

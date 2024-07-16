@@ -1,0 +1,37 @@
+{{extend 'layout_mobile.html'}}
+
+<style type="text/css">
+
+input[type=number]{
+    margin: 2px 0px 2px 0px;
+	width:100%;
+}
+form{
+	margin: 0 0 0px;
+	padding: 0px 0px 0px 05px;
+	}
+
+.page_color,body{
+	font-family:Arial, Helvetica, sans-serif;
+	font-size:12px;	
+}
+
+
+ </style>
+
+
+<body >
+
+<div style="text-align:center; font-weight:bold; background-color:#0F87FF; color:#FFF; height:30px; font-size:15px;">Report</div>
+&nbsp;&nbsp;<b>Month : {{=datetime.datetime.strptime(str(current_date)[0:7] + '-01', '%Y-%m-%d').strftime('%Y-%b')}}</b>
+<br/><br/><br/>
+<form action="{{=URL(c='report_summary_mobile',f='report_home')}}" method="post">
+    <div style="text-align:center;">
+        <input type="submit" name="btn_submit" style="width:95%; text-align:center; height:40px; background-color:#0F87FF; color:#FFF; text-align:center;" value="Target Vs Achievement" />
+    </div>
+</form>
+
+<br/>
+</body>
+
+

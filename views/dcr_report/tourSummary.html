@@ -1,0 +1,124 @@
+{{extend 'layout_sample_report.html'}}
+<html>
+<head>
+<script type="text/javascript">
+function print_page()
+  {
+    window.print()
+  }
+</script>
+
+</head>
+<body>
+<table width="900px" style="border:none; text-align:center; font-weight:bold;" >
+  <tr >
+    <td width="100" >&nbsp;</td>
+    <td align="left" style="font-size:18px" ></td>
+    <td width="100" ><img src="{{=URL('static','images/comp_logo1.png')}}" alt=""  height="30px"/></td>
+  </tr>
+  
+
+</table>
+<div style="background-color:#333; height:1px; font-size:1px"></div>
+<table width="900px" style="border:none;" >
+  <tr >
+    <td >FirstDate</td>
+    <td >:</td>
+    <td >{{=date_from}} </td>
+    <td >&nbsp;</td>
+    <td >&nbsp;</td>
+    <td width="266" >&nbsp;</td>
+  </tr>
+  <tr >
+    <td width="90" >RMBS</td>
+    <td width="10" >:</td>
+    <td width="438" ><span style="border-right-width:3px;">{{=rsm_id}}
+    {{=rsm_name}}</span></td>
+    <td >FP</td>
+    <td >:</td>
+    <td >{{=mso_name}}|{{=mso_id}}</td>
+  </tr>
+  <tr >
+    <td >FMBS</td>
+    <td >:</td>
+    <td ><span style="border-right-width:3px;">{{=fm_id}}
+    {{=fm_name}}</span></td>
+    <td >&nbsp;</td>
+    <td >&nbsp;</td>
+    <td >&nbsp;</td>
+  </tr>
+  <tr >
+    <td >FPBS</td>
+    <td >:</td>
+    <td ><span style="border-right-width:3px;">{{=tr_id}}
+    {{=tr_name}}</span></td>
+    <td >&nbsp;</td>
+    <td >&nbsp;</td>
+    <td >&nbsp;</td>
+  </tr>
+  <tr >
+    <td >&nbsp;</td>
+    <td >&nbsp;</td>
+    <td >&nbsp;</td>
+    <td >&nbsp;</td>
+    <td >&nbsp;</td>
+    <td >&nbsp;</td>
+  </tr>
+</table>
+
+
+<table width="700px" cellspacing="1" cellpadding="1">
+
+  <tr height="10px"></tr>
+	<tr>
+		<td><table width="900px" border="1" cellpadding="1" cellspacing="1" class="sample_border" >
+		  <tr align="left" class="blackCatHead"  height="20px" ;>
+		    <td width="70" >ASMBS_CD</td>
+		    <td width="70" > ASBS_NM</td>
+		    <td width="70" >RMBS_CD</td>
+		    <td width="70" >RMBS_NM</td>
+		    <td width="70" >FMBS_CD</td>
+		    <td width="70" >FMBS_NM</td>
+		    <td  width="80" >FPBS_CD</td>
+		    <td width="70" >FPBS_NM</td>
+		    <td  width="80" >FP_ID</td>
+		    <td  width="80" >FP_NM</td>
+		    <td  width="80" >Approved</td>
+          </tr>
+		  {{ p=0}} 		  
+		  
+		  {{for i,record in enumerate(records):}}
+          
+          
+         
+  <tr  align="left" class="blackCat"  style="vertical-align:middle; font-size:10px;">
+    <td width="50" >{{=record[db.sm_microunion.level0]}}</td>
+    <td width="50" >{{=record[db.sm_microunion.level0_name]}}</td>
+    <td width="50" >{{=record[db.sm_microunion.level1]}}</td>
+    <td width="50" >{{=record[db.sm_microunion.level1_name]}}</td>
+    <td width="50" >{{=record[db.sm_microunion.level2]}}</td>
+    <td width="50" >{{=record[db.sm_microunion.level2_name]}}</td>
+    <td width="50" >{{=record[db.sm_microunion.area_id]}}</td>
+    <td width="50" >{{=record[db.sm_microunion.area_name]}}</td>
+    <td width="50" align="center" >{{=record[db.sm_doctor_visit_plan.rep_id]}}</td>
+    <td  >{{=record[db.sm_doctor_visit_plan.rep_name]}}</td>
+    
+    {{status='No' 
+    if record[db.sm_doctor_visit_plan.status]=='Confirmed': 
+    status='Approved'  
+    pass}}
+    {{if record[db.sm_doctor_visit_plan.status]!='Confirmed' and record[db.sm_doctor_visit_plan.status]!='Cancelled': 
+    status='Submitted'  
+    pass}}
+    
+    <td width="50" align="center" >{{=status}}</td>
+    </tr>
+		  {{pass}}
+	    </table></td>
+			
+	</tr>
+</table>
+
+
+</body>
+</html>

@@ -1,0 +1,154 @@
+{{extend 'layout_invoice.html'}}
+
+<html>
+
+<head>
+
+
+
+</head>
+
+<body>
+
+{{pageFlag=1}}
+
+<!--page break-->
+
+		{{if pageFlag==0:}}
+<span style="page-break-before:always"></span>	
+
+			<!-- Report header-->	
+			
+<table width="902">
+
+				<tr>
+					<td width="100" ><img width="25px" height="40px" src="{{=URL('static','images/comp_logo2.png')}}"/></td>
+					<td style="text-align:center; font-size:24px; font-weight:bold">{{=session.cName}}</td>
+					<td width="100" >&nbsp;</td>
+  </tr>
+
+			</table>			
+            <table width="900" style="border: solid 1px #C4C4C4">
+                <tr style="border-bottom:solid; border-bottom-color:#999">
+                  <td align="center">{{=session.user_depot_address}}<!--{{#=session.company_address}}--><!--Sadar Road, Mohakhali, Dhaka. Ph: 9896479,9862763, 8855371-80 Ext:258 Fax:8860325, mail: tdclmohakhali@transcombd.com--></td>
+              </tr>
+</table>
+            <br>
+			
+			<!--<hr/>-->
+
+			<!-- end report header  -->
+		
+		{{pass}}
+
+		{{pageFlag=0}}
+
+		<!--end page break-->
+		
+		<!--<img src="{{#=URL('static','images/SKFLogo.png')}}"/> style="background:url({{#=URL('static','images/SKFLogo.png')}}); background-repeat:no-repeat; background-position:center"-->
+        
+        
+		<table width="900" border="0" cellspacing="1" cellpadding="1" >          
+
+		<tr>
+		  <th width="1132" colspan="8" align="center" style="font-size:16px; font-weight:bold" ><span style="font-size:20px; font-weight:bold">Invoice List</span></th>
+		  </tr>
+	</table>
+
+    <table width="900" cellpadding="1" cellspacing="1" >
+        <tr style="border: solid 1px #C4C4C4">
+          <td align="left">
+          <strong>Branch: {{=depot_id}}|{{=depot_name}}<br>
+          </strong></td>
+          <td width="200" align="center"><img src="{{=URL('static','images/comp_logo1.png')}}"/></td></tr>
+</table>
+    
+<table width="900" cellpadding="1" cellspacing="1" >
+            <tr style="">
+              <td width="100" align="left"><strong>Delivery Person</strong></td>
+              <td align="left"><strong><span style="font-size:14px; font-weight:bold">:{{=d_man_id}}&nbsp;| {{=d_man_name}}</span></strong></td>
+              <td width="150" align="left"><strong>Inv.Terms/(Sales Term)</strong></td>
+              <td width="200" align="left"><span style="font-size:14px;"><strong>:</strong>{{if paymentMode=='':}}ALL{{else:}}{{=paymentMode}}{{pass}}{{if paymentMode=='CREDIT':}}({{if creditType=='':}}ALL{{else:}}{{=creditType}}{{pass}}){{pass}}</span></td>
+            </tr>
+            <tr style="">
+              <td width="100" align="left"><strong>From Invoice</strong></td>
+              <td align="left"><span style="font-size:14px;"><strong>:</strong>{{=search_from_sl}}</span></td>
+              <td width="150" align="left"><strong>To Invoice Range</strong></td>
+              <td width="200" align="left"><span style="font-size:14px;"><strong>:</strong>{{=search_to_sl}}</span></td>
+            </tr>
+            <tr style="">
+              <td width="100" align="left"><strong>From Date</strong></td>
+              <td align="left"><strong><span style="font-size:14px; font-weight:bold">:</span></strong>{{try:}}{{=datetime.datetime.strptime(str(invoice_dateFrom),'%Y-%m-%d').strftime('%d-%b-%Y')}}{{except:}}{{pass}}</td>
+              <td width="150" align="left"><strong>To Date</strong></td>
+              <td width="200" align="left"><strong><span style="font-size:14px; font-weight:bold">:</span></strong>{{try:}}{{=datetime.datetime.strptime(str(invoice_dateTo),'%Y-%m-%d').strftime('%d-%b-%Y')}}{{except:}}{{pass}}</td>
+            </tr>
+  <tr style="">
+              <td colspan="4" align="center"><span style="font-weight:bold; background-color:#F2F2F2">Product Report - (Store Department)</span></td>
+  </tr>
+    </table>
+    
+<table width="900" border="1" cellpadding="1" cellspacing="1" class="sample_border" style="border: solid 1px #C4C4C4">
+	<tr align="left" class="blackCatHead"  height="20px" style="vertical-align:middle; background-color:#E6E6E6">
+	<td width="30" >Sl.No</td>
+    <td width="30" >{{=session.level2Name}}</td>
+    <td width="150" >MSO</td>
+    <td width="30" >Territory</td>
+    <td width="100" >Invoice No</td>
+    <td width="180" align="left" >Customer Name</td>
+    <td align="left" >Address</td>
+
+    <td width="150" align="left"  >Market</td>
+    </tr>
+
+	  	  
+
+	{{invoice_total=0.0}}
+	{{collAmt_total=0.0}}
+    {{netTotalOS=0.0}}
+     
+     
+    {{rowSl=0}}
+    
+	{{for i in range(len(data_List)):}}
+
+		{{dictData=data_List[i]}}
+
+	{{rowSl+=1}}
+    
+      <tr  align="left" class="blackCat"  style="vertical-align:middle; background-color:#FBFBFB">    
+        <td width="30" >{{=rowSl}}</td>
+        <td width="30" >{{=dictData['level2_name']}}</td>
+        <td width="150" >{{=dictData['rep_name']}} | {{=dictData['rep_id']}}</td>
+        <td width="30" >{{=dictData['area_name']}}</td>
+        <td width="100" >{{=session.prefix_invoice}}INV{{=dictData['depot_id']}}-{{=dictData['sl']}}</td>
+        <td width="180" align="left" >{{=dictData['client_name']}} | {{=dictData['client_id']}}</td>
+        <td align="left" style="word-wrap:break-word">{{=dictData['address']}}</td>
+    
+        <td width="150" align="left" >{{=dictData['market_id']}}|{{=dictData['market_name']}}</td>
+      </tr>
+ 	{{pass}}
+	
+</table>
+
+<br><br/>
+
+<table width="900" >
+	<tr>
+	  <td width="50" align="right">&nbsp;</td>
+	  <td align="center">______________________________________</td>
+	  <td width="150" align="center">__________________</td>
+	  <td width="150" align="center">___________________</td>
+	  <td width="150" align="center">_______________</td>
+  </tr>
+	<tr>
+	  <td width="50" align="right"><strong>for</strong></td>
+	  <td align="center"><strong>{{=session.cName}}<!--Transcom Distribution Co. Ltd.--></strong></td>
+	  <td width="150" align="center"><strong>Accounts Department</strong></td>
+	  <td width="150" align="center"><strong>Store-in-Charge</strong></td>
+	  <td width="150" align="center"><strong>Delivery Person</strong></td>
+  </tr>
+</table>
+
+</body>
+</html>
+

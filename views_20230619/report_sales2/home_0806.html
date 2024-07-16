@@ -1,0 +1,1371 @@
+{{extend 'layout.html'}}
+
+
+
+<head>
+
+<!--<link rel="stylesheet" href="{{=URL('static', 'jchart/styles/jchartfx.css')}}" type="text/css" />
+
+<script src="{{=URL('static','jchart/js/jchartfx.system.js')}}"></script>
+
+<script src="{{=URL('static','jchart/js/jchartfx.coreVector.js')}}"></script>
+
+<script src="{{=URL('static','jchart/js/jchartfx.advanced.js')}}"></script>-->
+
+
+
+<link rel="stylesheet" href="{{=URL('static', 'js_and_css/ui.theme.css')}}" type="text/css" />
+
+<link rel="stylesheet" href="{{=URL('static', 'js_and_css/jquery-ui.css')}}" type="text/css" />
+
+<link rel="stylesheet" href="{{=URL('static', 'js_and_css/style.css')}}" type="text/css" />
+
+
+
+<script src="{{=URL('static','js_and_css/jquery-1.8.2.js')}}"></script>
+
+<script src="{{=URL('static','js_and_css/jquery-ui.js')}}"></script>
+
+
+
+<style type="text/css">
+
+	<!--color-->
+
+	input[type=submit] {
+
+		margin: 2px 0px 2px 0px;
+
+		padding: 0px 0px 2px 0px;
+
+		width:200px;
+
+	}
+
+	
+
+	input[type=text] {
+
+		width:120px;
+
+	}
+
+	
+
+	.checkbox{
+
+	padding-left:0px;
+
+	}
+
+	
+
+	.multiselect{ 
+
+			text-align:left;
+
+			height:28px;
+
+	}
+
+	
+
+	.page_color,body{
+
+			font-family:Arial, Helvetica, sans-serif;
+
+			font-size:13px;	
+
+			}
+
+
+
+</style>
+
+
+
+<script>
+
+ $(function() { 
+
+	/*$( "#htmlbody" ).click(function(){		
+
+		$("#ChartDivSalesTrend").empty();		
+
+		 loadChart();
+
+    });*/
+
+	
+
+	$( "#accordionReport" ).accordion({
+
+	  active:0,
+
+      heightStyle: "content",
+
+	  collapsible: true
+
+    });
+
+	
+
+  });
+
+  </script>
+
+  
+
+   
+
+<script>
+
+var base_url=location.protocol + "//" + location.hostname + (location.port && ":" + location.port) + "/{{=request.application}}/";
+
+
+
+$(function() {
+//========================depot/Branch	
+    var scListStr="";
+	$.ajax({
+		  url: base_url+'default/get_depot_list',
+		  success: function(resStr) {
+			  scListStr=resStr			  
+		  }
+		});
+ 
+  
+   //=======================Billal
+  	var storeListStrS2="";
+  	var clientListStrS2="";
+  	var delManListStrS2="";
+  	var marketListStrS2="";
+	
+ 	var userType='{{=session.user_type}}';
+	if ( userType == 'Depot'){
+		var depotId='{{=session.depot_id}}';
+		
+		//--------- store list
+		$.ajax({
+		  url: base_url+'default/get_depot_store_all_list?depotid='+depotId,
+		  success: function(resStr) {
+			  storeListStrS2=resStr;
+		  }
+		});	
+		
+		//-----customer
+		$.ajax({
+		  url: base_url+'default/get_depot_client_all_list?depot='+depotId,
+		  success: function(resStr) {
+			  clientListStrS2=resStr;
+		  }
+		});	
+		
+		//-----delivery person
+		$.ajax({
+		  url: base_url+'default/get_depot_delivery_man_list?depot='+depotId,
+		  success: function(resStr) {
+			  delManListStrS2=resStr
+		  }
+		});	
+		//----- market list
+		$.ajax({
+		  url: base_url+'default/get_depot_market_list?depotid='+depotId,
+		  success: function(resStr) {
+			  marketListStrS2=resStr
+		  }
+		});			
+	};
+   
+ 	//=================
+	$('#sales_depot_id_sales2').blur(function(){
+		var depotIdName=$('#sales_depot_id_sales2').val();
+		if(depotIdName!=''){
+			var dpIdNameArray=depotIdName.split("|");
+			
+			var depotId=dpIdNameArray[0];
+			
+			$.ajax({
+			  url: base_url+'default/get_depot_store_all_list?depotid='+depotId,
+			  success: function(resStr2) {				 
+				  storeListStrS2=resStr2;
+			  }
+			});
+			
+			//-----customer
+			$.ajax({
+			  url: base_url+'default/get_depot_client_all_list?depot='+depotId,
+			  success: function(resStr) {
+				  clientListStrS2=resStr;
+			  }
+			});	
+			
+			//-----delivery person
+			$.ajax({
+			  url: base_url+'default/get_depot_delivery_man_list?depot='+depotId,
+			  success: function(resStr) {
+				  delManListStrS2=resStr
+			  }
+			});	
+			
+			//--------- Market
+			$.ajax({
+			  url: base_url+'default/get_depot_market_list?depotid='+depotId,
+			  success: function(resStr) {
+				  marketListStrS2=resStr
+			  }
+			});			
+		}		
+	});
+ 
+//=======================Depot
+	$('#sales_depot_id_sales2').keyup(function(){	
+		
+		//-------------------------
+		var ref_list = scListStr.split(',');				
+		var ref_name=$("#sales_depot_id_sales2").val();
+		
+		//---------------- auto complete combo list
+		var ref_list_new=new Array();
+		lc=0;
+		i =0;
+		var refStr="";				
+		while (i < ref_list.length)
+		{
+			refStr=ref_list[i];
+			i=i+1;					
+			var res=refStr.toUpperCase().match(ref_name.toUpperCase());
+			if (res!=null){
+				ref_list_new[lc]=refStr;
+				lc=lc+1;
+				if (lc==30){
+					break;
+				};
+			}else{
+				continue;
+			}					
+		};
+		
+		//-------------- auto complete source
+		$( "input#sales_depot_id_sales2" ).autocomplete({
+			source: ref_list_new
+		});	
+  });  
+//===================Store
+$('#store_id_sales2').keyup(function(){	
+		
+		//-------------------------
+		var ref_list = storeListStrS2.split(',');				
+		var ref_name=$("#store_id_sales2").val();
+		
+		//---------------- auto complete combo list
+		var ref_list_new=new Array();
+		lc=0;
+		i =0;
+		var refStr="";				
+		while (i < ref_list.length)
+		{
+			refStr=ref_list[i];
+			i=i+1;					
+			var res=refStr.toUpperCase().match(ref_name.toUpperCase());
+			if (res!=null){
+				ref_list_new[lc]=refStr;
+				lc=lc+1;
+				if (lc==30){
+					break;
+				};
+			}else{
+				continue;
+			}					
+		};
+		//alert (ref_list_new);
+		
+		//-------------- auto complete source
+		$( "input#store_id_sales2" ).autocomplete({
+			source: ref_list_new
+		});
+		
+	  });
+
+	//====================delivery man
+	
+	$('#dman_id_sales2').keyup(function(){	
+		
+		//-------------------------
+		var ref_list = delManListStrS2.split(',');				
+		var ref_name=$("#dman_id_sales2").val();
+		
+		//---------------- auto complete combo list
+		var ref_list_new=new Array();
+		lc=0;
+		i =0;
+		var refStr="";				
+		while (i < ref_list.length)
+		{
+			refStr=ref_list[i];
+			i=i+1;					
+			var res=refStr.toUpperCase().match(ref_name.toUpperCase());
+			if (res!=null){
+				ref_list_new[lc]=refStr;
+				lc=lc+1;
+				if (lc==30){
+					break;
+				};
+			}else{
+				continue;
+			}					
+		};
+		//alert (ref_list_new);
+		
+		//-------------- auto complete source
+		$( "input#dman_id_sales2" ).autocomplete({
+			source: ref_list_new
+		});
+		
+	});	
+	//=============	Customer list
+	
+	$('#customer_id_sales2').keyup(function(){
+		//-------------------------
+		var valueList = clientListStrS2.split(',');				
+		var searchValue=$("#customer_id_sales2").val();
+		
+		//---------------- auto complete combo list
+		var valueList_new=new Array();
+		lc=0;
+		i =0;
+		var valueStr="";				
+		while (i < valueList.length)
+		{
+			valueStr=valueList[i];
+			i=i+1;					
+			var res=valueStr.toUpperCase().match(searchValue.toUpperCase());
+			if (res!=null){
+				valueList_new[lc]=valueStr;
+				lc=lc+1;
+				if (lc==30){
+					break;
+				};
+			}else{
+				continue;
+			}					
+		};
+		//alert (ref_list_new);
+		
+		//-------------- auto complete source
+		$( "input#customer_id_sales2" ).autocomplete({
+			source: valueList_new
+		});
+	
+	}); 
+	
+	//===================MSO
+    var mSOListStr2="";
+	$.ajax({
+		  url: base_url+'default/get_rep_list',
+		  success: function(resStr) {			  
+			  mSOListStr2=resStr
+		  }
+		});
+ 
+	$('#mso_id_sales2').keyup(function(){
+		//-------------------------
+		var ref_list = mSOListStr2.split(',');
+					
+		var ref_name=$("#mso_id_sales2").val();
+		
+		//---------------- auto complete combo list
+		var ref_list_new=new Array();
+		lc=0;
+		i =0;
+		var refStr="";				
+		while (i < ref_list.length)
+		{
+			refStr=ref_list[i];
+			i=i+1;					
+			var res=refStr.toUpperCase().match(ref_name.toUpperCase());
+			if (res!=null){
+				ref_list_new[lc]=refStr;
+				lc=lc+1;
+				if (lc==30){
+					break;
+				};
+			}else{
+				continue;
+			}					
+		};
+		//-------------- auto complete source
+		$( "input#mso_id_sales2" ).autocomplete({
+			source: ref_list_new
+		});	
+	
+  });  
+
+//================= territory
+	
+var terriroryListStrS2="";
+$.ajax({
+	  url: base_url+'default/get_tl_list',
+	  success: function(resStr) {
+		  terriroryListStrS2=resStr		 
+	  }
+	});
+
+$('#t_id_sales2').keyup(function(){
+	//-------------------------
+	var valueList = terriroryListStrS2.split(',');				
+	var searchValue=$("#t_id_sales2").val();
+	
+	//---------------- auto complete combo list
+	var valueList_new=new Array();
+	lc=0;
+	i =0;
+	var valueStr="";				
+	while (i < valueList.length)
+	{
+		valueStr=valueList[i];
+		i=i+1;					
+		var res=valueStr.toUpperCase().match(searchValue.toUpperCase());
+		if (res!=null){
+			valueList_new[lc]=valueStr;
+			lc=lc+1;
+			if (lc==30){
+				break;
+			};
+		}else{
+			continue;
+		}					
+	};
+	//-------------- auto complete source
+	$( "input#t_id_sales2" ).autocomplete({
+		source: valueList_new
+	});
+}); 
+
+//===========Market
+$('#customer_market2').keyup(function(){
+	var valueList = marketListStrS2.split(',');				
+	var searchValue=$("#customer_market2").val();
+	
+	//---------------- auto complete combo list
+	var valueList_new=new Array();
+	lc=0;
+	i =0;
+	var valueStr="";				
+	while (i < valueList.length)
+	{
+		valueStr=valueList[i];
+		i=i+1;					
+		var res=valueStr.toUpperCase().match(searchValue.toUpperCase());
+		if (res!=null){
+			valueList_new[lc]=valueStr;
+			lc=lc+1;
+			if (lc==30){
+				break;
+			};
+		}else{
+			continue;
+		}					
+	};
+	
+	//-------------- auto complete source
+	$( "input#customer_market2" ).autocomplete({
+		source: valueList_new
+	});
+
+});
+
+var clientCatStrS2="";
+$.ajax({
+	  url: base_url+'default/get_clientCat_list',
+	  success: function(resStr) {
+		  clientCatStrS2=resStr		
+	  }
+	});
+	
+$('#customer_category2').keyup(function(){
+	//-------------------------
+	var valueList = clientCatStrS2.split(',');				
+	var searchValue=$("#customer_category2").val();
+	
+	//---------------- auto complete combo list
+	var valueList_new=new Array();
+	lc=0;
+	i =0;
+	var valueStr="";				
+	while (i < valueList.length)
+	{
+		valueStr=valueList[i];
+		i=i+1;					
+		var res=valueStr.toUpperCase().match(searchValue.toUpperCase());
+		if (res!=null){
+			valueList_new[lc]=valueStr;
+			lc=lc+1;
+			if (lc==30){
+				break;
+			};
+		}else{
+			continue;
+		}					
+	};
+	
+	//-------------- auto complete source
+	$( "input#customer_category2" ).autocomplete({
+		source: valueList_new
+	});
+
+});
+
+	
+	
+	
+//End Billal
+  
+  
+
+});
+
+</script>
+
+
+<style>
+
+	.rptlist{font-size:15px; height:auto; }
+
+	.rptlist:hover{ height:auto;}
+
+	.rptul{color:#0076AE; background-color:#F0F0F0;}
+
+	.rptdiv{  font-size:16px; color:#0076AE; background-color:#F0F0F0;}
+
+	
+
+	#accordionReport ul{	list-style-type:none;margin:0; font-size:15px; }
+
+	#accordionReport li{ margin:1px; border-radius:5px; border-bottom:1px solid #CCCCCC; font-size:15px; background-color:#F7F7F7; height:20px; padding:5px 2px 2px 15px;}/*:#F7F7F7*/
+
+	
+
+	#accordionReport li:hover{ height:21px;background-color:#F5F5F5; font-size:15px;}
+
+</style>
+
+
+
+</head>
+
+<body id="htmlbody">
+
+<!--<input type="hidden" value="{{#=salesTrendList}}" id="chartDataSalesTrend"/>-->
+
+
+
+{{currYear=str(date_fixed)[0:4]}}
+
+{{currMonth=str(date_fixed)[5:7]}}
+
+
+
+<!--Form Title -->
+
+<table width="100%" border="0" cellspacing="0" cellpadding="0" style="background-color:#FFFFFF;">
+
+  <tr height="30px">
+
+    <td><div class="blackCatTitle">Report</div></td>
+
+  </tr>
+
+  <tr >
+
+    <td height="1px" style="background-color:#CCCCCC;"></td>
+
+  </tr>
+
+</table>
+
+<!--Form Content -->
+
+<table width="100%" border="0" cellspacing="0" cellpadding="0" class="page_color">
+
+  
+
+  <tr height="20px">
+
+  	<td width="10px"></td>
+
+  	<td> </td>	
+
+  </tr>
+
+  
+
+  <tr >
+
+    <td width="10px"></td>
+
+	<td valign="top">					
+
+		 <div id="accordionReport"  style="width:90%">
+
+		 	
+
+           
+           <!--Billal-->
+           <div  class="rptdiv">
+
+                <ul class="rptul">
+
+                    <li class="rptlist"> Sales-2</li>
+
+                </ul>
+
+		   </div>
+
+		   <div >
+			<table width="900" border="0" cellpadding="0" cellspacing="0">
+
+				<form name="form2" id="form2" action="{{=URL(c='report_sales2',f='home')}}" target="_blank">
+				
+                <tr>
+                	<td valign="top">
+                   	  <table width="450" height="300px;" style="background-color:#F8F8F8;">
+
+                          <tr style="background-color:#E9E9E9; height:25px">
+
+                              <td width="10">&nbsp;</td>
+
+                              <td width="150">&nbsp;</td>
+
+                              <td width="2">&nbsp;</td>
+
+                              <td width="400">&nbsp;</td>
+
+                          </tr>
+
+                          <tr >
+                            <td>&nbsp;</td>
+                            <td>Date Range
+                            </td>
+                            <td>:</td>
+                            <td><span style="vertical-align:middle;">{{=search_form.custom.widget.from_dt_2}}&nbsp;To&nbsp;{{=search_form.custom.widget.to_dt_2}}</span></td>
+                          </tr>
+                          <tr >
+                            <td>&nbsp;</td>
+                            <td>Branch/Depot</td>
+                            <td>:</td>
+                            <td>
+                            {{if (session.user_type=='Depot' and session.user_depot_category=='DEPOT'):}}
+                                <input type="text" name="sales_depot_id_sales2" id="sales_depot_id_sales2" size="25" value="{{=session.depot_id}}|{{=session.user_depot_name}}" placeholder="Select Branch/Depot" autocomplete="off" style="width:288px"/>
+                            {{else:}}
+                            <input  name="sales_depot_id_sales2" type="text" id="sales_depot_id_sales2" class="depot_id" size="25" value="" placeholder="Select Branch/Depot" autocomplete="off" style="width:288px"/>
+                            {{pass}}
+                            
+                            </td>
+                          </tr>
+                          <tr >
+
+
+                            <td width="10">&nbsp;</td>
+
+                            <td>Branch Store</td>
+
+                            <td>:</td>
+
+                            <td width="400"><input  name="store_id_sales2" type="text" id="store_id_sales2" size="25" value="" placeholder="Select Branch/Depot Store" autocomplete="off" style="width:288px"/></td>
+
+                          </tr>
+
+                          <tr >
+
+                            <td width="10">&nbsp;</td>
+
+                            <td>Customer</td>
+
+                            <td>:</td>
+
+                            <td width="400"><input  name="customer_id_sales2" type="text" id="customer_id_sales2" size="25" value="" placeholder="Select Customer" autocomplete="off" style="width:288px"/></td>
+
+                          </tr>
+
+                            <tr >
+                              <td>&nbsp;</td>
+                              <td>Market</td>
+                              <td>:</td>
+                              <td><input  name="customer_market2" type="text" id="customer_market2" size="25" value="" placeholder="Select Market" autocomplete="off" style="width:288px"/></td>
+                            </tr>
+                            <tr >
+
+                              <td width="10">&nbsp;</td>
+
+                              <td>Delivery Man</td>
+
+                              <td>:</td>
+
+                              <td width="400"><input  name="dman_id_sales2" type="text" id="dman_id_sales2" size="25" value="" placeholder="Select Delivery Man" autocomplete="off" style="width:288px"/></td>
+
+                          </tr>
+                            <tr >
+                              <td>&nbsp;</td>
+                              <td>Teritory</td>
+                              <td>: </td>
+                              <td><input  name="t_id_sales2" type="text" id="t_id_sales2" size="25" value="" placeholder="Select Teritory" autocomplete="off" style="width:288px"/></td>
+                            </tr>
+                            <tr >
+                              <td>&nbsp;</td>
+                              <td>MSO</td>
+                              <td>:</td>
+                              <td><input  name="mso_id_sales2" type="text" id="mso_id_sales2" size="25" value="" placeholder="Select MSO" autocomplete="off" style="width:288px"/></td>
+                            </tr>
+                            <tr >
+                              <td>&nbsp;</td>
+                              <td>&nbsp;</td>
+                              <td>&nbsp;</td>
+                              <td>&nbsp;</td>
+                            </tr>
+
+                      </table>
+
+                  </td>
+
+                    <td valign="top">
+
+                    	<table width="350">
+                        	
+
+                            <tr style="background-color:#E9E9E9; height:25px">
+
+                              <td colspan="3">&nbsp;</td>
+                              <td>&nbsp;</td>
+                            </tr>
+							
+                            <tr >
+                              <td><input type="submit" style="width:400px" name="btn_inv_ret_details" value="30.1 Invoice and Return Details" title="Depot/branch,Store"/></td>
+                              <td width="5" align="left" style="width:60px">&nbsp;</td>
+                              <td align="right" style="width:60px"><input type="submit" style="width:50px" name="btn_inv_ret_details_D" value="  D   " title="" disabled/></td>
+                              <td>&nbsp;</td>
+                            </tr>
+                            <tr >
+                              <td><input type="submit" style="width:400px" name="btn_inv_ret_itemwise" value="30.2 Invoice and Return Details Item wise" title="Depot/branch,Store"/></td>
+                              <td width="5" align="left">&nbsp;</td>
+                              <td align="right"><input type="submit" style="width:50px" name="btn_inv_ret_itemwise_D" value="  D   " title="" disabled/></td>
+                              <td>&nbsp;</td>
+                            </tr>
+                            <tr >
+                              <td><input type="submit" style="width:400px" name="btn_inv_ret_checking" value="30.3 Invoice wise Return Checking" title="Depot/branch,Store"/></td>
+                              <td width="5" align="left">&nbsp;</td>
+                              <td align="right"><input type="submit" style="width:50px" name="btn_inv_ret_checking_D" value="  D   " title="" disabled/></td>
+                              <td>&nbsp;</td>
+                            </tr>
+                            
+                            <tr >
+                              <td colspan="3">&nbsp;</td>
+                              <td>&nbsp;</td>
+                            </tr>
+                            
+                            <tr >
+                              <td><!--<input type="submit" style="width:400px" name="btn_discount_typewise_sale" value="9 Discount Type wise Sales Statement Details" title="Depot/branch,Store" />--></td>
+                              <td width="5" align="left">&nbsp;</td>
+                              <td align="right"><!--<input type="submit" style="width:50px" name="btn_discount_typewise_sale_D" value="  D   " title="" disabled/>--></td>
+                              <td>&nbsp;</td>
+                            </tr>
+                            <tr >
+                              <td colspan="3">&nbsp;</td>
+                              <td>&nbsp;</td>
+                            </tr>
+                            
+                            <tr >
+                              <td colspan="3">&nbsp;</td>
+                              <td>&nbsp;</td>
+                            </tr>
+                           <tr >
+                           
+                            
+                          <tr >
+
+                              <td colspan="3">&nbsp;</td>
+                              <td>&nbsp;</td>
+                            </tr>
+						</table>
+
+                    </td>                    
+
+                </tr>
+
+               </form>
+
+            </table>
+           
+		   </div>
+           
+           <!--End Billal-->
+           
+
+	  </div>
+
+      
+
+      </td>
+
+  </tr>
+
+</table>
+
+<br>
+
+<br>
+
+<br>
+
+<br>
+
+<br>
+
+<br>
+
+<script type="text/javascript">
+
+$(document).ready(function() {
+
+	
+
+	// Test build of multiselect.
+
+	var build = function(select, tr) {
+
+		select.multiselect();
+
+		
+
+		if (select.length === 0) {
+
+			return 'Select not present anymore.';
+
+		}
+
+		
+
+		if (select.css('display') !== 'none') {
+
+			return 'Select still visible (expected <code>display: none;</code>).';
+
+		}
+
+		
+
+		if ($('button.multiselect', tr).length === 0) {
+
+			return 'Multiselect button not present.';
+
+		}
+
+		
+
+		if ($('option', select).length !== 5) {
+
+			return 'Not all options present anymore.';
+
+		}
+
+		
+
+		if ($('ul.multiselect-container', tr).length === 0) {
+
+			return 'Unordered list <code>.multiselect-container</code> not present.';
+
+		}
+
+		
+
+		if ($('ul.multiselect-container li', tr).length !== 5) {
+
+			return 'No list item for each option present.';
+
+		}
+
+		
+
+		if ($('ul.multiselect-container li a', tr).length !== 5) {
+
+			return 'Not all list items come with an anchor inside.';
+
+		}
+
+		
+
+		return false;
+
+	}($('#test-build-select'), $('#test-build-tr'));
+
+	
+
+	if (build) {
+
+		$('#test-build-tr').removeClass('success').addClass('danger');
+
+		$('#test-build-tr td').last().html(build);
+
+	}
+
+	
+
+	// Test build with optgroups.
+
+	var buildOptgroups = function(select, tr) {
+
+		select.multiselect();
+
+		
+
+		if ($('optgroup', select).length !== 2) {
+
+			return 'Optgroups not present anymore (2 expected).';
+
+		}
+
+		
+
+		var first = $('optgroup', select).get(0);
+
+		var second = $('optgroup', select).get(1);
+
+		
+
+		if ($('option', $(first)).length !== 2) {
+
+			return 'First optgroup does not have 2 options.';
+
+		}
+
+		
+
+		if ($('option', $(second)).length !== 3) {
+
+			return 'Second optgroup does not have 3 options.';
+
+		}
+
+		
+
+		// Check the corresponding labels.
+
+		if ($('label.multiselect-group', tr).length !== 2) {
+
+			return 'Expected 2 labels within the unordered list.';
+
+		}
+
+		
+
+		// Check labeling of groups.
+
+		var firstLabel = $('label.multiselect-group', tr).get(0);
+
+		var secondLabel = $('label.multiselect-group', tr).get(1);
+
+		
+
+		if ($(firstLabel).text() !== $(first).prop('label')) {
+
+			return 'First group labeled incorrectly.';
+
+		}
+
+		
+
+		if ($(secondLabel).text() !== $(second).prop('label')) {
+
+			return 'Second group labeled incorrectly.';
+
+		}
+
+		
+
+		return false;
+
+	}($('#test-build-optgroups-select'), $('#test-build-optgroups-tr'));
+
+	
+
+	if (buildOptgroups) {
+
+		$('#test-build-optgroups-tr').removeClass('success').addClass('danger');
+
+		$('#test-build-optgroups-tr td').last().html(build);
+
+	}
+
+	
+
+	var buildSelected = function(select, tr ) {
+
+		select.multiselect();
+
+		
+
+		if ($('option:selected', select).length !== 1) {
+
+			return 'Multiselect did not adopt selected options (1 selected option).';
+
+		}
+
+		
+
+		if ($('ul.multiselect-container li.active', tr).length !== 1) {
+
+			return 'Corresponding list item not set to <code>.active</code>.';
+
+		}
+
+		
+
+		return false;
+
+	}($('#test-build-selected-select'), $('#test-build-selected-tr'));
+
+	
+
+	if (buildSelected) {
+
+		$('#test-build-selected-tr').removeClass('success').addClass('danger');
+
+		$('#test-build-selected-tr td').last().html(buildSelected);
+
+	}
+
+
+
+//-----------	Editing code
+
+	var buildSelectAll = function(select, tr ) {
+
+		var value ="all";
+
+		select.multiselect({
+
+			maxHeight: 150,
+
+			selectedClass: null,
+
+			//buttonWidth:'200px',
+
+			//buttonHeight:'50px',
+
+			includeSelectAllOption: true,
+
+			selectAllValue: value
+
+		});
+
+		
+
+		if ($('.multiselect-container input[value="' + value + '"]', tr).length !== 1) {
+
+			return 'Expected exactly one input with value ' + value + ' as select all option.';
+
+		}
+
+		
+
+		return false;
+
+	}($('.test-build-select-all-select'), $('#test-build-select-all-tr'));
+
+	
+
+	if (buildSelectAll) {
+
+		$('#test-build-select-all-tr').removeClass('success').addClass('');
+
+		$('#test-build-select-all-tr td').last().html(buildSelectAll);
+
+	}
+
+	//------- close editing code
+
+	
+
+	var buildFilter = function(select, tr) {
+
+		select.multiselect({
+
+			enableFiltering: true
+
+		});
+
+		
+
+		if ($('.multiselect-search', tr).length !== 1) {
+
+			return 'No search input present.';
+
+		}
+
+		
+
+	}($('.test-build-filter-select'), $('#test-build-filter-tr'));
+
+	
+
+	if (buildFilter) {
+
+		$('#test-build-filter-tr').removeClass('success').addClass('danger');
+
+		$('#test-build-filter-tr td').last().html(buildFilter);
+
+	}
+
+	
+
+	// Test select.
+
+	var select = function(selectElement, tr) {
+
+		selectElement.multiselect();
+
+		
+
+		// Check for no selected options and no active li's.
+
+		if ($('option:selected', selectElement).length > 0) {
+
+			return 'There are already selected options (0 expected).';
+
+		}
+
+		
+
+		if ($('ul.multiselect-container li.active', tr).length > 0) {
+
+			return 'There are already active list items (0 expected).';
+
+		}
+
+		
+
+		selectElement.multiselect('select', '1');
+
+		
+
+		if ($('option:selected', selectElement).length !== 1) {
+
+			return 'Just selected an option - option not marked selected.';
+
+		}
+
+		
+
+		if ($('ul.multiselect-container li.active', tr).length !== 1) {
+
+			return 'Just selected an option - list item not set active.';
+
+		}
+
+		
+
+		if ($('option:selected', selectElement).first().val() !== '1') {
+
+			return 'Wrong option selected.';
+
+		}
+
+		
+
+		selectElement.multiselect('select', ['2', '3']);
+
+		
+
+		if ($('option:selected', selectElement).length !== 3) {
+
+			return 'Just selected two additional options - options not marked selected.';
+
+		}
+
+		
+
+		if ($('ul.multiselect-container li.active', tr).length !== 3) {
+
+			return 'Just selected two additional options - list items not set active.';
+
+		}
+
+		
+
+		var second = $('option:selected', selectElement).get(1),
+
+			third = $('option:selected', selectElement).get(2);
+
+		
+
+		if (second === undefined || second.length === 0) {
+
+			return 'Could not get second option.';
+
+		}
+
+		
+
+		if (third === undefined || third.length === 0) {
+
+			return 'Could not get third option.';
+
+		}
+
+		
+
+		if ($(second).val() !== '2' || $(third).val() !== '3') {
+
+			return 'Wrong options selected.';
+
+		}
+
+		
+
+		return false;
+
+	}($('#test-select-select'), $('#test-select-tr'));
+
+	
+
+	if (select) {
+
+		$('#test-select-tr').removeClass('success').addClass('danger');
+
+		$('#test-select-tr td').last().html(select);
+
+	}
+
+	
+
+	// Test deselect.
+
+	var deselect = function(select, tr) {
+
+		select.multiselect();
+
+		
+
+		// Check for no selected options and no active li's.
+
+		if ($('option:selected', select).length !== 3) {
+
+			return 'There should be 3 options selected.';
+
+		}
+
+		
+
+		if ($('ul.multiselect-container li.active', tr).length !== 3) {
+
+			return 'There should be 3 list items set to active.';
+
+		}
+
+		
+
+		select.multiselect('deselect', '1');
+
+		
+
+		if ($('option:selected', select).length !== 2) {
+
+			return 'Just deselected an option - option not marked deselected.';
+
+		}
+
+		
+
+		if ($('ul.multiselect-container li.active', tr).length !== 2) {
+
+			return 'Just deselected an option - list item not set inactive.';
+
+		}
+
+		
+
+		if ($('option:selected', select).first().val() !== '2') {
+
+			return 'Wrong option deselected.';
+
+		}
+
+		
+
+		select.multiselect('deselect', ['2', '3']);
+
+		
+
+		if ($('option:selected', select).length > 0) {
+
+			return 'Just deselected two additional options - options not marked deselected.';
+
+		}
+
+		
+
+		if ($('ul.multiselect-container li.active', tr).length > 0) {
+
+			return 'Just deselected two additional options - list items not set unactive.';
+
+		}
+
+		
+
+		return false;
+
+	}($('#test-deselect-select'), $('#test-deselect-tr'));
+
+	
+
+	if (deselect) {
+
+		$('#test-deselect-tr').removeClass('success').addClass('danger');
+
+		$('#test-deselect-tr td').last().html(deselect);
+
+	}
+
+	
+
+	var maxHeight = function(select, tr) {
+
+		
+
+		select.multiselect({
+
+			maxHeight: 100
+
+		});
+
+		
+
+		var height = $('.multiselect-container', tr).css('max-height');
+
+		if (height !== '100px') {
+
+			return 'Max height not set correctly (set: ' + height + ').';
+
+		}
+
+		
+
+		return false;
+
+	}($('#test-max-height-select'), $('#test-max-height-tr'));
+
+	
+
+	if (maxHeight) {
+
+		$('#test-max-height-tr').removeClass('success').addClass('danger');
+
+		$('#test-max-height-tr td').last().html(maxHeight);
+
+	}
+
+});
+
+</script>
+
+</body> 
+

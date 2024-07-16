@@ -1,0 +1,76 @@
+{{extend 'layout_report.html'}}
+<html>
+<head>
+<script type="text/javascript">
+function print_page()
+  {
+    window.print()
+  }
+</script>
+
+<style type="text/css">
+.blackCat{
+vertical-align:middle;
+background-color:#FBFBFB;
+}
+
+
+</style>
+
+</head>
+<body>
+
+<br/> 
+
+<table width="600" border="0" cellpadding="0" cellspacing="0" >
+
+  <tr align="left" class="blackCatHead"  height="20px" ; style="vertical-align:middle; background-color:#E6E6E6">
+    <td colspan="2" align="center" >Depot Opening </td>
+  </tr>
+
+  <tr  align="left" class="blackCat"  >
+    <td width="120" >ID</td>
+    <td >:&nbsp;{{=txid}}</td>
+  </tr>
+  <tr  align="left" class="blackCat"  >
+    <td width="120" >Depot</td>
+    <td >:&nbsp;{{=tx_account}}</td>
+  </tr>
+  <tr  align="left" class="blackCat"  >
+    <td >Depot</td>
+    <td >:&nbsp;{{=opposite_account}}</td>
+  </tr>
+  <tr  align="left" class="blackCat"  >
+    <td >Date</td>
+    <td >:&nbsp;{{=str(tx_date)[0:10]}}</td>
+  </tr>
+  
+  <tr  align="left" class="blackCat"  >
+    <td width="120" >Type</td>
+    <td >:&nbsp;{{=tx_type}}</td>
+  </tr>
+  
+  <tr  align="left" class="blackCat" >
+    <td width="120" >Description</td>
+    <td >:&nbsp;{{=tx_des}}</td>
+  </tr>
+  <tr  align="left" class="blackCat">
+    <td width="120" >Amount</td>
+    <td >:&nbsp;{{if tx_amount<0:}}{{=float(tx_amount)*(-1)}}&nbsp;(Cr){{else:}}{{=tx_amount}}&nbsp;(Dr){{pass}}</td>
+  </tr>
+  <tr  align="left" class="blackCat" >
+    <td width="120" >&nbsp;</td>
+    <td >&nbsp;</td>
+  </tr>
+</table>
+	<table width="600" border="0">
+          
+          <tr>
+            <td align="right" class="report_body"></td>
+          </tr>
+          <tr><td align="right" class="report_body"><a href="" onClick="print_page()" style="text-decoration:none">Print</a></td></tr>
+</table>
+
+    <br/>
+</body>
+</html>

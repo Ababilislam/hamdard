@@ -1,0 +1,288 @@
+{{extend 'layout_invoice.html'}}
+
+<html>
+
+<head>
+
+</head>
+
+<body>
+	{{itemPerpage=30}}
+	{{total_trade_price=0.0}}
+	{{total_vat=0.0}}
+    
+    {{rowSl=0}}
+    {{rowCount=0}}
+    {{pageFlag=0}}
+    
+	{{for i,record in enumerate(records):}}	
+		{{rowSl+=1}}
+     	{{rowCount+=1}}
+     	
+        {{if pageFlag==1:}}    
+        	{{pageFlag=0}}    
+		<!--page break-->
+            <span style="page-break-before:always"></span>	
+            <!-- Report header-->	                        
+            <table width="902">
+				<tr>
+					<td width="100" ><img width="25px" height="40px" src="{{=URL('static','images/comp_logo2.png')}}"/></td>
+					<td style="text-align:center; font-size:24px; font-weight:bold">{{=session.cName}}</td>
+					<td width="100" >&nbsp;</td>
+  				</tr>
+			</table>			
+            <table width="900" style="border: solid 1px #C4C4C4">
+                <tr style="border-bottom:solid; border-bottom-color:#999">
+                  <td align="center">{{=session.user_depot_address}}<!--{{#=session.company_address}}--><!--Sadar Road, Mohakhali, Dhaka. Ph: 9896479,9862763, 8855371-80 Ext:258 Fax:8860325, mail: tdclmohakhali@transcombd.com--></td>
+              </tr>
+			</table>
+            
+             <table width="900" cellpadding="1" cellspacing="1" >
+              <tr style="border: solid 1px #C4C4C4">
+                <td width="300" align="left"><strong>DPID:<span style="font-size:14px; font-weight:bold"> {{=d_man_id}}</span></strong></td>
+                <td align="left"><strong>DP Name: <span style="font-size:14px; font-weight:bold">{{=d_man_name}}</span></strong></td>
+                <td width="200" align="center"><strong>{{=session.user_depot_name}}</strong></td>
+              </tr>
+            </table>            
+            
+			<!--<hr/>-->
+			<!-- end report header  -->
+			
+            <table width="900" border="1" cellpadding="1" cellspacing="1" class="sample_border" style="border: solid 1px #C4C4C4">
+              <tr align="left" class="blackCatHead"  height="20px" style="vertical-align:middle; background-color:#E6E6E6">
+                <td width="40" rowspan="2" >SL</td>
+                <td width="60" rowspan="2" >Item ID</td>
+                <td rowspan="2" align="left" >Item Name</td>
+                <td width="60" rowspan="2" >Batch</td>
+                <td colspan="2" align="center" >Invoice</td>
+                <td colspan="2" align="center"  >Return</td>
+                <td colspan="2" align="center"  >Net Qnty Issue</td>
+              </tr>
+              <tr align="left" class="blackCatHead"  height="20px" style="vertical-align:middle; background-color:#E6E6E6">
+                <td width="50" align="center" >Qnty</td>
+                <td width="50" align="center" >Bonus</td>
+                <td width="50" align="center"  >Qnty</td>
+                <td width="50" align="center"  >Bonus</td>
+                <td width="50" align="center"  >Sold</td>
+                <td width="50" align="center"  >Bonus</td>
+              </tr>
+             
+        {{elif i==0:}}
+        	<span style="float:right">#5.1</span>
+        	<span style="float:right"><a href="{{=URL(c='print_manager',f='invoice_item_list_synopsis_sd_after_del_download')}}" >Download</a></span>
+    		      	
+        	 <table width="900" cellpadding="1" cellspacing="1" >
+              <tr style="border: solid 1px #C4C4C4">
+                <td width="300" align="left"><strong>DPID:<span style="font-size:14px; font-weight:bold"> {{=d_man_id}}</span></strong></td>
+                <td align="left"><strong>DP Name: <span style="font-size:14px; font-weight:bold">{{=d_man_name}}</span></strong></td>
+                <td width="200" align="center"><strong>{{=session.user_depot_name}}</strong></td>
+              </tr>
+            </table>  
+              
+            <table width="900" cellpadding="1" cellspacing="1" >
+                <tr style="border: solid 1px #C4C4C4">
+                  <td align="left">
+                  <strong>SYNOPSIS (After Delivery):</strong>
+                  <br><strong style="font-size:14px">Market:</strong> <strong>{{=maxMarketID}}|{{=maxmarketName}}</strong></td>
+                  <td width="200" align="center"><img src="{{=URL('static','images/comp_logo1.png')}}"/></td></tr>
+            </table>	
+            <table width="900" cellpadding="1" cellspacing="1" >
+                    <tr style="">
+                      <td width="100" align="left"><strong>Delivery Person</strong></td>
+                      <td align="left"><strong><span style="font-size:14px; font-weight:bold">:{{=d_man_id}}&nbsp;| {{=d_man_name}}</span></strong></td>
+                      <td width="150" align="left"><strong>Sales Term</strong></td>
+                      <td width="200" align="left"><strong><span style="font-size:14px; font-weight:bold">:{{if paymentMode=='':}}ALL{{else:}}{{=paymentMode}}{{pass}}{{if paymentMode=='CREDIT':}}({{if creditType=='':}}ALL{{else:}}{{=creditType}}{{pass}}){{pass}}</span></strong></td>
+                    </tr>
+                    <tr style="">
+                      <td width="100" align="left"><strong>From Invoice</strong></td>
+                      <td align="left"><strong>:{{=search_from_sl}}</strong></td>
+                      <td width="150" align="left"><strong>To Invoice Range</strong></td>
+                      <td width="200" align="left"><strong>:{{=search_to_sl}}</strong></td>
+                    </tr>
+                    <tr style="">
+                      <td width="100" align="left"><strong>From Date</strong></td>
+                      <td align="left"><strong><span style="font-size:14px; font-weight:bold">:</span></strong>{{try:}}{{=datetime.datetime.strptime(str(invoice_dateFrom),'%Y-%m-%d').strftime('%d-%b-%Y')}}{{except:}}{{pass}}</td>
+                      <td width="150" align="left"><strong>To Date</strong></td>
+                      <td width="200" align="left"><strong><span style="font-size:14px; font-weight:bold">:</span></strong>{{try:}}{{=datetime.datetime.strptime(str(invoice_dateTo),'%Y-%m-%d').strftime('%d-%b-%Y')}}{{except:}}{{pass}}</td>
+                    </tr>
+                    <tr style="">
+                      <td colspan="4" align="center"><span style="font-weight:bold; background-color:#F2F2F2">Product Report - (Store Department)</span></td>
+                    </tr>
+            </table>
+            
+            <table width="900" border="1" cellpadding="1" cellspacing="1" class="sample_border" style="border: solid 1px #C4C4C4">
+              <tr align="left" class="blackCatHead"  height="20px" style="vertical-align:middle; background-color:#E6E6E6">
+                <td width="40" rowspan="2" >SL</td>
+                <td width="60" rowspan="2" >Item ID</td>
+                <td rowspan="2" align="left" >Item Name</td>
+                <td width="60" rowspan="2" >Batch</td>
+                <td colspan="2" align="center" >Invoice</td>
+                <td colspan="2" align="center"  >Return</td>
+                <td colspan="2" align="center"  >Net Qnty Issue</td>
+              </tr>
+              <tr align="left" class="blackCatHead"  height="20px" style="vertical-align:middle; background-color:#E6E6E6">
+                <td width="50" align="center" >Qnty</td>
+                <td width="50" align="center" >Bonus</td>
+                <td width="50" align="center"  >Qnty</td>
+                <td width="50" align="center"  >Bonus</td>
+                <td width="50" align="center"  >Sold</td>
+                <td width="50" align="center"  >Bonus</td>
+              </tr>             
+        {{pass}}
+	
+	<!--end page break-->      
+      <tr  align="left" class="blackCat"  style="vertical-align:middle; background-color:#FBFBFB">	
+        <td width="40" >{{=rowSl}}</td>
+        <td width="60" >{{=record.sm_invoice.item_id}}</td>
+        <td align="left" >{{=record.sm_invoice.item_name}}</td>
+        
+        <td width="60" >{{=record.sm_invoice.batch_id}}</td>
+        <td width="50" align="center" >{{=record[db.sm_invoice.quantity.sum()]}}</td>
+        
+        <td width="50" align="center" >{{if record[db.sm_invoice.bonus_qty.sum()]==0:}}-{{else:}}{{=record[db.sm_invoice.bonus_qty.sum()]}}{{pass}}</td>
+        <td width="50" align="center" >{{if record[db.sm_invoice.return_qty.sum()]==0:}}-{{else:}}{{=record[db.sm_invoice.return_qty.sum()]}}{{pass}}</td>
+    	<td width="50" align="center" >{{if record[db.sm_invoice.return_bonus_qty.sum()]==0:}}-{{else:}}{{=record[db.sm_invoice.return_bonus_qty.sum()]}}{{pass}}</td>
+        <td width="50" align="center" >{{soldQty=record[db.sm_invoice.quantity.sum()]-record[db.sm_invoice.return_qty.sum()]}} {{if soldQty==0:}}-{{else:}}{{=soldQty}}{{pass}}</td>
+        <td width="50" align="center" >{{bonusQty=record[db.sm_invoice.bonus_qty.sum()]-record[db.sm_invoice.return_bonus_qty.sum()]}} {{if bonusQty==0:}}-{{else:}}{{=bonusQty}}{{pass}}</td>
+        </tr>
+        
+        <!--page break after Item limit-->
+        {{if rowCount==itemPerpage:}}    
+        	   
+             <!--Item limit without first page-->
+             {{if pageFlag==0:}}{{itemPerpage=36}}{{pass}}
+             
+             {{rowCount=0}}
+             {{pageFlag=1}}
+             
+             <!--full page page footer-->
+            </table>
+             <br/>  
+            <table width="900" >
+                <tr>
+                  <td width="30" align="right">&nbsp;</td>
+                  <td align="center">______________________________________</td>
+                  <td width="200" align="center">________________________</td>
+                  <td width="200" align="center">___________________</td>
+                  <td width="150" align="center">___________________</td>
+              </tr>
+                <tr>
+                  <td width="30" align="right"><strong>for</strong></td>
+                  <td align="center"><strong>{{=session.cName}}<!--Transcom Distribution Co. Ltd.--></strong></td>
+                  <td width="200" align="center"><strong>Accounts Department</strong></td>
+                  <td width="200" align="center"><strong>Store-in-Charge</strong></td>
+                  <td width="150" align="center"><strong>Delivery Person</strong></td>
+              </tr>
+            </table>
+            
+        {{pass}}       
+        
+    {{pass}}
+        
+        <!--part page footer-->
+        {{if rowCount>0:}}
+			</table>
+            
+             <!--<br/>  
+			<table width="900" >
+                <tr>
+                  <td width="30" align="right">&nbsp;</td>
+                  <td align="center">______________________________________</td>
+                  <td width="200" align="center">________________________</td>
+                  <td width="200" align="center">___________________</td>
+                  <td width="150" align="center">___________________</td>
+              </tr>
+                <tr>
+                  <td width="30" align="right"><strong>for</strong></td>
+                  <td align="center"><strong>{{=session.cName}}</strong></td>
+                  <td width="200" align="center"><strong>Accounts Department</strong></td>
+                  <td width="200" align="center"><strong>Store-in-Charge</strong></td>
+                  <td width="150" align="center"><strong>Delivery Person</strong></td>
+              </tr>
+            </table>-->        
+        {{pass}}
+        
+<br>
+    <table width="900px" border="1" cellpadding="1" cellspacing="1" class="sample_border" style="border: solid 1px #C4C4C4">
+        <tr align="left" class="blackCatHead"  height="20px" style="">
+          <td colspan="6" align="center" ><strong>Summary</strong></td>
+        </tr>
+        <tr align="left" class="blackCatHead"  height="20px" style="vertical-align:middle; background-color:#E6E6E6">
+          <td colspan="2" align="center" ><strong>DOCUMENT</strong></td>
+          <td width="120" align="left" >&nbsp;</td>
+          <td width="180" align="center" ><strong>INVOICE</strong></td>
+          <td width="180" align="center" ><strong>RETURN</strong></td>
+        <td align="center" ><strong>NET</strong></td>
+        </tr>
+        <tr  align="left" class="blackCat"  style="vertical-align:middle; background-color:#FBFBFB">
+          <td width="100" align="left" >Invoice</td>
+          <td width="100" align="left" >: {{=invoiceTotal}}</td>
+          <td width="120" align="left" >Sub Total(TP)</td>
+          <td width="180" align="right" >  {{=easy_format(actual_total_tp)}}</td>
+          <td width="180" align="right" >({{=easy_format(return_tp+return_sp_discount)}})</td>
+          <td align="right" >{{=easy_format(actual_total_tp-(return_tp+return_sp_discount))}}</td>
+        </tr>
+        <tr  align="left" class="blackCat"  style="vertical-align:middle; background-color:#FBFBFB">
+          <td width="100" align="left" >Credit Note</td>
+          <td width="100" align="left" >&nbsp;</td>
+          <td width="120" align="left" >VAT</td>
+          <td width="180" align="right" > {{=easy_format(vatTotal)}}</td>
+          <td width="180" align="right" >({{=easy_format(return_vat)}})</td>
+          <td align="right" >{{=easy_format(vatTotal-return_vat)}}</td>
+        </tr>
+        <tr  align="left" class="blackCat"  style="vertical-align:middle; background-color:#FBFBFB">
+          <td width="100" align="left" >Debit Note</td>
+          <td width="100" align="left" >&nbsp;</td>
+          <td width="120" align="left" >Discount</td>
+          <td width="180" align="right" > {{=easy_format(totalDiscount)}}</td>
+          <td width="180" align="right" >({{=easy_format(return_discount)}})</td>
+          <td align="right" >{{=easy_format(totalDiscount-return_discount)}}</td>
+        </tr>
+        <tr  align="left" class="blackCat"  style="vertical-align:middle; background-color:#FBFBFB">
+          <td align="left" >Customer</td>
+          <td align="left" >: {{=clientCount}}</td>
+          <td width="120" align="left" >Special Discount</td>
+          <td width="180" align="right" >{{=easy_format(totalSpDiscount)}}</td>
+          <td width="180" align="right" >({{=easy_format(return_sp_discount)}})</td>
+          <td align="right" >{{=easy_format(totalSpDiscount-return_sp_discount)}}</td>
+        </tr>
+        <tr  align="left" class="blackCat"  style="vertical-align:middle; background-color:#FBFBFB">
+          <td width="100" align="left" >&nbsp;</td>
+          <td width="100" align="left" >&nbsp;</td>
+          <td width="120" align="left" >Total</td>
+          <td width="180" align="right" title="{{=easy_format(totalAmount)}}">{{invTotal=(actual_total_tp+vatTotal-(totalDiscount+totalSpDiscount))}} {{=easy_format(invTotal)}}</td>
+          <td width="180" align="right" >({{totalReturn=return_tp+return_vat-return_discount}}{{=easy_format(totalReturn)}})</td>
+          <td align="right" >{{netSale=invTotal-totalReturn}}{{=easy_format(netSale)}}</td>
+        </tr>
+   </table>
+   <strong> Net Sales (Taka in Words):</strong> {{try:}}{{=num2word(round(netSale,2))}}.{{except:}}-{{pass}}
+	
+	<br/>  
+        <table width="900" >
+            <tr>
+              <td width="30" align="right">&nbsp;</td>
+              <td align="center">______________________________________</td>
+              <td width="200" align="center">________________________</td>
+              <td width="200" align="center">___________________</td>
+              <td width="150" align="center">___________________</td>
+          </tr>
+            <tr>
+              <td width="30" align="right"><strong>for</strong></td>
+              <td align="center"><strong>{{=session.cName}}<!--Transcom Distribution Co. Ltd.--></strong></td>
+              <td width="200" align="center"><strong>Accounts Department</strong></td>
+              <td width="200" align="center"><strong>Store-in-Charge</strong></td>
+              <td width="150" align="center"><strong>Delivery Person</strong></td>
+          </tr>
+        </table>    
+
+
+<!--<br>
+<strong> Net Sales (Taka in Words):</strong> {{try:}}{{=num2word(str(total_trade_price))}}{{except:}}-{{pass}}
+<hr>
+<strong>Total Invoice: </strong>{{=invoiceTotal}}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <strong>Total Customer: </strong>{{=clientCount}}
+-->
+
+</body>
+
+</html>
+

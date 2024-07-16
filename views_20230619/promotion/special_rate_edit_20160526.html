@@ -1,0 +1,250 @@
+{{extend 'layout.html'}}
+
+ 
+
+  <style type="text/css">
+
+ input[type=text], input[type=password],  select {
+
+    margin: 2px 0px 2px 0px;
+
+}
+
+div.error {
+
+    width: 170px;
+
+}
+
+
+
+#sm_promo_special_rate_status{
+	width: 185px;
+}
+
+
+
+ </style>
+<script>
+
+	$(function() {
+		/*$("#sm_promo_special_rate_from_date").attr("readonly",true);	
+		$("#sm_promo_special_rate_to_date").attr("readonly",true);*/
+		$("#sm_promo_special_rate_campaign_ref").attr("readonly",true);
+		$("#sm_promo_special_rate_product_id").attr("readonly",true);	
+		$("#sm_promo_special_rate_product_name").attr("readonly",true);	
+		$("#sm_promo_special_rate_mrp").attr("readonly",true);
+		$("#sm_promo_special_rate_tp").attr("readonly",true);
+		$("#sm_promo_special_rate_vat").attr("readonly",true);
+		$("#sm_promo_special_rate_min_qty").attr("readonly",true);	
+		$("#sm_promo_special_rate_special_rate_withvat").attr("readonly",true);	
+		$("#sm_promo_special_rate_special_rate_withoutvat").attr("readonly",true);	
+	});
+
+</script>
+ 
+
+  <table width="100%"  border="0" cellspacing="0" cellpadding="0" style="background-color:#FFFFFF;" >
+
+  <tr height="30px" >
+
+    <td width="300"><span class="blackCatTitle">Special Rate-Edit</span></td>
+
+	<form action="{{=URL(c='promotion',f='special_rate',args=[page])}}" method="post">
+
+	<td width="500" align="right">	
+
+	<input name="" type="submit"  value="Back"/>	</td>
+
+	<td align="left">&nbsp;</td>
+
+	</form>
+
+  </tr>
+
+  <tr  height="1px" style="background-color:#CCCCCC;">	
+
+	<td width="300" align="left">	</td>
+
+	<td colspan="2" align="right">	</td>
+
+  </tr>
+
+  </table>
+
+  
+
+  
+
+  <table width="100%" height="500px"  border="0" cellspacing="0" cellpadding="0" class="page_color"  >
+
+  <tr height="100%"  style="vertical-align:top;">
+
+    <td>
+
+	<table width="100%"  border="0" cellpadding="0" cellspacing="0"  >
+
+      <tr>
+
+        <td width="10px">&nbsp;</td>
+
+        <td>&nbsp;</td>
+
+      </tr>
+
+      <tr>
+
+        <td>&nbsp;</td>
+
+        <td align="left">
+
+          <table width="800">
+
+            <tr>
+
+              <td width="485"><table width="400" class="blackCat">
+
+                {{=form.custom.begin}}
+
+                <tr>
+
+              <td width="130">From-Date</td>
+
+                  <td width="337">{{#=form.custom.widget.from_date}}<input type="text" id="from_date" name="from_date" value="{{=recordRows[0].from_date}}" readonly="readonly"/></td>
+
+                </tr>
+
+            <tr>
+
+              <td>To-Date</td>
+
+              <td>{{=form.custom.widget.to_date}}<!--<input type="text" id="to_date" name="to_date" value="{{#=recordRows[0].to_date}}" readonly="readonly"/>--></td>
+
+            </tr>
+
+            <tr>
+
+              <td>Campaign Ref</td>
+
+              <td>{{=form.custom.widget.campaign_ref}}</td>
+
+            </tr>
+
+            <tr>
+
+              <td>Product ID</td>
+
+              <td>{{=form.custom.widget.product_id}}</td>
+
+            </tr>
+
+            <tr>
+              
+              <td>Product Name</td>
+              
+              <td>{{=form.custom.widget.product_name}}</td>
+              
+            </tr>
+			
+            </table></td>
+
+              <td width="303"><table width="400" class="blackCat">
+
+                  <tr>
+                    
+                    <td>Minimum Qty</td>
+                    
+                    <td>{{=form.custom.widget.min_qty}}</td>
+                    
+                  </tr>
+                  
+                   <tr>
+
+                    <td>Special TP</td>
+
+                    <td>{{=form.custom.widget.special_rate_tp}}</td>
+
+                  </tr>
+                  
+                  <tr>
+
+                    <td>Special VAT</td>
+
+                    <td>{{=form.custom.widget.special_rate_vat}}</td>
+
+                  </tr>
+                  <tr>
+
+                    <td>Status </td>
+
+                    <td>{{=form.custom.widget.status}}</td>
+
+                  </tr>
+
+                  <tr>
+
+                    <td>Delete</td>
+
+                    <td>{{=form.custom.deletable}}</td>
+
+                  </tr>
+
+                  <tr>
+
+                    <td>&nbsp;</td>
+
+                    <td>{{=form.custom.submit}}</td>
+
+                  </tr>
+
+                  <tr>
+
+                    <td></td>
+
+                    <td></td>
+
+                  </tr>
+
+                  <tr>
+
+                    <td></td>
+
+                    <td></td>
+
+                  </tr>
+
+                  <tr>
+
+                    <td></td>
+
+                    <td></td>
+
+                  </tr>
+
+                  <tr>
+
+                    <td></td>
+
+                    <td></td>
+
+                  </tr>
+
+                {{=form.custom.end}}
+
+              </table></td>
+
+            </tr>
+
+          </table>
+
+		  </td>
+
+      </tr>
+
+		  </table>
+
+	</td>
+
+  </tr>
+
+</table>

@@ -1,0 +1,79 @@
+{{extend 'layout_salesreport.html'}}
+<style>
+  #sm_search_date_from_dt,#sm_search_date_to_dt{
+    height:30px;
+    padding: 0px 5px;
+  }
+  #btn_filter,#btn_all{
+    
+  }
+  .table tr:nth-child(even) {background-color: #d6d8db;}
+</style>
+<table class="table mb-0 " >
+  <tbody>
+  <form action="{{=URL(c='sales_report',f='salesDcr_report_detail',vars=dict(cid=cid,rep_id=rep_id,password=password,synccode=synccode))}}">
+    <input type="hidden" name="cid" value="{{=cid}}">
+    <input type="hidden" name="rep_id" value="{{=rep_id}}">
+    <input type="hidden" name="password" value="{{=password}}">
+    <input type="hidden" name="synccode" value="{{=synccode}}">
+    <!-- <input type="hidden" name="repArea_id" value="{{#=repArea_id}}"> -->
+    <tr class="bg-light">
+    <td scope="row"  colspan="3">Date From
+
+      {{=search_form.custom.widget.from_dt}}
+      {{#=date_to}}
+      <!-- <input type="date" value="{{=date_to}}"> -->
+      To &nbsp;
+      {{=search_form.custom.widget.to_dt}}
+    </td>
+    <td>
+      <div class="form-group">
+      <input type="submit"  class="form-control form-control-sm bg-dark text-light" name="btn_filter" id="btn_filter" value="Filter" id="dateTo" />
+      </div>
+    </td>
+    <td>
+      <div class="form-group">
+        <input type="submit"  class="form-control form-control-sm bg-dark text-light " name="btn_all" id="btn_all" value="All" id="dateTo" />
+      </div>
+    </td>
+  </tr>
+</form>
+</tbody>  
+</table>
+
+<table class="table table-striped table-hover table-bordered" > 
+  
+  <thead class="table-dark">
+    <th scope="col">Date</th>
+      <th scope="col">Territory</th>
+      <th scope="col">Visit Count</th>
+      <th scope="col">Successful DCR</th>
+      <th scope="col"></th>
+  </thead>
+  <tbody>
+    {{for i in range(len(records_ov)):
+      records_ov_dict=records_ov[i]   
+      visit_date=str(records_ov_dict["visit_date"])      
+      route_id=str(records_ov_dict["route_id"])      
+      route_name=str(records_ov_dict["route_name"])      
+      doc_count=str(records_ov_dict["doc_count"])    
+           
+      scsDcr_count=str(records_ov_dict["scsdoc_count"])          
+      if scsDcr_count=='None':
+        scsDcr_count=0
+      pass
+    }}
+
+    <tr class="table-primary">
+      <th scope="row" class="text-center">{{=visit_date}}</th>
+      <td class="text-center">{{=route_id}}|{{=route_name}}</td>
+      <td class="text-center">{{=doc_count}}</td>
+      <td class="text-center">{{=scsDcr_count}}</td>
+      <td class="text-right"><a style="text-decoration: none;font-size: 20px"  href="{{=URL(c='sales_report',f='slsRptDcr_area_wise', vars=dict(cid=cid,rep_id=rep_id,password=password,synccode=synccode,visit_date=visit_date,route_id=route_id))}}" target="_blank">
+        &raquo;
+      </a>
+      </td>
+    </tr>
+    {{pass}}
+  </tbody>
+</table>

@@ -1,0 +1,627 @@
+{{extend 'layout.html'}}
+
+<link
+  rel="stylesheet"
+  href="{{=URL('static', 'js_and_css/ui.theme.css')}}"
+  type="text/css"
+/>
+
+<link
+  rel="stylesheet"
+  href="{{=URL('static', 'js_and_css/jquery-ui.css')}}"
+  type="text/css"
+/>
+
+<link
+  rel="stylesheet"
+  href="{{=URL('static', 'js_and_css/style.css')}}"
+  type="text/css"
+/>
+
+<script src="{{=URL('static','js_and_css/jquery-1.8.2.js')}}"></script>
+
+<script src="{{=URL('static','js_and_css/jquery-ui.js')}}"></script>
+
+<style type="text/css">
+  input[type="text"],
+  input[type="password"],
+  select {
+    margin: 2px 0px 2px 0px;
+
+    width: 100px;
+  }
+
+  div.error {
+    margin-left: 0px;
+
+    width: 100px;
+  }
+
+  #uni_middle_str5 {
+    width: 300px;
+  }
+
+  .page_color,
+  body {
+    font-family: Arial, Helvetica, sans-serif;
+
+    font-size: 13px;
+  }
+  #btn_expense_report {
+    width: 300px;
+  }
+</style>
+
+<script>
+  var base_url =
+    location.protocol +
+    "//" +
+    location.hostname +
+    (location.port && ":" + location.port) +
+    "/{{=request.application}}/";
+
+  $(function () {
+    //======================== GET REGION LIST START ================================//
+
+    $.ajax({
+      url: base_url + "default/get_zm_list",
+      success: function (rezStr) {
+        zmStr = rezStr;
+        //alert (fmStr)
+      },
+    });
+
+    $("#zm_SC").keyup(function () {
+      // alert("YES")
+      //-------------------------
+      var ref_list = zmStr.split(",");
+      var ref_name = $("#zm_SC").val();
+
+      //---------------- auto complete combo list
+      var ref_list_new = new Array();
+      lc = 0;
+      i = 0;
+      var refStr = "";
+      while (i < ref_list.length) {
+        refStr = ref_list[i];
+        i = i + 1;
+        var res = refStr.toUpperCase().match(ref_name.toUpperCase());
+        if (res != null) {
+          ref_list_new[lc] = refStr;
+          lc = lc + 1;
+          if (lc == 30) {
+            break;
+          }
+        } else {
+          continue;
+        }
+      }
+      //alert (ref_list_new);
+
+      //-------------- auto complete source
+      $("input#zm_SC").autocomplete({
+        source: ref_list_new,
+      });
+    });
+
+    //======================== GET REGION LIST END ================================//
+
+    //======================== GET ZONE LIST START ================================//
+
+    $.ajax({
+      url: base_url + "default/get_rsm_list",
+      success: function (resStr) {
+        rsmStr = resStr;
+        //alert (fmStr)
+      },
+    });
+
+    $("#rsm_SC").keyup(function () {
+      //-------------------------
+      var ref_list = rsmStr.split(",");
+      var ref_name = $("#rsm_SC").val();
+
+      //---------------- auto complete combo list
+      var ref_list_new = new Array();
+      lc = 0;
+      i = 0;
+      var refStr = "";
+      while (i < ref_list.length) {
+        refStr = ref_list[i];
+        i = i + 1;
+        var res = refStr.toUpperCase().match(ref_name.toUpperCase());
+        if (res != null) {
+          ref_list_new[lc] = refStr;
+          lc = lc + 1;
+          if (lc == 30) {
+            break;
+          }
+        } else {
+          continue;
+        }
+      }
+      //alert (ref_list_new);
+
+      //-------------- auto complete source
+      $("input#rsm_SC").autocomplete({
+        source: ref_list_new,
+      });
+    });
+
+    //======================== GET ZONE LIST END ================================//
+
+    //======================== GET AREA LIST START ================================//
+
+    $.ajax({
+      url: base_url + "default/get_fm_list",
+      success: function (resStr) {
+        fmStr = resStr;
+        //alert (fmStr)
+      },
+    });
+
+    $("#fm_SC").keyup(function () {
+      //-------------------------
+      var ref_list = fmStr.split(",");
+      var ref_name = $("#fm_SC").val();
+
+      //---------------- auto complete combo list
+      var ref_list_new = new Array();
+      lc = 0;
+      i = 0;
+      var refStr = "";
+      while (i < ref_list.length) {
+        refStr = ref_list[i];
+        i = i + 1;
+        var res = refStr.toUpperCase().match(ref_name.toUpperCase());
+        if (res != null) {
+          ref_list_new[lc] = refStr;
+          lc = lc + 1;
+          if (lc == 30) {
+            break;
+          }
+        } else {
+          continue;
+        }
+      }
+      //alert (ref_list_new);
+
+      //-------------- auto complete source
+      $("input#fm_SC").autocomplete({
+        source: ref_list_new,
+      });
+    });
+
+    //======================== GET AREA LIST END ================================//
+
+    //======================== GET TERRITORY LIST START ================================//
+
+    $.ajax({
+      url: base_url + "default/get_tl_list",
+      success: function (resStr) {
+        trtStr = resStr;
+      },
+    });
+
+    $("#tr_SC").keyup(function () {
+      //-------------------------
+      var ref_list = trtStr.split(",");
+      var ref_name = $("#tr_SC").val();
+
+      //---------------- auto complete combo list
+      var ref_list_new = new Array();
+      lc = 0;
+      i = 0;
+      var refStr = "";
+      while (i < ref_list.length) {
+        refStr = ref_list[i];
+        i = i + 1;
+        var res = refStr.toUpperCase().match(ref_name.toUpperCase());
+        if (res != null) {
+          ref_list_new[lc] = refStr;
+          lc = lc + 1;
+          if (lc == 30) {
+            break;
+          }
+        } else {
+          continue;
+        }
+      }
+      //alert (ref_list_new);
+
+      //-------------- auto complete source
+      $("input#tr_SC").autocomplete({
+        source: ref_list_new,
+      });
+    });
+
+    //======================== GET ZONE LIST END ================================//
+
+    // ================================================ ITEM ID AUTO COMPLETE START =======================================
+    employeeListStr = "";
+    // alert(base_url+'default/get_active_item_list')
+    $.ajax({
+      url: base_url + "counter_market_transaction/get_active_item_list",
+      success: function (retStr) {
+        employeeListStr = retStr;
+      },
+    });
+
+    $("#item_id").keyup(function () {
+      $("#stock_qty").html("");
+
+      // alert(employeeListStr)
+      localStorage.employeeListStr = employeeListStr;
+      valueList = employeeListStr.split(",");
+      var searchValue = $("#item_id").val();
+      var valueList_new = new Array();
+      lc = 0;
+      i = 0;
+      var valueStr = "";
+      while (i < valueList.length) {
+        valueStr = valueList[i];
+        i = i + 1;
+        // alert ('fgdf')
+        var ret = valueStr.toUpperCase().match(searchValue.toUpperCase());
+
+        if (ret != null) {
+          valueList_new[lc] = valueStr;
+          lc = lc + 1;
+          if (lc == 30) {
+            break;
+          }
+        } else {
+          continue;
+        }
+      }
+
+      //-------------- auto complete source
+      $("input#item_id").autocomplete({
+        source: valueList_new,
+      });
+    });
+
+    // ================================================ ITEM AUTO COMPLETE END ================================================
+
+    // .................depot.................
+    var depot_Str = "";
+    // alert(url: base_url+'default/get_depot_list',)
+    $.ajax({
+      url: base_url + "default/get_depot_list",
+      success: function (retStr) {
+        depot_Str = retStr;
+      },
+    });
+
+    $("#branch_id").keyup(function () {
+      var ref_list = depot_Str.split(",");
+      var ref_name = $("#branch_id").val();
+      //---------------- auto complete combo list
+      var ref_list_new1 = new Array();
+      lc = 0;
+      i = 0;
+      var refStr = "";
+      while (i < ref_list.length) {
+        refStr = ref_list[i];
+        i = i + 1;
+        var res = refStr.toUpperCase().match(ref_name.toUpperCase());
+        if (res != null) {
+          ref_list_new1[lc] = refStr;
+          lc = lc + 1;
+          if (lc == 30) {
+            break;
+          }
+        } else {
+          continue;
+        }
+      }
+      //-------------- auto complete source
+      $("input#branch_id").autocomplete({
+        source: ref_list_new1,
+      });
+    });
+  });
+
+  function MM_jumpMenu(targ, selObj, restore) {
+    //v3.0
+    eval(
+      targ + ".location='" + selObj.options[selObj.selectedIndex].value + "'"
+    );
+    if (restore) selObj.selectedIndex = 0;
+  }
+
+  // function test(){
+  // 	alert ('sdfdsgdhgh')
+  // }
+</script>
+<body class="claro">
+  <!--Form Title -->
+
+  <table
+    width="100%"
+    border="0"
+    cellspacing="0"
+    cellpadding="0"
+    style="background-color: #ffffff"
+  >
+    <tr height="30px">
+      <td><div class="blackCatTitle">Product Wise Report</div></td>
+    </tr>
+
+    <tr>
+      <td height="1px" style="background-color: #cccccc"></td>
+    </tr>
+  </table>
+
+  <!--Form Content -->
+  <form
+    name="form2"
+    id="form2"
+    action="{{=URL(c='counter_report',f='product_wise_report')}}"
+    target="_blank"
+  >
+    <table
+      width="100%"
+      border="0"
+      cellspacing="0"
+      cellpadding="0"
+      class="page_color"
+    >
+      <tr height="20px">
+        <td width="10px"></td>
+
+        <td></td>
+      </tr>
+
+      <tr>
+        <td width="10px"></td>
+
+        <td valign="top">
+          <div style="height: 700px">
+            <table width="900" border="0" cellpadding="0" cellspacing="0">
+              <tr>
+                <td valign="top">
+                  <table
+                    width="500"
+                    height="300px;"
+                    style="background-color: #f8f8f8"
+                  >
+                    <tr style="background-color: #e9e9e9; height: 25px">
+                      <td width="10">&nbsp;</td>
+                      <td width="160">&nbsp;</td>
+                      <td width="2">&nbsp;</td>
+                      <td>&nbsp;</td>
+                    </tr>
+                    <tr>
+                      <td>&nbsp;&nbsp;&nbsp;</td>
+                      <td style="margin-top: 5px; vertical-align: middle">
+                        From
+                      </td>
+                      <td style="vertical-align: middle"></td>
+                      <td style="color: #212f3c; padding-top: 10px">
+                        <input
+                          name="from_dt"
+                          type="text"
+                          id="from_dt"
+                          size="25"
+                          value=""
+                          autocomplete="off"
+                          placeholder="From Date"
+                          style="width: 118px"
+                          class="date"
+                          required
+                        />&nbsp;&nbsp; To &nbsp;&nbsp;
+                        <input
+                          name="to_dt"
+                          type="text"
+                          id="to_dt"
+                          size="25"
+                          placeholder="To Date"
+                          autocomplete="off"
+                          value=""
+                          style="width: 118px"
+                          class="date"
+                          required
+                        />
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>&nbsp;&nbsp;&nbsp;</td>
+                      <td>Branch</td>
+                      <td></td>
+                      <td>
+                        {{if session.user_type == 'Depot':}}
+                        <input
+                          name="branch_id"
+                          type="text"
+                          id="branch_id"
+                          size="25"
+                          value="{{=session.depot_id}}"
+                          placeholder="Branch"
+                          autocomplete="off"
+                          style="width: 288px"
+                          readonly
+                        />
+                        {{else:}}
+                        <input
+                          name="branch_id"
+                          type="text"
+                          id="branch_id"
+                          size="25"
+                          value=""
+                          placeholder="Branch"
+                          autocomplete="off"
+                          style="width: 288px"
+                        />
+                        {{pass}}
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>&nbsp;&nbsp;&nbsp;</td>
+                      <td>Physician</td>
+                      <td></td>
+                      <td>
+                        <select
+                          id="physician_id"
+                          name="physician_id"
+                          style="width: 300px"
+                        >
+                          <option value="" selected>Select Physician</option>
+                          <option value="Counter|Counter" >Counter</option>
+                          {{ for p in range(len(get_depot_physician_list)):
+                          physician_record = get_depot_physician_list[p]
+                          physician_id = str(physician_record['physician_id'])
+                          physician_name=str(physician_record['physician_name']) }}
+                          <option value="{{=physician_id}}|{{=physician_name}}">
+                            {{=physician_id}}|{{=physician_name}}
+                          </option>
+                          {{pass}}
+                        </select>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>&nbsp;&nbsp;&nbsp;</td>
+                      <td>Discount Type</td>
+                      <td></td>
+                      <td>
+                        <select
+                          id="discount_type_id"
+                          name="discount_type_id"
+                          style="width: 300px"
+                        >
+                          <option value="" selected>Select a Value</option>
+                          <option value="MRP">MRP</option>
+                          {{ for d in range(len(get_discount_type_rec)):
+                          dis_record = get_discount_type_rec[d]
+                          discount_category = str(dis_record['discount_type'])
+                          }}
+                          <option value="{{=discount_category}}">
+                            {{=discount_category}}
+                          </option>
+                          {{pass}}
+                        </select>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>&nbsp;&nbsp;&nbsp;</td>
+                      <td>Status</td>
+                      <td></td>
+                      <td>
+                        <select
+                          id="status_id"
+                          name="status_id"
+                          style="width: 300px"
+                        >
+                          <option value="">Select a Type</option>
+                          <option value="Invoiced">Invoiced</option>
+                          <option value="Return">Return</option>
+                        </select>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>&nbsp;&nbsp;&nbsp;</td>
+                      <td>Item</td>
+                      <td></td>
+                      <td>
+                        <input
+                          name="item_id"
+                          type="text"
+                          id="item_id"
+                          size="25"
+                          value=""
+                          placeholder="Item"
+                          autocomplete="off"
+                          style="width: 288px"
+                        />
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>&nbsp;</td>
+                      <td>&nbsp;</td>
+                      <td>&nbsp;</td>
+                      <td>&nbsp;</td>
+                    </tr>
+                    <tr>
+                      <td>&nbsp;</td>
+                      <td>&nbsp;</td>
+                      <td>&nbsp;</td>
+                      <td>&nbsp;</td>
+                    </tr>
+                    <tr>
+                      <td>&nbsp;</td>
+                      <td>&nbsp;</td>
+                      <td>&nbsp;</td>
+                      <td>&nbsp;</td>
+                    </tr>
+                  </table>
+                </td>
+
+                <td width="400" valign="top">
+                  <table width="350">
+                    <tr style="background-color: #e9e9e9; height: 25px">
+                      <td>&nbsp;</td>
+                      <td></td>
+                    </tr>
+
+                    <tr>
+                      <td>
+                        <input
+                          type="submit"
+                          style="width: 350px; height: 27px"
+                          name="btn_product_wise_report"
+                          id="btn_product_wise_report"
+                          value="Product Wise Report"
+                        />
+                      </td>
+                      <td>
+                        <input
+                          type="submit"
+                          name="btn_product_wise_report_d"
+                          id="btn_product_wise_report_d"
+                          value="D"
+                          style="
+                            height: 27px;
+                            vertical-align: middle;
+                            margin-left: 5px;
+                            padding: 3px 10px 10px 10px;
+                          "
+                        />
+                      </td>
+                    </tr>
+                    
+                    <tr>
+                      <td>
+                        <input
+                          type="submit"
+                          style="width: 350px; height: 27px"
+                          name="btn_product_wise_customer_details"
+                          id="btn_product_wise_customer_details"
+                          value="Product Wise Customer Details"
+                        />
+                      </td>
+                      <td>
+                        <input
+                          type="submit"
+                          name="btn_product_wise_customer_details_d"
+                          id="btn_product_wise_customer_details_d"
+                          value="D"
+                          style="
+                            height: 27px;
+                            vertical-align: middle;
+                            margin-left: 5px;
+                            padding: 3px 10px 10px 10px;
+                          "
+                        />
+                      </td>
+                    </tr>
+                  </form>
+                  </table>
+                </td>
+              </tr>
+            </table>
+          </div>
+        </td>
+      </tr>
+    </table>
+  </form>
+</body>

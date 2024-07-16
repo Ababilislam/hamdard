@@ -1,0 +1,209 @@
+{{extend 'layout_invoice_landscap.html'}}
+
+<html>
+
+<head>
+
+
+
+</head>
+
+<body>
+	
+    
+	{{pageFlag=1}}
+
+	
+<!--page break-->
+
+		{{if pageFlag==0:}}
+<span style="page-break-before:always"></span>	
+
+			<!-- Report header-->	
+<br/>			
+<table width="1150">
+    <tr>
+          <td width="50" >&nbsp;</td>
+            <td width="15" rowspan="2" style="padding:0px; margin-bottom:0px;"><img width="25px" height="40px" src="{{=URL('static','images/comp_logo2.png')}}"/></td>
+            <td style="text-align:center; font-size:24px; font-weight:bold">{{=session.cName}}</td>
+            <td width="100">&nbsp;</td>
+          </tr>
+        <tr style="height:10px; background-color:#F0F0F0">
+          <td width="50" style="border-bottom:solid 1px #999; border-top:solid 1px #999;"></td>
+          <td style="border-bottom:solid 1px #999; border-top:solid 1px #999;"></td>
+          <td style="border-bottom:solid 1px #999; border-top:solid 1px #999;"></td>
+        </tr>        
+        </table>		
+<table width="1150" style="border: solid 1px #C4C4C4">
+  <tr style="border-bottom:solid; border-bottom-color:#999">
+    <td align="center">{{=session.user_depot_address}}<!--{{#=session.company_address}}--><!--Sadar Road, Mohakhali, Dhaka. Ph: 9896479,9862763, 8855371-80 Ext:258 Fax:8860325, mail: tdclmohakhali@transcombd.com--></td>
+  </tr>
+</table>            
+        <!--<hr/>-->
+        <!-- end report header  -->
+    {{pass}}
+    
+    {{pageFlag=0}}
+    
+    <!--end page break-->
+		
+		<!--<img src="{{#=URL('static','images/SKFLogo.png')}}"/> style="background:url({{#=URL('static','images/SKFLogo.png')}}); background-repeat:no-repeat; background-position:center"--></p>
+ <table width="1150" cellpadding="1" cellspacing="1" style="border:none;" >
+  <tr >
+      <td width="700" align="left"></td>
+      <td width="400" align="left">(Customer Copy)</td>
+  </tr>
+ </table>           
+<table width="1150" cellpadding="1" cellspacing="1" >
+  <tr >
+      <td width="400" align="left">
+        <table width="400" cellpadding="1" cellspacing="1" style="border: solid 1px #C4C4C4;" >
+          <tr >
+              <td width="100" align="left">Branch</td>
+              <td width="2" align="left">:</td>
+              <td align="left">{{=depotName}}</td>
+           </tr>
+           <tr >
+              <td width="100" align="left">Print Date</td>
+              <td width="2" align="left">:</td>
+              <td align="left">{{=datetime.datetime.strptime(str(current_date),'%Y-%m-%d').strftime('%d-%b-%y')}}</td>
+           </tr>
+         </table>      
+      </td>
+      <td width="300" align="center" style="vertical-align:top;">
+        <div style=" width:100px; height:25px; background-color:#EAEAEA; font-weight:bold; margin-bottom:5px;">Money Receipt</div>
+        <img style="height:15px;" src="{{=URL('static','images/comp_logo1.png')}}"/>
+      </td>
+      <td width="400" align="left">
+        <!--<table width="400" cellpadding="1" cellspacing="1" style="border: solid 1px #C4C4C4;" >
+          <tr >
+              <td width="100" align="left">Date</td>
+              <td width="2" align="left">:</td>
+              <td align="left"></td>
+          </tr>
+           <tr >
+              <td width="100" align="left">&nbsp;</td>
+              <td width="2" align="left">&nbsp;</td>
+              <td align="left"></td>
+           </tr>
+           <tr >
+              <td width="100" align="left"></td>
+              <td width="2" align="left"></td>
+              <td align="left"></td>
+           </tr>
+           <tr >
+              <td width="100" align="left"></td>
+              <td width="2" align="left"></td>
+              <td align="left"></td>
+           </tr>
+        </table>-->   
+      </td>    
+  </tr>
+</table>
+  
+  <table width="1150" border="1" cellpadding="1" cellspacing="1" class="sample_border" style="border: solid 1px #C4C4C4">
+
+  <tr align="left" class="blackCatHead"  style="vertical-align:middle; background-color:#E6E6E6;">
+
+    <td width="50" >Sl.No</td>
+    <td width="50" align="left" >MR.No</td>
+    <td width="100" align="left" >Inv.SL/Ref.No</td>
+
+    <td width="80" align="center" >Doc Date</td>
+    <td width="150" align="left" >Cust. Name</td>
+
+    <td width="100" align="right"  >Inv Amount</td>
+    <td width="100" align="right"  >Applied Amt</td>
+
+    <td width="70" align="center"  >Pay Type</td>
+    <td width="100" align="center"  >Cause</td>
+    <td align="left"  >Payment Description</td>
+    <td width="200" align="left"  >Deliveryman Name</td>
+
+    </tr>
+	
+	{{totalApAmount=0}}
+    {{rowSl=0}}
+	{{for i,record in enumerate(records):}}
+
+	{{rowSl+=1}}
+        
+  <tr  align="left" class="blackCat"  style="vertical-align:middle; background-color:#FBFBFB; font-size:10px;">	
+    <td width="50" >{{=rowSl}}</td>
+    <td width="50" align="left" >{{=record.id}}</td>
+    <td width="100" align="left" >{{=session.prefix_invoice}}INV{{=record.depot_id}}-{{=record.sl}}</td>
+	
+    <td width="80" align="center" >{{=record.payment_collection_date.strftime('%d-%b-%y')}}</td>
+    <td width="150" align="left" >{{=record.client_name}}</td>
+	
+    <td width="100" align="right" >{{=easy_format(record.total_inv_amount)}}</td>
+    <td width="100" align="right" >{{=easy_format(record.collection_amount)}}{{totalApAmount+=record.collection_amount}}</td>
+
+    <td width="70" align="center" >{{=record.payment_type}}</td>
+    <td width="100" align="center" >{{if record.transaction_cause=='':}}{{=record.transaction_type}}{{else:}}{{=record.transaction_type}},{{=record.transaction_cause}}{{pass}}</td>
+    <td align="left" >{{=record.collection_note}}</td>
+    <td width="200" align="left" >{{=record.d_man_name}}</td>
+	
+    </tr>
+  
+
+    {{pass}}
+    
+    <tr  align="left" class="blackCat"  style="vertical-align:middle; background-color:#FBFBFB">	
+    <td width="50" ></td>
+    <td width="50" align="left" ></td>
+    <td width="100" align="left" ></td>
+	
+    <td width="80" align="center" ></td>
+    <td width="150" align="right" ></td>
+	
+    <td width="100" align="right" ><strong>Total:</strong></td>
+    <td width="100" align="right" ><strong>{{=easy_format(totalApAmount)}}<strong></td>
+
+    <td width="70" align="center" ></td>
+    <td width="100" align="center" ></td>
+    <td align="right" ></td>
+    <td width="200" align="right" ></td>
+	
+    </tr>
+	
+  
+    
+</table>
+<br>
+<table width="250" cellpadding="1" cellspacing="1" >
+    <tr >
+      <td align="left"><strong><span style="font-size:14px; font-weight:bold">TAKA:</span></strong></td>
+      <td width="150" align="right" style="border: solid 1px #C4C4C4">{{=easy_format(totalApAmount)}}</td>
+    </tr>
+</table>
+<br/>
+<strong> Taka in Words:</strong> {{try:}}{{=num2word(str(totalApAmount))}}{{except:}}-{{pass}}
+
+
+<br/><br/><br/>
+<table width="1150" >
+	<tr>
+	  <td width="150" align="center">__________________</td>
+	  <td width="150" align="center">___________________</td>
+	  <td width="150" align="center">_______________</td>
+	  <td width="20" align="center">&nbsp;</td>
+	  <td width="180" align="center">&nbsp;</td>
+	  <td width="30" rowspan="2" align="center">Stamp</td>
+  </tr>
+	<tr>
+	  <td width="150" align="center"><strong>Prepared By</strong></td>
+	  <td width="150" align="center"><strong>Approved By</strong></td>
+	  <td width="150" align="center"><strong>Receipt by</strong></td>
+	  <td width="20" align="center">for</td>
+	  <td width="180" align="center"><strong>{{=session.cName}}</strong></td>
+  </tr>
+</table>
+
+
+
+
+</body>
+
+</html>
+

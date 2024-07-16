@@ -1,0 +1,102 @@
+{{extend 'layout.html'}}
+ 
+ <style type="text/css">
+	 input[type=text], input[type=password]{
+		margin: 2px 0px 2px 0px;
+		width:200px;
+	}
+	select {
+    margin: 2px 0px 2px 0px;
+	width:212px;
+}
+</style>
+ 
+ 
+<table width="100%"  border="0" cellspacing="0" cellpadding="0" style="background-color:#FFFFFF;" >
+  <tr height="30px" >
+    <td width="300"><span class="blackCatTitle">Device Reset/Status Update</span></td>
+	<form action="{{=URL(c='utility',f='device_list',args=[page])}}" method="post">
+    <td width="300" align="right"><input name="" type="submit"  value="Back"/></td>
+	</form>
+    <td>&nbsp;</td>
+  </tr>
+  <tr  height="1px" style="background-color:#CCCCCC;">
+	    <td colspan="3" ></td>
+  </tr>
+  </table>
+  
+  
+  <table width="100%" height="500px"  border="0" cellspacing="0" cellpadding="0" class="page_color"  >
+  <tr height="100%"  style="vertical-align:top;">
+    <td>
+	<table width="100%"  border="0" cellpadding="0" cellspacing="0"  >
+      <tr>
+        <td width="10px">&nbsp;</td>
+        <td>&nbsp;</td>
+      </tr>
+      <tr>
+        <td>&nbsp;</td>
+        <td>
+          <table width="500" class="blackCat">
+		  {{=form.custom.begin}}
+            <tr>
+              <td width="150"> User ID</td>
+              <td>: {{=records[0].user_id}}</td>
+              <td>&nbsp;</td>
+              </tr>
+            <tr>
+              <td width="150">Device Name</td>
+              <td>: {{=records[0].device_name}}</td>
+              <td>&nbsp;</td>
+              </tr>
+            <tr>
+              <td width="150">Access Point</td>
+              <td>: <textarea disabled="disabled" style="background-color:inherit; width:300px; height:60px; border:none; border-top:none; resize:none; border-color:inherit">{{=records[0].user_agent}}</textarea></td>
+              <td>&nbsp;</td>
+            </tr>
+            <tr>
+              <td width="150">IP</td>
+              <td>: {{=records[0].request_ip}}</td>
+              <td>&nbsp;</td>
+            </tr>
+            
+            <tr>
+              <td width="150">Submission Time</td>
+              <td>: {{=records[0].created_on}}</td>
+              <td>&nbsp;</td>
+            </tr>
+            <tr>
+              <td width="150">Status</td>
+              <td>: {{=form.custom.widget.status}}</td>
+              <td>&nbsp;</td>
+              </tr>
+            
+            <tr>
+              <td width="150">Reset/Delete?</td>
+              <td>{{if useFlag==True:}}
+                <input type="checkbox" name="" disabled="disabled"/>
+			  {{else:}}{{=form.custom.deletable}}{{pass}}			  </td>
+              <td>&nbsp;</td>
+              </tr>
+            <tr>
+              <td width="150">&nbsp;</td>
+              <td>&nbsp;</td>
+              <td>&nbsp;</td>
+            </tr>
+            <tr>
+              <td width="150">&nbsp;</td>
+              <td>
+			  
+			  {{if access_permission==True:}}{{=form.custom.submit}}
+			  {{pass}}
+              </td>
+              <td>&nbsp;</td>
+              </tr>
+          </table>
+          {{=form.custom.end}}</td>
+      </tr>
+    </table>
+	</td>
+  </tr>
+</table>
+

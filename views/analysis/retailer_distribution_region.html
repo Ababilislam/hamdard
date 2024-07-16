@@ -1,0 +1,158 @@
+{{extend 'layout_report.html'}}
+<html>
+<head>
+<script type="text/javascript">
+function print_page()
+  {
+    window.print()
+  }
+</script>
+
+
+<link rel="stylesheet" href="{{=URL('static', 'jchart/styles/jchartfx.css')}}" type="text/css" />
+<script src="{{=URL('static','jchart/js/jchartfx.system.js')}}"></script>
+<script src="{{=URL('static','jchart/js/jchartfx.coreVector.js')}}"></script>
+<script src="{{=URL('static','jchart/js/jchartfx.advanced.js')}}"></script>
+
+<style type="text/css">
+.jchartfx .Title {
+     font-size:12pt;
+     font-weight: bold;
+	 color:#000000;
+}
+
+input[type=submit] {
+    margin: 2px 0px 2px 0px;
+	padding: 0px 0px 2px 0px;
+	width:250px;
+}
+input[type=text] {
+	width:120px;
+}
+
+.checkbox{
+padding-left:0px;
+}
+.multiselect{ 
+		text-align:left;
+		height:28px;
+}
+
+
+</style>
+
+
+<script type="text/javascript" language="javascript">   
+	var chart2;
+    function loadChart()
+      {
+		//------------------------
+		chart2 = new cfx.Chart();
+		chart2.getData().setSeries(1);
+		var series2 = chart2.getSeries().getItem(0);
+		chart2.setGallery(cfx.Gallery.Pie);
+		//Doughnut
+		//var title = new cfx.TitleDockable();
+		//title.setText("Zone Wise Number of Retailer");
+		//title.setAlignment(cfx.StringAlignment.Center);
+		
+		//chart2.getTitles().add(title);
+		chart2.getAllSeries().setMultipleColors(true);
+		
+		var dataPtype= new Array();
+		dataPtype=eval($('#chartDataRegionSummary').val());
+		
+		chart2.setDataSource(dataPtype);
+		chart2.getAllSeries().getPointLabels().setVisible(true);
+		chart2.getLegendBox().setVisible(false);
+		
+		var divHolder2 = document.getElementById('ChartDivRegionSummary');
+		chart2.create(divHolder2); 
+		//---------------------------------------------------------
+		
+	}
+</script>
+
+<script>
+ $(function() {
+	$("#ChartDivRegionSummary").empty();		
+	 loadChart();
+  });
+  </script>
+
+</head>
+
+<body id="htmlbody">
+<input type="hidden" value="{{=regionRecordList}}" id="chartDataRegionSummary"/>
+
+
+<div class="blackCatTitle">&nbsp;Number of Retailer ({{=session.level0Name}} Wise)</div>
+<br/>
+
+
+
+<table width="700px" cellspacing="1" cellpadding="1">
+	<tr>
+		<td>
+			<table width="900" class="sample_border" >
+                <tr style="background-color:#E6E6E6;">
+                  <td >{{=session.level0Name}}</td>
+                </tr>
+                <tr style="background-color:#F0FAFF">
+                    <td align="left" valign="top">{{if regionValueShow=='':}}
+                        All
+                    {{else:}}
+                        {{if str(regionValueShow)[:3]=='all':}}
+                            {{=str(regionValueShow)[4:]}} 
+                        {{else:}} 
+                            {{=str(regionValueShow)}} 
+                        {{pass}}
+                    {{pass}} </td>
+                </tr>
+		  </table>
+	  </td>
+	</tr>
+	<tr height="10px"></tr>
+	<tr>
+		<td>
+			<table width="900" border="1" cellpadding="1" cellspacing="1" class="sample_border" >                
+                <tr align="left" class="blackCatHead" height="20px" ;  style="font-size:12px">
+                  <td width="300"  style="border-right-width:3px;">{{=session.level0Name}}</td>
+                  <td align="right"  >Number Of Retailer</td>
+                  </tr>
+                
+                {{total=0}}
+                {{for i in range(len(regionRecordShowList)):}}
+                	{{recDate=regionRecordShowList[i]}}
+                
+              <tr  align="left" class="blackCat"  style="vertical-align:middle; font-size:11px;">
+                <td width="300" style="border-right-width:3px;"><a href="{{=URL(c='analysis',f='retailer_distribution_area_wise',vars=dict(regionId=recDate['RegionId'],regionName=recDate['RegionName']))}}" target="_blank">{{=recDate['RegionName']}}|{{=recDate['RegionId']}}</a></td>
+                <td align="right" ><span style="border-right-width:3px;">{{=recDate['NumberOfRet']}}</span>{{total+=recDate['NumberOfRet']}}</td>
+              </tr>
+                {{pass}}
+               
+               
+               <tr  align="left" class="blackCat"  style="vertical-align:middle; font-size:11px;">
+                <td width="300" style="border-right-width:3px;"><strong>Total</strong></td>
+                <td align="right" ><strong><span style="border-right-width:3px;">{{=total}}</span></strong></td>
+              </tr>
+                
+              </table>
+		  
+		</td>
+			
+	</tr>
+</table>
+<br/>
+<div id="ChartDivRegionSummary" style="width:900px;height:450px;"></div>
+<br>
+
+<p>
+<br/>
+  
+  
+  <br/>
+</p>
+
+</body>
+</html>

@@ -1,0 +1,218 @@
+{{extend 'layout_invoice_landscap.html'}}
+{{current_date=datetime.datetime.strptime(str(current_date),'%Y-%m-%d')}}
+    
+<style>
+ #wrapper{ width:auto;}
+</style> 
+
+{{pageFlag=1}}	
+<!--page break-->
+{{if pageFlag==0:}}
+<span style="page-break-before:always"></span>        
+<!-- Report header-->                    
+<table width="1150">
+    <tr>
+        <td width="100" ><img width="25px" src="{{=URL('static','images/comp_logo2.png')}}"/></td>
+        <td style="text-align:center; font-size:24px; font-weight:bold">{{=session.cName}}</td>
+        <td width="100" >&nbsp;</td>
+    </tr>
+</table>			
+<table width="1150" style="border: solid 1px #C4C4C4">
+    <tr style="border-bottom:solid; border-bottom-color:#999">
+      <td align="center">{{=session.user_depot_address}}</td>
+  </tr>
+</table>
+    <!--<hr/>-->
+    <!-- end report header  -->
+{{pass}}
+
+{{pageFlag=0}}
+
+<!--end page break-->
+
+<table width="1150" cellpadding="1" cellspacing="1" style="border:none;" >
+    <tr >
+      <td width="120" align="right" >Inv Date From</td>
+      <td width="2" >:</td>
+      <td width="80" >{{=date_from}}</td>
+      <td width="100" align="right" >To Date</td>
+      <td width="2" >:</td>
+      <td width="80" >{{=date_to}}</td>
+      <td width="150" align="left" >Market:{{=market_name}}</td>
+      <td width="30" align="right" >Depot</td>
+      <td width="2" >:</td>
+      <td width="100" >{{=depotName}}</td>
+      <td width="30" align="right" >Store</td>
+      <td width="2" >:</td>
+      <td >{{=storeName}}</td>
+      <td width="50" ><span style="float:right">#30.01B</span></td>
+  </tr>
+    <tr >
+      <td width="120" align="right" >DP</td>
+      <td >:</td>
+      <td >{{=delivery_man_name}}</td>
+      <td align="right" >Territory</td>
+      <td >:</td>
+      <td >{{=territory_name}}</td>
+      <td width="150" align="left" >Customer: {{=customerName}}</td>
+      <td align="right" >MSO</td>
+      <td >:</td>
+      <td colspan="2" >{{=mso_name}}</td>
+      <td >&nbsp;</td>
+      <td >&nbsp;</td>
+      <td ><a href="{{=URL(c='report_sales2',f='invoice_return_details_ret_download',vars=dict(date_from=date_from,date_to=date_to,date_from_ret=date_from_ret,date_to_ret=date_to_ret,depot_id=depot_id,store_id=store_id,customer_id=customer_id,dman_id=dman_id,territory_id=territory_id,market_id=market_id,mso_id=mso_id))}}" >Download</a></td>
+    </tr>
+    <tr >
+      <td width="120" align="right" >Return Date From</td>
+      <td >:</td>
+      <td >{{=date_from_ret}}</td>
+      <td align="right" >To Date</td>
+      <td >:</td>
+      <td >{{=date_to_ret}}</td>
+      <td align="left" >&nbsp;</td>
+      <td align="right" >&nbsp;</td>
+      <td >&nbsp;</td>
+      <td >&nbsp;</td>
+      <td align="right" >&nbsp;</td>
+      <td >&nbsp;</td>
+      <td >&nbsp;</td>
+      <td >&nbsp;</td>
+    </tr>
+</table>      
+<table width="1150" cellpadding="1" cellspacing="1" style="border:none;" >
+        <tr >
+          <td align="center">
+          <div style="border: solid 1px #C4C4C4; width:90%; font-weight:bold;" >30.1B Invoice and Return Details</div></td>
+          <td width="50" align="center"><img style="width:80px;" src="{{=URL('static','images/comp_logo1.png')}}"/></td></tr>
+</table>
+
+<table width="1500" border="1" cellpadding="1" cellspacing="1" class="sample_border" >            
+
+    <tr align="left" class="blackCatHead" height="20px" ;  style="font-size:12px">
+      <td colspan="6" align="center" style="border-right:solid 1px #666">Document Details</td>
+      <td colspan="4" align="center" style="border-right:solid 1px #666">Invoice Details</td>
+      <td colspan="4" align="center"  >Return Details</td>
+    </tr>
+    <tr align="left" class="blackCatHead" height="20px" ;  style="font-size:12px">
+      <td width="60" align="center"  >Inv.Date</td>
+      <td width="100" align="left"  >Inv.Number</td>
+      <td width="80" align="left"  >Cust.ID</td>
+      <td width="120" align="left"  >Cust.Name</td>
+      <td width="80" align="left"  >Retn.Date</td>
+      <td width="80" align="left" style="border-right:solid 1px #666">Return Number</td>
+      <td width="80" align="right"  >TP</td>
+      <td width="50" align="right"  >VAT</td>
+      <td width="50" align="right"  >Discount (Reg+SP)</td>
+      <td width="80" align="right"  style="border-right:solid 1px #666">Net</td>
+      <td width="60" align="right"  >TP</td>
+      <td width="50" align="right"  >VAT</td>
+      <td width="50" align="right"  >Discount (Reg+SP)</td>
+      <td width="60" align="right"  >Net</td>
+  </tr>
+    
+    {{invSaleTotal=0}}
+    {{invDiscTotal=0}}
+    {{invNetTotal=0}}
+    {{invVatTotal=0}}
+    {{invNetSaleVatTotal=0}}
+    
+    {{retSaleTotal=0}}
+    {{retDiscTotal=0}}
+    {{retNetTotal=0}}
+    {{retVatTotal=0}}
+    {{retNetSaleVatTotal=0}}
+    
+    {{invSlList=[]}}
+    {{invocieCount=0}}
+    {{for i in range(len(recordList)):}}    
+    {{ #if i==items_per_page: break}}
+	
+    {{recData=recordList[i]}}
+	
+    {{invSl=recData['invSl']}}
+    
+    {{invSaleAmt=round(recData['actualTpAmt'],2)}}
+    {{invVatAmt=round(recData['vatTotalAmt'],2)}}
+    {{invDiscAmt=round(recData['discAmt']+recData['spDiscAmt'],2)}}
+    {{invSaleVatNetAmt=round(invSaleAmt+invVatAmt-invDiscAmt,2)}}
+    
+    {{if invSl in invSlList:}}
+        {{invSaleAmt=0}}
+        {{invVatAmt=0}}
+        {{invDiscAmt=0}}
+        {{invSaleVatNetAmt=0}}        
+    {{else:}}
+    	{{invSlList.append(invSl)}}
+    	{{invocieCount+=1}}
+     {{pass}}
+     
+    {{invSaleTotal+=invSaleAmt}}
+    {{invVatTotal+=invVatAmt}}
+    {{invDiscTotal+=invDiscAmt}}
+    {{invNetSaleVatTotal+=invSaleVatNetAmt}}
+    
+    {{retSaleAmt=round(recData['retTpAmt'],2)}}
+    {{retVatAmt=round(recData['retVatAmt'],2)}}
+    {{retDiscAmt=round(recData['retDiscAmt']+recData['retSpDiscAmt'],2)}}
+    {{retSaleVatNetAmt=round(retSaleAmt+retVatAmt-retDiscAmt,2)}}
+    
+    {{retSaleTotal+=retSaleAmt}}
+    {{retVatTotal+=retVatAmt}}
+    {{retDiscTotal+=retDiscAmt}}
+    {{retNetSaleVatTotal+=retSaleVatNetAmt}}
+    
+  <tr  align="left" class="blackCat"  style="background-color:#FBFBFB; font-size:11px;">
+    <td width="60" align="center" ><span style=" text-align:center;">{{=recData['invoice_date'].strftime('%d-%b-%Y')}}</span></td>	
+    <td width="100" align="left" >{{=session.prefix_invoice}}INV{{=recData['depot_id']}}-{{=recData['invSl']}}</td>
+    <td width="80" align="left" >{{=recData['client_id']}}</td>
+    <td width="120" align="left" >{{=recData['client_name']}}</td>
+    <td width="80" align="left" >{{=recData['return_date'].strftime('%d-%b-%Y')}}</td>
+    <td width="80" align="left" style="border-right:solid 1px #666">{{=session.prefix_invoice}}RET{{=recData['depot_id']}}-{{=recData['retSl']}}</td>
+    
+    <td width="80" align="right" >{{if invSaleAmt==0:}}-{{else:}}{{=easy_format(invSaleAmt)}}{{pass}}</td>
+    <td width="50" align="right" >{{if invVatAmt==0:}}-{{else:}}{{=easy_format(invVatAmt)}}{{pass}}</td>
+    <td width="50" align="right" >{{if invDiscAmt==0:}}-{{else:}}{{=easy_format(invDiscAmt)}}{{pass}}</td>
+    <td width="80" align="right" style="border-right:solid 1px #666">{{if invSaleVatNetAmt==0:}}-{{else:}}{{=easy_format(invSaleVatNetAmt)}}{{pass}}</td>
+    
+    <td width="60" align="right" >({{=easy_format(retSaleAmt)}})</td>
+    <td width="50" align="right" >({{=easy_format(retVatAmt)}})</td>
+    <td width="50" align="right" >{{if retDiscAmt==0:}}-{{else:}}({{=easy_format(retDiscAmt)}}){{pass}}</td>
+    <td width="60" align="right" style=" text-align:right;">({{=easy_format(retSaleVatNetAmt)}})&nbsp;</td>
+  
+  </tr>
+  
+    {{pass}}
+   
+  <tr  align="left" class="blackCat"  style="background-color:#FBFBFB; font-size:11px;">
+    <td colspan="2" align="left" ><strong>&nbsp;{{=invocieCount}} Invoice(s)</strong></td>
+    <td width="80" align="left">&nbsp;</td>
+    <td width="120" align="left">&nbsp;</td>
+    <td width="80" align="left">&nbsp;</td>
+    <td width="80" align="left">&nbsp;</td>
+    <td width="80" align="right" style="border-bottom:solid 1px #666"><strong style="text-decoration:overline">{{=easy_format(invSaleTotal)}}</strong></td>
+    <td width="50" align="right" style="border-bottom:solid 1px #666"><strong style="text-decoration:overline">{{=easy_format(invVatTotal)}}</strong></td>
+    <td width="50" align="right" style="border-bottom:solid 1px #666"><strong style="text-decoration:overline">{{=easy_format(invDiscTotal)}}</strong></td>
+    <td width="80" align="right" style="border-bottom:solid 1px #666"><strong style="text-decoration:overline">{{=easy_format(invNetSaleVatTotal)}}</strong></td>
+    <td width="60" align="right" style="border-bottom:solid 1px #666"><strong style="text-decoration:overline">{{=easy_format(retSaleTotal)}}</strong></td>
+    <td width="50" align="right" style="border-bottom:solid 1px #666"><strong style="text-decoration:overline">{{=easy_format(retVatTotal)}}</strong></td>
+    <td width="50" align="right" style="border-bottom:solid 1px #666"><strong style="text-decoration:overline">{{=easy_format(retDiscTotal)}}</strong></td>
+    <td width="60" align="right" style="border-bottom:solid 1px #666"><strong style="text-decoration:overline">{{=easy_format(retNetSaleVatTotal)}}</strong>&nbsp;</td>
+  </tr>
+</table>
+<br>
+<br/>
+<table width="1150" >
+	<tr>
+	  <td width="150" align="center">__________________</td>
+	  <td width="150" align="center">_______________________________________</td>
+	  <td width="20" align="center">&nbsp;</td>
+	  <td width="180" align="center">&nbsp;</td>
+  </tr>
+	<tr>
+	  <td width="150" align="center"><strong>Printed By</strong></td>
+	  <td width="150" align="center"><span style="font-style:italic;">for</span>&nbsp; &nbsp;<strong>{{=session.cName}}</strong></td>
+	  <td width="20" align="center">&nbsp;</td>
+	  <td width="180" align="center">&nbsp;</td>
+  </tr>
+</table>
+

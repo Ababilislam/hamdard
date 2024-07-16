@@ -1,0 +1,59 @@
+{{extend 'layout_change_pass.html'}}
+  <link rel="stylesheet" href="{{=URL('static', 'js_and_css/ui.theme.css')}}" type="text/css" />
+  <link rel="stylesheet" href="{{=URL('static', 'js_and_css/jquery-ui.css')}}" type="text/css" />
+  <link rel="stylesheet" href="{{=URL('static', 'js_and_css/style.css')}}" type="text/css" />
+  <script src="{{=URL('static','js_and_css/jquery-1.8.2.js')}}"></script>
+  <script src="{{=URL('static','js_and_css/jquery-ui.js')}}"></script>
+  
+ <style type="text/css">
+  #mIdAdd,#mNameAdd,{
+  width:88%;
+  background: #fff;
+  padding: 9px 6px;
+  border: 1px solid #807b7b;
+  }
+
+  #mtype{
+  width:88%;
+  background: #fff;
+  padding: 9px 6px;
+  border: 1px solid #807b7b;
+  }
+  
+ </style> 
+
+<table style=" border-style:hidden" width="100%" border="0" cellpadding="0" cellspacing="0" align="center">              
+   <tr >
+      <td colspan='2'  align="center" style="  width:300px; height:auto;"><h2 style=" color:#000;margin: 10px">Seen RX</h2></td>
+    </tr> 
+</table>
+
+<table style=" border-style:hidden" width="100%" border="0" cellpadding="0" cellspacing="0" align="center">  
+    <input type="hidden" name="cid" id="cid" value="{{=cid}}"  autocomplete="off" />
+    <input type="hidden" name="rep_id" id="rep_id" value="{{=rep_id}}"  autocomplete="off" />
+    <input type="hidden" name="rep_pass" id="rep_pass" value="{{=rep_pass}}"  autocomplete="off" />            
+     
+    <tr>
+      <td align="center"> 
+        <a href="{{=URL(c='product_wise_report',f='index',vars=dict(cid=cid,rep_id=rep_id,rep_pass=rep_pass))}}"style="text-align:center;">
+            <input type="submit" style="width:75%; height:45px; background:#9dd0e3;color: #FFF; font-size:20px;  border: 1px solid #9dd0e3;" name="btn_product_wise_report"  value="Product Wise Report" />
+        </a>
+      </td>
+    </tr>
+
+    <tr>
+      <td align="center">
+        <a href="{{=URL(c='doctor_wise_report',f='index',vars=dict(cid=cid,rep_id=rep_id,rep_pass=rep_pass))}}"style="text-align:center;">
+          <input type="submit" id="btn_doctor_wise_report" name="btn_doctor_wise_report" style="width:75%; height:45px; background:#9dd0e3;color: #FFF; font-size:20px;  border: 1px solid #9dd0e3;" value="Doctor Wise Report"  onClick=""/>
+      </td>
+    </tr>
+    <tr>
+      <td></td>
+    </tr>
+    
+</table>  
+         
+
+          
+
+            

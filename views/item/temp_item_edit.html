@@ -1,0 +1,262 @@
+{{extend 'layout.html'}}
+
+ 
+
+  <style type="text/css">
+
+  input[type=text], input[type=password]{
+		margin: 2px 0px 2px 0px;
+		width: 200px;
+	}
+	select{
+		margin: 2px 0px 2px 0px;
+		width: 215px;
+	}
+
+div.error {
+
+    width: 170px;
+
+}
+
+ </style>
+
+ 
+
+  <table width="100%"  border="0" cellspacing="0" cellpadding="0" style="background-color:#FFFFFF;" >
+
+  <tr height="30px" >
+
+    <td width="300"><span class="blackCatTitle">Item Change Schedule-Edit</span></td>
+
+	<form action="{{=URL(c='item',f='temp_item',args=[page])}}" method="post">
+
+	<td width="500" align="right">	
+
+	<input name="" type="submit"  value="Back"/>	</td>
+
+	<td align="left">&nbsp;</td>
+
+	</form>
+
+  </tr>
+
+  <tr  height="1px" style="background-color:#CCCCCC;">	
+
+	<td width="300" align="left">	</td>
+
+	<td colspan="2" align="right">	</td>
+
+  </tr>
+
+  </table>
+
+  
+
+  
+
+  <table width="100%" height="500px"  border="0" cellspacing="0" cellpadding="0" class="page_color"  >
+
+  <tr height="100%"  style="vertical-align:top;">
+
+    <td>
+
+	<table width="100%"  border="0" cellpadding="0" cellspacing="0"  >
+
+      <tr>
+
+        <td width="10px">&nbsp;</td>
+
+        <td>&nbsp;</td>
+
+      </tr>
+
+      <tr>
+
+        <td>&nbsp;</td>
+
+        <td align="left" valign="top">
+
+          <table width="800">
+
+            <tr>
+
+              <td width="485"><table width="400" class="blackCat">
+
+                {{=form.custom.begin}}
+
+                <tr>
+
+              <td width="140"> ItemID </td>
+
+                  <td>{{=item_id}}</td>
+
+                </tr>
+
+            <tr>
+
+              <td width="140">Name</td>
+
+              <td>{{=form.custom.widget.name}}</td>
+
+            </tr>
+
+            <tr>
+
+              <td width="140">Description</td>
+
+              <td>{{=form.custom.widget.des}}</td>
+
+            </tr>
+
+            <tr>
+
+              <td width="140">Group</td>
+
+              <td>{{=form.custom.widget.category_id}}</td>
+
+            </tr>
+
+            <tr>
+              <td>Base Group</td>
+              <td>{{=form.custom.widget.category_id_sp}}</td>
+            </tr>
+            <tr>
+
+              <td width="140">Unit Type </td>
+
+              <td>{{=form.custom.widget.unit_type}}</td>
+
+            </tr>
+
+            <tr>
+
+              <td width="140"></td>
+
+              <td></td>
+
+            </tr>
+
+            <tr>
+
+              <td width="140"></td>
+
+              <td></td>
+
+            </tr>
+
+            <tr>
+
+              <td width="140"></td>
+
+              <td></td>
+
+            </tr>
+
+            <tr>
+
+              <td width="140"></td>
+
+              <td></td>
+
+            </tr>
+
+              </table></td>
+
+              <td width="303" valign="top"><table width="400" class="blackCat">
+
+                  <tr>
+
+                    <td>Manufacturer</td>
+
+                    <td>{{=form.custom.widget.manufacturer}}</td>
+
+                  </tr>
+
+                  <tr>
+                    <td>M.Carton</td>
+                    <td>{{=form.custom.widget.item_carton}}</td>
+                  </tr>
+                  <tr>
+
+                    <td>TP Amount</td>
+
+                    <td>{{=form.custom.widget.price}}</td>
+
+                  </tr>
+
+                  <tr>
+
+                    <td>VAT Amount</td>
+
+                    <td>{{=form.custom.widget.vat_amt}}</td>
+
+                  </tr>
+
+                  <tr>
+
+                    <td>Delete</td>
+
+                    <td>{{=form.custom.deletable}}</td>
+
+                  </tr>
+
+                  <tr>
+
+                    <td>&nbsp;</td>
+
+                    <td>{{=form.custom.submit}}</td>
+
+                  </tr>
+
+                  <tr>
+
+                    <td></td>
+
+                    <td></td>
+
+                  </tr>
+
+                  <tr>
+
+                    <td></td>
+
+                    <td></td>
+
+                  </tr>
+
+                  <tr>
+
+                    <td></td>
+
+                    <td></td>
+
+                  </tr>
+
+                  <tr>
+
+                    <td></td>
+
+                    <td></td>
+
+                  </tr>
+
+                {{=form.custom.end}}
+
+              </table></td>
+
+            </tr>
+
+          </table>
+
+		  </td>
+
+      </tr>
+
+		  </table>
+
+	</td>
+
+  </tr>
+
+</table>

@@ -1,0 +1,1244 @@
+{{extend 'layout.html'}}
+
+<style type="text/css">
+
+.rounded_corner{
+
+background-color:#CCCCCC;
+
+font:Arial, Helvetica, sans-serif;
+
+color:#666666;
+
+font-size:14px;
+
+display: block;
+
+-moz-border-radius: 10px;
+
+-webkit-border-radius: 10px;
+
+}
+</style>
+
+<table width="100%"  border="0" cellspacing="0" cellpadding="0" style="background-color:#FFFFFF;" >
+
+  <tr height="30px" >
+
+    <td width="400"><span class="blackCatTitle">Utility</span></td>
+
+      <td width="400" align="right">&nbsp;</td>
+   
+    <td>&nbsp;</td>
+
+  </tr>
+
+  <tr  height="1px" style="background-color:#CCCCCC;">
+
+    <td colspan="3" ></td>
+
+  </tr>
+
+</table>
+
+<table width="1100" border="0"  cellpadding="0" cellspacing="0" >
+
+<tr>
+  <td valign="top" style="width:500px;"> 
+   
+  <table width="500" border="0"  cellpadding="0" cellspacing="0" >
+
+  <tr>
+    <td height="22" align="center" valign="middle">
+      
+      <table width="500" align="left" cellpadding="2"  style="background-color:#EEEEEE">
+       
+        <form action="{{=URL(c='utility_mrep',f='set_product_list')}}" method="post"  name="form1" id="form2"  >
+          <tr style="background-color:#DBDBDB; font-weight:bold" >
+            <td align="left" >&nbsp;</td>
+            <td align="left" >Item List Ready for Mobile Sync</td>
+            <td width="11" align="left" >&nbsp;</td>
+          </tr>
+          <tr >
+            <td align="left" >&nbsp;</td>
+            <td width="320" align="left" >&nbsp;</td>
+            <td align="left" >&nbsp;</td>
+          </tr>
+          <tr >
+            <td width="13" align="left" >&nbsp;</td>
+            <td align="left" >&nbsp;
+            <input style="width:400px; height:50px" type="submit" name="btn_item_sync" id="btn_item_sync" value=" Prepare" /></td>
+            <td align="left" >&nbsp;</td>
+          </tr>
+          
+          <tr>
+            <td align="center" >&nbsp;</td>
+            <td align="left" >&nbsp;</td>
+            <td align="center" >&nbsp;</td>
+          </tr>
+        </form>
+        
+        
+      </table>
+          
+    </td>
+  </tr>
+  <tr>
+    <td height="22" align="center" valign="middle">&nbsp;</td>
+  </tr>
+  <tr>
+    <td height="22" align="center" valign="middle">
+    
+    <table width="500" align="left" cellpadding="2"  style="background-color:#EEEEEE">
+       
+        <form action="{{=URL(c='utility_mrep',f='change_promotional_status')}}" method="post"  name="form1" id="form2"  >
+          <tr style="background-color:#DBDBDB; font-weight:bold" >
+            <td align="left" >&nbsp;</td>
+            <td align="left" >Change Status 'ACTIVE' to 'INACTIVE' before Current Date In Promotion</td>
+            <td width="11" align="left" >&nbsp;</td>
+          </tr>
+          <tr >
+            <td align="left" >&nbsp;</td>
+            <td width="320" align="left" >&nbsp;</td>
+            <td align="left" >&nbsp;</td>
+          </tr>
+          <tr >
+            <td width="13" align="left" >&nbsp;</td>
+            <td align="left" >&nbsp;
+            <input style="width:400px; height:50px" type="submit" name="btn_change_status_promo" id="btn_change_status_promo" value="Update" /></td>
+            <td align="left" >&nbsp;</td>
+          </tr>
+          
+          <tr>
+            <td align="center" >&nbsp;</td>
+            <td align="left" >&nbsp;</td>
+            <td align="center" >&nbsp;</td>
+          </tr>
+        </form>
+        
+      </table>
+    
+    </td>
+  </tr>
+  <tr>
+    <td height="22" align="center" valign="middle">&nbsp;</td>
+  </tr>
+  
+  <tr>
+    <td height="22" align="center" valign="middle">
+      
+      <table width="500" align="left" cellpadding="2"  style="background-color:#EEEEEE">
+       
+        <form action="{{=URL(c='utility_mrep',f='branch_data_clean_request')}}" method="post"  name="form1" id="form2"  >
+          <tr style="background-color:#DBDBDB; font-weight:bold" >
+            <td align="left" >&nbsp;</td>
+            <td colspan="2" align="left" title="Data clean: Requisition,Issue,Receive,Damage,Dispute,Invoice,Return,Payment,Transaction and Ledger; Data update: Order and stock">Clean Branch Data</td>
+            <td width="11" align="left" >&nbsp;</td>
+          </tr>
+          <tr >
+            <td width="13" align="left" >&nbsp;</td>
+            <td width="100" align="left" >Branch ID</td>
+            <td align="left" ><input  type="text" name="clean_branch_id" id="clean_branch_id" size="15" placeholder="Type Branch ID" autocomplete="off"/></td>
+            <td align="left" >&nbsp;</td>
+          </tr>
+          <tr>
+            <td align="center" >&nbsp;</td>
+            <td width="100" align="left" >Password</td>
+            <td align="left" ><input  type="text" name="clean_password" id="clean_password" size="15"  placeholder="Password" autocomplete="off"/></td>
+            <td align="center" >&nbsp;</td>
+          </tr>
+          <tr>
+            <td align="center" >&nbsp;</td>
+            <td align="left" >Confirm</td>
+            <td align="left" ><input  type="text" name="clean_checkbox" id="clean_checkbox" size="15"  placeholder="Type Confirm" autocomplete="off"/></td>
+            <td align="center" >&nbsp;</td>
+          </tr>
+          <tr>
+            <td align="center" >&nbsp;</td>
+            <td width="100" align="left" >&nbsp;</td>
+            <td align="left" ><input style="" type="submit" name="btn_clean_branch_data" id="btn_clean_branch_data" value="Clean Data" /></td>
+            <td align="center" >&nbsp;</td>
+          </tr>
+          <tr>
+            <td align="center" >&nbsp;</td>
+            <td width="100" align="left" >&nbsp;</td>
+            <td align="left" >&nbsp;</td>
+            <td align="center" >&nbsp;</td>
+          </tr>
+        </form>       
+        
+      </table>
+          
+    </td>
+  </tr>
+  <tr>
+    <td height="22" align="center" valign="middle">&nbsp;</td>
+  </tr>
+  
+  
+  <tr>
+    <td height="22" align="center" valign="middle">
+      
+      <table width="500" align="left" cellpadding="2"  style="background-color:#EEEEEE">
+       
+        <form action="{{=URL(c='utility_mrep',f='branch_customer_clean_request')}}" method="post"  name="form1" id="form2"  >
+          <tr style="background-color:#DBDBDB; font-weight:bold" >
+            <td align="left" >&nbsp;</td>
+            <td colspan="2" align="left" title="Data clean: Customer list">Clean Customer List</td>
+            <td width="11" align="left" >&nbsp;</td>
+          </tr>
+          <tr >
+            <td width="13" align="left" >&nbsp;</td>
+            <td width="100" align="left" >Branch ID</td>
+            <td align="left" ><input  type="text" name="clean_branch_id" id="clean_branch_id" size="15" placeholder="Type Branch ID" autocomplete="off"/></td>
+            <td align="left" >&nbsp;</td>
+          </tr>
+          <tr>
+            <td align="center" >&nbsp;</td>
+            <td width="100" align="left" >Password</td>
+            <td align="left" ><input  type="text" name="clean_password" id="clean_password" size="15"  placeholder="Password" autocomplete="off"/></td>
+            <td align="center" >&nbsp;</td>
+          </tr>
+          <tr>
+            <td align="center" >&nbsp;</td>
+            <td align="left" >Confirm</td>
+            <td align="left" ><input  type="text" name="clean_checkbox" id="clean_checkbox" size="15"  placeholder="Type Confirm" autocomplete="off"/></td>
+            <td align="center" >&nbsp;</td>
+          </tr>
+          <tr>
+            <td align="center" >&nbsp;</td>
+            <td width="100" align="left" >&nbsp;</td>
+            <td align="left" ><input style="" type="submit" name="btn_clean_branch_data" id="btn_clean_branch_data" value="Clean Customer List"/></td>
+            <td align="center" >&nbsp;</td>
+          </tr>
+          <tr>
+            <td align="center" >&nbsp;</td>
+            <td width="100" align="left" >&nbsp;</td>
+            <td align="left" >&nbsp;</td>
+            <td align="center" >&nbsp;</td>
+          </tr>
+        </form>       
+        
+      </table>
+          
+    </td>
+  </tr>
+  <tr>
+    <td height="22" align="center" valign="middle">&nbsp;</td>
+  </tr>
+  
+  <tr>
+    <td height="22" align="center" valign="middle">
+    
+    <table width="500" align="left" cellpadding="2"  style="background-color:#EEEEEE">       
+        <form action="{{=URL(c='utility_mrep',f='change_item_expiary_date')}}" method="post"  name="form1" id="form2"  >
+          <tr style="background-color:#DBDBDB; font-weight:bold" >
+            <td align="left" >&nbsp;</td>
+            <td colspan="2" align="left" title="Data clean: Customer list">Change Item Expiary Date</td>
+            <td width="11" align="left" >&nbsp;</td>
+          </tr>
+          <tr >
+            <td width="13" align="left" >&nbsp;</td>
+            <td width="130" align="left" >Item ID</td>
+            <td align="left" ><input  type="text" name="change_item_id" id="change_item_id" size="15" placeholder="Type Item ID" autocomplete="off"/></td>
+            <td align="left" >&nbsp;</td>
+          </tr>
+          <tr >
+            <td width="13" align="left" >&nbsp;</td>
+            <td width="130" align="left" >Batch ID</td>
+            <td align="left" ><input  type="text" name="change_batch_id" id="change_batch_id" size="15" placeholder="Type Batch ID" autocomplete="off"/></td>
+            <td align="left" >&nbsp;</td>
+          </tr>
+          <tr >
+            <td width="13" align="left" >&nbsp;</td>
+            <td width="130" align="left" >New Expiary Date</td>
+            <td align="left" ><input  type="text" name="change_new_expiary_date" id="change_new_expiary_date" size="15" placeholder="Type Expiary Date" autocomplete="off"/></td>
+            <td align="left" >&nbsp;</td>
+          </tr>
+          <tr>
+            <td align="center" >&nbsp;</td>
+            <td width="130" align="left" >Password</td>
+            <td align="left" ><input  type="text" name="change_password" id="change_password" size="15"  placeholder="Password" autocomplete="off"/></td>
+            <td align="center" >&nbsp;</td>
+          </tr>
+          <tr>
+            <td align="center" >&nbsp;</td>
+            <td width="130" align="left" >Confirm</td>
+            <td align="left" ><input  type="text" name="change_checkbox" id="change_checkbox" size="15"  placeholder="Type Confirm" autocomplete="off"/></td>
+            <td align="center" >&nbsp;</td>
+          </tr>
+          <tr>
+            <td align="center" >&nbsp;</td>
+            <td width="130" align="left" >&nbsp;</td>
+            <td align="left" ><input style="" type="submit" name="btn_change_item_expiary" id="btn_change_item_expiary" value="Change Expiary Date"/></td>
+            <td align="center" >&nbsp;</td>
+          </tr>
+          <tr>
+            <td align="center" >&nbsp;</td>
+            <td width="130" align="left" >&nbsp;</td>
+            <td align="left" >&nbsp;</td>
+            <td align="center" >&nbsp;</td>
+          </tr>
+        </form>
+      </table>
+      
+    </td>
+  </tr>
+  
+  <tr>
+    <td height="22" align="center" valign="middle">&nbsp;</td>
+  </tr>
+  
+  
+  
+  {{if (depot_transfer=='YES'):}}
+  <tr>
+    <td height="22" align="center" valign="middle">
+    <table width="500" align="left" cellpadding="2"  style="background-color:#EEEEEE">
+
+      <form action="{{#=URL(c='utility_mrep',f='depot_transfer')}}" method="post"  name="form1" id="form1"  >
+
+        <tr style="background-color:#DBDBDB; font-weight:bold" >
+
+          <td align="left" >&nbsp;</td>
+
+          <td colspan="2" align="left" >Transfer Depot </td>
+
+          <td align="left" >&nbsp;</td>
+
+        </tr>
+
+        <tr >
+
+          <td width="13" align="left" >&nbsp;</td>
+
+          <td colspan="2" align="left" style="color:#990000" > Warning
+
+            <ul >
+
+                <li>First Create a Depot same catagory </li>
+
+                <li>Once Transfered it can not be undone </li>
+
+              </ul></td>
+
+          <td width="11" align="left" >&nbsp;</td>
+
+        </tr>
+
+        <tr >
+
+          <td align="left" >&nbsp;</td>
+
+          <td width="150" align="left" >&nbsp;</td>
+
+          <td width="320" align="left" >&nbsp;</td>
+
+          <td align="left" >&nbsp;</td>
+
+        </tr>
+
+        <tr >
+
+          <td width="13" align="left" >&nbsp;</td>
+
+          <td align="left" >Transfer this Depot ID </td>
+
+          <td align="left" ><input  type="text" name="depot_id" id="depot_id" size="15" /></td>
+
+          <td align="left" >&nbsp;</td>
+
+        </tr>
+
+        <tr >
+
+          <td width="13" align="left" >&nbsp;</td>
+
+          <td align="left" >To this Depot ID</td>
+
+          <td align="left" ><input  type="text" name="transfer_with_depot_id" id="transfer_with_depot_id" size="15" /></td>
+
+          <td align="left" >&nbsp;</td>
+
+        </tr>
+
+        <tr>
+
+          <td align="center" >&nbsp;</td>
+
+          <td align="left" >Confirm</td>
+
+          <td align="left" ><input type="checkbox" name="checkbox" value="checkbox" />
+
+          </td>
+
+          <td align="center" >&nbsp;</td>
+
+        </tr>
+
+        <tr>
+
+          <td align="center" >&nbsp;</td>
+
+          <td align="center" >&nbsp;</td>
+
+          <td align="center" >&nbsp;</td>
+
+          <td align="center" >&nbsp;</td>
+
+        </tr>
+
+        <tr>
+
+          <td width="13" align="center" >&nbsp;</td>
+
+          <td align="center" >&nbsp;</td>
+
+          <td align="center" ><div align="left"> &nbsp;
+
+                <input type="submit" name="btn_transfer_depot" id="btn_transfer_depot" value="Submit Transfer" />
+
+          </div></td>
+
+          <td align="center" >&nbsp;</td>
+
+        </tr>
+
+        <tr>
+
+          <td align="center" >&nbsp;</td>
+
+          <td align="center" >&nbsp;</td>
+
+          <td align="center" >&nbsp;</td>
+
+          <td align="center" >&nbsp;</td>
+
+        </tr>
+
+      </form>
+
+    </table>
+    
+    
+    </td>
+  </tr>
+  {{pass}}
+  
+  {{smsResubmitRows=db((db.sm_settings.cid==session.cid) & (db.sm_settings.s_key=='SMS_RESUBMIT')& (db.sm_settings.s_value=='YES')).select(db.sm_settings.s_value,limitby=(0,1))}}
+  {{if smsResubmitRows:}}
+  <tr>
+    <td height="22" align="center" valign="middle">
+    <table width="500" align="left" cellpadding="2"  style="background-color:#EEEEEE">      
+
+            <form action="{{#=URL(c='utility_mrep',f='sms_resubmit')}}" method="post"  name="form1" id="form1"  >
+
+            <tr style="background-color:#DBDBDB; font-weight:bold" >
+
+              <td width="25" align="left" >&nbsp;</td>
+
+              <td align="left" >SMS Re-Submit</td>
+
+              <td width="180" align="left" >
+
+              </td>
+
+              <td width="90" align="right" ><input type="submit" name="Input" id="Input" value=" &gt;&gt; " /></td>
+
+              <td width="11" align="left" >&nbsp;</td>
+
+            </tr>
+
+            </form>
+
+        </table>
+    
+    
+    </td>
+  </tr>    
+  {{pass}}
+  
+  
+  <tr>
+    <td height="22" align="center" valign="middle">&nbsp;</td>
+  </tr>  
+  
+   <tr>
+    <td height="22" align="center" valign="middle">&nbsp;</td>
+  </tr>
+  
+  
+  <!--<tr>
+    <td align="center" valign="middle">&nbsp;</td>
+    <td height="77" align="left" valign="top">
+        <table width="600px" align="left" cellpadding="2"  style="background-color:#EEEEEE">
+
+          <form action="{{#=URL(c='utility_mrep',f='utility_settings')}}" method="post"  name="form1" id="form1"  >
+
+            <tr style="background-color:#DBDBDB; font-weight:bold" >
+
+              <td align="left" >&nbsp;</td>
+
+              <td colspan="2" align="left" >Show Last ID</td>
+
+              <td width="11" align="left" >&nbsp;</td>
+
+            </tr>
+
+            <tr >
+
+              <td align="left" >&nbsp;</td>
+
+              <td width="50" align="left" >&nbsp;</td>
+
+              <td width="320" align="left" >&nbsp;</td>
+
+              <td align="left" >&nbsp;</td>
+
+            </tr>
+
+            <tr >
+
+              <td width="13" align="left" >&nbsp;</td>
+
+              <td width="50" align="left" >Type</td>
+
+              <td align="left" >
+
+                <select name="showLastIDType" id="showLastIDType" style="width:150px" >			  	
+
+                    <option value="">Select</option>
+
+                    {{if showLastIDType=='REP':}}<option value="REP" selected="selected">REP</option>{{else:}}<option value="REP">REP</option>{{pass}}
+
+                    {{if showLastIDType=='SUPERVISOR':}}<option value="SUPERVISOR" selected="selected">Supervisor</option>{{else:}}<option value="SUPERVISOR">Supervisor</option>{{pass}}
+
+                    {{if showLastIDType=='RETAILER':}}<option value="RETAILER" selected="selected">Client/Retailer</option>{{else:}}<option value="RETAILER">Client/Retailer</option>{{pass}}
+
+                    {{if showLastIDType=='DOCTOR':}}<option value="DOCTOR" selected="selected">Doctor</option>{{else:}}<option value="DOCTOR">Doctor</option>{{pass}}
+
+                    
+
+                </select>
+
+                &nbsp;
+
+    <input type="submit" name="btn_show_lastID" id="btn_show_lastID" value=" Show " />
+
+              </td>
+
+              <td align="left" >&nbsp;</td>
+
+            </tr>
+
+            <tr>
+
+              <td align="center" >&nbsp;</td>
+
+              <td width="50" align="left" >Last ID</td>
+
+              <td align="left" >: {{=showLastID}}</td>
+
+              <td align="center" >&nbsp;</td>
+
+            </tr>
+
+            <tr>
+
+              <td align="center" >&nbsp;</td>
+
+              <td width="50" align="center" >&nbsp;</td>
+
+              <td align="left" >&nbsp;</td>
+
+              <td align="center" >&nbsp;</td>
+
+            </tr>
+
+          </form>
+
+        </table>
+
+    
+
+    </td>
+
+  </tr>-->
+
+</table>
+
+
+
+</td>
+
+
+<td valign="top" style="width:20px;" >&nbsp;</td>
+
+
+<td valign="top" style="width:500px;">
+
+<table width="500" border="0"  cellpadding="0" cellspacing="0" >
+
+  <tr>
+    <td height="22" align="center" valign="middle">
+      
+      <table width="500" align="left" cellpadding="2"  style="background-color:#EEEEEE">      
+        <form action="{{=URL(c='utility_mrep',f='utility_settings')}}" method="post"  name="form1" id="form1"  >
+		<tr style="background-color:#DBDBDB" >
+		  <td align="left" >&nbsp;</td>
+		  <td width="150" align="left" ><strong>Item Release</strong></td>
+		  <td align="left" >&nbsp;</td>
+		  <td align="right" >&nbsp;</td>
+		  <td align="left" >&nbsp;</td>
+		</tr>
+		<tr style="background-color:#EEEEEE" >
+		  <td align="left" >&nbsp;</td>
+		  <td align="left" >Branch/Depot ID</td>
+		  <td align="left" ><input  type="text" name="release_depot_id" id="release_depot_id" size="15" placeholder="Type Batch ID" autocomplete="off"/></td>
+		  <td align="right" >&nbsp;</td>
+		  <td align="left" >&nbsp;</td>
+		  </tr>
+		<tr style="background-color:#EEEEEE" >
+		  <td align="left" >&nbsp;</td>
+		  <td align="left" >Store ID</td>
+		  <td align="left" ><input  type="text" name="release_store_id" id="release_store_id" placeholder="Type Store ID" size="15" /></td>
+		  <td align="right" >&nbsp;</td>
+		  <td align="left" >&nbsp;</td>
+		  </tr>
+		<tr style="background-color:#EEEEEE" >
+          <td width="13" align="left" >&nbsp;</td>
+          <td width="150" align="left" >Item ID</td>
+          <td align="left" >
+		  	<input  type="text" name="release_item_id" id="release_item_id" placeholder="Type Item ID" size="15" />
+		  </td>
+          <td width="90" align="right" ><input type="submit" name="btn_item_batch_release" id="btn_item_batch_release" value="Next >>" disabled="disabled" /></td>
+          <td width="11" align="left" >&nbsp;</td>
+        </tr>
+        </form>
+    </table>
+      
+          
+    </td>
+  </tr>
+  <tr>
+    <td height="22" align="center" valign="middle">&nbsp;</td>
+  </tr>
+
+  
+  {{levelUpRows=db((db.sm_settings.cid==session.cid) & (db.sm_settings.s_key=='LEVEL_BATCH_UPLOAD')& (db.sm_settings.s_value=='YES')).select(db.sm_settings.s_value,limitby=(0,1))}}
+  {{if levelUpRows:}}
+  <tr>
+    <td height="22" align="center" valign="middle">
+    
+    <table width="500" align="left" cellpadding="2"  style="background-color:#EEEEEE">      
+        <form action="{{=URL(c='level',f='level_batch_upload_without_depot')}}" method="post"  name="form1" id="form1"  >
+		<tr style="background-color:#DBDBDB" >
+          <td width="13" align="left" >&nbsp;</td>
+          <td align="left" ><strong>Level Upload  </strong></td>
+          <td width="180" align="left" >
+		  	Depth:
+			{{depthValue=0}}
+		  	<select name="uploadDepth" id="uploadDepth" style="width:100px" >
+				<option value="" selected="selected"></option>
+				{{rows=db((db.sm_settings.cid==session.cid) & (db.sm_settings.s_key=='LEVEL_DEPTH')).select(db.sm_settings.s_value,limitby=(0,1))}}
+			  	
+				{{if rows:}}{{depthValue=int(rows[0].s_value)}}{{pass}}
+				
+				{{for i in xrange (depthValue+1):}}
+				<option value="{{=i}}" >{{=i}}</option>
+				{{pass}}
+				
+			</select>
+		  
+		  </td>
+          <td width="90" align="right" ><input type="submit" name="Input" id="Input" value="Batch Upload" /></td>
+          <td width="11" align="left" >&nbsp;</td>
+        </tr>
+        </form>
+    </table>
+    
+    
+    </td>
+  </tr>
+  <tr>
+    <td height="22" align="center" valign="middle">&nbsp;</td>
+  </tr>
+  {{pass}}
+  
+  {{if (depot_transfer=='YES'):}}  {{pass}}
+    
+  {{transferLevelFlag=True}}  
+  {{if transferLevelFlag==True:}}
+  
+  <tr>
+    <td height="22" align="center" valign="middle">
+    
+    <table width="500" align="left" cellpadding="2"  style="background-color:#EEEEEE">
+  <form  name="form1" action="{{=URL(c='utility_mrep',f='level_transfer')}}" method="post"  >
+    <tr style="background-color:#DBDBDB; font-weight:bold" >
+      <td colspan="3" align="left" ><strong>Transfer Working Area / Level </strong></td>
+      <td align="left" >&nbsp;</td>
+    </tr>
+
+    <tr >
+      <td width="13" align="left" >&nbsp;</td>
+      <td colspan="2" align="left" style="color:#990000" >
+	  
+
+	  Warning
+
+	  <ul >
+
+	  <li>Transfer can be made in same Level only </li>
+
+	  <li>Once Transfered it can not be undone </li>
+	   
+       <li>Transfer can not be applied in previous transactional data</li>
+       
+	  <li>To reflect the new area structure please sync Static data in i-Report
+
+        module(if have i-Report)</li>
+		
+	  </ul>	 </td>
+
+      <td width="11" align="left" >&nbsp;</td>
+
+    </tr>
+
+    <tr >
+
+      <td align="left" >&nbsp;</td>
+
+      <td width="200" align="left" >&nbsp;</td>
+
+      <td width="320" align="left" >&nbsp;</td>
+
+      <td align="left" >&nbsp;</td>
+
+    </tr>
+
+    <tr >
+
+      <td width="13" align="left" >&nbsp;</td>
+
+      <td width="200" align="left" >Transfer this Level ID </td>
+
+      <td align="left" ><input  type="text" name="level_id" id="level_id" size="15" /></td>
+
+      <td align="left" >&nbsp;</td>
+
+    </tr>
+
+    <tr >
+
+      <td width="13" align="left" >&nbsp;</td>
+
+      <td width="200" align="left" >Under new Parent Level ID</td>
+
+      <td align="left" ><input  type="text" name="under_level_id" id="under_level_id" size="15" /></td>
+
+      <td align="left" >&nbsp;</td>
+
+    </tr>
+
+    
+
+    <tr>
+
+      <td align="center" >&nbsp;</td>
+
+      <td width="200" align="left" >Confirm</td>
+
+      <td align="left" >
+
+        <input type="checkbox" name="checkbox" value="checkbox" />      </td>
+
+      <td align="center" >&nbsp;</td>
+
+    </tr>
+
+    <tr>
+
+      <td align="center" >&nbsp;</td>
+
+      <td width="200" align="center" >&nbsp;</td>
+
+      <td align="center" >&nbsp;</td>
+
+      <td align="center" >&nbsp;</td>
+
+    </tr>
+
+    <tr>
+
+      <td width="13" align="center" >&nbsp;</td>
+
+      <td width="200" align="center" >&nbsp;</td>
+
+      <td align="center" ><div align="left">
+
+        &nbsp;<input type="submit" name="btn_transfer" id="btn_transfer" value="Submit Transfer" />
+
+      </div></td>
+
+      <td align="center" >&nbsp;</td>
+
+    </tr>
+
+    <tr>
+
+      <td align="center" >&nbsp;</td>
+
+      <td width="200" align="center" >&nbsp;</td>
+
+      <td align="center" >&nbsp;</td>
+
+      <td align="center" >&nbsp;</td>
+
+    </tr>
+	</form>
+</table>
+    
+    
+    </td>
+  </tr>  
+  <tr>
+    <td height="22" align="center" valign="middle">&nbsp;</td>
+  </tr>
+  {{pass}}  
+  
+</table>
+{{if session.user_id=='ADMIN':}}
+<br/>
+<table width="500" align="left" cellpadding="2"  style="background-color:#EEEEEE">      
+    <form action="{{=URL(c='utility_mrep',f='utility_settings')}}" method="post"  name="form1" id="form1"  >
+        <tr style="background-color:#DBDBDB" >
+            <td align="left" >&nbsp;</td>
+            <td width="150" align="left" ><strong>Update Block Qty</strong></td>
+            <td align="left" >&nbsp;</td>
+            <td align="right" >&nbsp;</td>
+            <td align="left" >&nbsp;</td>
+        </tr>
+        <tr style="background-color:#EEEEEE" >
+            <td align="left" >&nbsp;</td>
+            <td align="left" >Branch/Depot ID</td>
+            <td align="left" ><input  type="text" name="block_depot_id" id="block_depot_id" size="15" placeholder="Type Depot ID" autocomplete="off"/></td>
+            <td align="right" >&nbsp;</td>
+            <td align="left" >&nbsp;</td>
+        </tr>
+            <tr style="background-color:#EEEEEE" >
+            <td align="left" >&nbsp;</td>
+            <td align="left" >Store ID</td>
+            <td align="left" ><input  type="text" name="block_store_id" id="block_store_id" placeholder="Type Store ID" size="15" /></td>
+            <td align="right" >&nbsp;</td>
+            <td align="left" >&nbsp;</td>
+        </tr>
+        </tr>
+            <tr style="background-color:#EEEEEE" >
+            <td align="left" >&nbsp;</td>
+            <td align="left" >Item ID</td>
+            <td align="left" ><input  type="text" name="block_item_id" id="block_item_id" placeholder="Type Item ID" size="15" /></td>
+            <td align="right" >&nbsp;</td>
+            <td align="left" >&nbsp;</td>
+        </tr>
+        <tr style="background-color:#EEEEEE" >
+            <td width="13" align="left" >&nbsp;</td>
+            <td width="150" align="left" >Batch ID</td>
+            <td align="left" >
+            <input  type="text" name="block_batch_id" id="block_batch_id" placeholder="Type Batch ID" size="15" />
+            </td>
+            <td width="90" align="right" ><input type="submit" name="btn_update_block_qty" id="btn_update_block_qty" value="Update Block Qty"  /></td>
+            <td width="11" align="left" >&nbsp;</td>
+        </tr>
+    </form>
+</table>
+{{pass}}
+
+<table width="500px" align="left" cellpadding="2"  >
+       
+          <tr  >
+            <td align="left" >&nbsp;</td>
+            <td colspan="2" align="left" ></td>
+            <td width="11" align="left" >&nbsp;</td>
+          </tr>
+          <tr style="" >
+            <td align="left" >&nbsp;</td>
+          </tr>
+         <tr >
+            <td width="50px" height="53" align="left">
+            
+            </td>
+            <td width="250px">
+
+
+            </td>
+                	
+                    
+                  <td width="250px">                     		      
+
+            </td>     
+                    
+
+               
+                              
+      </table>
+<table width="500px" align="left" cellpadding="2"  style="background-color:#EEEEEE">
+       {{currentDate=str(date_fixed)[0:7:]}}
+          <tr style="background-color:#DBDBDB" >
+            <td align="left" >&nbsp;</td>
+            <td colspan="2" align="left" title="Process Tour Summary">Process Tour Summary</td>
+            <td width="11" align="left" >&nbsp;</td>
+          </tr>
+          <tr style="" >
+            <td align="left" >&nbsp;</td>
+          </tr>
+          <form action="{{=URL(c='utility_mrep',f='tour_summary_insert_cron',vars=dict(currentDate=currentDate))}}" style="margin-bottom:0px" method="post"  name="form1" id="form2"  >
+          <tr >
+            <td width="50px" height="53" align="left">Month
+            
+            </td>
+            <td width="250px">
+                <select name="get_month" >
+                    <option value="">Select Month</option>
+                    <option value="This">This</option>
+                    <option value="Next">Next</option>
+              </select>
+            </td>
+                	
+                    
+                  <td width="250px">                     		      
+                		<input type="submit" name="btn_step_1_cron"  id="btn_step_1_cron" value="Update" />
+                        <!--<input type="submit" name="btn_step_2_cron" id="btn_step_2_cron" value="Step 2" />
+                        <input type="submit" name="btn_step_3_cron" id="btn_step_3_cron" value="Step 3" />-->
+            </td>     
+               </tr>     
+        </form>
+                        
+         <form action="{{=URL(c='report',f='tour_summary_download',vars=dict())}}" style="margin-bottom:0px" method="post"  name="form1" id="form2"  >
+          <tr >
+            <td width="50px" height="53" align="left">
+            
+            </td>
+            <td width="250px">
+                
+            </td>
+                	
+                    
+                  <td width="250px">                     		      
+                		<input type="submit"  value="Download" />
+                        
+            </td>     
+          </tr>     
+        </form>     
+                    
+               
+                              
+      </table>
+      <br>
+      <table width="500" align="left" cellpadding="2"  style="background-color:#EEEEEE;">
+       
+        <form action="{{=URL(c='utility_mrep',f='branch_client_transfer')}}" method="post"  name="form1" id="form2"  >
+          <tr style="background-color:#DBDBDB; font-weight:bold" >
+            <td align="left" >&nbsp;</td>
+            <td colspan="2" align="left" title="Client depot Transfer">Depot Client Transfer</td>
+            <td width="11" align="left" >&nbsp;</td>
+          </tr>
+      <tr >
+            <td width="13" align="left" >&nbsp;</td>
+            <td width="100" align="left" >Client ID List</td>
+            <td align="left" >
+        <textarea name="transfer_client_id_list" id="transfer_client_id_list" cols='10' rows='3' ></textarea> </td>
+            <td align="left" >&nbsp;</td>
+          </tr>
+          <tr >
+            <td width="13" align="left" >&nbsp;</td>
+            <td width="100" align="left" >New Branch ID</td>
+            <td align="left" ><input  type="text" name="transfer_branch_id" id="transfer_branch_id" size="15" placeholder="Type Branch ID" autocomplete="off"/></td>
+            <td align="left" >&nbsp;</td>
+          </tr>
+      <tr >
+            <td width="13" align="left" >&nbsp;</td>
+            <td width="100" align="left" >New Store ID</td>
+            <td align="left" ><input  type="text" name="transfer_store_id" id="transfer_store_id" size="15" placeholder="Type Store ID" autocomplete="off"/></td>
+            <td align="left" >&nbsp;</td>
+          </tr>
+          <tr>
+            <td align="center" >&nbsp;</td>
+            <td width="100" align="left" >Password</td>
+            <td align="left" ><input  type="text" name="transfer_password" id="transfer_password" size="15"  placeholder="Password" autocomplete="off"/></td>
+            <td align="center" >&nbsp;</td>
+          </tr>
+          <tr>
+            <td align="center" >&nbsp;</td>
+            <td align="left" >Confirm</td>
+            <td align="left" ><input  type="text" name="transfer_checkbox" id="transfer_checkbox" size="15"  placeholder="Type Confirm" autocomplete="off"/></td>
+            <td align="center" >&nbsp;</td>
+          </tr>
+          <tr>
+            <td align="center" >&nbsp;</td>
+            <td width="100" align="left" >&nbsp;</td>
+            <td align="left" ><input style="" type="submit" name="btn_trans_client_branch_data" id="btn_trans_client_branch_data" value="Transfer" /></td>
+            <td align="center" >&nbsp;</td>
+          </tr>
+          <tr>
+            <td align="center" >&nbsp;</td>
+            <td width="100" align="left" >&nbsp;</td>
+            <td align="left" >&nbsp;</td>
+            <td align="center" >&nbsp;</td>
+          </tr>
+        </form>       
+        
+      </table>
+</td>
+
+</tr>
+
+
+
+
+  <!--Nazma Azam 2019-09-14 strat-->
+ 
+ 
+ 
+ <tr>
+    <td height="22" align="center" valign="middle">
+      
+      <table width="500px" align="left" cellpadding="2"  style="background-color:#EEEEEE">
+       
+        <form action="{{=URL(c='utility_mrep_delete',f='rep_data_clean_request')}}" method="post"  name="form1" id="form2"  >
+
+          
+ 		<tr style="background-color:#DBDBDB" >
+ 		  <td align="left" >&nbsp;</td>
+            <td colspan="2" align="left" >Delete Tour Plan </td>
+            <td width="11" align="left" >&nbsp;</td>
+          </tr>
+          
+                    
+          <tr >
+            <td width="18" align="left" >&nbsp;</td>
+           
+            <td width="60" align="left" >Rep ID</td>
+            <td align="left" ><input  type="text" name="rep_id" id="rep_id" size="15" placeholder="Rep ID" autocomplete="off"/></td>
+            
+            <td align="left" >&nbsp;</td>
+          </tr>
+          
+          
+          
+          
+          
+          
+          <!--<tr>
+            <td width="18" align="left" >&nbsp;</td>
+           
+            <td width="60" align="left" >Year</td>
+            <td align="left" >
+            
+            <select style="width:30" id="year_no" name="year_no">
+                <option value="2019">2019</option>
+                <option value="2020">2020</option>
+                <option value="2021">2021</option>
+                <option value="2022">2022</option>
+ 
+                <option value="2023">2023</option>
+                <option value="2024">2024</option>
+                <option value="2025">2025</option>
+                <option value="2026">2026</option>
+                
+                <option value="2027">2027</option>
+                <option value="2028">2028</option>
+                <option value="2029">2029</option>
+                <option value="2030">2030</option>
+            </select> 
+
+			</td>
+            
+            <td align="left" >&nbsp;</td>
+          </tr>-->
+          
+          {{
+          	next_month_name=''
+          	month_name=''
+            month_next=''
+            this_year=str(first_currentDate).split('-')[0]
+            this_month=str(first_currentDate).split('-')[1]
+            this_month_int=int(this_month)
+            #=this_month
+            if (this_month_int==12):
+            	month_next='01'
+            else:
+            	month_next=str(int(this_month)+1)
+            pass
+            
+            month_next_int=int(month_next)
+            
+                    
+            #=month_next
+            if (this_month_int==1):
+            	month_name='January'
+            elif (this_month_int==2):
+            	month_name='February'
+            elif (this_month_int==3):
+            	month_name='March'
+            elif (this_month_int==4): 
+            	month_name='April'
+            elif (this_month_int==5): 
+            	month_name= 'May'            
+            elif (this_month_int==6):  
+            	month_name='June'               
+            elif (this_month_int==7):
+            	month_name= 'July'                 
+            elif (this_month_int==8):    
+            	month_name= 'August'            
+            elif (this_month_int==9):  
+            	month_name= 'September'             
+            elif (this_month_int==10):      
+            	month_name= 'October'           
+            elif (this_month_int==11):  
+            	month_name= 'November' 
+            elif (this_month_int==12): 
+            	month_name='December'
+            else:
+            	month_name=''
+          	pass
+
+
+            if (month_next_int==1):
+            	next_month_name='January'
+            elif (month_next_int==2):
+            	next_month_name='February'
+            elif (month_next_int==3):
+            	next_month_name='March'
+            elif (month_next_int==4): 
+            	next_month_name='April'
+            elif (month_next_int==5): 
+            	next_month_name= 'May'             
+            elif (month_next_int==6):  
+            	next_month_name='June'               
+            elif (month_next_int==7):
+            	next_month_name= 'July'                 
+            elif (month_next_int==8):    
+            	next_month_name='August'             
+            elif (month_next_int==9):  
+            	next_month_name='September'              
+            elif (month_next_int==10):      
+            	next_month_name= 'October'           
+            elif (month_next_int==11):  
+            	next_month_name= 'November' 
+            elif (month_next_int==12): 
+            	next_month_name='December'
+            else:
+            	next_month_name=''
+			pass
+          
+          }}
+          
+          
+          
+          <tr>
+            <td width="18" align="left" >&nbsp;</td>
+           
+            <td width="60" align="left" >Month</td>
+            <td align="left" >
+            
+            <select style="width:30" id="month_name" name="month_name">
+
+                <option value="{{=this_month}}">{{=month_name}}</option>
+                <option value="{{=month_next}}">{{=next_month_name}}</option>
+            
+            </select> 
+
+			</td>
+            
+            <td align="left" >&nbsp;</td>
+          </tr>
+          <tr>
+            <td align="left" >&nbsp;</td>
+           
+            <td align="left" >Type</td>
+            <td align="left" ><input type="text" name="confirm_val" id="confirm_val" placeholder="CONFIRM" />
+            <br />
+            <span style="color:#C00">* please type CONFIRM</span>
+            </td>
+            
+            <td align="left" >&nbsp;</td>
+          </tr>
+          <tr>
+            <td align="center" >&nbsp;</td>
+            <td align="center" >&nbsp;</td>
+            <td width="283" align="left" ><input style="" type="submit" name="btn_delete_rep_data" id="btn_delete_rep_data" value="   Delete Data   " /></td>
+
+           
+            <td align="left" >&nbsp;<br><br></td>
+          </tr>
+
+        </form>       
+        
+      </table>
+          
+    </td>	
+  </tr>
+  <tr>
+  
+    <td height="22" align="center" valign="middle">
+    	<br/>
+    	<table width="500" align="left" cellpadding="2"  style="background-color:#EEEEEE">
+       
+        <form action="{{=URL(c='utility_mrep',f='national_data_clean_request')}}" method="post"  name="form1" id="form2"  >
+          <tr style="background-color:#DBDBDB; font-weight:bold" >
+            <td align="left" >&nbsp;</td>
+            <td colspan="2" align="left" title="Data clean: Requisition,Issue,Receive,Damage,Dispute,Invoice,Return,Payment,Transaction and Ledger; Data update: Order and stock">Clean National Data</td>
+            <td width="11" align="left" >&nbsp;</td>
+          </tr>          
+          <tr>
+            <td align="center" >&nbsp;</td>
+            <td width="100" align="left" >Password</td>
+            <td align="left" ><input  type="text" name="clean_password_n" id="clean_password_n" size="15"  placeholder="Password" autocomplete="off"/></td>
+            <td align="center" >&nbsp;</td>
+          </tr>
+          <tr>
+            <td align="center" >&nbsp;</td>
+            <td align="left" >Confirm</td>
+            <td align="left" ><input  type="text" name="clean_checkbox_n" id="clean_checkbox_n" size="15"  placeholder="Type Confirm" autocomplete="off"/></td>
+            <td align="center" >&nbsp;</td>
+          </tr>
+          <tr>
+            <td align="center" >&nbsp;</td>
+            <td width="100" align="left" >&nbsp;</td>
+            <td align="left" ><input type="submit" name="btn_clean_data_n" id="btn_clean_data_n" value="Clean Data" /></td>
+            <td align="center" >&nbsp;</td>
+          </tr>
+          <tr>
+            <td align="center" >&nbsp;</td>
+            <td width="100" align="left" >&nbsp;</td>
+            <td align="left" >&nbsp;</td>
+            <td align="center" >&nbsp;</td>
+          </tr>
+        </form>       
+        
+      </table>
+    
+    </td>
+  </tr>
+  
+  
+  
+  		<!--Nazma Azam 2019-09-14 end-->
+
+</table>
+
+<br />
+
+<br />
+
+<br />
+
+<br />
+
+
+
+
+
+
+

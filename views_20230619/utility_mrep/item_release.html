@@ -1,0 +1,214 @@
+
+
+{{extend 'layout.html'}}
+
+  <link rel="stylesheet" href="{{=URL('static', 'js_and_css/ui.theme.css')}}" type="text/css" />
+
+  <link rel="stylesheet" href="{{=URL('static', 'js_and_css/jquery-ui.css')}}" type="text/css" />
+
+  <link rel="stylesheet" href="{{=URL('static', 'js_and_css/style.css')}}" type="text/css" />
+
+   <script src="{{=URL('static','js_and_css/jquery-1.8.2.js')}}"></script>
+
+    <script src="{{=URL('static','js_and_css/jquery-ui.js')}}"></script>
+
+  
+
+  
+
+  <style type="text/css">
+
+	 input[type=text], input[type=password],  select {
+
+		margin: 2px 0px 2px 0px;
+
+		width: 200px;
+
+	}
+
+	div.error {
+
+		width: 200px;
+
+	}
+
+	
+
+	#sm_item_category_id,#sm_item_unit_type{
+
+		width: 200px;
+
+	}
+
+.page_color,body{
+
+	font-family:Arial, Helvetica, sans-serif;
+
+	font-size:13px;	
+
+	}
+
+ </style>
+
+ 
+{{today=datetime.datetime.strptime(current_date,'%Y-%m-%d')}}
+
+<table width="100%"  border="0" cellspacing="0" cellpadding="0" style="background-color:#FFFFFF;" >
+
+  <tr height="30px" >
+
+    <td width="500"><span class="blackCatTitle">Item Release</span></td>
+
+	<form id="form1" name="form1" method="post" action="{{=URL(c='utility_mrep',f='utility_settings')}}">
+    <td width="400" align="right"><input type="submit" name="btn_back" id="btn_back" value="Back" class="button_update"/></td>
+    <td align="right">&nbsp;</td>
+	</form>
+
+    <td align="right" width="20px">&nbsp;</td>
+
+  </tr>
+
+  <tr  height="1px" style="background-color:#CCCCCC;">
+
+	    <td ></td><td width="400" ></td>
+	    <td ></td>
+	    <td ></td>
+
+  </tr>
+
+  </table>
+
+  
+
+  
+
+  <table width="100%" height="500px"  border="0" cellspacing="0" cellpadding="0" class="page_color"  >
+
+  <tr height="100%"  style="vertical-align:top;">
+
+    <td>
+
+	<table width="100%"  border="0" cellpadding="0" cellspacing="0"  >
+
+
+
+      <tr>
+
+        <td width="10">&nbsp;</td>
+
+        <td>
+
+		<br />
+
+		<table width="800">
+
+			<tr>
+
+				<td width="478">
+
+          <table width="475" class="blackCat">
+
+		 
+              <tr>
+
+                <td width="150"> Branch/Depot ID</td>
+
+                <td width="368">                				
+				:{{=depotId}}|{{=depotName}}</td>
+
+              </tr>
+
+              <tr>
+
+                <td width="150">Store ID</td>
+
+                <td>:{{=storeId}}|{{=storeName}}</td>
+
+              </tr>
+
+              <tr>
+
+                <td width="150">Item ID</td>
+
+                <td>:{{=itemId}}|{{=itemName}}</td>
+
+                </tr>
+
+            </table>
+
+			</td>
+
+			<td width="310">&nbsp;</td>
+
+			</tr>
+
+			</table>
+
+            <br />
+		 
+			 <table width="900" border="1" cellpadding="1" cellspacing="1" class="sample_border" >
+
+                <tr align="left" class="blackCatHead"  height="20px" style="font-size:16px; background-color:#CCC">
+
+                  <td width="60" >ItemID</td>
+
+                  <td width="60" >BatchID</td>
+
+                  <td width="60" align="center" >Expiry Date</td>
+                  <td width="60" align="right" >Quantity</td>
+                  <td width="60" align="right" >Blocked</td>
+                  <td width="60" align="right" >Available</td>
+                  <td width="100" align="right"  >Action</td>
+
+                </tr>
+
+			    {{ p=0}} 		  
+
+			    {{for i,record in enumerate(records):}}
+
+    <!--<form id="form1" method="post" action="">-->
+	
+    {{expiaryDate=datetime.datetime.strptime(str(record.expiary_date),'%Y-%m-%d')}}
+	{{rowStyle='font-size:13px;'}}
+    {{if expiaryDate < today:}}
+    	{{rowStyle='font-size:13px; background-color:#FFFFC1'}}
+    {{pass}}
+	
+    <tr  align="left" class="blackCat" style="{{=rowStyle}}">    
+      <td width="60" >{{=record.item_id}}</td>		
+      <td width="60" >{{=record.batch_id}}</td>		
+      <td width="60" align="center" >{{=record.expiary_date}}</td>
+      <td width="60" align="right" >{{=record.quantity}}</td>
+      <td width="60" align="right" >{{=record.block_qty}}</td>
+      <td width="60" align="right" >{{=record.quantity-record.block_qty}}</td>
+      
+      <form id="form1" name="form1" method="post" action="{{=URL(c='utility_mrep',f='item_release',vars=dict(depotId=depotId,storeId=storeId,itemId=itemId,batchId=record.batch_id,rowid=record.id))}}">
+		<td width="100" align="right" >   
+        {{if record.block_qty!=0:}}     
+        <input type="checkbox" name="check_update" value="YES" title="Checked confirmation"/>
+        &nbsp;&nbsp;
+        <input type="submit" name="btn_update" id="btn_update" value="Release"   class="button_update"/>
+          {{pass}}         
+      </td>
+	</form>
+    </tr>
+
+			    {{pass}}
+
+		    </table>
+
+			  <p>&nbsp;</p>
+
+	      </td></tr>
+
+    </table>
+
+
+	</td>
+
+  </tr>
+
+</table>
+
+
+

@@ -1,0 +1,118 @@
+{{extend 'layout_login.html'}}
+
+<table width="800" border="0">
+  <tr>
+    <td align="left"><div class="blackCatTitle">Table Data Clean</div></td>
+    <td width="100" align="right">
+	<form action="{{=URL(c='super',f='home')}}" method="post">
+	<input name="" type="submit"  value="Back"/>
+	</form>
+	</td>
+  </tr>
+</table>
+
+<table width="800" border="0" >
+  <form action="{{=URL(c='super',f='sys_data_clean')}}" method="post">
+  <tr style="background-color:#F0F8FF;">
+    <td colspan="3" align="left">&nbsp;</td>
+    <td width="80" align="right">&nbsp;</td>
+    <td width="2" align="right">&nbsp;</td>
+  </tr>
+  <tr style="background-color:#F0F8FF;">
+    <td colspan="3" align="left">&nbsp;CID:
+	{{if session.cid_value=='' or session.cid_value==None:}}
+	<input type="text" name="cid_value" id="cid_value" style="width:100px" value="">
+	{{else:}}
+	<input type="text" name="cid_value" id="cid_value" style="width:100px" value="{{=session.cid_value}}">
+	{{pass}}
+	&nbsp;Table Name
+	{{if session.table_name=='' or session.table_name==None:}}
+	<input type="text" name="table_name" id="table_name" style="width:200px" value="" />
+	{{else:}}
+	<input type="text" name="table_name" id="table_name" style="width:200px" value="{{=session.table_name}}">
+	{{pass}}
+	
+	&nbsp;Password
+	{{if session.passwordValue=='' or session.passwordValue==None:}}
+	<input type="password" name="password" id="password" style="width:100px" value="" />
+	{{else:}}
+	<input type="password" name="password" id="password" style="width:100px" value="{{=session.passwordValue}}">
+	{{pass}}	</td>	
+    <td width="80" align="right"><input name="btn_set" type="submit"  value="Set" style="background-color:#ECF5FF; width:80px;" class="button_update"/></td>
+    <td width="2" align="right">&nbsp;</td>
+  </tr>
+  <tr style="background-color:#F0F8FF;">
+    <td colspan="3" align="left">&nbsp;</td>
+    <td align="right"><input name="btn_reset" type="submit"  value="Reset" style="background-color:#ECF5FF;width:80px;" class="button_update"/></td>
+    <td width="2" align="right">&nbsp;</td>
+  </tr>
+  <tr style="background-color:#F0F8FF;">
+    <td colspan="3" align="left">&nbsp;</td>
+    <td align="right">&nbsp;</td>
+    <td align="right">&nbsp;</td>
+  </tr>
+  <tr style="background-color:#F0F8FF;">
+    <td colspan="3" align="left">&nbsp;</td>
+    <td align="right"><input name="btn_clean" type="submit"  value="Clean Data" style="background-color:#ECF5FF;width:80px;" class="button_update"/></td>
+    <td width="2" align="right">&nbsp;</td>
+  </tr>
+  <tr style="background-color:#F0F8FF;">
+    <td height="21" colspan="3" align="left"><strong>Table List: </strong></td>
+    <td align="right">&nbsp;</td>
+    <td align="right">&nbsp;</td>
+  </tr>
+  <tr style="background-color:#F0F8FF;">
+    <td height="21" colspan="4" align="left"><p>sm_item,<br /> 
+		sm_level, <br />
+		sm_rep, sm_rep_area, <br />
+		sm_client, 
+		sm_client_user,<br />
+		sm_depot, sm_depot_settings, sm_depot_stock, sm_depot_stock_balance,<br />		
+		sm_requisition_head, sm_requisition, <br />
+		sm_issue_head, sm_issue, <br />
+		sm_receive_head, sm_receive,<br />
+		sm_damage_head, sm_damage,<br />
+		sm_order_head, sm_order, <br />
+		sm_invoice_head, sm_invoice,
+		sm_invoice_processing_rules, <br />
+		sm_return_head, sm_return, <br />
+		sm_client_payment, sm_depot_payment,<br />
+		sm_transaction,<br />
+		sm_comp_mobile, sm_mobile_settings, sm_web_settings, sm_settings, sm_company_settings, <br />
+		sm_depot_user,<br />
+		sm_download_url, sm_download_table, <br />
+		sm_doctor, sm_doctor_area, sm_doctor_gift, sm_gift_submit,
+		sm_sample_submit,<br />
+		sm_doc_feedback, sm_notice, sm_attendance, <br />
+		sm_target, <br />
+      sm_inbox </p></td>
+    <td align="right">&nbsp;</td>
+  </tr>
+  </form>
+  <tr style="background-color:#F0F8FF;">
+    <td height="21" colspan="4" align="left"><hr /></td>
+    <td align="right">&nbsp;</td>
+  </tr>
+  <form action="{{=URL(c='super',f='sys_data_clean')}}" method="post">
+  <tr align="left" valign="top" style="background-color:#F0F8FF;">
+    <td width="33" height="21">SQL<!--<input type="text" name="update_sql" id="update_sql" style="width:400px" value="" />	--></td>
+    <td width="427"><textarea name="update_sql" id="update_sql" style="width:400px; height:50px; border: thick"></textarea></td>
+    <td width="236">Password&nbsp;
+      <input type="password" name="update_password" id="update_password" style="width:150px" value="" /></td>
+    <td><input name="btn_update" type="submit"  value="Execute" style="background-color:#ECF5FF;width:80px;" class="button_update"/></td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr style="background-color:#F0F8FF;">
+    <td height="21" colspan="3" align="left">Exam: update sm_depot set field1='SUPER' where sm_depot.cid='ABC' and sm_depot.depot_id='HO'</td>
+    <td width="80" align="right">&nbsp;</td>
+    <td width="2" align="right">&nbsp;</td>
+  </tr>
+  <tr style="background-color:#F0F8FF;">
+    <td height="21" align="left" valign="top">Result</td>
+    <td height="21" colspan="3" align="left"><textarea name="executeRes" id="executeRes" style="width:800px; height:100px; border: thick">{{=returnStr}}</textarea></td>
+    <td align="right">&nbsp;</td>
+  </tr>
+  </form>
+</table>
+
+ <br/><br/>

@@ -1,0 +1,290 @@
+{{extend 'layout.html'}}
+
+  <link rel="stylesheet" href="{{=URL('static', 'js_and_css/ui.theme.css')}}" type="text/css" />
+  <link rel="stylesheet" href="{{=URL('static', 'js_and_css/jquery-ui.css')}}" type="text/css" />
+  <link rel="stylesheet" href="{{=URL('static', 'js_and_css/style.css')}}" type="text/css" />
+  
+  <script src="{{=URL('static','js_and_css/jquery-1.8.2.js')}}"></script>
+  <script src="{{=URL('static','js_and_css/jquery-ui.js')}}"></script>
+  
+  <style type="text/css">
+	 input[type=text], input[type=password],  select {
+    margin: 2px 0px 2px 0px;
+	}
+	
+	#sm_client_status,#sm_client_category_id{
+	width:auto;
+	}
+	#sm_client_client_id,#sm_client_area_id{
+	width:70px;
+	}
+	
+	#sm_client_op_balance,#sm_client_balance,#sm_client_credit_limit{
+	width:60px;
+	text-align:right;
+	}
+	
+	div.error {
+		color: white;
+		padding: 0px;
+		width: auto; 
+		margin-left:0px;
+	}
+	.page_color,body{
+		font-family:Arial, Helvetica, sans-serif;
+		font-size:13px;	
+		}
+ </style>
+ 
+<script>
+var base_url=location.protocol + "//" + location.hostname + (location.port && ":" + location.port) + "/{{=request.application}}/";
+
+$(function() {
+	 	var valueListStr="";
+		
+		$('#search_type').blur(function(){
+			if ($('#search_type').val()=='ClientID'){
+				//alert(base_url+'default/get_route_list');
+				$.ajax({
+					  url: base_url+'default/get_client_list',
+					  success: function(resStr) {
+						  valueListStr=resStr
+					  }
+					});
+			}else if ($('#search_type').val()=='AreaID'){
+				$.ajax({
+					  url: base_url+'default/get_area_list',
+					  success: function(resStr) {
+						  valueListStr=resStr
+					  }
+					});				
+			}else if ($('#search_type').val()=='Region'){
+				$.ajax({
+					  url: base_url+'default/get_region_list',
+					  success: function(resStr) {
+						  valueListStr=resStr
+					  }
+					});
+			}else if ($('#search_type').val()=='District'){
+				$.ajax({
+					  url: base_url+'default/get_district_list',
+					  success: function(resStr) {
+						  valueListStr=resStr
+					  }
+					});
+			}else if ($('#search_type').val()=='Status'){
+				valueListStr='ACTIVE,INACTIVE'
+				
+			}else if ($('#search_type').val()=='DepotID'){
+				$.ajax({
+					  url: base_url+'default/get_depot_list',
+					  success: function(resStr) {
+						  valueListStr=resStr
+					  }
+					});			
+			};			
+	 	});
+	 
+		$('#search_value').keyup(function(){
+			//-------------------------
+			var valueList = valueListStr.split(',');				
+			var searchValue=$("#search_value").val();
+			
+			//---------------- auto complete combo list
+			var valueList_new=new Array();
+			lc=0;
+			i =0;
+			var valueStr="";				
+			while (i < valueList.length)
+			{
+				valueStr=valueList[i];
+				i=i+1;					
+				var res=valueStr.toUpperCase().match(searchValue.toUpperCase());
+				if (res!=null){
+					valueList_new[lc]=valueStr;
+					lc=lc+1;
+					if (lc==30){
+						break;
+					};
+				}else{
+					continue;
+				}					
+			};
+			//alert (ref_list_new);
+			
+			//-------------- auto complete source
+			$( "input#search_value" ).autocomplete({
+				source: valueList_new
+			});
+		
+	  }); 
+	    
+}); 
+
+</script>
+
+
+<table width="100%"  border="0" cellspacing="0" cellpadding="0" style="background-color:#FFFFFF;" >
+  <tr height="30px" >
+    <td width="500"><span class="blackCatTitle">Customer</span></td>
+    <td width="500" align="right"><span class="blackCatTitle">
+   {{ if session.rm_client_cat_manage=="True" or session.rm_client_cat_view=="True":}}
+	
+     <a href="{{=URL(c='client',f='catagory')}}" ><input type="button" value="Category"/></a>&nbsp;
+     <a href="{{=URL(c='client',f='sub_catagory')}}" ><input type="button" value="Sub Category"/></a>
+     
+     {{ pass }}
+    </span></td>
+    <td align="right">&nbsp;</td>
+  </tr>
+  <tr  height="1px" style="background-color:#CCCCCC;">
+	    <td width="300" ></td><td ></td><td ></td>
+  </tr>
+  </table>
+  
+  
+  <table width="100%" height="500px"  border="0" cellspacing="0" cellpadding="0" class="page_color"  >
+  <tr height="100%"  style="vertical-align:top;">
+    <td>
+	<table width="100%"  border="0" cellpadding="0" cellspacing="0"  >
+      <tr>
+        <td width="5">&nbsp;</td>
+        <td>
+		
+		<table width="1000" border="0" cellpadding="0" cellspacing="0" >
+			<tr>
+				<td width="100">&nbsp;</td>
+				<td width="900" align="right">
+                
+                {{if access_permission==True and session.user_type=='Depot':}}
+                	<a href="{{=URL(c='client',f='downlaod_client_without_matching_territory')}}"><input type="button" name="" id="" value="Customer without matching territory (Download)"   class="button_update"/></a>
+                    <a href="{{=URL(c='client',f='client_territory_update')}}"><input type="button" name="" id="" value="Customer territory (Update)"   class="button_update"/></a>
+                {{pass}}
+                
+                {{if access_permission==True:}}
+                	<a href="{{=URL(c='client',f='client_add')}}"><input type="button" name="" id="" value="New"   class="button_update"/></a>
+				{{pass}}
+                
+                </td>
+				<td align="right">&nbsp;</td>
+			</tr>
+		</table>
+		
+		</td>
+      </tr>
+      <tr>
+        <td width="5">&nbsp;</td>
+        <td>			
+            <br />
+               <table width="1000" border="1" cellpadding="1" cellspacing="1" class="sample_border" >
+               
+			   <form id="form1" name="form1" method="post" action="{{=URL(c='client',f='client')}}">
+                 <tr align="left" class="blackCatHead"  height="20px" ;"vertical-align:middle">
+                   <td width="200" >
+                   <select name="search_type" id="search_type" style="width:200px" >
+                       <option selected="selected">Select a Type</option>
+                        {{if session.search_type_client=='Region':}}<option value="Region" selected="selected">{{=session.level0Name}}</option>{{else:}}<option value="Region" >{{=session.level0Name}}</option>{{pass}}
+                        {{if session.search_type_client=='District':}}<option value="District" selected="selected">District</option>{{else:}}<option value="District" >District</option>{{pass}}
+                        {{if session.search_type_client=='AreaID':}}<option value="AreaID" selected="selected">{{=session.level3Name}} ID/Name</option>{{else:}}<option value="AreaID" >{{=session.level3Name}} ID/Name</option>{{pass}}
+                        {{if session.search_type_client=='ClientID':}}<option value="ClientID" selected="selected">Client/Retailer ID/Name</option>{{else:}}<option value="ClientID" >Client/Retailer ID/Name</option>{{pass}}
+                        {{if session.search_type_client=='Status':}}<option value="Status" selected="selected">Status</option>{{else:}}<option value="Status" >Status</option>{{pass}}
+                        
+                        {{if session.user_type!='Depot':}}
+                            {{if session.search_type_client=='DepotID':}}<option value="DepotID" selected="selected">Branch</option>{{else:}}<option value="DepotID" >Branch</option>{{pass}}
+                        {{pass}}
+                        
+                   </select>
+				   </td>
+                   <td >
+                   {{if session.search_value_client=='' or session.search_value_client==None:}}
+                    <input  name="search_value" type="text" id="search_value" size="25" value="" placeholder="Select a value" autocomplete="off" style="width:300px"/>
+                  {{else:}}
+                    <input  name="search_value" type="text" id="search_value" size="25" value="{{=session.search_value_client}}" placeholder="Select a value" autocomplete="off" style="width:300px"/>
+                  {{pass}}
+                   
+                   </td>
+                   <td width="100" align="right"  ><input type="submit" name="btn_filter" id="btn_filter" value="Filter"   class="button_update"/>
+                   <input type="submit" name="btn_filter_client_all" id="btn_filter_client_all" value="All"   class="button_update"/></td>
+                   <td width="80" align="right"  ><a href="{{=URL(c='client',f='download_client')}}">
+				 	<input type="button" name="" id="" value="Download" class="button_update" title="Need Filter by {{=session.level0Name}}/District/Market/Client for Download"/></a></td>
+                   
+                   {{if access_permission==True:}}
+                   <td width="80" align="right"  ><a href="{{=URL(c='client',f='client_batch_upload')}}">
+                     <input type="button" name="" id="" value="Batch Upload"   class="button_update" title=""/></a>
+                   </td>
+                    {{pass}}
+			     </tr>
+			     </form>
+            </table>
+			 <strong>Total:</strong> {{=totalCount}}<br />
+			 <br />
+			 <table width="1000" border="1" cellpadding="1" cellspacing="1" class="sample_border" >
+               <tr align="left" class="blackCatHead"  height="20px" ;"vertical-align:middle">
+                 <td width="80" >New ID,<br />
+                   Old ID</td>
+                 <td width="150" >Name</td>
+                 <td width="120" >{{=session.level3Name}}</td>
+                 <td width="60" >{{=session.level0Name}}</td>
+                 <td width="130" >Market, Thana, District</td>
+                 <td width="50" > Branch,<br />
+                   Store</td>
+                 <td width="50" >Belt</td>
+                 <td width="60" align="center" >Status</td>
+                 <td width="50" align="center" >Location</td>
+                 <td width="30" align="right" > </td>
+                 <td width="30" align="right" ></td>
+               </tr>
+			   			   
+			   	  
+			   {{for i,record in enumerate(records):}}
+			   		{{ if i==items_per_page: break}}
+  
+                      <tr  align="left" class="blackCat"  style="font-size:13px"> 
+                      <td width="80" >{{=record.sm_client.client_id}},<br />
+                        {{=record.sm_client.client_old_id}}</td>
+                      <td width="150" >{{=record.sm_client.name}}</td>
+                      <td width="120" >{{=record.sm_level.level_name}} | {{=record.sm_client.area_id}}</td>
+                      <td width="60" >{{=record.sm_level.level0_name}}</td>
+                      <td width="130" >{{=record.sm_client.market_name}}, {{=record.sm_client.thana}}, {{=record.sm_client.district}}</td>
+                      <td width="50" >{{=record.sm_client.depot_id}}-{{=record.sm_client.depot_name}},<br />
+                        {{=record.sm_client.store_name}}</td>
+                      <td width="50" >{{=record.sm_client.depot_belt_name}}</td>
+                      <td width="60" align="center"  >{{=record.sm_client.status}}</td>
+                      <td width="50" align="center"  >{{if record.sm_client.latitude=='0' and record.sm_client.longitude=='0':}}&nbsp;{{else:}}<a href="{{='https://maps.google.com/?q='+str(record.sm_client.latitude)+','+str(record.sm_client.longitude)}}" target="_blank">Map</a>{{pass}}</td>
+                      
+                      <form id="form1" name="form1" method="post" action="{{=URL(c='client',f='client_edit',args=[page,record.sm_client.id])}}">
+                      <td width="30" align="right"  >
+                      	<input type="submit" name="btn_go" id="btn_go" value="Edit"   class="button_update"/>  
+                      </td>
+                      
+                      <td width="30" align="right"  ><a href="{{=URL(c='client',f='client_profile',vars=dict(client_id=record.sm_client.client_id))}}" target="_blank"><input type="button" name="btn_go2" id="btn_go2" value="Profile"   class="button_update"/></a></td>
+                      </form>
+                    </tr>
+  
+			   {{pass}}
+</table>
+
+
+
+	      </td>
+        </tr>
+    </table>
+
+{{if page:}}
+&nbsp;&nbsp;<a href="{{=URL(args=[page-page])}}">first</a> |  
+&nbsp;&nbsp;<a href="{{=URL(args=[page-1])}}">previous</a> |
+{{pass}}
+
+{{if len(records)>items_per_page:}}
+&nbsp;&nbsp;<a href="{{=URL(args=[page+1])}}">next</a>
+{{pass}}
+<br />
+<strong>Notes:</strong>
+<ul>
+  <li>If Old ID is provided then Branch ID will be added before that to create unique new ID.<br />
+	If Old id is not provided then system will automatically generate a new 11 digit ID starting with 9.<br />Example: 90000000001</li>
+</ul>
+	</td>
+  </tr>
+</table>
+

@@ -1,0 +1,200 @@
+{{extend 'layout_wap.html'}}
+
+<head>
+<link rel="stylesheet" href="{{=URL('static', 'jchart/styles/jchartfx.css')}}" type="text/css" />
+<script src="{{=URL('static','jchart/js/jchartfx.system.js')}}"></script>
+<script src="{{=URL('static','jchart/js/jchartfx.coreVector.js')}}"></script>
+<script src="{{=URL('static','jchart/js/jchartfx.advanced.js')}}"></script>
+
+<link rel="stylesheet" href="{{=URL('static', 'js_and_css/ui.theme.css')}}" type="text/css" />
+<link rel="stylesheet" href="{{=URL('static', 'js_and_css/jquery-ui.css')}}" type="text/css" />
+<link rel="stylesheet" href="{{=URL('static', 'js_and_css/style.css')}}" type="text/css" />
+
+<script src="{{=URL('static','js_and_css/jquery-1.8.2.js')}}"></script>
+<script src="{{=URL('static','js_and_css/jquery-ui.js')}}"></script>
+
+<style type="text/css">
+	.jchartfx .Title {
+		 font-size:12pt;
+		 font-weight: bold;
+		 color:#000000;
+	}
+
+	<!--Chart color-->
+	.jchartfx .Attribute3{
+		 fill:#C44000;
+	}
+	.jchartfx .Attribute0{
+		 fill:#4F81BD; 
+	}
+	.jchartfx .Attribute1{
+		 fill:#C0504D;
+	}
+	
+	.jchartfx .Attribute0Line{
+		 stroke:#C0504D;
+		 stroke-width:2;
+	}
+	 .jchartfx .Attribute1Line{
+		 stroke:#4F81BD;
+		 stroke-width:2;	
+	}
+	<!--color-->
+	
+	input[type=submit] {
+		margin: 2px 0px 2px 0px;
+		padding: 0px 0px 2px 0px;
+		width:200px;
+	}
+	
+	input[type=text] {
+		width:120px;
+	}
+	
+	.checkbox{
+	padding-left:0px;
+	}
+	
+	.multiselect{ 
+			text-align:left;
+			height:28px;
+	}
+	
+	.page_color,body{
+			font-family:Arial, Helvetica, sans-serif;
+			font-size:13px;	
+			}
+
+		#accordion ul{	list-style-type:none;margin:0;}
+		#accordion li{ margin:1px; border-radius:5px; border-bottom:1px solid #CCCCCC; font-size:10px; background-color:#F7F7F7; height:20px; padding:5px 2px 2px 15px;}/*:#F7F7F7*/
+		#accordion li a{ text-decoration:none;}
+		#accordion li:hover{ height:21px;background-color:#F5F5F5;}
+		
+	
+	/*#home{ margin-top:0px; width:16px; height:16px;background:url('{{=URL('static','images/ui-icon.png')}}') 0 -110px;}*/
+	
+	#AM{ width:32px; height:25px;background:url('{{=URL('static','images/vicon.png')}}') -307px -289px;}
+	#RSM{ width:32px; height:25px;background:url('{{=URL('static','images/vicon.png')}}') -115px -194px;}	
+
+
+
+
+
+</style>
+
+
+<script>
+ $(function() { 
+	
+	$( "#accordionReport" ).accordion({
+	  active:0,
+      heightStyle: "content",
+	  collapsible: true
+    });
+
+
+//	$( "#accordion" ).accordion({
+//	  active: true,
+//	  navigation:true,
+//      heightStyle: "content",
+//	  collapsible: true	  	   
+//    });
+
+
+	
+  });
+  </script>
+  
+   
+<script>
+var base_url=location.protocol + "//" + location.hostname + (location.port && ":" + location.port) + "/{{=request.application}}/";
+
+$(function() {
+	 	
+	
+});
+</script>
+
+
+<style>
+	.rptlist{font-size:15px; height:auto; }
+	.rptlist:hover{ height:auto;}
+	.rptul{color:#0076AE; background-color:#F0F0F0;}
+	.rptdiv{  font-size:16px; color:#0076AE; background-color:#F0F0F0;}
+	
+	#accordionReport ul{	list-style-type:none;margin:0; font-size:15px; }
+	#accordionReport li{ margin:1px; border-radius:5px; border-bottom:1px solid #CCCCCC; font-size:15px; background-color:#F7F7F7; height:20px; padding:5px 2px 2px 15px;}/*:#F7F7F7*/
+	
+	#accordionReport li:hover{ height:21px;background-color:#F5F5F5; font-size:15px;}
+</style>
+
+</head>
+<body id="htmlbody">
+<!--<input type="hidden" value="{{#=salesTrendList}}" id="chartDataSalesTrend"/>-->
+
+
+
+<!--Form Title -->
+<table width="100%" border="0" cellspacing="0" cellpadding="0" style="background-color:#FFFFFF;">
+  <tr height="30px">
+    <td style="text-align:center; font-size:24px; font-weight:bold"><div class="blackCatTitle" ><span data-dobid="hdw">Amendment</span></div></td>
+  </tr>
+  <tr >
+    <td height="1px" style="background-color:#CCCCCC;"></td>
+  </tr>
+  
+    <tr >
+    <td height="1px" style="background-color:#CCCCCC;"></td>
+  </tr>
+  
+</table>
+
+<br>
+<br>
+<br>
+
+<table style=" background-color:#F2F2F2;  margin:1px;width:100%">
+
+
+
+                
+
+<tr>
+<td colspan="2">
+                                                  
+							
+<table width="100%" border="0">
+{{for i,pendingfo in enumerate(pendingfo):}}
+  <tr>
+    
+    <td><a href="{{=URL(c='tour_web',f='tourPending',args=[pendingfo.rep_id,pendingfo.schedule_date])}}"  target="_blank">{{=pendingfo.schedule_date}} &nbsp;&nbsp; {{=pendingfo.rep_id}} | {{=pendingfo.rep_name}}</a></td>
+  </tr>
+  {{pass}}
+</table>
+
+                                
+                            	  
+                                
+                                
+</td>
+
+
+</tr>
+                           {{pass}}
+                           
+
+</table>
+
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<script type="text/javascript">
+$(document).ready(function() {
+	
+
+});
+</script>
+</body> 

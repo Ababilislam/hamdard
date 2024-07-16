@@ -1,0 +1,892 @@
+{{extend 'layout.html'}}
+
+<link rel="stylesheet" href="{{=URL('static', 'js_and_css/ui.theme.css')}}" type="text/css" />
+<link rel="stylesheet" href="{{=URL('static', 'js_and_css/jquery-ui.css')}}" type="text/css" />
+<link rel="stylesheet" href="{{=URL('static', 'js_and_css/style.css')}}" type="text/css" />
+<script src="{{=URL('static','js_and_css/jquery-1.8.2.js')}}"></script>
+<script src="{{=URL('static','js_and_css/jquery-ui.js')}}"></script>
+
+<style>
+body {
+  font-family: "Lato", sans-serif;
+}
+
+#main {
+  transition: margin-left .5s;
+  padding: 16px;
+}
+
+@media screen and (max-height: 450px) {
+  .sidenav {padding-top: 15px;}
+  .sidenav a {font-size: 18px;}
+}
+</style>
+ 
+<style type="text/css">
+.password-mask {
+  -webkit-text-security: disc;
+  -moz-binding: url('https://example.com#fake_moz_binding');
+}
+ input[type=text], input[type=password],  select {
+    margin: 2px 0px 2px 0px;
+	width:250px;
+}
+
+select{ width:265px; margin:2px 0px 2px 0px;}
+
+textarea{
+  width:250px;
+	height:50px;
+	margin:2px 0px 2px 0px;
+}
+
+div.error {
+  margin-left:0px;
+	width:265px;
+}
+.page_color,body{
+	font-family:Arial, Helvetica, sans-serif;
+	font-size:13px;
+	}
+	
+#uni_middle_str4{
+width:100px;
+}
+
+</style>
+<script src="{{=URL('static', 'discount_type_autocomplete.js')}}"></script>
+
+<script>
+var base_url=location.protocol + "//" + location.hostname + (location.port && ":" + location.port) + "/{{=request.application}}/";
+
+$(function() {
+ 
+// ================================================ ITEM ID AUTO COMPLETE START =======================================
+employeeListStr="";  
+    // alert(base_url+'default/get_active_item_list')  
+    $.ajax({
+      url: base_url+'counter_market_transaction/get_active_item_list',
+      success: function(retStr) {
+        employeeListStr=retStr 
+      }
+    }); 
+
+    $('#item_id').keyup(function(){
+      $("#stock_qty").html('')
+
+      // alert(employeeListStr)
+      localStorage.employeeListStr=employeeListStr
+      valueList = employeeListStr.split(','); 
+      var searchValue=$("#item_id").val();
+      var valueList_new=new Array();
+      lc=0;
+      i =0;
+      var valueStr="";    
+      while (i < valueList.length)
+      {
+        valueStr=valueList[i];
+        i=i+1;  
+        // alert ('fgdf')       
+        var ret=valueStr.toUpperCase().match(searchValue.toUpperCase());
+
+        if (ret!=null){
+          valueList_new[lc]=valueStr;
+          lc=lc+1;
+          if (lc==30){
+            break;
+          };
+        }else{
+          continue;
+        }         
+      }; 
+
+       //-------------- auto complete source
+      $( "input#item_id" ).autocomplete({
+        source: valueList_new
+      });  
+      
+      }); 
+
+// ================================================ ITEM AUTO COMPLETE END ================================================
+
+
+// ================================================ PHYSICIAN ID AUTO COMPLETE START =======================================
+var physicianListStr="";  
+   
+    // alert(base_url+'counter/physician_list_depot_wise')
+    $.ajax({
+      url: base_url+'counter/physician_list_depot_wise',
+      success: function(retStr) {
+        // alert (retStr)
+        physicianListStr=retStr 
+      }
+    }); 
+
+// =================================
+$('#physician_id').keyup(function(){
+      // alert('ok')
+      //-------------------------
+      var ref_list = physicianListStr.split(',');  
+      var ref_name=$("#physician_id").val();
+      // alert(ref_name)
+      
+      //---------------- auto complete combo list
+      var ref_list_new=new Array();
+      lc=0;
+      i =0;
+      var refStr="";        
+      while (i < ref_list.length)
+      {
+        refStr=ref_list[i];
+        i=i+1;          
+        var res=refStr.toUpperCase().match(ref_name.toUpperCase());
+        if (res!=null){
+          ref_list_new[lc]=refStr;
+          lc=lc+1;
+          if (lc==30){
+            break;
+          };
+        }else{
+          continue;
+        }         
+      };
+      
+      //-------------- auto complete source
+      $( "input#physician_id" ).autocomplete({
+        source: ref_list_new
+      });
+    
+    }); 
+// ================================================ PHYSICIAN ID AUTO COMPLETE END =======================================
+
+
+// ================================================ DISCOUNT TYPE AUTO COMPLETE START =======================================
+
+var discount_typeStr="";  
+   
+    // alert(base_url+'doctor_speciality/speciality_list')
+    $.ajax({
+      url: base_url+'discount_type/discount_type_list',
+      success: function(retStr) {
+        // alert (retStr)
+        discount_typeStr=retStr 
+      }
+    }); 
+  // alert (discount_typeStr)
+
+  // =================================
+  $('#discount_type_id').keyup(function(){
+      // alert('ok')
+      //-------------------------
+      var ref_list = discount_typeStr.split(',');  
+      var ref_name=$("#discount_type_id").val();
+      // alert(ref_name)
+      
+      //---------------- auto complete combo list
+      var ref_list_new1 =new Array();
+      lc=0;
+      i =0;
+      var refStr="";        
+      while (i < ref_list.length)
+      {
+        refStr=ref_list[i];
+        i=i+1;          
+        var res=refStr.toUpperCase().match(ref_name.toUpperCase());
+        if (res!=null){
+          ref_list_new1[lc]=refStr;
+          lc=lc+1;
+          if (lc==30){
+            break;
+          };
+        }else{
+          continue;
+        }         
+      };
+      
+      //-------------- auto complete source
+      $( "input#discount_type_id" ).autocomplete({
+        source: ref_list_new1
+      });
+    
+    }); 
+// ================================================ DISCOUNT TYPE AUTO COMPLETE END =======================================
+
+ 
+// =============================================== CUSTOMER PHONE NUMBER AUTO COMPLETE START ==============================
+customer_phoneListStr="";  
+    // alert(base_url+'counter/get_customer_phone_num')
+    $.ajax({
+      url: base_url+'counter/get_customer_phone_num',
+      success: function(retStr) {
+        customer_phoneListStr=retStr 
+      }
+    }); 
+
+    $('#phone').keyup(function(){
+      $("#customer_name").html('')
+
+      localStorage.customer_phoneListStr=customer_phoneListStr
+      valueList = customer_phoneListStr.split(','); 
+      var searchValue=$("#phone").val();
+      var valueList_new2=new Array();
+      lc=0;
+      i =0;
+      var valueStr="";    
+      while (i < valueList.length)
+      {
+        valueStr=valueList[i];
+        i=i+1;   
+        var ret=valueStr.toUpperCase().match(searchValue.toUpperCase());
+
+        if (ret!=null){
+          valueList_new2[lc]=valueStr;
+          lc=lc+1;
+          if (lc==30){
+            break;
+          };
+        }else{
+          continue;
+        }         
+      }; 
+
+       //-------------- auto complete source
+      $( "input#phone" ).autocomplete({
+        source: valueList_new2
+      });  
+      }); 
+      
+// ================================== CUSTOMER PHONE NUMBER AUTO COMPLETE END ===========================================
+
+
+// =============================================== HAMDARD STAFF AUTO COMPLETE START ====================================
+customer_staffListStr="";  
+    // alert(base_url+'counter/get_staff_list')
+    $.ajax({
+      url: base_url+'counter/get_staff_list',
+      success: function(retStr) {
+        customer_staffListStr=retStr 
+      }
+    }); 
+
+    $('#staff_id').keyup(function(){
+      $("#customer_name").html('')
+
+      localStorage.customer_staffListStr=customer_staffListStr
+      valueList = customer_staffListStr.split(','); 
+      var searchValue=$("#staff_id").val();
+      var valueList_new2=new Array();
+      lc=0;
+      i =0;
+      var valueStr="";    
+      while (i < valueList.length)
+      {
+        valueStr=valueList[i];
+        i=i+1;   
+        var ret=valueStr.toUpperCase().match(searchValue.toUpperCase());
+
+        if (ret!=null){
+          valueList_new2[lc]=valueStr;
+          lc=lc+1;
+          if (lc==30){
+            break;
+          };
+        }else{
+          continue;
+        }         
+      }; 
+
+       //-------------- auto complete source
+      $( "input#staff_id" ).autocomplete({
+        source: valueList_new2
+      });  
+      }); 
+      
+// ================================== HAMDARD STAFF AUTO COMPLETE END ===========================================
+
+
+});
+
+
+// ----------------------------------- AUTO FILL STOCK QUANTITY FOR ITEM ---------------------------------------
+
+$(document).ready(function() {
+  // Bind keydown event listener to item_id input field
+  $('#item_id').keydown(function(event) {
+    // Check if the pressed key is enter (keyCode 13)
+    if (event.keyCode === 13) {
+      // Call get_stock_qty() function
+      get_stock_qty();
+    }
+  });
+
+  // Bind click event listener to qty_id input field
+  $('#qty_id').click(function() {
+    // Call get_stock_qty() function
+    get_stock_qty();
+  });
+
+  // Function to fetch stock quantity information
+  function get_stock_qty() {
+    var item_id = $("#item_id").val().split('|')[0];
+    var item_id_n = $("#item_id").val();
+
+    $.ajax({
+      url: base_url + 'counter/get_stock_qty?item_id=' + item_id,
+      success: function(data) {
+        var itemdataArray = data.split('|');
+        var stock_qty = itemdataArray[0];
+        var quantity = itemdataArray[1];
+        var item_per_unit = itemdataArray[2];
+
+        $("#stock_qty").val(stock_qty);
+        $("#depot_stock_qty").val(quantity);
+        $("#item_per_unit").val(item_per_unit);
+      }
+    });
+  }
+});
+
+// ----------------------------------- AUTO FILL NAME, GENDER, AGE FOR COUNTER CUSTOMER START ---------------------------------
+
+function get_customer_info(){
+  var phone=$("#phone").val();
+  // alert('phone')
+  // alert(base_url+'counter/get_customer_info?phone='+phone)
+  $.ajax({
+
+    url: base_url+'counter/get_customer_info?phone='+phone,
+    success: function(data) {
+    
+      var dataArray = data.split('|');
+      var customer_name = dataArray[0];
+      var gender = dataArray[1];
+      var age = dataArray[2];
+      var customer_id = dataArray[3];
+      
+      $("#customer_name").val(customer_name);
+      $("#gender").val(gender);
+      $("#age").val(age);
+      $("#customer_id").val(customer_id); 
+  }
+  }); 
+
+}
+// ----------------------------------- AUTO FILL NAME, GENDER, AGE FOR COUNTER CUSTOMER END ---------------------------------
+
+
+// ------------------- AUTO FILL CUSTOMER ID, NAME, PHONE GENDER, AGE FOR COUNTER CUSTOMER START ----------------------------
+
+function get_customer_all_info_by_staff(){
+  var staff_id=$("#staff_id").val();
+  // alert(staff_id)
+  // alert(base_url+'counter/get_customer_info_by_staff?staff_id='+staff_id)
+  $.ajax({
+
+    url: base_url+'counter/get_customer_info_by_staff?staff_id='+staff_id,
+    success: function(data) {
+    
+      var dataArray = data.split('|');
+      var customer_id = dataArray[0];
+      var phone = dataArray[1];
+      var customer_name = dataArray[2];
+      var gender = dataArray[3];
+      var age = dataArray[4];
+
+      $("#customer_id").val(customer_id);
+      $("#phone").val(phone);
+      $("#customer_name").val(customer_name);
+      $("#gender").val(gender);
+      $("#age").val(age);
+  }
+  }); 
+
+}
+// ----------------------------------- AUTO FILL NAME, GENDER, AGE FOR COUNTER CUSTOMER END ---------------------------------
+
+
+// ----------------------------------- COUNTER INVOICE FUNCTION START -------------------------------------------------------
+
+function counter_submit(){
+  $("#submit_btn").html('' )
+  // // $("#wait_image_chemProf").show();
+
+  depot_id=$("#depot_id").val();
+  order_sl_id=$("#order_sl_id").val();
+  sales_date_id=$("#sales_date_id").val();
+  physician_id=$("#physician_id").val();
+  discount_type_id=$("#discount_type_id").val();
+  customer_id=$("#customer_id").val();
+  phone=$("#phone").val();
+  customer_name=$("#customer_name").val();
+  gender=$("#gender").val();
+  age=$("#age").val();
+  staff_id=$("#staff_id").val();
+  note_id=$("#note_id").val();
+  item_id=$("#item_id").val();
+  qty_id=$("#qty_id").val();
+  stock_qty=$("#stock_qty").val();
+  // alert(physician_id)
+  var error_flag=0 
+  
+  if  ((depot_id=='') || (order_sl_id=='') || (sales_date_id=='') || (physician_id=='') || (discount_type_id=='') || (item_id=='') || (qty_id=='')){
+
+    error_flag=1
+  }
+    
+  if (error_flag==1){
+    $("#submit_btn").html('Please complete required fields' )
+  }
+  else{ 
+      // $("#wait_image").show();
+      // $("#submit_btnButton1").hide();
+     // alert(base_url+'counter/counter_add?depot_id='+depot_id+'&order_sl_id='+order_sl_id+'&sales_date_id='+sales_date_id+'&physician_id='+physician_id+'&discount_type_id='+discount_type_id+'&customer_id='+customer_id+'&phone='+phone+'&customer_name='+customer_name+'&gender='+gender+'&age='+age+'&staff_id='+staff_id+'&note_id='+note_id+'&item_id='+item_id+'&qty_id='+qty_id+'&stock_qty='+stock_qty)
+
+    $.ajax(base_url+'counter/counter_add?depot_id='+depot_id+'&order_sl_id='+order_sl_id+'&sales_date_id='+sales_date_id+'&physician_id='+physician_id+'&discount_type_id='+discount_type_id+'&customer_id='+customer_id+'&phone='+phone+'&customer_name='+customer_name+'&gender='+gender+'&age='+age+'&staff_id='+staff_id+'&note_id='+note_id+'&item_id='+item_id+'&qty_id='+qty_id+'&stock_qty='+stock_qty,{
+
+      type: 'POST',
+      timeout: 30000,
+      success: function(result) {
+        $("#wait_image").hide();
+       
+        if (result==''){
+          
+          $("#submit_btn").html('Sorry Network not available');
+        }else{          
+          var resultArray = result.split('<SYNCDATA>');     
+          if (resultArray[0]=='FAILED'){  
+            $("#submit_btnButton1").show();         
+            $("#submit_btn").html(resultArray[1]);                
+          
+          }else if (resultArray[0]=='SUCCESS'){                                               
+            $("#submit_btn").html(resultArray[1]);
+            $("#wait_image").hide()
+            $("#wait_image").hide();
+          }else{        
+            // $("#submit_btnButton1").show();   
+            $("#submit_btn").html('Network Timeout. Please try again.');
+          }
+        }
+      },
+        error: function(result) {   
+          // $("#chSButton").show();     
+        $("#submit_btn").html('Network Timeout. Please try again.');    
+        }
+    });//end ajax
+  }
+}
+// ----------------------------------- COUNTER INVOICE FUNCTION END -------------------------------------------------------
+
+
+// ----------------------------- COUNTER DISCOUNT TYPE SELECTION FUNCTION START -------------------------------------------
+
+// Function to update discount options based on physician selection
+function updateDiscountOptions() {
+  var physicianSelect = document.getElementById('physician_id');
+  var discountSelect = document.getElementById('discount_type_id');
+
+  // Get the selected physician value
+  var selectedPhysician = physicianSelect.value;
+
+  // Get the discount select options
+  var discountOptions = discountSelect.getElementsByTagName('option');
+
+  // Clear existing options
+  discountSelect.innerHTML = '';
+
+  // Create default discount options
+  var defaultOptions = [
+    { value: 'MRP', text: 'MRP' },
+    { value: 'COUNTER WHOLESALE', text: 'COUNTER WHOLESALE' },
+    { value: 'E-SHOP', text: 'E-SHOP' },
+    { value: 'HAMDARD FOUNDATION', text: 'HAMDARD FOUNDATION' },
+    { value: 'STAFF', text: 'STAFF' },
+    // Add other default options as needed
+  ];
+
+  // Create physician-specific discount options
+  var physicianOptions = [
+    { value: 'MRP', text: 'MRP' },
+    { value: 'FREEDOM FIGHTER', text: 'FREEDOM FIGHTER' },
+    { value: 'VIP', text: 'VIP' },
+    { value: 'STAFF', text: 'STAFF' },
+    // Add other physician-specific options as needed
+  ];
+
+  // Use default options if no physician is selected, otherwise use physician-specific options
+  var optionsToUse = selectedPhysician ? physicianOptions : defaultOptions;
+
+  // Create and append option elements based on the selected options
+  optionsToUse.forEach(function (optionData) {
+    var option = document.createElement('option');
+    option.value = optionData.value;
+    option.text = optionData.text;
+    discountSelect.appendChild(option);
+  });
+}
+
+// Call the function initially to set the correct discount options
+updateDiscountOptions();
+</script>  
+
+<script>
+// Function to show/hide the "Staff" row based on the selected discount type
+$(document).ready(function () {
+  $("#discount_type_id").change(function () {
+    var selectedDiscountType = $(this).val();
+    var staffRow = $("#staffRow");
+
+    if (selectedDiscountType === "STAFF") {
+      staffRow.show();
+    } else {
+      staffRow.hide();
+    }
+  });
+
+  // Call the change event handler initially to set the initial visibility
+  $("#discount_type_id").trigger("change");
+});
+
+// ----------------------------- COUNTER DISCOUNT TYPE SELECTION FUNCTION END -------------------------------------------
+
+
+function isNumberKey(evt) {
+        var charCode = (evt.which) ? evt.which : evt.keyCode;
+        if (charCode > 31 && (charCode < 48 || charCode > 57)) {
+            return false;
+        }
+        return true;
+    }
+</script>
+
+
+<table width="100%"  height="100%"   border="0" cellspacing="0" cellpadding="0" style="background-color:#FFFFFF;" >
+ 
+  <tr  height="1px" >
+    <td colspan="3" ></td>
+  </tr>
+
+  <tr>
+    <td>
+    <table border="0" cellspacing="0" cellpadding="0" style="background-color:#FFFFFF;" >
+      <tr height="30px" >
+        <td width="100%" style="background-color:#FFFFFF;" >
+          <span class="blackCatTitle">&nbsp;Counter Memo</span>
+        </td>
+      <td width="500" >&nbsp;</td>
+        <td>&nbsp;</td>
+      </tr>
+      <tr  height="1px" style="background-color:#CCCCCC;">
+        <td colspan="3" ></td>
+      </tr>
+    </table>
+
+    <table width="100%" align="left" height="100%" border="0"  cellpadding="0" cellspacing="0" style="margin-left:auto;margin-right:auto;background-color:#F5F5F5;" >
+      <tr>
+        <td height="80%" valign="middle">
+                            <!-- INSERT-->
+      <form  name="form1" action="{{=URL(c='counter',f='counter_add')}}" method="post"  >
+        <table width="100%" align="left" cellpadding="2" class="rounded_corner" style="background-color:#F5F5F5">
+                
+          <tr >
+            <td width="100px" style="vertical-align: middle;">Branch</td>
+            <td width="10px" style="vertical-align: middle;font-size: 20px;">:</td>
+            <td width="200px" style="padding-top:5px" >
+            	<input  type="text" name="depot_id" id="depot_id" value="{{=session.depot_id}} | {{=session.user_depot_name}}" size="10" readonly style="width:200px"/>
+            </td>
+            <td width="100px"></td>
+            <td width="100px" style="vertical-align: middle;">Customer ID</td>
+            <td width="10px" style="font-size: 20px;vertical-align: middle;">:</td>
+            <td style="padding-top:5px">
+              {{if session.customer_id == '' or session.customer_id == 'None' or session.customer_id == None:}}
+              <input  type="text" id="customer_id" name="customer_id" readonly value="" placeholder="Cusotmer ID" size="10" style="width:200px"/>
+              {{else:}}
+              <input  type="text" id="customer_id" name="customer_id" readonly value="{{=session.customer_id}}" size="10" style="width:200px"/>
+              {{pass}}
+            </td>
+          </tr>
+
+          <tr >
+            <td width="100px" style="vertical-align: middle;">Order SL</td>
+            <td width="10px" style="vertical-align: middle;font-size: 20px;">:</td>
+            <td style="padding-top:10px">
+              <input  type="text" name="order_sl_id" id="order_sl_id" value="{{=order_sl}}" size="10" style="width:200px" readonly />
+            </td>
+            <td width="100px"></td>
+            <td width="100px" style="vertical-align: middle;">Phone <font style="color:#B93976; font-size:20px">*</font></td>
+            <td width="10px" style="font-size: 20px;vertical-align: middle;">:</td>
+            <td style="padding-top:10px">
+              {{if session.phone == '' or session.phone == 'None' or session.phone == None:}}
+              <input  type="number" name="phone" id="phone" value="" placeholder="Phone" size="10" style="width:200px" autocomplete="off" required  onclick="get_customer_all_info_by_staff()"/>
+              {{else:}}
+              <input  type="number" name="phone" id="phone" value="{{=session.phone}}" size="10" style="width:200px" autocomplete="off"  required onclick="get_customer_all_info_by_staff()"/>
+              {{pass}}
+            </td>
+
+          </tr>
+          <tr >
+            <td width="100px" style="vertical-align: middle;">Sales Date</td>
+            <td width="10px" style="vertical-align: middle;font-size: 20px;">:</td>
+            <td style="padding-top:5px">
+              {{sales_date = current_date}}
+              <input  type="text" name="sales_date_id" id="sales_date_id" value="{{=sales_date}}" autocomplete="off" placeholder="Sales Date" size="10"  style="width:200px"  readonly />
+            </td>
+            <td width="100px"></td>
+            <td width="100px" style="vertical-align: middle;">Name <font style="color:#B93976; font-size:20px">*</font></td>
+            <td width="10px" style="font-size: 20px;vertical-align: middle;">:</td>
+            <td style="padding-top:5px">
+              {{if session.customer_name == '' or session.customer_name == 'None' or session.customer_name == None:}}
+              <input  type="text" name="customer_name" id="customer_name" value="" autocomplete="off"  placeholder="Cusotmer Name" size="10" style="width:200px" required onclick="get_customer_info()"/>
+              {{else:}}
+              <input  type="text" name="customer_name" id="customer_name" value="{{=session.customer_name}}" autocomplete="off"  size="10" style="width:200px" required onclick="get_customer_info()"/>
+              {{pass}}
+            </td>
+          </tr>
+
+          <tr >
+            <td width="100px" style="vertical-align: middle;">Physician</td>
+            <td width="10px" style="vertical-align: middle;font-size: 20px;">:</td>
+            <td style="padding-top:5px">
+              <select id="physician_id" name="physician_id" style="width:215px;" onchange="updateDiscountOptions()">
+              {{if session.physician_id == '' or session.physician_id == 'None' or session.physician_id == None:}}
+              <option value="" selected>Select Counter</option>
+              {{
+                for i in range(len(physicianRows)):
+                    records_ov_dict=physicianRows[i]   
+                    physician_id=str(records_ov_dict["physician_id"])
+                    physician_name=str(records_ov_dict["physician_name"])
+              }}
+              <option value="{{=physician_id}}|{{=physician_name}}"> {{=physician_id}}|{{=physician_name}}</option>
+              {{pass}}
+              {{else:}}
+              <option value="{{=session.physician_id}}" selected>{{=session.physician_id}}</option>
+              {{pass}}
+              </select>
+            </td>
+            <td width="100px"></td>
+            <td width="100px" style="vertical-align: middle;">Gender <font style="color:#B93976; font-size:20px">*</font></td>
+            <td width="10px" style="font-size: 20px;vertical-align: middle;">:</td>
+            <td style="padding-top:5px">
+              <select id="gender" name="gender" style="width:215px" required>
+                {{if session.gender == '' or session.gender == 'None' or session.gender == None:}}
+                <option value=""></option>
+                <option value="Male">Male</option>
+                <option value="Female">Female</option>
+                {{else:}}
+                <option value="{{=session.gender}}">{{=session.gender}}</option>
+                {{pass}}
+              </select>
+            </td>
+            
+          </tr>
+
+          <tr>
+            <td width="100px" style="vertical-align: middle;">Discount Type</td>
+            <td width="10px" style="vertical-align: middle;font-size: 20px;">:</td>
+
+            <td style="padding-top:5px">
+
+              <select id="discount_type_id" name="discount_type_id" style="width:215px;" >
+                  {{if session.discount_type =='' or session.discount_type == 'None' or session.discount_type== None :}}
+                  <option value="MRP" selected>MRP</option>
+                  <option value="COUNTER WHOLESALE" >COUNTER WHOLESALE</option>
+                  <option value="E-SHOP" >E-SHOP</option>
+                  <option value="HAMDARD FOUNDATION" >HAMDARD FOUNDATION</option>
+                  <option value="STAFF" >STAFF</option>
+                  
+                  {{else:}}
+                  <option value="{{=session.discount_type}}" selected>{{=session.discount_type}}</option>
+                  {{pass}}
+            </select>
+            </td>
+            <td width="100px"></td>
+            <td width="100px" style="vertical-align: middle;">Age</td>
+            <td width="10px" style="font-size: 20px;vertical-align: middle;">:</td>
+            <td style="padding-top:5px">
+              {{if session.age == '' or session.age == 'None' or session.age == None:}}
+              <input  type="number" name="age" id="age" value="" placeholder="Age" size="10" style="width:200px"/>
+              {{else:}}
+              <input  type="number" name="age" id="age" value="{{=session.age}}"  size="10" style="width:200px"/>
+              {{pass}}
+            </td>
+          </tr>
+
+          <tr id="staffRow" style="display: none;">
+            <td width="100px" style="vertical-align: middle;">Staff ID<font style="color:#B93976; font-size:20px">*</font></td>
+            <td width="10px" style="vertical-align: middle;font-size: 20px;">:</td>
+            <td style="padding-top:5px">
+              {{if session.staff_id == '' or session.staff_id == 'None' or session.staff_id == None:}}
+              <input type="text" name="staff_id" id="staff_id" value="" placeholder="Staff ID"  size="10" style="width:200px" onkeypress="return isNumberKey(event)" />
+              {{else:}}
+              <input type="text" name="staff_id" id="staff_id" value="{{=session.staff_id}}"  size="10" style="width:200px" onkeypress="return isNumberKey(event)"/>
+              {{pass}}
+            </td>
+          </tr>
+
+          <tr>
+            <td width="100px" style="vertical-align: middle;">Note</td>
+            <td width="10px" style="vertical-align: middle;font-size: 20px;">:</td>
+            <td style="padding-top:5px">
+              {{if session.note == '' or session.note == 'None' or session.note == None:}}
+              <input  type="text" name="note_id" id="note_id" value="" placeholder="Note" size="10"style="width:200px"  />
+              {{else:}}
+              <input  type="text" name="note_id" id="note_id" value="{{=session.note}}" size="10"  style="width:200px" />
+              {{pass}}
+            </td>
+
+          </tr>
+        </table>  
+
+        <table border="0" cellpadding="1" cellspacing="1" style="background-color: #F5F5F5;border: none;">
+
+            <tr >
+              <td width="200px" style="padding-top: 10px;">
+                <input type="text" name="item_id" id="item_id" value="{{#=session.item_id}}" size="10" placeholder="Item ID / Name" autocomplete="off" required style="width:200px;height:20px"/>
+              </td>
+              <td width="80px" style="padding-top: 10px;padding-left: 10px;">
+                <input  type="text" name="qty_id" id="qty_id" autocomplete="off"  value="{{#=session.qty_id}}" size="10" placeholder="Quantity" required style="width:60px;height:20px" onclick="get_stock_qty()"/>
+              </td>
+              <td width="80px" style="padding-top:10px;padding-left: 10px;">
+                <input  type="text" name="stock_qty" id="stock_qty" value="{{#=stock_qty}}" placeholder="Counter Stock" size="10" readonly style="width:80px;height:20px"/>
+              </td>
+              <td width="80px" style="padding-top: 10px;padding-left: 10px;">
+                <input  type="text" name="depot_stock_qty" id="depot_stock_qty" value="{{#=depot_stock_qty}}" placeholder="Depot Stock" size="10" readonly style="width:80px;height:20px"/>
+              </td>
+               <td width="100px" style="padding-top: 10px;padding-left: 10px;">
+                <input  type="text" name="item_per_unit" id="item_per_unit" value="{{#=item_per_unit}}" placeholder="Item Per Unit" size="10" readonly style="width:80px;height:20px"/>
+              </td>
+              <td  align="left" width="120px" style="padding-top: 10px;padding-left: 10px;">
+                <input  type="submit" name="submit_btn" id="submit_btn" value="Save" style="vertical-align:middle;height:30px ; width:80px;" onClick="counter_submit();"/>
+              </td>
+               <!-- <td  align="left" width="120px" style="padding-top: 10px;padding-left: 10px;">
+                <input  type="submit" name="import_btn" id="import_btn" value="Import" style="vertical-align:middle;height:30px ; width:80px;" onClick="counter_import();"/>
+              </td> -->
+            </tr>
+                
+      </table>
+    </form>
+
+        <table  border="1" cellpadding="1" cellspacing="2" class="sample_border"  >
+
+          <tr class="blackCatHead">
+            <td width="300px" style="vertical-align: middle; padding-left: 10px; height: 30px;">Name</td>
+            <td width="80px"  style="vertical-align: middle;">ID</td>
+            <td align="right" width="50px"  style="vertical-align: middle;">Quantity</td>
+            <td align="right"  width="100px" style="vertical-align: middle;">TP</td>
+            <td  align="right"width="120px" style="vertical-align: middle;">Discount</td>
+            <td  align="right"width="120px" style="vertical-align: middle;">Total&nbsp;Discount</td>
+            <td  align="right"width="120px" style="vertical-align: middle;">TP(Discount)</td>
+            <td  align="right" width="80px" style="vertical-align: middle;">Total</td>
+            <td  align="right" width="80px" style="vertical-align: middle;"></td>
+            <td  align="right" width="40px" style="vertical-align: middle;"></td>
+          </tr>
+
+          {{if len(invoice_counter_record) > 0:}}
+          {{
+            grand_total = 0
+            total_discount = 0
+            total_discount_sum = 0
+            net_total = 0
+            for i in range(len(invoice_counter_record)):
+             records_ov_dict=invoice_counter_record[i]  
+             record_id=str(records_ov_dict["id"]) 
+             item_id=str(records_ov_dict["item_id"]) 
+             item_name=str(records_ov_dict["item_name"])      
+             quantity= records_ov_dict["quantity"]
+             price= records_ov_dict["price"]    
+             item_discount= records_ov_dict["item_discount"]
+             total_price=records_ov_dict["total_price"]
+             order_sl_counter=str(records_ov_dict["order_sl_counter"]) 
+             order_date=str(records_ov_dict["order_date"]) 
+           }}
+
+        <tr  align="left" class="blackCat"  style="vertical-align:middle">
+          <form  name="form2" action="{{=URL(c='counter',f='counter_add', args = [record_id, price, item_id])}}" method="post"  >
+            <td   style="vertical-align: middle;padding-left: 5px">{{=item_name}}</td>
+            <td  style="vertical-align: middle;">{{=item_id}}</td>
+            <td  align="right" >
+              <input align="right" type="text" name="quantity_id" id="quantity_id" value="{{=quantity}}" size="10"  style="width:60px;height:25px" />
+            </td> 
+            <td align="right" width="120px" style="vertical-align: middle;">{{=price}}</td>
+            <td align="right"  width="120px" style="vertical-align: middle;">{{=easy_format(item_discount)}}%</td>
+            {{total_discount = (quantity * price * item_discount) / 100}}
+            <td align="right"  width="100px" style="vertical-align: middle;">{{=easy_format(total_discount)}}</td>
+            <td align="right"  width="120px" style="vertical-align: middle;">{{=easy_format(total_price - total_discount)}}</td>
+            <td align="right"  width="120px" style="vertical-align: middle;">{{=total_price}}</td>
+            {{grand_total += total_price }}
+            {{total_discount_sum += total_discount }}
+            
+            <td  align="right" width="80px" style="vertical-align: middle;padding-left: 15px;">
+              <input  type="submit" name="update_btn" id="update_btn" value="Update" style="vertical-align:middle;height:30px ; width:80px;" />
+            </td>
+          </form>
+            <form  name="form1" action="{{=URL(c='counter',f='counter_delete',args=[record_id, order_sl_counter,item_id])}}" method="post"  >
+            <td  align="center" width="40px" style="vertical-align: middle;">
+              <input  type="submit" name="delete_btn" id="delete_btn" value="X" style="vertical-align:middle;height:30px ; width:40px;" />
+            </td>
+          </form>
+            {{pass}}
+          </tr>
+          
+          <tr class="blackCat">
+           
+           <td colspan="7" align="right" style="font-weight: bold; border: none">Total&nbsp;Trade&nbsp;Price<strong>:</strong></td>
+           <td align="right" style="font-weight: bold;">{{=easy_format(grand_total)}}</td>
+            
+          </tr>
+
+          <tr class="blackCat">
+
+           <td colspan="7" align="right" style="font-weight: bold; border: none;">Discount<strong>:</strong></td>
+           <td align="right" style="font-weight: bold;">{{=easy_format(total_discount_sum)}}</td>
+           
+          </tr>
+
+          <tr class="blackCat">
+
+           <td colspan="7" align="right" style="font-weight: bold; border:none;">Net Total<strong>:</strong></td>
+           {{net_total = grand_total - total_discount_sum}}
+           <td align="right" style="font-weight: bold;">{{=easy_format(round(net_total))}}</td>
+            
+          </tr>
+
+          <tr style="border:none">
+           <td colspan="10" style="height:30px;border: none;">&nbsp;&nbsp;</td>
+          </tr>
+
+          <tr class="blackCat">
+            <form  name="form2" action="{{=URL(c='counter',f='counter_add', args = [order_sl])}}" method="post"  >
+              <td colspan="9" align="right" width="120px" style="vertical-align: middle;border: none;">
+                <input  type="submit" name="cancel_btn" id="cancel_btn" value="Cancel" style="vertical-align:middle;height:30px ; width:80px;" />
+              </td>
+            </form>
+            <form  name="form2" action="{{=URL(c='counter',f='counter_add', args = [order_sl, grand_total, total_discount_sum, net_total ])}}" method="post"  >
+              <td  width="120px" align="right" style="vertical-align: middle; border: none;">
+                <input  type="submit" name="submit_all_btn" id="submit_all_btn" value="Submit" style="vertical-align:middle;height:30px ; width:80px;" />
+              </td>
+            </form>
+          </tr>
+            {{else:}}
+          <tr >
+             <td></td>
+             <td></td>
+             <td></td>
+             <td></td>
+             <td></td>
+             <td></td>
+             <td></td>
+             <td></td>  
+          </tr>
+            {{pass}}
+          <tr>
+            <td height="300px">&nbsp; &nbsp; &nbsp; &nbsp;</td>
+          </tr>
+
+          <tr height="1px" style="background-color:#CCCCCC;">
+            <td colspan="20"></td>
+          </tr>
+    </table>
+
+  </td>
+  </tr>
+        
+</table>

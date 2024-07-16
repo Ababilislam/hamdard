@@ -1,0 +1,44 @@
+{{extend 'layout_salesreport.html'}}
+<style>
+  #sm_search_date_from_dt,#sm_search_date_to_dt{
+    height:30px;
+    padding: 0px 5px;
+  }
+  #btn_filter,#btn_all{
+    
+  }
+  .tbl tr:nth-child(even) {background-color: #d6d8db;}
+</style>
+
+<div class="table-responsive-sm">
+
+  <table class="table  bg-light  " > 
+
+    <tr class="table-secondary text-center">
+      <td >
+        <input type="hidden" name="cid" value="{{=cid}}">
+        <input type="hidden" name="rep_id" value="{{=rep_id}}">
+        <input type="hidden" name="password" value="{{=password}}">
+        <form action="{{=URL(c='url_sample_gift_ppm',f='get_sample',vars=dict(cid=cid,rep_id=rep_id,rep_pass=password))}}" method="post">
+
+          <input type="submit" class="form-control-sm text-dark" style="border: none;background: transparent;" name="btn_sample" value="Sample">
+        </form>
+      </td>
+    </tr>
+    <tr class="table-success text-center">
+      <td >
+        <form action="{{=URL(c='url_sample_gift_ppm',f='get_gift',vars=dict(cid=cid,rep_id=rep_id,rep_pass=password))}}" method="post">
+          <input type="submit" class="form-control-sm text-dark" style="border: none;background: transparent;" name="btn_gift" value="Gift">
+        </form>
+      </td>
+    </tr>
+    <tr class="table-primary text-center">
+      <td >
+        <form action="{{=URL(c='url_sample_gift_ppm',f='get_ppm',vars=dict(cid=cid,rep_id=rep_id,rep_pass=password))}}" method="post">
+          <input type="submit" class="form-control-sm text-dark" style="border: none;background: transparent;"  name="btn_ppm" value="PPM">
+        </form>
+      </td>
+    </tr>
+  </table>
+ 
+</div>

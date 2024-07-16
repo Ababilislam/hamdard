@@ -1,0 +1,91 @@
+{{extend 'layout_report.html'}}
+
+<html>
+    <head>
+    
+    </head>
+    <body>    
+    <div class="blackCatTitle">&nbsp;New Client List</div>       
+    <!--<table width="900px;"> <tr><td style="text-align:right"><a href="{{=URL(c='',f='',vars=dict())}}" >Downlaod</a></td></tr></table>
+    -->
+    <table width="900" class="sample_border" >
+        <tr style="background-color:#E6E6E6;">
+            <td width="150" >Date Range</td>
+            <td width="100" >{{=session.level0Name}}</td>
+            <td width="100" >{{=session.level1Name}}</td>
+            <td width="150" >Visit By</td>
+        </tr>
+        <tr style="background-color:#F0FAFF">
+            <td width="150" >							
+            {{=datetime.datetime.strptime(fromDate,'%Y-%m-%d').strftime('%d-%m-%Y ')}} <b> To</b> {{=datetime.datetime.strptime(toDate,'%Y-%m-%d').strftime('%d-%m-%Y ')}}</td>
+            <td width="100" align="left" valign="top">{{if regionValue=='':}}
+            All
+            {{else:}}
+            {{=regionValueShow}}{{pass}}</td>
+            <td width="100" align="left" valign="top">{{if areaValue=='':}}
+            All
+            {{else:}}
+            {{=areaValueShow}}{{pass}}</td>
+            <td width="150" align="left" valign="top">{{if repCM=='':}}
+            All
+            {{else:}}
+            {{=repCM}}{{pass}}
+            </td>
+        </tr>
+    </table>		
+    <br/>		
+    {{if len(records)==0:}}
+    	Data not available
+    {{else:}}
+    <table width="900" class="sample_border" >
+        <tr style="background-color:#E6E6E6; text-align:center;">
+            <td width="100" >Summary</td>
+            <td width="100" >Total Client</td>
+            <td width="100" ></td>
+            <td width="150" ></td>
+        </tr>
+        <tr style="background-color:#F0FAFF; text-align:center;">
+            <td width="100" ></td>
+            <td width="100" >{{=len(records)}}</td>
+            <td width="100" ></td>
+            <td width="150" ></td>
+        </tr>
+    </table>	
+    <br/>
+    <table width="900" border="1" cellpadding="1" cellspacing="1" class="sample_border" >
+        <tr align="left" class="blackCatHead" height="20px" ;  style="font-size:12px; background-color:#E9E9E9;">            
+            <td align="left"  >Sl</td>
+            <td align="left"  >Zone</td>
+            <td align="left"  >Region</td>
+            <td align="left"  >Area</td>
+            <td align="left"  >Route</td>
+            <td align="left"  >Client</td>
+            <td align="left"  >Class</td>
+            <td align="left"  >Sub Class</td>
+            <td align="left"  >Address</td>
+            
+        </td>                
+        {{for i in range(len(records)):}}
+        {{recStr=records[i]}}
+        {{if i%2==0:}}
+        	<tr  align="left" class="blackCat"  style="font-size:11px;">
+        {{else:}}
+        	<tr  align="left" class="blackCat"  style="font-size:11px; background-color:#F5F5F5;">
+        {{pass}}
+        	<td align="left" >{{=i+1}}</td>
+        	<td align="left" >{{=recStr['level0']}}|<br/>{{=recStr['level0_name']}}</td>
+            <td align="left" >{{=recStr['level1']}}|<br/>{{=recStr['level1_name']}}</td>
+            <td align="left" >{{=recStr['level2']}}|<br/>{{=recStr['level2_name']}}</td>
+            <td align="left" >{{=recStr['level3']}}|<br/>{{=recStr['level3_name']}}</td>                    
+            <td align="left" >{{=recStr['client_id']}}|<br/>{{=recStr['name']}}</td>
+            <td align="left" >{{=recStr['category_id']}}</td><!--|{{=recStr['category_name']}}-->
+            <td align="left" >{{=recStr['sub_category_id']}}</td><!--|{{=recStr['sub_category_name']}}-->
+            <td align="left" >{{=recStr['address']}}</td>        
+        </tr>
+        {{pass}}
+        
+    </table>
+   {{pass}}
+    </body>
+</html>
+

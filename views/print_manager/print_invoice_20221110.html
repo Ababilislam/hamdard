@@ -1,0 +1,886 @@
+{{extend 'layout.html'}}
+
+<link rel="stylesheet" href="{{=URL('static', 'js_and_css/ui.theme.css')}}" type="text/css" />
+
+<link rel="stylesheet" href="{{=URL('static', 'js_and_css/jquery-ui.css')}}" type="text/css" />
+
+<link rel="stylesheet" href="{{=URL('static', 'js_and_css/style.css')}}" type="text/css" />
+
+<script src="{{=URL('static','js_and_css/jquery-1.8.2.js')}}"></script>
+
+<script src="{{=URL('static','js_and_css/jquery-ui.js')}}"></script>
+
+<style type="text/css">
+
+ input[type=text], input[type=password],  select {
+    margin: 2px 0px 2px 0px;
+	width:100px;
+}
+
+div.error {
+
+    padding: 0px;
+
+	width:inherit;
+
+	margin-left:0px;
+
+}
+
+.page_color,body{
+	font-family:Arial, Helvetica, sans-serif;
+	font-size:13px;
+	}
+
+ </style>
+
+ 
+
+ 
+
+ <script>
+
+var base_url=location.protocol + "//" + location.hostname + (location.port && ":" + location.port) + "/{{=request.application}}/";
+var totalRow='{{=totalRecords}}';
+
+
+$(function() {
+
+	 	var valueListStr="";
+		
+		//----------
+		$.ajax({
+		  url: base_url+'default/get_area_list',
+		  success: function(resStr) {
+			  valueListStr=resStr
+		  }
+		});
+		//--------------
+		
+
+		$('#search_type').blur(function(){
+
+			if ($('#search_type').val()=='CLIENTID'){
+
+				//alert(base_url+'default/get_route_list');
+
+				$.ajax({
+
+					  url: base_url+'default/get_client_list',
+
+					  success: function(resStr) {
+
+						  valueListStr=resStr
+
+					  }
+
+					});
+
+			}else if ($('#search_type').val()=='REPID'){
+
+				$.ajax({
+
+					  url: base_url+'default/get_all_ff_list',
+
+					  success: function(resStr) {
+
+						  valueListStr=resStr
+
+					  }
+
+					});
+
+			
+
+			}else if ($('#search_type').val()=='ROUTEID'){
+
+				$.ajax({
+
+					  url: base_url+'default/get_area_list',
+
+					  success: function(resStr) {
+
+						  valueListStr=resStr
+
+					  }
+
+					});
+
+			}else if ($('#search_type').val()=='DPID'){
+				
+				var depotValue='{{=session.depot_id}}';
+				
+				$.ajax({
+
+					 url: base_url+'default/get_depot_delivery_man_list?depot='+depotValue,
+
+					  success: function(resStr) {
+						
+						  valueListStr=resStr
+	
+					  }
+
+					});
+
+			};
+
+			
+
+	 	});
+
+	 
+
+		$('#search_value').keyup(function(){
+
+			//-------------------------
+
+			var valueList = valueListStr.split(',');				
+
+			var searchValue=$("#search_value").val();
+
+			
+
+			//---------------- auto complete combo list
+
+			var valueList_new=new Array();
+
+			lc=0;
+
+			i =0;
+
+			var valueStr="";				
+
+			while (i < valueList.length)
+
+			{
+
+				valueStr=valueList[i];
+
+				i=i+1;					
+
+				var res=valueStr.toUpperCase().match(searchValue.toUpperCase());
+
+				if (res!=null){
+
+					valueList_new[lc]=valueStr;
+
+					lc=lc+1;
+
+					if (lc==30){
+
+						break;
+
+					};
+
+				}else{
+
+					continue;
+
+				}					
+
+			};
+
+			//alert (ref_list_new);
+
+			
+
+			//-------------- auto complete source
+
+			$( "input#search_value" ).autocomplete({
+
+				source: valueList_new
+
+			});
+
+		
+
+	  }); 
+		
+		
+		//==============Delivery man auto complete
+	  
+}); 
+
+//========== Print invoice
+function showInvoiceList(){
+	var numOfSelectedInvoice=0
+	var slNoStr='';	
+    var checkbox;
+    for ( var i = 0; i < totalRow; i++ ) {		
+		checkbox = document.getElementById('vslfield_'+i);		
+		var temp='vslfield_'+i;		
+        if ( checkbox && checkbox.type == 'checkbox' ) {
+			var confirmValue=$("input[id='"+temp+"']:checked").val();
+			if (confirmValue!=undefined){				
+				
+				if (slNoStr==''){
+					slNoStr=confirmValue;
+				}else{
+					slNoStr=slNoStr+','+confirmValue;
+				}				
+				numOfSelectedInvoice+=1;				
+			}		
+        }		
+    }
+	
+	if (slNoStr!=''){
+		//alert(slNoStr)
+		
+		window.open(base_url+'print_manager/invoice_list_preview?vslList='+encodeURIComponent(slNoStr),'_blank')
+		
+	}else{
+		alert("Select voucher")
+		}		
+	}
+
+
+
+//========== Preview List
+function previewInvoiceHeadList(){
+	var numOfSelectedInvoice=0
+	var slNoStr='';	
+    var checkbox;
+    for ( var i = 0; i < totalRow; i++ ) {		
+		checkbox = document.getElementById('vslfield_'+i);		
+		var temp='vslfield_'+i;		
+        if ( checkbox && checkbox.type == 'checkbox' ) {
+			var confirmValue=$("input[id='"+temp+"']:checked").val();
+			if (confirmValue!=undefined){				
+				
+				if (slNoStr==''){
+					slNoStr=confirmValue;
+				}else{
+					slNoStr=slNoStr+','+confirmValue;
+				}				
+				numOfSelectedInvoice+=1;				
+			}		
+        }		
+    }
+	
+	if (slNoStr!=''){
+		//alert(slNoStr)		
+		window.open(base_url+'print_manager/preview_list?vslList='+encodeURIComponent(slNoStr),'_blank')		
+	}else{
+		alert("Select voucher")
+		}		
+	}
+
+function hideBtnPostCancel(){					
+	$("#btn_confirm_post").hide();
+};
+
+</script>
+
+ 
+
+ 
+
+ <body>
+
+<table width="100%"  border="0" cellspacing="0" cellpadding="0" style="background-color:#FFFFFF;" >
+
+  <tr height="30px" >
+
+    <td width="500"><span class="blackCatTitle">Invoice/Delivery - Print </span></td>    
+
+	<form id="form1" name="form1" method="post" action="{{=URL(c='order_invoice',f='invoice_generate',vars=dict(req_sl=-1))}}">
+	
+    {{if check_role('rm_invoice_manage'):}}
+    <td width="515" align="right"><input type="submit" name="btn_new" id="btn_new" value="New Invoice"  class="button_update"/></td>	
+	{{pass}}
+    </form>
+
+    <td>&nbsp;</td>
+
+  </tr>
+
+  <tr  height="1px" style="background-color:#CCCCCC;">
+
+	    <td colspan="3" ></td>
+
+  </tr>
+
+</table>
+
+  
+
+  <table width="100%" height="500px"  border="0" cellspacing="0" cellpadding="0" class="page_color"  >
+
+  <tr height="100%"  style="vertical-align:top;">
+
+    <td width="10">&nbsp;</td>
+
+    <td>
+
+		<table width="100%"  border="0" cellpadding="0" cellspacing="0"  >
+
+		  <tr>
+
+			<td align="left">&nbsp;</td>
+
+      		</tr>
+
+      <tr>
+
+        <td>
+
+          <table width="720" height="78" border="0" cellpadding="0" cellspacing="0">            
+
+            <tr>
+
+              <td width="100%" colspan="2">
+				
+              <table width="1000" border="1" cellpadding="1" cellspacing="1" class="sample_border" >
+
+                <form id="form1" name="form1" method="post" action="{{=URL(c='print_manager',f='print_invoice')}}">
+
+                  <tr align="left" class="blackCatHead" height="20px" ;"vertical-align:middle">
+
+                    <td width="80" >
+
+                      {{if session.user_type!='Depot':}}
+
+                      <input  name="depot_id_value" type="text" id="depot_id_value" style="width:80px" value="" title="Depot ID" />
+						{{else:}}
+                      <input  name="depot_id_value" type="text" id="depot_id_value" style="width:80px; background-color:#F8F8F8" value="{{=session.depot_id}}" disabled="disabled" title="Depot ID" />
+                      {{pass}}</td>
+
+						  <td width="100"  title="Search Type">
+							
+						  <select name="search_type" id="search_type" style="width:150px" >
+                              {{if session.search_type_printm=='ALL':}}<option value="ALL" selected="selected">Search Type</option>{{else:}}<option value="ALL" >Search Type</option>{{pass}}
+                              {{if session.search_type_printm=='ROUTEID':}}<option value="ROUTEID" selected="selected">{{=session.level3Name}}</option>{{else:}}<option value="ROUTEID">{{=session.level3Name}}</option>{{pass}}
+                              {{if session.search_type_printm=='CLIENTID':}}<option value="CLIENTID" selected="selected">Client/Retailer</option>{{else:}}<option value="CLIENTID" >Client/Retailer</option>{{pass}}
+							  {{if session.search_type_printm=='REPID':}}<option value="REPID" selected="selected">MSO/Sup</option>{{else:}}<option value="REPID" >MSO/Sup</option>{{pass}}
+                              {{if session.search_type_printm=='SL':}}<option value="SL" selected="selected">INV.SL</option>{{else:}}<option value="SL" >INV.SL</option>{{pass}}
+							  {{if session.search_type_printm=='ORDSL':}}<option value="ORDSL" selected="selected">Order SL</option>{{else:}}<option value="ORDSL" >Order SL</option>{{pass}}
+							  {{if session.search_type_printm=='ORDDATE':}}<option value="ORDDATE" selected="selected">Ord.DATE(YYYY-MM-DD)</option>{{else:}}<option value="ORDDATE" >Ord.DATE(YYYY-MM-DD)</option>{{pass}}
+							  {{if session.search_type_printm=='DPID':}}<option value="DPID" selected="selected">Delivery Person ID</option>{{else:}}<option value="DPID" >Delivery Person ID</option>{{pass}}
+						  </select>
+
+                          </td>
+
+						  <td width="150"  title="Search Value" >
+
+                            {{if session.search_value_printm=='' or session.search_value_printm==None:}}
+                                <input  name="search_value" type="text" id="search_value" size="25" value="" placeholder="Select value" autocomplete="off" style="width:200px"/>
+                            {{else:}}
+                                <input  name="search_value" type="text" id="search_value" size="25" value="{{=session.search_value_printm}}" placeholder="Select value" autocomplete="off" style="width:200px"/>
+                            {{pass}}
+						
+                          </td>
+						  <td width="180" align="right" valign="middle"  title="Upto Schedule Del.Date (if not select)">
+                          <select name="search_delivery" id="search_delivery" style="width:180px" >
+						     
+                           <!-- <option value="search_delivery" selected="selected">Submitted/Pending</option>-->
+                            
+                            <option value="">Select Del.Date Type</option>
+                            
+                            {{if session.search_delivery=='UptoDelDate':}}
+						    <option value="UptoDelDate" selected="selected">Upto Schedule Del.Date</option>
+						    {{else:}}
+						    <option value="UptoDelDate">Upto Schedule  Del.Date</option>
+						    {{pass}}
+                            
+                             {{if session.search_delivery=='OnDelDate':}}
+						    <option value="OnDelDate" selected="selected">On Schedule Del.Date</option>
+						    {{else:}}
+						    <option value="OnDelDate" >On Schedule Del.Date</option>
+						    {{pass}}
+                           
+						    </select></td>
+						  <td width="80" align="right" valign="middle"  title="Schedule Delivery Date">{{=filterform.custom.widget.from_dt}}</td>
+					    <td width="20" align="right" valign="middle" >
+						    
+					      {{if session.print_status=='Pending':}}
+						    
+						    <input name="print_status" type="checkbox" value="Pending" checked="checked" title="Pending voucher" />
+						    
+					      {{else:}}
+						    
+						    <input name="print_status" type="checkbox" value="Pending" title="Pending voucher" />
+						    
+					      {{pass}}
+						    
+					    </td>
+
+						  <td width="80" valign="top" style=" padding-top:5px;" >Due Print</td>
+
+						  <td rowspan="2" align="right" valign="middle" ><input type="submit" name="btn_filter" id="btn_filter" value="Filter" style="height:50px; font-weight:bold; margin-top:5px" class="button_update" title=""/></td>
+
+						  <td width="50" rowspan="2" align="right" valign="middle" title="Submitted/Pending before schedule date" ><input type="submit" name="btn_all" id="btn_all" value="  Default  " style="height:50px;font-weight:bold;margin-top:5px" class="button_update"/></td>
+
+				      </tr>
+                  <tr align="left" class="blackCatHead" height="20px" ;"vertical-align:middle">
+                    <td >Limit Over</td>
+                    <td  title="Client Limit Over">
+                    <select name="limitOver" id="limitOver" style="width:80px" >
+                      <option value="">ALL</option>
+                      {{if session.limitOver=='1':}}<option value="1" selected="selected">YES</option>{{else:}}<option value="1">YES</option>{{pass}}
+                      {{if session.limitOver=='0':}}<option value="0" selected="selected">NO</option>{{else:}}<option value="0" >NO</option>{{pass}}
+                    </select>
+                    </td>
+                    <td  title="Search Value" ><span style="background-color:#FFC6C6">Empty Batch</span>
+                      &nbsp;
+                      <select name="emptyBatch" id="emptyBatch" style="width:80px" >
+                        <option value="">ALL</option>                                              
+                      {{if session.emptyBatch=='1':}}<option value="1" selected="selected">YES</option>{{else:}}<option value="1">YES</option>{{pass}}
+                      {{if session.emptyBatch=='0':}}<option value="0" selected="selected">NO</option>{{else:}}<option value="0" >NO</option>{{pass}}
+                    </select></td>
+                    <td align="left" valign="middle"  title="">Inv.Term
+                    
+                    <select name="paymentMode" id="paymentMode" style="width:100px" >
+                      <option value="">ALL</option>
+                      {{for invRow in invoiceTermRows:}}
+                      	{{if session.paymentMode==invRow.cat_type_id:}}
+                        	<option value="{{=invRow.cat_type_id}}" selected="selected">{{=invRow.cat_type_id}}</option>
+                        {{else:}}
+                        	<option value="{{=invRow.cat_type_id}}">{{=invRow.cat_type_id}}</option>
+                        {{pass}}
+                      {{pass}}
+                      </select>
+                    </td>
+                    <td align="right" valign="middle"  title="Schedule Delivery Date">&nbsp;</td>
+                    <td align="right" valign="middle" >&nbsp;</td>
+                    <td valign="top" style=" padding-top:5px;" >&nbsp;</td>
+                    </tr>
+
+                  </form>
+
+			    </table>
+
+				<strong>Total:</strong> {{=totalCount}}<br />                
+
+                <table width="1000" border="1" cellpadding="1" cellspacing="1" class="sample_border" >			  
+
+                  <tr align="left" class="blackCatHead"  height="20px" ;"vertical-align:middle">
+
+                      <td width="20" >&nbsp;</td>
+
+                      <td width="100" >INV.SL</td>
+                      <td width="60"  >{{=session.level3Name}}</td>
+
+                      <td width="180"  >Client/Retailer</td>
+
+                      <td width="200"  >MSO/Sup</td>
+                      <td width="30" align="center"  >DPID</td>
+
+                      <td width="50" align="center"  >Order SL</td>
+                      <td width="90" align="center"  >OrderDate</td>
+
+					  <td width="90" align="center"  >Schedule D.Date</td>
+					  <td width="40" align="center"  >Inv. Term</td>
+					  <td width="90" align="center"  >Invoice Date</td>
+					  <td width="40" align="center"  > Over Limit</td>
+
+					  <td width="80" align="center"  >Status</td>
+					  <td width="70" align="right"  >Invoice Value</td>
+
+                      <td  >&nbsp;</td>
+
+                    </tr>
+
+                  <form method="post" action="{{=URL(c='print_manager',f='invoice_list_post')}}" name="tablesForm" id="tablesForm">
+					
+                  {{for i,record in enumerate(records):}}					
+                    {{if pageBreakFlag==1:}}
+                  		{{ if i==items_per_page: break}}
+					{{pass}}
+				  
+                  {{rowStyle=''}}
+                  {{if record.empty_batch_flag==1:}}
+                  	{{rowStyle='background-color:#FFC6C6'}}
+                  	
+                  {{elif record.acknowledge_flag==1:}}
+                  	{{rowStyle='background-color:#FFFFC4'}}                  
+				  {{pass}}
+                 
+                 
+                 <tr  align="left" class="blackCat" style="font-size:11px;{{=rowStyle}}"  >
+                 
+                  <td width="20" ><input type="checkbox" name="vslList" id="vslfield_{{=i}}" value="{{=record.sl}}"></td> 
+				  <td width="100" >{{if record.field2==1:}}<font color="#FF0000">INV{{=record.depot_id}}-{{=record.sl}}</font>{{else:}}INV{{=record.depot_id}}-{{=record.sl}}{{pass}}</td>
+                  <td width="60" >{{=record.area_id}}<br />{{=record.area_name}}</td>
+			    <td width="180" >{{=record.client_id}}<br />{{=record.client_name}}</td>
+			    <td width="200" >{{=record.rep_id}}<br />{{=record.rep_name}}</td>
+			    <td width="30" align="center" >{{=record.d_man_id}}</td>
+			    <td width="50" align="center" >{{if (record.order_sl>0):}}{{=record.order_sl}}{{pass}}</td>
+			    <td width="90" align="center" >{{try:}}{{=record.order_datetime.strftime('%d-%m-%Y %I:%M%p' )}}{{except:}}-{{pass}}</td>
+			    <td width="90" align="center" >{{try:}}{{=record.delivery_date.strftime('%d-%m-%Y')}}{{except:}}&nbsp;{{pass}}</td>
+			    <td width="40" align="center" >{{=record.payment_mode}}</td>
+			    <td width="90" align="center" >{{if record.invoice_date!=None:}}{{=record.invoice_date.strftime('%d-%m-%Y')}}{{pass}}</td>
+			    <td width="40" align="center" >{{if record.client_limit_over==1:}}<font color="#CC3333">Yes</font>{{pass}}</td>
+			    <td width="80" align="center" >{{=record.status}}</td>
+			    <td width="70" align="right" >{{=record.total_amount}}</td>
+			    <td align="right">
+			      <a href="{{=URL(c ='order_invoice',f ='invoice_generate',vars=dict(req_sl=record.sl,dptid=record.depot_id))}}" style="text-decoration:none"><input type="button" name="btn_detail" id="btn_detail" value="details"  class="button_update"/></a>	      
+			    </td>
+              </tr>
+
+               {{pass}}
+				<!--<a href="{{#=URL(c ='order_invoice',f ='show_invoice',args=[record.depot_id,record.sl])}}" style="text-decoration:none" target="_blank">Print</a>
+-->
+
+                <tr  align="left" class="blackCat"  style="vertical-align:middle; border:none">
+                  <td colspan="15" >
+                  
+                  {{if pageBreakFlag==1:}}
+                        {{if page:}}    
+                        &nbsp;&nbsp;<a href="{{=URL(args=[page-page])}}">first</a> |
+                        &nbsp;&nbsp;<a href="{{=URL(args=[page-1])}}">previous</a> |
+                        {{pass}}
+                        
+                        {{if len(records)>items_per_page:}}
+                        &nbsp;&nbsp;<a href="{{=URL(args=[page+1])}}">next</a>
+                        {{pass}}
+                    {{pass}}
+                  
+                  </td>
+                  </tr>
+                <tr  align="left" class="blackCat"  style="vertical-align:middle; border:none">
+
+				  <td colspan="6" >
+				    
+				    <input type="hidden" name="vslList" id="vslfield" value="0">
+				    
+				    <img src="{{=URL('static','images/arrow_ltr.png')}}" width="38" height="22" alt="^" />
+				    
+				    <a href="" onClick="if (markAllRows()) return false;">Check All</a>&nbsp;/&nbsp;
+				    
+				    <a href="" onClick="if (unMarkAllRows()) return false;">Uncheck All</a>&nbsp;&nbsp;&nbsp;<!--<input type="button" name="btn_print_submit"  value="Print Invoice" onClick="showInvoiceList()"title="Print checked invoice"/>-->&nbsp;&nbsp;&nbsp;<input type="button" name="btn_preview_list"  value="Preview List" onClick="previewInvoiceHeadList()"title="Invoice List"/></td>
+
+				  <td colspan="9" rowspan="6" align="center"  ></td>
+				  </tr>
+                <tr  align="left" class="blackCat"  style="vertical-align:middle; border:none">
+                  <td colspan="6" >Schedule D.Date:                  
+                    {{if not(session.search_dt=='' or session.search_dt==None):}}
+                    <input type="text" name="invoice_date" id="invoice_date" value="{{=session.search_dt}}" style="width:50" readonly/>
+                    {{else:}}
+                    <input type="text" name="invoice_date" id="invoice_date" value="{{=currentDate}}" style="width:50" readonly/>
+                    {{pass}}
+                  </td>
+                  </tr>
+                <tr  align="left" class="blackCat"  style="vertical-align:middle; border:none">
+                  <td colspan="6" >Invoice Date&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <input type="text" name="invdate" id="invdate" value="{{=current_date}}" style="width:50" readonly/></td>
+                </tr>
+                <tr  align="left" class="blackCat"  style="vertical-align:middle; border:none">
+                  <td colspan="6" >Shipment No&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:
+                   <select name="shipment_no" id="shipment_no" style="width:250px" >
+                      <option value="" selected="selected">New</option>
+                       {{for shipRow in shipmentRows:}}
+                          <option value="{{=shipRow.shipment_no}}" >{{=shipRow.shipment_no}}</option>                          
+                       {{pass}}
+                    </select>                  
+                  </td>
+                </tr>
+                <tr  align="left" class="blackCat"  style="vertical-align:middle; border:none">
+                  <td colspan="6" >Delivery Man&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:
+                    <select name="d_man_id" id="d_man_id" style="width:250px" >
+                      <option value="" selected="selected">Select</option>
+                      
+                      {{if submitFlag==1:}}
+                       {{for drow in deliveryManRows:}}
+                          <option value="{{=drow.d_man_id}}" >{{=drow.d_man_id}} | {{=drow.name}}</option>                          
+                       {{pass}}       
+                 	{{pass}}
+                    </select>
+                    </td>
+                  </tr>
+                <tr  align="left" class="blackCat"  style="vertical-align:middle; border:none">
+                  <td colspan="2" >&nbsp;</td>
+                  <td colspan="4" >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                  
+                  {{if submitFlag==1:}}
+                    <input type="submit" style="height:50px; width:150px;" name="btn_confirm_post" id="btn_confirm_post"  value="Confirm & Post" title="" onClick="hideBtnPostCancel()"/>
+                  {{else:}}
+                    <span style="font-size:10px; color:#993333">Required filter by Submitted and upto Schedule D.Date</span>
+                  {{pass}}
+                    </td>
+                  </tr>
+				
+				  </form>
+
+				</table>
+
+				</td>
+
+				</tr>
+
+          </table>
+
+		   </td>
+
+      </tr>
+
+    </table>
+
+      <br />
+
+<div id="reportMsg" style="color:#FF5959; font-size:16px">&nbsp;</div>
+
+<br>
+<strong>Note:</strong>
+<table style="width:600px; border:solid 1px #666666">
+<tr ><th width="150" align="left" style="border:solid 1px #666666">Operation</th><th align="left" style="border:solid 1px #666666"> Filter</th></tr>
+<tr><td width="150" align="left" style="border:solid 1px #666666">Invoice Post</td>
+  <td align="left" style="border:solid 1px #666666">Required:  Submitted, Upto Schedule D.Date. OR All Pending<br>
+    Optional: Territory, Due Print, Limit Over, Empty Batch, Inv.Term</td></tr>
+<tr>
+  <td width="150" align="left" style="border:solid 1px #666666">All Pending(Submitted)</td>
+  <td align="left" style="border:solid 1px #666666">Default Button (Upto Scheduled D.Date Today)</td>
+</tr>
+</table>
+<br>
+<br>
+<br>
+</td>
+
+  </tr>
+
+</table>
+
+
+</body>
+
+
+
+
+<script>
+var base_urlpath=location.protocol + "//" + location.hostname + (location.port && ":" + location.port) + "/{{=request.application}}/";
+
+var totalRow='{{=totalRecords}}';
+
+
+/*checked all*/
+
+function markAllRows() {    
+
+    var checkbox;	
+
+    for ( var i = 0; i < totalRow; i++ ) {		
+
+		checkbox = document.getElementById('vslfield_'+i);
+
+        if ( checkbox && checkbox.type == 'checkbox' ) {
+
+            if ( checkbox.disabled == false ) {
+
+                checkbox.checked = true;                
+
+            }
+
+        }
+
+    }
+
+    return true;
+
+}
+
+
+/*unchecked all*/
+
+function unMarkAllRows() {
+
+    var checkbox;
+
+    for ( var i = 0; i < totalRow; i++ ) {
+
+        checkbox = document.getElementById('vslfield_'+i);
+
+        if ( checkbox && checkbox.type == 'checkbox' ) {
+
+            checkbox.checked = false;
+
+        }
+
+    }
+    return true;
+}
+
+/*Count selected*/
+function countAllMark() {    
+	var numOfSelectedInvoice=0
+	var slNoStr='';
+	
+    var checkbox;	
+	
+    for ( var i = 0; i < totalRow; i++ ) {
+		
+		checkbox = document.getElementById('vslfield_'+i);		
+		var temp='vslfield_'+i;		
+        if ( checkbox && checkbox.type == 'checkbox' ) {			
+			//var confirmStatus=$("input[name='"+checkbox+"']:checked").val();
+			var confirmValue=$("input[id='"+temp+"']:checked").val();
+			if (confirmValue!=undefined){				
+				
+				if (slNoStr==''){
+					slNoStr=confirmValue;
+				}else{
+					slNoStr=slNoStr+','+confirmValue;
+				}
+				
+				numOfSelectedInvoice+=1;
+				
+			}		
+        }
+		
+    }
+	
+	$('#totalInvoiceSelect').val(numOfSelectedInvoice)
+	$('#slStrList').val(slNoStr)
+		
+    return true;
+
+}
+
+/*Count selected report*/
+function countAllMarkReport() {    
+	var numOfSelectedInvoice=0
+	var slNoStr='';
+	
+    var checkbox;	
+	
+    for ( var i = 0; i < totalRow; i++ ) {		
+		checkbox = document.getElementById('vslfield_'+i);		
+		var temp='vslfield_'+i;		
+        if ( checkbox && checkbox.type == 'checkbox' ) {			
+			//var confirmStatus=$("input[name='"+checkbox+"']:checked").val();
+			var confirmValue=$("input[id='"+temp+"']:checked").val();
+			if (confirmValue!=undefined){				
+				
+				if (slNoStr==''){
+					slNoStr=confirmValue;
+				}else{
+					slNoStr=slNoStr+','+confirmValue;
+				}
+				
+				numOfSelectedInvoice+=1;
+				
+			}		
+        }
+		
+    }
+	
+	$('#totalInvoiceSelectReport').val(numOfSelectedInvoice)
+	$('#slStrListReport').val(slNoStr)
+		
+    return true;
+
+}
+
+/* invoice post*/
+function postInvoice() {	
+	$('#postMsg').text(' ');
+	var filterType='{{=session.search_type_printm}}'
+	
+	var numOfSelectedInvoice=$('#totalInvoiceSelect').val()
+	var slNoStr=$('#slStrList').val()
+	
+	var depotId=$('#depot_id_value').val()
+	var invoiceDate=$('#invoice_date').val()	
+	var d_man_id=$('#d_man_id').val()
+	
+	if(depotId=='' || invoiceDate==''){
+		$('#postMsg').text('Depot ID / Invoice Date not found');
+	}else{		
+		if(filterType!=='ROUTEID'){
+			$('#postMsg').text('Required {{=session.level3Name}} wise filter');			
+		}else{
+			if (numOfSelectedInvoice==''){
+				$('#postMsg').text('Required Selected Confirmation');
+			}else{
+				if (slNoStr==''){	
+					$('#postMsg').text('Selected Invoice not available');	
+				}else{
+					
+						if (d_man_id==''){	
+							$('#postMsg').text('Required Delivery Man');
+						}else{
+							
+							//------------
+							var slList=slNoStr.split(',');
+							var slCount=slList.length;
+							var postCount=0
+							var postFlag=true;
+							
+							for ( var i = 0; i < slCount; i++ ) {
+								var slNo=slList[i]
+								
+								//alert(base_urlpath+'print_manager/post_invoice?deptId='+depotId+'&slNo='+slNo+'&invoiceDate='+invoiceDate+'&deliveryManId='+d_man_id);							
+								
+								$.ajax({
+									  url: base_urlpath+'print_manager/post_invoice?deptId='+depotId+'&slNo='+slNo+'&invoiceDate='+invoiceDate+'&deliveryManId='+d_man_id,
+									  success: function(resStr) {
+										  var resultList=resStr.split('<fd>')
+										  if(resultList[0]=="Error"){	
+										  	  $('#postMsg').text('Failed.'+resultList[1]);										  
+											  postFlag=false;
+											  location.reload();
+										  }else{
+										  	postCount+=1;
+										  }
+										  //$('#postMsg').text('Completed'+postCount);
+									  }
+									});
+									
+								//next();
+								
+							};
+							if(postFlag==false){
+								$('#postMsg').text('Error');
+							}else{
+								$('#postMsg').text('Success');
+							}
+							location.reload();
+							
+							//--------------
+						}
+				}
+			}
+	  }
+	}
+}
+
+
+//Time Sleep Method
+var maxLoops = 50;
+var counter = 0;
+
+function next() {	
+		
+		if (counter++ >= maxLoops) return;
+					
+		setTimeout(function() {
+			$('#postMsg').text('Time '+counter);	
+			
+			next();
+			
+		}, 100);
+	}
+
+
+//------------------------
+	/*var minutes=1;// minutes after reload the page
+	
+	var secCount=0;
+	var dueTime=0;	
+	var myVar = setInterval(function(){myTimer()},1000);
+	
+	function myTimer() {
+		secCount=secCount+1
+		dueTime=minutes*60-secCount;
+				
+		if (secCount==60*minutes){
+			secCount=0;
+			
+			$.ajax({
+				  url: base_url+'dashboard/get_sales_call',
+				  success: function(resStr) {						  
+					  $('#salesCall').text(resStr.toString());
+				  }
+				});
+			};
+	}*/
+
+	</script>

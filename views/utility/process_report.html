@@ -1,0 +1,199 @@
+{{extend 'layout.html'}}
+  
+<style type="text/css">
+ input[type=text], input[type=password],  select {
+    margin: 2px 0px 2px 0px;
+	width:150px;
+}
+
+
+div.error {
+    padding: 0px;
+	width: 200px;
+	margin-left:0px;
+}
+.page_color,body{
+	font-family:Arial, Helvetica, sans-serif;
+	font-size:13px;	
+	}
+	
+ </style>
+
+
+<body >  
+{{currYear=str(date_fixed)[0:4]}}
+{{currMonth=str(date_fixed)[5:7]}}
+
+<!--Form Title -->
+<table width="100%" border="0" cellspacing="0" cellpadding="0" style="background-color:#FFFFFF;">
+  <tr height="30px">
+    <td width="500"><div class="blackCatTitle">Process Report</div></td>
+    
+	<form action="{{=URL(c='report',f='reports_home')}}" method="post">
+	<td width="200" align="right"><!--<input name="" type="submit"  value="  Back  "/>--></td>
+	</form>
+	
+    <td>&nbsp;</td>
+  </tr>
+  <tr>
+    <td height="1px" colspan="3" style="background-color:#CCCCCC;"></td>
+  </tr>
+</table>
+
+<!--Form Content -->
+
+<table width="100%" border="0" cellspacing="0" cellpadding="0" class="page_color" id="table_details">
+  
+  <tr height="20px">
+  	<td width="10"></td>
+  	<td> </td>	
+  </tr>
+  
+  <tr height="600px">
+    <td width="10" valign="top">    
+    <td valign="top">
+	
+	<table width="700" border="0" cellpadding="0" cellspacing="0" style="background-color: #F0F0F0">
+    <form name="form1" id="form1" action="{{=URL(c='utility',f='process_report')}}" method="post">
+      <tr >
+        <td colspan="3" align="left"><strong><em>Tabulation Sheet:</em></strong></td>
+        <td width="5">&nbsp;</td>
+      </tr>
+      <tr >
+        <td width="100" align="left">Month-1</td>
+        <td><span style="vertical-align:middle;">
+          <select id="yearValue1" name="yearValue1" style="width:140px;" >
+            <option value="">Select Year</option>
+            {{if currYear=='2014':}}<option value="2014" selected>2014</option>{{else:}}<option value="2014">2014</option>{{pass}}
+            {{if currYear=='2015':}}<option value="2015" selected>2015</option>{{else:}}<option value="2015">2015</option>{{pass}}
+            {{if currYear=='2016':}}<option value="2016" selected>2016</option>{{else:}}<option value="2016">2016</option>{{pass}}
+            {{if currYear=='2017':}}<option value="2017" selected>2017</option>{{else:}}<option value="2017">2017</option>{{pass}}
+            {{if currYear=='2018':}}<option value="2018" selected>2018</option>{{else:}}<option value="2016">2018</option>{{pass}}
+            {{if currYear=='2019':}}<option value="2019" selected>2019</option>{{else:}}<option value="2019">2019</option>{{pass}}
+            {{if currYear=='2020':}}<option value="2020" selected>2020</option>{{else:}}<option value="2020">2020</option>{{pass}}
+                            
+          </select>
+        </span>-<span style="vertical-align:middle;">
+        <select id="monthValue1" name="monthValue1" style="width:140px;" >
+          <option value="">Select Month</option>
+          {{if currMonth=='01':}}<option value="01" selected>Jan</option>{{else:}}<option value="01">Jan</option>{{pass}}
+          {{if currMonth=='02':}}<option value="02" selected>Feb</option>{{else:}}<option value="02">Feb</option>{{pass}}
+          {{if currMonth=='03':}}<option value="03" selected>Mar</option>{{else:}}<option value="03">Mar</option>{{pass}}
+          {{if currMonth=='04':}}<option value="04" selected>Apr</option>{{else:}}<option value="04">Apr</option>{{pass}}
+          {{if currMonth=='05':}}<option value="05" selected>May</option>{{else:}}<option value="05">May</option>{{pass}}
+          {{if currMonth=='06':}}<option value="06" selected>Jun</option>{{else:}}<option value="06">Jun</option>{{pass}}
+          {{if currMonth=='07':}}<option value="07" selected>Jul</option>{{else:}}<option value="07">Jul</option>{{pass}}
+          {{if currMonth=='08':}}<option value="08" selected>Aug</option>{{else:}}<option value="08">Aug</option>{{pass}}
+          {{if currMonth=='09':}}<option value="09" selected>Sep</option>{{else:}}<option value="09">Sep</option>{{pass}}
+          {{if currMonth=='10':}}<option value="10" selected>Oct</option>{{else:}}<option value="10">Oct</option>{{pass}}
+          {{if currMonth=='11':}}<option value="11" selected>Nov</option>{{else:}}<option value="11">Nov</option>{{pass}}
+          {{if currMonth=='12':}}<option value="12" selected>Dec</option>{{else:}}<option value="12">Dec</option>{{pass}}
+                        
+        </select>
+        </span></td>
+        <td width="214" align="right">&nbsp;</td>
+        <td width="5">&nbsp;</td>
+      </tr>
+      <tr >
+        <td align="left">Month-2</td>
+        <td><span style="vertical-align:middle;">
+          <select id="yearValue2" name="yearValue2" style="width:140px;" >
+            <option value="">Select Year</option>
+            {{if currYear=='2014':}}<option value="2014" selected>2014</option>{{else:}}<option value="2014">2014</option>{{pass}}
+            {{if currYear=='2015':}}<option value="2015" selected>2015</option>{{else:}}<option value="2015">2015</option>{{pass}}
+            {{if currYear=='2016':}}<option value="2016" selected>2016</option>{{else:}}<option value="2016">2016</option>{{pass}}
+            {{if currYear=='2017':}}<option value="2017" selected>2017</option>{{else:}}<option value="2017">2017</option>{{pass}}
+            {{if currYear=='2018':}}<option value="2018" selected>2018</option>{{else:}}<option value="2016">2018</option>{{pass}}
+            {{if currYear=='2019':}}<option value="2019" selected>2019</option>{{else:}}<option value="2019">2019</option>{{pass}}
+            {{if currYear=='2020':}}<option value="2020" selected>2020</option>{{else:}}<option value="2020">2020</option>{{pass}}
+            
+          </select>
+          -
+          <select id="monthValue2" name="monthValue2" style="width:140px;" >
+            <option value="">Select Month</option>
+          {{if currMonth=='01':}}<option value="01" selected>Jan</option>{{else:}}<option value="01">Jan</option>{{pass}}
+          {{if currMonth=='02':}}<option value="02" selected>Feb</option>{{else:}}<option value="02">Feb</option>{{pass}}
+          {{if currMonth=='03':}}<option value="03" selected>Mar</option>{{else:}}<option value="03">Mar</option>{{pass}}
+          {{if currMonth=='04':}}<option value="04" selected>Apr</option>{{else:}}<option value="04">Apr</option>{{pass}}
+          {{if currMonth=='05':}}<option value="05" selected>May</option>{{else:}}<option value="05">May</option>{{pass}}
+          {{if currMonth=='06':}}<option value="06" selected>Jun</option>{{else:}}<option value="06">Jun</option>{{pass}}
+          {{if currMonth=='07':}}<option value="07" selected>Jul</option>{{else:}}<option value="07">Jul</option>{{pass}}
+          {{if currMonth=='08':}}<option value="08" selected>Aug</option>{{else:}}<option value="08">Aug</option>{{pass}}
+          {{if currMonth=='09':}}<option value="09" selected>Sep</option>{{else:}}<option value="09">Sep</option>{{pass}}
+          {{if currMonth=='10':}}<option value="10" selected>Oct</option>{{else:}}<option value="10">Oct</option>{{pass}}
+          {{if currMonth=='11':}}<option value="11" selected>Nov</option>{{else:}}<option value="11">Nov</option>{{pass}}
+          {{if currMonth=='12':}}<option value="12" selected>Dec</option>{{else:}}<option value="12">Dec</option>{{pass}}
+           
+          </select>
+        </span></td>
+        <td>&nbsp;</td>
+        <td>&nbsp;</td>
+      </tr>
+      <tr >
+        <td align="left">&nbsp;</td>
+        <td>&nbsp;</td>
+        <td>&nbsp;</td>
+        <td>&nbsp;</td>
+      </tr>
+      <tr >
+        <td width="100" align="left">&nbsp;</td>
+        <td><input name="btn_process_submit" type="submit" style="width:150px" title="" value="Submit Process"/></td>
+        <td>&nbsp;</td>
+        <td width="5">&nbsp;</td>
+      </tr>
+      
+      <tr >
+        <td colspan="4" align="left">&nbsp;</td>
+      </tr>
+      </form>
+    </table>
+    
+    
+	<br>
+    
+    <table width="700" border="1" cellpadding="1" cellspacing="1" class="sample_border" >
+        <tr align="left" class="blackCatHead"  height="20px" ;"vertical-align:middle">
+          <td width="150" >Process Date</td>
+          <td width="100" >Month-1</td>
+          <td width="100" >Month-2</td>
+          <td >Status</td>
+          <td width="150" align="right"  ></td>
+        </tr>
+        {{ p=0}} 		  
+        {{for i,record in enumerate(records):}}
+       
+        <tr  align="left" class="blackCat"  style="vertical-align:middle"> 
+          <td width="150" >{{=record.created_date}}</td>
+          <td width="100" >{{=record.month_1.strftime('%Y-%b')}}</td>
+          <td width="100" >{{=record.month_2.strftime('%Y-%b')}}</td>
+          <td >{{=record.status}}</td>
+          
+          <form name="form1" id="form1" action="{{=URL(c='utility',f='process_report')}}" method="post">
+          <td width="150" align="right"  >
+            {{if access_permission==True:}}
+  				
+                {{if record.status_flag==0:}}
+                  	<input type="submit" name="btn_process" id="btn_process" value=" Process "   class="button_update"/>&nbsp;&nbsp;&nbsp;
+                	<input type="submit" name="btn_delete" id="btn_delete" value=" X "   class="button_update"/>                    
+                
+                {{elif record.status_flag==3:}}
+                	<a href="{{=URL(c='utility',f='process_report_show')}}" style="text-decoration:none" target="_blank"><input type="button" name="btn_show_process" id="btn_show_process" value=" Show "   class="button_update"/></a>&nbsp;&nbsp;&nbsp;
+                	<input type="submit" name="btn_delete" id="btn_delete" value=" X "   class="button_update"/>
+                {{pass}}  
+                                  
+            {{pass}}          
+          </td> 
+            </form>
+        </tr>
+      
+        
+        {{pass}}
+    </table>
+    
+	  
+<!--start-->
+<!--end--><td width="5"></td>
+  <td width="5"></tr>
+</table>
+
+</body>

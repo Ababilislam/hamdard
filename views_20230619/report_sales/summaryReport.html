@@ -1,0 +1,208 @@
+{{extend 'layout_sales_report.html'}}
+
+<html>
+
+<head>
+
+<script type="text/javascript">
+
+function print_page()
+
+  {
+
+    window.print()
+
+  }
+
+</script>
+
+
+
+</head>
+
+<body>
+
+<table width="900px" style="border:none;" >
+		  <tr >
+		    <td width="90" >Date Range</td>
+		    <td width="10" >&nbsp;</td>
+		    <td width="424" >{{=date_from}} - {{=date_to}}</td>
+		    <td width="79" >&nbsp;</td>
+		    <td width="3" >&nbsp;</td>
+		    <td width="266" >&nbsp;</td>
+	      </tr>
+	    </table>
+          <table width="900px" style="border:none; text-align:center; font-weight:bold;" >
+            <tr >
+              <td width="100" >&nbsp;</td>
+              <td align="center" ><span style="border-bottom:1px solid #333;">11 Sales Summary</span></td>
+              <td width="100" ><img  height="30px" src="{{=URL('static','images/comp_logo1.png')}}"/></td>
+            </tr>
+        </table>
+          <table width="900px" border="1" cellpadding="1" cellspacing="1" class="sample_border" >
+            <tr align="left" class="blackCatHead" height="20px" ;  style="font-size:12px">
+              <td width="100" rowspan="2"    >RSM</td>
+              <td width="80" rowspan="2"  >FM</td>
+              <td width="80" rowspan="2"   >TR              </td>
+              <td width="80" rowspan="2"   align="right">InvCount</td>
+              <td width="80" colspan="5"   ><div align="center">Invioce</div></td>
+              <td width="80" colspan="5"   ><div align="center">Return</div></td>
+              <td width="80" rowspan="2"   align="right"> Net</td>
+            </tr>
+            <thead>
+            <tr align="left" class="blackCatHead" height="20px"   style="font-size:12px">
+              <td  width="80"  align="right" >TotalTP</td>
+              <td width="80"  align="right"  >Vat</td>
+              <td width="80" align="right"  >Disc</td>
+              <td width="80" align="right"  >SP.Disc</td>
+              <td width="80" align="right"  >InvAmount</td>
+              <td  width="80"  align="right" >TotalTP</td>
+              <td width="80"  align="right"  >Vat</td>
+              <td width="80" align="right"  >Disc</td>
+              <td width="80" align="right"  >SP.Disc</td>
+              <td width="80" align="right"  >RetAmount</td>
+            </tr>
+      </thead>      
+            {{rsm_past=''
+            fm_past=''
+            tr_past=''
+            invTotalTP=0
+            retTotalTP=0
+            invAmnTotal=0
+            retAmnTotal=0
+            netAmnTotal=0
+            }}
+            {{for records in records:}}
+ 
+ <tbody>
+  <tr  align="left" class="blackCat"  style="vertical-align:middle; font-size:11px;">
+    <td  >
+    {{if rsm_past!=records[db.sm_invoice_head.level1_id]:}}
+    {{=records[db.sm_invoice_head.level1_id]}}{{#=records[db.sm_invoice_head.level1_name]}}
+    {{pass}}
+    </td>
+    <td    >
+     {{if fm_past!=records[db.sm_invoice_head.level2_id]:}}
+    {{=records[db.sm_invoice_head.level2_id]}}{{#=records[db.sm_invoice_head.level2_name]}}
+    {{pass}}
+    </td>
+    <td    >
+     {{if tr_past!=records[db.sm_invoice_head.level3_id]:}}
+    {{=records[db.sm_invoice_head.level3_id]}}{{#=records[db.sm_invoice_head.level3_name]}}</td>
+    {{pass}}
+    <td    align="right">{{=records[db.sm_invoice_head.id.count()]}}</td>
+    <td  align="right"  >{{='{:20,.2f}'.format(records[db.sm_invoice_head.actual_total_tp.sum()])}}
+    
+    {{invTotalTP=invTotalTP+records[db.sm_invoice_head.actual_total_tp.sum()]}}
+    </td>
+    <td align="right"  >{{='{:20,.2f}'.format(records[db.sm_invoice_head.vat_total_amount.sum()])}}</td>
+    <td align="right"   >{{='{:20,.2f}'.format(records[db.sm_invoice_head.discount.sum()])}}</td>
+    <td align="right"   >{{='{:20,.2f}'.format(records[db.sm_invoice_head.sp_discount.sum()])}}</td>
+    <td align="right"   >{{='{:20,.2f}'.format(records[db.sm_invoice_head.total_amount.sum()])}}
+    {{invAmnTotal=invAmnTotal+records[db.sm_invoice_head.total_amount.sum()]}}
+    </td>
+    <td  align="right"  >{{='{:20,.2f}'.format(records[(db.sm_invoice_head.return_tp+db.sm_invoice_head.return_sp_discount).sum()])}}
+    {{retTotalTP=retTotalTP+records[(db.sm_invoice_head.return_tp+db.sm_invoice_head.return_sp_discount).sum()]}}
+    </td>
+    <td align="right"  >{{='{:20,.2f}'.format(records[db.sm_invoice_head.return_vat.sum()])}}</td>
+    <td align="right"   >{{='{:20,.2f}'.format(records[db.sm_invoice_head.return_discount.sum()])}}</td>
+    <td align="right"   >{{='{:20,.2f}'.format(records[db.sm_invoice_head.return_sp_discount.sum()])}}</td>
+    {{retAmn=float(records[db.sm_invoice_head.return_tp.sum()])+float(records[db.sm_invoice_head.return_vat.sum()])-(float(records[db.sm_invoice_head.return_discount.sum()])+float(records[db.sm_invoice_head.return_sp_discount.sum()]))+float(records[db.sm_invoice_head.return_sp_discount.sum()])}}
+    
+    <td align="right"   >{{='{:20,.2f}'.format(retAmn)}}
+    {{retAmnTotal=retAmnTotal+retAmn}}
+    </td>
+    <td  align="right"  >
+      {{='{:20,.2f}'.format(records[db.sm_invoice_head.total_amount.sum()]-retAmn)}}
+      {{netAmnTotal=netAmnTotal+(records[db.sm_invoice_head.total_amount.sum()]-retAmn)}}
+      </td>
+    </tr>
+   </tbody>       
+         {{ rsm_past=records[db.sm_invoice_head.level1_id]}}
+         {{ fm_past=records[db.sm_invoice_head.level2_id]}}
+         {{ tr_past=records[db.sm_invoice_head.level3_id]}}
+            {{pass}}
+            
+            
+        
+        
+        
+     <tr  align="left" class="blackCat"  style="vertical-align:middle; font-size:14px; color:#5E002F">
+    <td  >
+    
+    </td>
+    <td    >
+    
+    </td>
+    <td    >
+
+    <td    align="right"></td>
+    <td  align="right"  >
+    
+    {{='{:20,.2f}'.format(invTotalTP)}}
+    </td>
+    <td align="right"  ></td>
+    <td align="right"   ></td>
+    <td align="right"   ></td>
+    <td align="right"   >
+    {{='{:20,.2f}'.format(invAmnTotal)}}
+    </td>
+    <td  align="right"  >
+    {{='{:20,.2f}'.format(retTotalTP)}}
+    </td>
+    <td align="right"  ></td>
+    <td align="right"   ></td>
+    <td align="right"   ></td>
+
+    <td align="right"   >
+    {{='{:20,.2f}'.format(retAmnTotal)}}
+    </td>
+    <td  align="right"  >
+   
+      {{='{:20,.2f}'.format(netAmnTotal)}}
+      </td>
+    </tr>
+    
+    
+        
+        </table></td>
+
+	</tr>
+
+	<tr height="10px"></tr>
+
+	<tr>
+
+		<td></br></td>
+
+			
+
+	</tr>
+
+</table>
+
+<br/>
+
+
+
+
+<br/>
+
+
+
+<table width="900px" >
+  <tr>
+    <td width="411" align="center">__________________</td>
+    <td width="225" align="center">&nbsp;</td>
+    <td width="248" align="left">________________________________</td>
+  </tr>
+  <tr>
+    <td width="411" align="center"><strong>Printed By</strong></td>
+    <td width="225" align="right">for</td>
+    <td width="248" align="left"><strong>{{=session.cName}}</strong></td>
+  </tr>
+</table>
+</body>
+
+</html>
+

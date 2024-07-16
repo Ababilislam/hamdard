@@ -1,0 +1,1629 @@
+{{extend 'layout.html'}}
+
+
+<link rel="stylesheet" href="{{=URL('static', 'js_and_css/ui.theme.css')}}" type="text/css" />
+
+<link rel="stylesheet" href="{{=URL('static', 'js_and_css/jquery-ui.css')}}" type="text/css" />
+
+<link rel="stylesheet" href="{{=URL('static', 'js_and_css/style.css')}}" type="text/css" />
+
+<script src="{{=URL('static','js_and_css/jquery-1.8.2.js')}}"></script>
+
+<script src="{{=URL('static','js_and_css/jquery-ui.js')}}"></script>
+
+<style type="text/css">
+
+input[type=text], input[type=password],  select {
+    margin: 2px 0px 2px 0px;
+	width:100px;
+}
+
+div.error {
+    margin-left:0px;
+	width:auto;
+}
+
+#status,#sm_return_head_note,#sm_return_note{
+ width:150px;
+ }
+
+#sm_return_head_ret_reason,#sm_return_ret_reason{
+ width:195px;
+ }
+
+#depot_id,#sl,#client_id,#rep_id{
+ width:150px;
+ }
+
+#sl,#status{
+ background-color:#F7F7F7;
+}
+
+ #sl,#status,#order_sl{
+ background-color:#F7F7F7;
+  }
+
+ #sm_return_quantity{
+ width:70px;
+ text-align:right;
+ }
+
+
+#bonus_qty{
+
+
+ width:70px;
+
+
+ text-align:right;
+
+
+ readonly:true;
+
+
+ background-color:#F2F2F2;
+
+
+ }
+
+
+ 
+
+
+.page_color,body{
+
+
+	font-family:Arial, Helvetica, sans-serif;
+
+
+	font-size:13px;	
+
+
+}
+
+
+
+
+
+ </style>
+
+
+
+
+
+
+
+
+<script>
+
+
+var base_url=location.protocol + "//" + location.hostname + (location.port && ":" + location.port) + "/{{=request.application}}/";
+
+
+
+
+
+$(function() {
+
+
+	 	var valueListStr=localStorage.itemDataStr;
+
+
+		
+
+
+		$('#item_details').keyup(function(){
+
+
+			//-------------------------
+
+
+			var valueList = valueListStr.split(',');				
+
+
+			var searchValue=$("#item_details").val();
+
+
+			
+
+
+			//---------------- auto complete combo list
+
+
+			var valueList_new=new Array();
+
+
+			lc=0;
+
+
+			i =0;
+
+
+			var valueStr="";				
+
+
+			while (i < valueList.length)
+
+
+			{
+
+
+				valueStr=valueList[i];
+
+
+				i=i+1;					
+
+
+				var res=valueStr.toUpperCase().match(searchValue.toUpperCase());
+
+
+				if (res!=null){
+
+
+					valueList_new[lc]=valueStr;
+
+
+					lc=lc+1;
+
+
+					if (lc==30){
+
+
+						break;
+
+
+					};
+
+
+				}else{
+
+
+					continue;
+
+
+				}					
+
+
+			};
+
+
+			//alert (ref_list_new);
+
+
+			
+
+
+			//-------------- auto complete source
+
+
+			$( "input#item_details" ).autocomplete({
+
+
+				source: valueList_new
+
+
+			});
+
+
+		
+
+
+	  }); 
+
+
+	   //==============	 
+
+
+	   $('#item_details').blur(function(){
+
+
+		   var my_array=new Array();
+
+
+			my_array=$("#item_details").val().split('|');
+
+
+			
+
+
+			if (my_array.length == 5){
+
+
+				document.getElementById('item_name').value=my_array[0];
+
+
+				document.getElementById('item_id').value=my_array[1];
+
+
+				document.getElementById('category_id').value=my_array[2];
+
+
+				document.getElementById('price').value=my_array[4];
+
+
+				
+
+
+				document.getElementById('name_value').innerHTML = my_array[0];
+
+
+				document.getElementById('id_value').innerHTML = my_array[1];
+
+
+				document.getElementById('category_value').innerHTML = my_array[2];
+
+
+				document.getElementById('price_value').innerHTML = my_array[4];	
+
+
+												
+
+
+			};
+
+
+		   
+
+
+		}); 
+
+
+		
+
+
+		//================
+
+
+		var valueListStr1="";		
+
+
+		$('#depot_id').keyup(function(){
+
+
+			$.ajax({
+
+
+				  url: base_url+'default/get_depot_list',
+
+
+				  success: function(resStr) {
+
+
+					  valueListStr1=resStr
+
+
+				  }
+
+
+				});
+
+
+			
+
+
+			//-------------------------
+
+
+			var valueList = valueListStr1.split(',');				
+
+
+			var searchValue=$("#depot_id").val();
+
+
+			
+
+
+			//---------------- auto complete combo list
+
+
+			var valueList_new=new Array();
+
+
+			lc=0;
+
+
+			i =0;
+
+
+			var valueStr="";				
+
+
+			while (i < valueList.length)
+
+
+			{
+
+
+				valueStr=valueList[i];
+
+
+				i=i+1;					
+
+
+				var res=valueStr.toUpperCase().match(searchValue.toUpperCase());
+
+
+				if (res!=null){
+
+
+					valueList_new[lc]=valueStr;
+
+
+					lc=lc+1;
+
+
+					if (lc==30){
+
+
+						break;
+
+
+					};
+
+
+				}else{
+
+
+					continue;
+
+
+				}
+
+
+			};
+
+
+			
+
+
+			//-------------- auto complete source
+
+
+			$( "input#depot_id" ).autocomplete({
+
+
+				source: valueList_new
+
+
+			});
+
+
+	  });
+
+
+	  
+
+
+	   //==============	
+
+
+	   var valueListStr2="";		
+
+
+		$('#client_id').keyup(function(){
+
+	
+			var depotValue=$("#depot_id").val().split('|')[0];
+
+
+			$.ajax({
+
+
+				  url: base_url+'default/get_depot_client_list?depot='+depotValue,
+
+
+				  success: function(resStr) {
+
+
+					  valueListStr2=resStr
+
+
+				  }
+
+
+				});
+
+
+			
+
+
+			//-------------------------
+
+
+			var valueList = valueListStr2.split(',');				
+
+
+			var searchValue=$("#client_id").val();
+
+
+			
+
+
+			//---------------- auto complete combo list
+
+
+			var valueList_new=new Array();
+
+
+			lc=0;
+
+
+			i =0;
+
+
+			var valueStr="";				
+
+
+			while (i < valueList.length)
+
+
+			{
+
+
+				valueStr=valueList[i];
+
+
+				i=i+1;					
+
+
+				var res=valueStr.toUpperCase().match(searchValue.toUpperCase());
+
+
+				if (res!=null){
+
+
+					valueList_new[lc]=valueStr;
+
+
+					lc=lc+1;
+
+
+					if (lc==30){
+
+
+						break;
+
+
+					};
+
+
+				}else{
+
+
+					continue;
+
+
+				}
+
+
+			};
+
+
+			
+
+
+			//-------------- auto complete source
+
+
+			$( "input#client_id" ).autocomplete({
+
+
+				source: valueList_new
+
+
+			});
+
+
+	  });
+
+
+		
+
+
+		//==============	 
+
+
+	   
+
+
+	   var valueListStr3="";		
+
+
+		$('#rep_id').keyup(function(){
+
+
+			//var depotValue=$("#depot_id").val().split('|')[0];
+			var clientID=$("#client_id").val().split('|')[0];
+
+			$.ajax({
+
+
+				  url: base_url+'default/get_customer_rep_list?clientID='+clientID,
+
+
+				  success: function(resStr) {
+
+
+					  valueListStr3=resStr
+
+
+				  }
+
+
+				});
+
+
+			
+
+
+			//-------------------------
+
+
+			var valueList = valueListStr3.split(',');				
+
+
+			var searchValue=$("#rep_id").val();
+
+
+			
+
+
+			//---------------- auto complete combo list
+
+
+			var valueList_new=new Array();
+
+
+			lc=0;
+
+
+			i =0;
+
+
+			var valueStr="";				
+
+
+			while (i < valueList.length)
+
+
+			{
+
+
+				valueStr=valueList[i];
+
+
+				i=i+1;					
+
+
+				var res=valueStr.toUpperCase().match(searchValue.toUpperCase());
+
+
+				if (res!=null){
+
+
+					valueList_new[lc]=valueStr;
+
+
+					lc=lc+1;
+
+
+					if (lc==30){
+
+
+						break;
+
+
+					};
+
+
+				}else{
+
+
+					continue;
+
+
+				}					
+
+
+			};
+
+
+			//alert (ref_list_new);
+
+
+			
+
+
+			//-------------- auto complete source
+
+
+			$( "input#rep_id" ).autocomplete({
+
+
+				source: valueList_new
+
+
+			});
+
+
+	  });
+
+
+		//==============	 
+
+
+	   
+
+
+}); 
+
+function hideBtnPostCancel(){					
+	$("#btn_post").hide();	
+	$("#btn_part_return").hide();
+	$("#btn_full_return").hide();	
+	$("#btn_cancel").hide();
+	$("#btn_return_cancel").hide();	
+};
+
+
+
+</script>
+
+
+    
+
+
+ <body > 
+
+
+ 
+
+
+<table width="100%"  border="0" cellspacing="0" cellpadding="0" style="background-color:#FFFFFF;" >
+
+
+  <tr height="30px" >
+
+
+    <td width="600"><span class="blackCatTitle">Return - Add</span></td>
+
+
+    <td width="350" align="right">
+    <a href="{{=URL(c='order_invoice',f='return_list')}}"><input type="button" name="" id="" value="Return List"  class="button_update" title=""/></a>
+    </td>
+      
+    <form id="form1" name="form1" method="post" action="{{=URL(c='order_invoice',f='return_add',vars=dict(req_sl=0))}}">
+	  <td width="50" align="right">{{if access_permission==True:}}
+        <input type="submit" name="btn_new" id="btn_new" value="New"  class="button_update"/>
+{{pass}}</td>
+    </form>
+
+    <td>&nbsp;</td>
+  </tr>
+
+  <tr  height="1px" style="background-color:#CCCCCC;">
+	    <td colspan="4" ></td>
+  </tr>
+
+</table>
+
+
+  <table width="100%" height="500px"  border="0" cellspacing="0" cellpadding="0" class="page_color" id="full_page"  >
+
+
+  <tr height="100%"  style="vertical-align:top;">
+
+
+    <td>
+
+
+	<!--start-->
+
+
+	<table width="100%"  border="0" cellpadding="0" cellspacing="0"  >
+
+
+      <tr>
+
+
+        <td width="0%">&nbsp;</td>
+
+
+        <td colspan="2">&nbsp;</td>
+
+
+      </tr>
+
+
+      <tr>
+
+
+        <td>&nbsp;</td>
+
+
+        <td colspan="2">
+
+
+          <table width="1000" height="78" border="0" cellpadding="0" cellspacing="0">
+
+
+            <tr>
+
+
+			<td width="350" valign="top">
+
+
+			
+
+
+			
+
+
+			<table width="350" class="blackCat">			  
+
+
+          {{=form.custom.begin}}				
+
+
+                <tr>
+
+
+        <td width="50">Branch</td>
+
+
+          <td width="250">:
+
+            {{if depot_id=='' or depot_id==None:}}
+                <input type="text" name="depot_id" id="depot_id" size="25" value="" placeholder="Select Depot" autocomplete="off" style="width:200px"/>
+
+            {{else:}}
+                <input type="text" name="depot_id" id="depot_id" size="25" value="{{=depot_id}}|{{=depot_name}}" placeholder="Select Depot" autocomplete="off" style="width:200px;background-color:#F7F7F7;" readonly/>
+
+            {{pass}}
+
+            </td>
+
+
+          </tr>
+
+
+      <tr>
+
+
+        <td width="50">Sl</td>
+
+
+        <td width="250">:
+
+
+          <input type="text" name="sl" id="sl" value="{{=sl}}" style="width:200px;" readonly/></td>
+
+
+        </tr>
+
+
+      <tr>
+        <td>Store</td>
+        <td width="250">:
+       {{if int(sl)<=0:}}
+        	<select name="store_id" id="store_id" style="width:215px;">
+				<option value=""></option>
+				{{for row in storeRecords:}}
+					<option value="{{=row.store_id}}|{{=row.store_name}}" >{{=row.store_id}} | {{=row.store_name}}</option>
+				{{pass}}
+			</select>
+		{{else:}}
+        	<input type="text" name="store_id" id="store_id" value="{{=store_id}}|{{=store_name}}" style="background-color:#F3F3F3;width:200px;" readonly/>
+		{{pass}}</td>
+      </tr>
+      <tr>
+
+
+        <td width="50">Client/Retailer</td>
+
+
+        <td width="250">:
+
+
+          
+
+
+        {{if client_id=='' or client_id==None:}}
+
+
+            <input type="text" name="client_id" id="client_id" size="25" value="" placeholder="Select Client" autocomplete="off" style="width:200px"/>
+
+
+        {{else:}}
+
+
+            <input type="text" name="client_id" id="client_id" size="25" value="{{=client_id}}|{{=client_name}}" placeholder="Select Client" autocomplete="off" style="width:200px;background-color:#F7F7F7;" readonly/>
+
+
+        {{pass}}
+
+
+        
+
+
+          </td>
+
+
+        </tr>
+
+
+      <tr>
+
+
+        <td width="50">Rep/Sup </td>
+
+
+        <td width="250">:
+
+
+		
+
+
+        {{if rep_id=='' or rep_id==None:}}
+
+
+            <input type="text" name="rep_id" id="rep_id" size="25" value="" placeholder="Select Rep" autocomplete="off" style="width:200px"/>
+
+
+        {{else:}}
+
+
+            <input type="text" name="rep_id" id="rep_id" size="25" value="{{=rep_id}}|{{=rep_name}}" placeholder="Select Rep" autocomplete="off" style="width:200px;background-color:#F7F7F7;" readonly/>
+
+
+        {{pass}}
+
+
+        
+
+
+        </td>
+
+
+      </tr>
+
+
+      </table>
+
+
+      </td>
+
+
+       <td width="400" valign="top"><table width="285" class="blackCat">
+
+
+                
+
+
+      <tr >
+        <td width="100" align="left">Cause</td>
+        <td width="10" align="left">:</td>
+        <td width="300" colspan="2" >{{if rowid==0:}}{{=form.custom.widget.ret_reason}}
+          {{else:}}{{=form_head.custom.widget.ret_reason}}{{pass}}
+       </td>
+      </tr>
+      <tr >
+
+
+        <td width="100" align="left">Invoice SL </td>
+        <td width="10" align="left">:</td>
+
+
+        <td width="300" colspan="2" >INV{{=depot_id}}-{{if invoice_sl!=0:}}
+
+
+          <input type="text" name="invoice_sl" id="invoice_sl" style="width:70px" value="{{=invoice_sl}}" readonly title="enter invoice number"/>
+
+
+          {{else:}}
+
+
+          <input type="text" name="invoice_sl" id="invoice_sl" style="width:70px" value="" title="enter invoice number"/>
+
+
+          {{pass}}
+
+
+          
+
+
+          {{if (status=='Returned' or status=='Cancelled' or sl!=0):}}
+
+
+          &nbsp;
+
+
+          {{else:}}
+
+
+          <input type="submit" name="btn_import_req" id="btn_import_req" value=" I " title="Import (fillup Order SL and Date)"/>
+
+
+          {{pass}}
+
+
+          
+
+
+          </td>
+
+
+      </tr>
+
+
+      <tr>
+
+
+        <td width="100">Date</td>
+        <td width="10">:</td>
+
+
+        <td width="300" colspan="2"><input name="return_date" type="Text" id="return_date" value="{{=return_dt}}" readonly  /> </td>
+
+
+      </tr>
+
+
+      <tr>
+
+
+        <td width="100">Discount Tk.</td>
+        <td width="10">:</td>
+
+
+        <td width="149"><input type="text" name="discount" id="discount" value="{{=discount}}"/></td>
+        <td width="149" >&nbsp;(Adjustment)</td>
+
+
+      </tr>
+      <tr>
+        <td>Prev.Ret.Dicount</td>
+        <td width="10">:</td>
+        <td width="300" colspan="2">{{=retDiscount}} &nbsp;(Adjustment)</td>
+      </tr>
+
+
+      
+
+
+              </table></td>
+
+
+              <td align="right" valign="top">
+
+
+			    <div align="left">
+
+
+			      <table class="blackCat">
+
+
+			        <tr>
+			          
+			          
+			          <td>Status</td>
+			          
+			          
+			          <td>:&nbsp;<input type="text" name="status" id="status" value="{{=status}}" readonly/></td>
+			          
+			          
+			          </tr>
+
+
+			        <tr>
+			          
+			          
+			          <td>Notes</td>
+			          
+			          
+			          <td>:{{if rowid==0:}}
+			            
+			            
+			            {{=form.custom.widget.note}}
+			            
+			            
+			            {{else:}}
+			            
+			            
+			            {{=form_head.custom.widget.note}}
+			            
+			            
+			            {{pass}}
+			            
+			            
+			            </td>
+			          
+			          
+			          </tr>
+
+
+			        
+
+
+			        <tr>
+
+
+			          <td>&nbsp;</td>
+
+
+            <td>
+
+
+              {{if ((status=='Returned') or (status=='Cancelled') or (sl==0) or (access_permission!=True)):}}<!-- or invoice_sl!=0)-->
+
+
+              &nbsp;
+
+
+              {{else:}}
+
+
+              &nbsp;&nbsp;<input type="submit" name="btn_update" id="btn_update" value="Update"/>
+
+
+              {{pass}}		</td>
+
+
+            </tr>
+
+
+			        <tr>
+
+
+			          <td>&nbsp;</td>
+
+
+            <td>&nbsp;</td>
+
+
+            </tr>
+
+
+			          </table>
+
+
+		        </div></td>
+
+
+            </tr>
+
+
+
+
+
+            <!--<tr id="">
+
+              <td colspan="2" valign="bottom">&nbsp;</td>
+
+              <td align="right">{{if ((status=='Returned') or (status=='Cancelled') or (access_permission!=True) or invoice_sl!=0):}}
+
+					&nbsp;
+
+					{{else:}}
+
+					<input name="button" type="button" class="button_update" id="btn_batch"  title="Add New Batch"  value=" + "/>
+
+			{{pass}}</td>
+
+
+            </tr>-->
+
+
+            <!--<tr id="upload_div">
+
+
+              <td colspan="2" valign="bottom">Download this <a href="{{=URL('static','return_upload_format.xls')}}">Excel Template</a> , fillup with data and copy(maximum 30 records)-paste to upload field<br/>
+
+
+			  &nbsp;Total Record:{{=total_row}};&nbsp;Saved:{{=count_inserted}};&nbsp;Error:{{=count_error}}			
+
+
+			  <br />
+
+
+			  <textarea name="error_data" id="error_data" style="font-size:10px; background-color:#F5F5F5; border:solid; border-width:1px" cols="80" rows="3">{{if error_str!=None:}}{{=error_str}}{{pass}}</textarea>			  </td>
+
+
+              <td align="right">
+
+
+			  <textarea name="input_data" id="input_data" style="font-size:10px" cols="50" rows="7" ></textarea>
+
+
+			  <input type="submit" name="btn_batch_upload" id="btn_batch_upload" value="Upload"/>
+
+
+			  <input type="button" id="btn_hide"  value="  -  "  class="button_update" title="Hide New Batch"/>			  </td>
+
+
+            </tr>-->
+
+
+
+
+
+          
+
+
+		    <tr>
+
+
+              <td colspan="3"><table width="1000" border="1" cellpadding="1" cellspacing="1" class="sample_border" >
+					{{entryShow=False}}<!-- used for new entry off (temporary)-->
+
+                  {{if entryShow==True and access_permission==True: }} <!-- and invoice_sl==0-->
+
+
+				  {{if not(status=='Returned' or status=='Cancelled'):}}
+
+
+                      <tr align="left" class="blackCatHead"  height="20px" ;"vertical-align:middle">
+
+
+                         <td colspan="13" style="font-size:9px;"><strong>Name:</strong> <span id="name_value"></span>,&nbsp;<strong>ID:</strong> <span id="id_value"></span>,&nbsp;<strong>Category:</strong> <span id="category_value"></span>,&nbsp;<strong>Price:</strong> <span id="price_value"></span></td>
+
+
+                        <td align="right"  >&nbsp;</td>
+
+
+                        <td align="right"  >&nbsp;</td>
+                        <td width="10" align="right"  >&nbsp;</td>
+
+
+                        <td width="10" align="right"  ></td>
+
+
+                      </tr>
+
+
+                    <tr align="left" class="blackCatHead"  height="20px" ;"vertical-align:middle">
+
+
+                    <td colspan="2" >
+					<input type="hidden" name="item_id" id="item_id" />					
+
+
+					<input type="hidden" name="item_name" id="item_name" />
+
+
+					<input type="hidden" name="category_id" id="category_id" />
+
+
+					<input type="hidden" name="price" id="price" />
+
+					<input type="text" name="item_details" id="item_details" style="width:300px;" value="" placeholder="Select Item" autocomplete="off" />
+
+                    </td>
+
+
+                    <td width="50" align="center"  >&nbsp;</td>
+                    <td width="60" align="left"  >&nbsp;</td>
+                    <td width="60" align="right"  >&nbsp;</td>
+                    <td width="50" align="right"  >&nbsp;</td>
+                    <td width="50" align="right"  >&nbsp;</td>
+                    <td width="50" align="right"  >&nbsp;</td>
+
+
+                    <td width="80" align="right"  >{{=form.custom.widget.quantity}} </td>
+
+
+                    <td width="80" align="right"  ><input type="text" name="bonus_qty" id="bonus_qty" value="" readonly /></td>
+
+
+                    <td width="60" align="right"  >&nbsp;</td>
+                    <td width="60" align="right"  >&nbsp;</td>
+                    <td width="60" align="right"  >&nbsp;</td>
+
+
+                    <td width="100" align="right"  >&nbsp;</td>
+
+
+                    <td align="right"  >{{=form.custom.widget.short_note}}</td>
+                    <td width="10" align="right"  >&nbsp;</td>
+
+                    <td width="10" align="right"  >
+
+					{{=form.custom.submit}}
+                    </td>
+
+                  </tr>
+
+				  {{pass}}
+				  {{pass}}
+
+				  {{=form.custom.end}}
+
+
+				  <tr align="left" class="blackCatHead"  height="20px" ;"vertical-align:middle">                    
+
+
+                    <td >Name</td>
+
+
+					<td width="60" >Item ID</td>
+
+
+                    <td width="50" align="center"  >Category</td>
+                    <td width="60" align="left"  >Batch ID</td>
+                    <td width="60" align="right"  >ActualTP</td>
+                    <td width="50" align="right"  >Inv. (Qty+BQty)</td>
+                    <td width="50" align="right"  >Prev.Ret (Qty+BQty)</td>
+                    <td width="50" align="right"  >Available Qty</td>
+
+
+                    <td width="80" align="right"  >Ret.Qty</td>
+
+
+                    <td width="80" align="right"  >Ret. Bonus Qty </td>
+
+
+                    <td width="60" align="right"  >Ret.Unit Price</td>
+                    <td width="60" align="right"  >Vat</td>
+                    <td width="60" align="right"  >SpDisc</td>
+
+
+                    <td width="100" align="right"  >Total TP</td>
+
+
+                    <td align="right"  >Short Note </td>
+                    <td width="10" align="right"  >&nbsp;</td>
+
+
+                    <td width="10" align="right"  ></td>
+
+
+                  </tr>
+
+				  
+                  {{spTotalDisc=0}}
+                  {{vatTotal=0}}
+               {{gross_total=0.0}}
+				
+			   {{for record in (records):}}
+					
+                    {{qty=0;rate=0}}
+    
+                    {{readonlyQty=''}}
+                    {{readonlyBQty=''}}
+                    
+                    {{if (int(record.inv_quantity)-int(record.prev_return_qty))<=0:}}
+                        {{readonlyQty='readonly'}}
+                    {{pass}}
+                    
+                    {{if (int(record.inv_bonus_qty)-int(record.prev_return_bonus_qty))<=0:}}
+                        {{readonlyBQty='readonly'}}
+                    {{pass}}
+			
+            
+			 <form id="form1" name="form1" method="post" action="{{=URL(c='order_invoice',f='update_return_item',args=[depot_id,sl,record.item_id,record.id])}}">
+
+			<tr  align="left" class="blackCat"  style="vertical-align:middle"> 			  
+
+
+			  <td >{{=record.item_name}}</td>
+
+			  <td width="60" >{{=record.item_id}}</td>
+				
+			  <td width="50" align="center" >{{=record.category_id}}</td>
+			  <td width="60" align="left" >{{=record.batch_id}}</td>
+			  <td width="60" align="right" >{{=record.actual_tp}}</td>
+			  <td width="50" align="right" >{{=record.inv_quantity}}+{{=record.inv_bonus_qty}}</td>
+			  <td width="50" align="right" >{{=record.prev_return_qty}}+{{=record.prev_return_bonus_qty}}</td>
+			  <td width="50" align="right" >{{=(record.inv_quantity+record.inv_bonus_qty)-(record.prev_return_qty+record.prev_return_bonus_qty)}}</td>
+
+			  <td width="80" align="right" >{{qty=record.quantity}}{{#=qty}}<input type="text" name="rowQty" id="rowQty_{{=record.id}}" style="width:50px; text-align:right;" value="{{=qty}}"  {{=readonlyQty}}/></td>
+
+			  <td width="80" align="right" >{{bonus_qty=record.bonus_qty}}{{#=bonus_qty}}<input type="text" name="rowBonusQty" id="rowBonusQty_{{=record.id}}" style="width:50px; text-align:right;" value="{{=bonus_qty}}"  {{=readonlyBQty}}/></td>
+
+			  <td width="60" align="right" >{{rate=record.price}}<input type="text" name="rowRate" id="rowRate_{{=record.id}}" style="width:50px; text-align:right;" value="{{=rate}}"  readonly {{#=readonlyQty}}/></td>
+			  <td width="60" align="right" >{{itemVat=record.item_vat}}{{=itemVat}}{{vatTotal+=qty*itemVat}}</td>
+			  <td width="60" align="right" >{{spDisc=(record.actual_tp-rate)*qty}}{{=spDisc}}{{spTotalDisc+=spDisc}}</td>
+				
+
+			  <td width="100" align="right" >{{amt=qty*(record.actual_tp)}}{{gross_total+=amt}}{{=easy_format(amt)}}</td>
+
+
+			  <td align="right"  >{{=record.short_note}} <span style="font-size:9px">{{if record.item_discount!=0:}}({{=record.discount_type}}:{{=record.item_discount}}){{pass}}</span></td>
+			  <td width="10" align="right"  >
+			    
+			    {{if (access_permission==False or status!='Draft'):}}
+			    &nbsp;
+			    {{else:}}
+			    <input type="submit" name="btn_qtyupdate" id="btn_qtyupdate" value="Update"  class="button_update"/>
+			    {{pass}}
+			    </td>
+
+			  <td width="10" align="right"  >
+				<!-- or (invoice_sl!=0)-->
+                
+			  <!--{{if ((status=='Returned') or (status=='Cancelled') or (access_permission!=True)):}}
+
+				&nbsp;
+				{{else:}}
+				<input type="submit" name="btn_delete" id="btn_delete" value="X"  class="button_update"/>
+
+				  {{pass}}-->
+                  </td>			  
+
+			</tr>
+
+			</form>
+
+			   {{pass}}
+
+
+			   <tr  align="left" class="blackCat"  style="vertical-align:middle">
+
+
+			  <td colspan="10" rowspan="5" >{{#=recordCount}}</td>
+
+
+			  <td colspan="2" align="right" >Total Trade Price:</td>
+			  <td colspan="2" align="right" >{{=easy_format(gross_total)}}</td>
+			  <td colspan="3" rowspan="5" align="right"  >&nbsp;</td>
+
+
+			  </tr>
+
+
+			   <tr  align="left" class="blackCat"  style="vertical-align:middle">
+			     <td colspan="2" align="right" >Vat:</td>
+			     <td colspan="2" align="right" >{{=easy_format(vatTotal)}}</td>
+			     </tr>
+			   <tr  align="left" class="blackCat"  style="vertical-align:middle">
+
+
+			     <td colspan="2" align="right" >Discount:</td>
+			     <td colspan="2" align="right" >{{=easy_format(discount)}}</td>
+			     </tr>
+
+
+			   <tr  align="left" class="blackCat"  style="vertical-align:middle">
+			     <td colspan="2" align="right" >Special Discount:</td>
+			     <td colspan="2" align="right" >{{=easy_format(spTotalDisc)}}</td>
+			     </tr>
+			   <tr  align="left" class="blackCat"  style="vertical-align:middle">
+
+
+			     <td colspan="2" align="right" >Net Total:</td>
+			     <td colspan="2" align="right" >{{=easy_format(gross_total+vatTotal-discount-spTotalDisc)}}</td>
+			     </tr>
+
+              </table>
+              </td>
+              </tr>
+
+          </table>
+          </td>
+      </tr>
+
+      <tr>
+        <td>&nbsp;</td>		
+        <td colspan="2">&nbsp;</td>		
+      </tr>
+
+	<form id="form1" name="form1" method="post" action="{{=URL(c='order_invoice',f='update_status_return',args=[depot_id,sl,invoice_sl,return_dt])}}">
+
+	  <tr>
+        <td>&nbsp;</td>
+		<td width="6%">        
+        <a href="{{=URL(c ='order_invoice',f ='show_return',args=[depot_id,sl])}}" style="text-decoration:none" target="_blank">
+		<input type="button" value="Preview" style="height:30px;width:180px"/></a>
+		
+        
+		</td>
+
+        <td width="94%">
+		{{if (access_permission==True):}}
+		{{if (status=='Returned' or status=='Cancelled' or sl==0):}}
+		&nbsp;
+		{{else:}}
+		&nbsp;<input type="submit" name="btn_post" id="btn_post" value="Confirm Return" style="height:30px;width:180px" onClick="hideBtnPostCancel()"/>
+         <!--&nbsp;<input type="submit" name="btn_cancel" id="btn_cancel" value="Cancel"/>-->		
+        &nbsp;&nbsp;&nbsp;&nbsp;
+		&nbsp;&nbsp;&nbsp;&nbsp;<!--<input type="submit" name="btn_part_return" id="btn_part_return" value="Part Return (Reset Qty)" title="Reset Qty" style="height:30px;width:180px" onClick="hideBtnPostCancel()"/>-->
+        &nbsp;&nbsp;<input type="submit" name="btn_full_return" id="btn_full_return" value="Full Return(Set Available Qty)" title="Set Available Qty" style="height:30px;width:200px" onClick="hideBtnPostCancel()"/>
+        &nbsp;<!--<input type="submit" name="btn_return_apply_rules" id="btn_return_apply_rules" value="Apply Process Rules" title="Set Qty with rules" style="height:30px;width:180px"/>-->
+		 
+		  {{pass}}
+		  {{pass}}
+		
+		  </td>
+        
+
+      </tr>
+	  <tr>
+	    <td>&nbsp;</td>
+	    <td><a href="{{=URL(c ='order_invoice',f ='show_return_note',args=[depot_id,sl])}}" style="text-decoration:none" target="_blank">
+		<input type="button" value="(5.2)Preview-Return Note" style="height:30px;width:180px"/></a></td>
+	    <td>
+        {{if (access_permission==True):}}
+		{{if (status=='Returned' or status=='Cancelled' or sl==0):}}
+		&nbsp;
+		{{else:}}
+			&nbsp;<input type="submit" name="btn_cancel" id="btn_cancel" value="Cancel" style="height:30px;width:90px" onClick="hideBtnPostCancel()"/>		
+		  {{pass}}
+		  {{pass}}
+        </td>
+	  </tr>
+	</form>
+
+    </table>
+
+ <br>
+<!--  {{if access_permission==True:}}		
+      {{if (status=='Returned'):}}		
+      <form id="form1" name="form1" method="post" action="{{=URL(c='order_invoice',f='update_status_return',args=[depot_id,sl])}}">
+		<input type="checkbox" name="check_return" id="check_return" value="YES" title="Confirmation to return" style="width:18px; height:18px;"/>
+		<input type="submit" name="btn_return_cancel" id="btn_return_cancel" value="Returned-Cancel" onClick="hideBtnPostCancel()"/>
+	  </form>
+    {{pass}}
+   {{pass}}--!>
+<br>
+<br>
+
+<!--end-->
+
+	</td>
+
+  </tr>
+
+
+</table>
+
+
+</body>
+
+
+<!--<script>
+
+
+jQuery("#txt_item").keyup(function(){
+
+
+      jQuery('#target1').show();	  
+
+
+      ajax(('order_invoice','invoice_item_selector'), ['txt_item'], 'target1');
+
+
+	  });
+
+
+      
+
+
+jQuery("#target1").click(function(){
+
+
+    getItems();   
+
+
+   jQuery('#target1').hide();
+
+
+   });
+
+
+   
+
+
+function getItems() 
+
+
+    {
+
+
+        var txt_item=document.getElementById("txt_item").value;
+
+
+		var item_id=document.getElementById("item_id");
+
+
+		var item_name=document.getElementById("item_name");
+
+
+		var category_id=document.getElementById("category_id");
+
+
+		var price=document.getElementById("price");
+
+
+		
+
+
+        var my_array=new Array();
+
+
+   		my_array=txt_item.split("-");
+
+
+		
+
+
+		if (my_array.length == 4){
+
+
+		item_name.value=my_array[0];
+
+
+		item_id.value=my_array[1];
+
+
+		category_id.value=my_array[2];
+
+
+		price.value=my_array[3];
+
+
+		};		
+
+
+    }
+
+
+</script>-->
+
+
+	
+
+
+	<script>
+
+
+		jQuery("document").ready(function(){
+
+
+			  jQuery('#upload_div').hide();
+
+
+			   });
+
+
+		   
+
+
+		jQuery("#btn_batch").click(function(){
+
+
+			  jQuery('#upload_div').show();
+
+
+			   });
+
+
+			
+
+
+		jQuery("#btn_hide").click(function(){
+
+
+		   jQuery('#upload_div').hide();
+
+
+		   });
+
+
+		
+
+
+		jQuery("#full_page").click(function(){
+
+
+		   jQuery('#target1').hide();
+
+
+		   });
+
+
+		   
+
+
+	</script>
+
+

@@ -1,0 +1,292 @@
+{{extend 'layout_report.html'}}
+
+<html>
+<head>
+</head>
+
+
+ <script>
+
+var base_url=location.protocol + "//" + location.hostname + (location.port && ":" + location.port) + "/{{=request.application}}/";
+
+$(function() {
+    var employeeListStr="";  
+    $.ajax({
+   // alert(base_url+'default/get_id_list');
+      url: base_url+'default/get_id_list',
+      success: function(ret_id_Str) {
+        // alert("Hello");
+        // alert (ret_id_Str)
+        employeeListStr=ret_id_Str 
+        // alert(employeeListStr)
+      }
+    }); 
+// alert (employeeListStr)
+
+// =================================
+$('#search_value_ff_id').keyup(function(){
+      // alert('ok')
+      //-------------------------
+      var ref_list = employeeListStr.split(',');  
+      var ref_name=$("#search_value_ff_id").val();
+      // alert(ref_list)
+      
+      //---------------- auto complete combo list
+      var ref_list_new=new Array();
+      lc=0;
+      i =0;
+      var refStr="";        
+      while (i < ref_list.length)
+      {
+        refStr=ref_list[i];
+        i=i+1;          
+        var res=refStr.toUpperCase().match(ref_name.toUpperCase());
+        if (res!=null){
+          ref_list_new[lc]=refStr;
+          lc=lc+1;
+          if (lc==30){
+            break;
+          };
+        }else{
+          continue;
+        }         
+      };
+      
+      //-------------- auto complete source
+      $( "input#search_value_ff_id" ).autocomplete({
+        source: ref_list_new
+      });
+    
+    }); 
+     //==============    
+}); 
+
+</script>
+
+
+
+<body>
+     <form action="{{=URL(c='tour',f='tour_plan_details_page')}}" method="post">
+<table width="900px" style="border:none; text-align:center; font-weight:bold;" >
+
+        <tr >
+            <td width="150" >&nbsp;</td>
+            <td align="center" ><span style="border-bottom:1px solid #333;">Tour Plan</span></td>
+            <td width="100" ><img  height="30px" src="{{=URL('static','images/comp_logo1.png')}}"/></td>
+        </tr>
+        <tr>
+            <!-- <td align="left">
+                <input  name="search_value_ff_id" type="text" id="search_value_ff_id" size="25" value="" placeholder="ID | Name" autocomplete="on" style="width:150px"/>
+            </td>
+            <td align="left" >
+                <input  name="from_date" type="text" id="from_date" size="25" value="" autocomplete="off" placeholder="From Date" style="width:120px" class="date" />
+                 <input  name="to_date" type="text" id="to_date" size="25" autocomplete="off" placeholder="To Date" value="" style="width:120px" class="date"/>
+            </td>
+            <td align="left" colspan="1" style="padding-left: 10px; padding-top:2px">
+                <input  type="submit" name="filter_btn" id="filter_btn" value="Filter"  style=" width:70px; height:30px; background-color:#EBEBEB;color: #212F3C; "/> 
+            </td>
+
+            <td align="left" colspan="1"  style="padding-left: 5px;padding-top:2px">
+                <input type="submit" name="all_btn" id="all_btn" value="All" style=" width: 60px; height:30px; background-color:#EBEBEB;color: #212F3C; ">
+            </td> -->
+            <!-- <td align="right" colspan="8" style="color:#212F3C;width: 40%; padding-left:10px;padding-top:2px">
+                         <a href="{{#=URL(c='tour',f='tour_plan_details_page_download')}}">
+                          <input type="button" name="tour_plan_details_page_d" id="tour_plan_details_page_d"  value="Download" style="background-color: #EBEBEB;color: #212F3C;width: 100px;height: 30px; text-align: center;">
+                          </a> 
+            </td>  -->
+
+
+        </tr>
+</table>
+    
+    
+    <br/>
+    
+   <table width="900" border="1" cellpadding="1" style="border:1px solid #c7c4c4 " cellspacing="1" >
+    <tr style="background-color:#E6E6E6;">
+      <td width="300" >Date Range</td>
+      <td width="300" >Field Force</td>
+      <td >Region</td>
+      <td >Territory</td>
+    </tr>
+    <tr style="background-color:#F0FAFF">
+      <td width="300" >{{=date_from}} <b> To</b> {{=date_to}}</td>
+      
+        <td width="300" ><span style="border-right-width:3px;">{{if pr_ff=='':}}ALL{{else:}}{{=pr_ff}}{{pass}}</span></td>
+       
+        <td width="300" ><span style="border-right-width:3px;">{{if pr_region=='':}}ALL{{else:}}{{=pr_region}}{{pass}}</span></td>
+        <td width="300" ><span style="border-right-width:3px;">{{if pr_territory=='':}}ALL{{else:}}{{=pr_territory}}{{pass}}</span></td>
+        
+    </tr>
+</table>
+
+	
+    <br/>
+    <table width="900px" border="1" cellpadding="1" cellspacing="1" class="sample_border" >
+        <tr align="left" style="background-color:#EBEBEB; font-size:12px; font-weight:bold;" >		    
+            <td style="width:100px;">Date</td> 
+            <td style="width:150px;">Name of MPO</td> 
+            <td style="width:150px;">Morning</td>
+            <td style="width:80px;">Type</td> 
+            <td style="width:100px;">Evening</td> 
+            <td style="width:80px;">Type</td>  
+      </tr>
+      
+         {{Sstring=''}}
+       {{for i,record in enumerate(records):}}
+        
+
+
+         
+
+<!-- ============  Morning ==============-->
+
+
+         
+        <tr  align="left" style="font-size:11px;">
+            <td width="100px">{{=record[db.sm_doctor_visit_plan.schedule_date]}}</td>
+            <td width="150px">{{=record[db.sm_doctor_visit_plan.rep_name]}}|{{=record[db.sm_doctor_visit_plan.rep_id]}}</td>
+
+            {{
+            morning_data_sql = "select route_id,route_name from sm_doctor_visit_plan where cid = '"+str(cid)+"' and  schedule_date = '"+str(record[db.sm_doctor_visit_plan.schedule_date])+"' and note = 'Morning' and  rep_id='"+record[db.sm_doctor_visit_plan.rep_id]+"'"
+            #=morning_data_sql
+            morning_record = db.executesql(morning_data_sql, as_dict=True)
+            morning_route=''
+            for m in range(len(morning_record)):
+                m_str_single = morning_record[m]
+                route_id=str(m_str_single['route_id'])
+                rname=str(m_str_single['route_name'])
+                if morning_route=='':
+                    morning_route=route_id+'|'+rname
+                
+                else:
+                    morning_route=morning_route+', '+route_id+'|'+rname
+                pass
+
+
+            pass
+
+        }}
+
+        {{
+            evening_data_sql = "select route_id,route_name from sm_doctor_visit_plan where cid = '"+str(cid)+"' and  schedule_date = '"+str(record[db.sm_doctor_visit_plan.schedule_date])+"' and note = 'Evening' and  rep_id='"+record[db.sm_doctor_visit_plan.rep_id]+"'"
+            #=evening_data_sql
+            evening_record = db.executesql(evening_data_sql, as_dict=True)
+            evening_route=''
+            for m in range(len(evening_record)):
+                m_str_single = evening_record[m]
+                route_id=str(m_str_single['route_id'])
+                rname=str(m_str_single['route_name'])
+                if evening_route=='':
+                    evening_route=route_id+'|'+rname
+                
+                else:
+                    evening_route=evening_route+', '+route_id+'|'+rname
+                pass
+
+
+            pass
+
+        }}
+
+            <td width="300px" ><span >{{=morning_route}}</span></td>
+
+            {{type_morning=''}}
+                      {{if morning_route.find(', HQ')!=-1:
+                        type_morning='HQ'
+                        pass
+                      }}
+                      {{if morning_route.find(', EHQ')!=-1:
+                          if type_morning!='':
+                            type_morning=type_morning+','+'EHQ'
+                          else:
+                            type_morning='EHQ'
+                          pass
+                        pass
+                      }}
+                      {{if morning_route.find(', NS')!=-1:
+                          if type_morning!='':
+                            type_morning=type_morning+','+'NS'
+                          else:
+                            type_morning='NS'
+                          pass
+                        pass
+                      }}
+
+
+
+
+                      {{type_ev=''}}
+
+                      {{if evening_route.find(', HQ')!=-1:
+                        type_ev='HQ'
+                        pass
+                      }}
+                      {{if evening_route.find(', EHQ')!=-1:
+                          if type_ev!='':
+                            type_ev=type_ev+','+'EHQ'
+                          else:
+                            type_ev='EHQ'
+                          pass
+                        pass
+                      }}
+                      {{if evening_route.find(', NS')!=-1:
+                          if type_ev!='':
+                            type_ev=type_ev+','+'NS'
+                          else:
+                            type_ev='NS'
+                          pass
+                        pass
+                      }}
+
+
+
+                      {{if morning_route=='HQ':
+                        type_morning='HQ'
+                        pass
+                      }}
+                      {{if morning_route=='EHQ':
+                        type_morning='EHQ'
+                        pass
+                      }}
+                      {{if morning_route=='NS':
+                        type_morning='NS'
+                        pass
+                      }}
+
+                      {{if evening_route=='HQ':
+                        type_ev='HQ'
+                        pass
+                      }}
+                      {{if evening_route=='EHQ':
+                        type_ev='EHQ'
+                        pass
+                      }}
+                      {{if evening_route=='NS':
+                        type_ev='NS'
+                        pass
+                      }}
+            
+            <td width="80px">{{=type_morning}}</td>
+              
+            
+            <td width="300px"  ><span>{{=evening_route}}</span></td>
+            
+            <td width="80px"  >{{=type_ev}}</td>
+            
+        </tr>
+       
+        {{pass}}       
+        <tr  align="left" style=" background-color:#F4F4F4; font-size:11px; font-weight:bold;">
+            <td style="text-align:center" colspan="6"></td>  
+        </tr>
+
+    </table>
+        
+</table>		 
+      </form>
+
+</body>
+
+</html>
+

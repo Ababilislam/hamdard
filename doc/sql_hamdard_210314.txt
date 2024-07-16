@@ -1,0 +1,37 @@
+
+CREATE TABLE `sm_depot_distributor` (
+  `id` int(11) NOT NULL,
+  `cid` varchar(10) DEFAULT NULL,
+  `depot_id` varchar(10) DEFAULT NULL,
+  `dist_id` varchar(20) DEFAULT NULL,
+  `dist_name` varchar(100) DEFAULT NULL,
+  `field1` varchar(255) DEFAULT NULL,
+  `field2` int(11) DEFAULT NULL,
+  `note` varchar(255) DEFAULT NULL,
+  `created_on` datetime DEFAULT NULL,
+  `created_by` varchar(30) DEFAULT NULL,
+  `updated_on` datetime DEFAULT NULL,
+  `updated_by` varchar(30) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+-- Indexes for table `sm_depot_distributor`
+--
+ALTER TABLE `sm_depot_distributor`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- AUTO_INCREMENT for dumped tables
+--
+
+--
+-- AUTO_INCREMENT for table `sm_depot_distributor`
+--
+ALTER TABLE `sm_depot_distributor`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=0;
+COMMIT;
+
+INSERT INTO `sm_depot_distributor` (`cid`, `depot_id`, `dist_id`, `dist_name`, `field1`, `field2`, `note`, `created_on`, `created_by`, `updated_on`, `updated_by`) VALUES
+('HAMDARD', 'DL01', 'DIST01', 'Default', '', 0, '', '2021-02-08 13:46:28', 'ADMIN', '2021-02-08 13:46:28', 'ADMIN'),
+('HAMDARD', 'DL24', 'DIST24', 'Distributor 24', '', 0, '', '2021-02-08 13:46:28', 'ADMIN', '2021-02-08 13:46:28', 'ADMIN'),
+('HAMDARD', 'DEMOBR', 'DIST_DEMO', 'Default', '', 0, '', '2021-02-08 13:48:07', 'ADMIN', '2021-02-08 13:48:07', 'ADMIN');

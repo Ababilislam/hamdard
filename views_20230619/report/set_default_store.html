@@ -1,0 +1,519 @@
+{{extend 'layout.html'}}
+
+
+
+<head>
+
+
+
+<style type="text/css">
+
+	
+	<!--color-->
+
+	
+
+	input[type=submit] {
+
+		margin: 2px 0px 2px 0px;
+
+		padding: 0px 0px 2px 0px;
+
+		width:200px;
+
+	}
+
+	
+
+	input[type=text] {
+
+		width:120px;
+
+	}
+
+	
+
+	.checkbox{
+
+	padding-left:0px;
+
+	}
+
+	
+
+	.multiselect{ 
+
+			text-align:left;
+
+			height:28px;
+
+	}
+
+	
+
+	.page_color,body{
+
+			font-family:Arial, Helvetica, sans-serif;
+
+			font-size:13px;	
+
+			}
+
+
+
+</style>
+
+
+
+<script>
+
+ $(function() { 
+
+	/*$( "#htmlbody" ).click(function(){		
+
+		$("#ChartDivSalesTrend").empty();		
+
+		 loadChart();
+
+    });*/
+
+	
+
+	$( "#accordionReport" ).accordion({
+
+	  active:0,
+
+      heightStyle: "content",
+
+	  collapsible: true
+
+    });
+
+	
+
+  });
+
+  </script>
+
+  
+
+   
+
+<script>
+
+var base_url=location.protocol + "//" + location.hostname + (location.port && ":" + location.port) + "/{{=request.application}}/";
+
+
+
+$(function() {
+ var storeListStr="";
+ var clientListStr="";
+ var clientListCollStr="";
+ var delManListStr="";
+ 
+ 	var userType='{{=session.user_type}}';
+	if ( userType == 'Depot'){
+		var depotId='{{=session.depot_id}}';
+		
+		//--------- store list
+		$.ajax({
+		  url: base_url+'default/get_depot_store_all_list?depotid='+depotId,
+		  success: function(resStr) {
+			  storeListStr=resStr;
+		  }
+		});	
+		
+	};
+ 
+//--------------- stock	
+	$('#depot_id').blur(function(){
+		var depotIdName=$('#depot_id').val();
+		if(depotIdName!=''){
+			var dpIdNameArray=depotIdName.split("|");
+			
+			var depotId=dpIdNameArray[0];
+			
+			$.ajax({
+			  url: base_url+'default/get_depot_store_all_list?depotid='+depotId,
+			  success: function(resStr2) {
+				  storeListStr=resStr2;
+			  }
+			});
+			
+		}		
+	});
+	
+ 	var scListStr="";
+	$.ajax({
+		  url: base_url+'default/get_depot_list',
+		  success: function(resStr) {
+			  scListStr=resStr
+		  }
+		});
+	
+	var allDepotListStr="";
+	$.ajax({
+		  url: base_url+'default/get_depot_list_all',
+		  success: function(resStr) {
+			  allDepotListStr=resStr
+		  }
+		});
+	
+	//========================depot/Branch
+	$('#depot_id_name').keyup(function(){	
+		
+		//-------------------------
+		var ref_list = scListStr.split(',');				
+		var ref_name=$("#depot_id_name").val();
+		
+		//---------------- auto complete combo list
+		var ref_list_new=new Array();
+		lc=0;
+		i =0;
+		var refStr="";				
+		while (i < ref_list.length)
+		{
+			refStr=ref_list[i];
+			i=i+1;					
+			var res=refStr.toUpperCase().match(ref_name.toUpperCase());
+			if (res!=null){
+				ref_list_new[lc]=refStr;
+				lc=lc+1;
+				if (lc==30){
+					break;
+				};
+			}else{
+				continue;
+			}					
+		};
+		//alert (ref_list_new);
+		
+		//-------------- auto complete source
+		$( "input#depot_id_name" ).autocomplete({
+			source: ref_list_new
+		});
+	
+  });  
+  //==============
+
+	   var valueListStr2="";
+		$('#item_id_name').keyup(function(){
+			$.ajax({
+				  url: base_url+'default/get_item_list',
+				  success: function(resStr) {
+					  valueListStr2=resStr
+				  }
+				});
+
+			//-------------------------
+			var valueList = valueListStr2.split(',');
+			var searchValue=$("#item_id_name").val();
+			
+			//---------------- auto complete combo list
+			var valueList_new=new Array();
+			lc=0;
+			i =0;
+			var valueStr="";
+			while (i < valueList.length)
+			{
+				valueStr=valueList[i];
+				i=i+1;
+				var res=valueStr.toUpperCase().match(searchValue.toUpperCase());
+				if (res!=null){
+					valueList_new[lc]=valueStr;
+					lc=lc+1;
+					if (lc==30){
+						break;
+					};
+				}else{
+					continue;
+				}
+			};
+
+			//-------------- auto complete source
+			$( "input#item_id_name" ).autocomplete({
+				source: valueList_new
+			});
+	  });
+
+  //-------------------
+	$('#depot_id').keyup(function(){	
+		
+		//-------------------------
+		var ref_list = scListStr.split(',');				
+		var ref_name=$("#depot_id").val();
+		
+		//---------------- auto complete combo list
+		var ref_list_new=new Array();
+		lc=0;
+		i =0;
+		var refStr="";				
+		while (i < ref_list.length)
+		{
+			refStr=ref_list[i];
+			i=i+1;					
+			var res=refStr.toUpperCase().match(ref_name.toUpperCase());
+			if (res!=null){
+				ref_list_new[lc]=refStr;
+				lc=lc+1;
+				if (lc==30){
+					break;
+				};
+			}else{
+				continue;
+			}					
+		};
+		//alert (ref_list_new);
+		
+		//-------------- auto complete source
+		$( "input#depot_id" ).autocomplete({
+			source: ref_list_new
+		});
+	
+  });  
+  
+  	  //------------Depot Store
+	  $('#store_id').keyup(function(){	
+		
+		//-------------------------
+		var ref_list = storeListStr.split(',');				
+		var ref_name=$("#store_id").val();
+		
+		//---------------- auto complete combo list
+		var ref_list_new=new Array();
+		lc=0;
+		i =0;
+		var refStr="";				
+		while (i < ref_list.length)
+		{
+			refStr=ref_list[i];
+			i=i+1;					
+			var res=refStr.toUpperCase().match(ref_name.toUpperCase());
+			if (res!=null){
+				ref_list_new[lc]=refStr;
+				lc=lc+1;
+				if (lc==30){
+					break;
+				};
+			}else{
+				continue;
+			}					
+		};
+		//alert (ref_list_new);
+		
+		//-------------- auto complete source
+		$( "input#store_id" ).autocomplete({
+			source: ref_list_new
+		});
+		
+	  });
+
+
+});
+
+</script>
+
+
+
+
+
+<style>
+
+	.rptlist{font-size:15px; height:auto; }
+
+	.rptlist:hover{ height:auto;}
+
+	.rptul{color:#0076AE; background-color:#F0F0F0;}
+
+	.rptdiv{  font-size:16px; color:#0076AE; background-color:#F0F0F0;}
+
+	
+
+	#accordionReport ul{	list-style-type:none;margin:0; font-size:15px; }
+
+	#accordionReport li{ margin:1px; border-radius:5px; border-bottom:1px solid #CCCCCC; font-size:15px; background-color:#F7F7F7; height:20px; padding:5px 2px 2px 15px;}/*:#F7F7F7*/
+
+	
+
+	#accordionReport li:hover{ height:21px;background-color:#F5F5F5; font-size:15px;}
+
+</style>
+
+
+
+</head>
+
+<body id="htmlbody">
+
+<!--<input type="hidden" value="{{#=salesTrendList}}" id="chartDataSalesTrend"/>-->
+
+
+
+{{currYear=str(date_fixed)[0:4]}}
+
+{{currMonth=str(date_fixed)[5:7]}}
+
+
+
+<!--Form Title -->
+
+<table width="100%" border="0" cellspacing="0" cellpadding="0" style="background-color:#FFFFFF;">
+
+  <tr height="30px">
+
+    <td><div class="blackCatTitle"></div></td>
+
+  </tr>
+
+  <tr >
+
+    <td height="1px" style="background-color:#CCCCCC;"></td>
+
+  </tr>
+
+</table>
+
+<!--Form Content -->
+
+<table width="100%" border="0" cellspacing="0" cellpadding="0" class="page_color">
+
+  
+
+  <tr height="20px">
+
+  	<td width="10px"></td>
+
+  	<td> </td>	
+
+  </tr>
+
+  
+
+  <tr >
+
+    <td width="10px"></td>
+
+	<td valign="top">					
+
+           <table width="900" border="0" cellpadding="0" cellspacing="0">
+
+				<form name="form2" id="form2" action="{{=URL(c='report',f='set_default_store')}}">
+
+                <tr>
+
+                	<td valign="top">
+
+                   	  <table width="550" height="200px;" style="background-color:#F8F8F8;">
+
+                        	
+
+                          <tr style="background-color:#E9E9E9; height:25px">
+
+                              <td width="10">&nbsp;</td>
+
+                              <td colspan="3">Set Default Store</td>
+
+                          </tr>
+
+                          <tr >
+
+            
+
+                            <td width="10">&nbsp;</td>
+
+                            <td width="150">Branch/Depot</td>
+
+                            <td width="2">:</td>
+
+                            <td width="400">
+                            {{if (session.user_type=='Depot' and session.user_depot_category=='DEPOT'):}}
+                                <input type="text" name="depot_id" id="depot_id" size="25" value="{{=session.depot_id}}|{{=session.user_depot_name}}" placeholder="Select Branch/Depot" autocomplete="off" style="width:288px" readonly/>
+                            {{else:}}
+                              <input  name="depot_id" type="text" id="depot_id"   size="25" value="" placeholder="Select Branch/Depot" autocomplete="off" style="width:288px"/>
+                             {{pass}}
+                            </td>
+
+                          </tr>
+
+                          <tr >
+
+                              <td width="10">&nbsp;</td>
+
+                              <td>Default Store</td>
+
+                              <td>:</td>
+
+                              <td width="400">
+                              {{if (session.user_type=='Depot' and not(session.report_store_id=='' or session.report_store_id==None)):}}
+                              		<input name="store_id" type="text" id="store_id" size="25" value="{{=session.report_store_id}}|{{=session.report_store_name}}" placeholder="Select Store" autocomplete="off" style="width:288px; font-weight:bold"/>
+                              {{else:}}
+                              		<input  name="store_id" type="text" id="store_id"   size="25" value="" placeholder="Select Store" autocomplete="off" style="width:288px"/>
+                             {{pass}}
+                              
+                              </td>
+
+                          </tr>
+
+                            <tr >
+
+                              <td width="10">&nbsp;</td>
+
+                              <td>&nbsp;</td>
+
+                              <td>&nbsp;</td>
+
+                              <td width="400">
+                              	<input type="submit" style="width:150px" name="btn_set_store" value="Submit" title="Depot/branch,Store"/>
+                              </td>
+
+                          </tr>
+
+                            <tr >
+
+                              <td width="10">&nbsp;</td>
+
+                              <td>&nbsp;</td>
+
+                              <td>&nbsp;</td>
+
+                              <td width="400">&nbsp;</td>
+
+                          </tr>
+
+                      </table>
+
+                    
+
+                    
+
+                  </td>
+
+                    <td valign="top">&nbsp;</td>                    
+
+                </tr>
+
+                
+
+               </form>
+
+            </table>
+           
+          <!-- Billal Start-->
+           
+           <!-- Billal End-->
+		  
+
+      </td>
+
+  </tr>
+
+</table>
+
+<br>
+
+<br>
+
+
+
+</body> 
+

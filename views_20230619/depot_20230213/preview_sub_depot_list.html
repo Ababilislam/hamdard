@@ -1,0 +1,49 @@
+{{extend 'layout_report.html'}}
+<html>
+<head>
+<script type="text/javascript">
+function print_page()
+  {
+    window.print()
+  }
+</script>
+</head>
+<body>
+<div class="blackCatTitle">Sub-Dealer List </div>
+<br>
+
+<table width="500" border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <td width="150" style=" padding-left:0px;"><b>Parent Depot/Dealer </b></td>
+    <td width="5"><b>:</b></td>
+    <td align="left"><font size="3px;">{{=fromDepot}}</font></td>
+    <td width="5">&nbsp;</td>
+    <td width="100" align="right"><a href="{{=URL(c='depot',f='preview_sub_depot_list',vars=dict(fromDepot=fromDepot))}}"></a></td>
+  </tr>
+</table>
+<br/>
+<table width="500" border="1" cellspacing="1" cellpadding="1"  class="sample_border">
+  <tr class="table_title">
+    <td align="left" >Sub-Dealer Name  </td>
+    <td width="100" align="left" >ID</td>
+  </tr>
+
+  
+  	{{ p=0}}
+	{{ c=''}}
+				
+  		{{for i,record in enumerate(records):}}
+              {{ if p==0:}} {{c ='table_row1'}}{{ p=1}} {{ else:}} {{c ='table_row2'}}{{ p=0}} {{ pass}}
+              <tr class="{{=c}}" >
+                <td >{{=record.sm_depot.name}}</td>
+                <td width="100" >{{=record.sm_depot_settings.depot_id}}</td>
+              </tr>			  
+	  	{{pass}}
+	  
+</table>
+<table width="500" border="0">
+          <tr><td align="right" class="report_body"><a href="" onClick="print_page()" style="text-decoration:none">Print</a></td></tr>
+</table>
+
+</body>
+</html>

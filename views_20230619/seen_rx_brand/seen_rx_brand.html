@@ -1,0 +1,240 @@
+{{extend 'layout.html'}}
+
+ <link rel="stylesheet" href="{{=URL('static', 'js_and_css/ui.theme.css')}}" type="text/css" />
+  <link rel="stylesheet" href="{{=URL('static', 'js_and_css/jquery-ui.css')}}" type="text/css" />
+  <link rel="stylesheet" href="{{=URL('static', 'js_and_css/style.css')}}" type="text/css" />
+  <script src="{{=URL('static','js_and_css/jquery-1.8.2.js')}}"></script>
+  <script src="{{=URL('static','js_and_css/jquery-ui.js')}}"></script>
+<style>
+body {
+  font-family: "Lato", sans-serif;
+}
+
+.
+#main {
+  transition: margin-left .5s;
+  padding: 16px;
+}
+
+@media screen and (max-height: 450px) {
+  .sidenav {padding-top: 15px;}
+  .sidenav a {font-size: 18px;}
+}
+</style>
+ 
+  <style type="text/css">
+ input[type=text], input[type=password],  select {
+    margin: 2px 0px 2px 0px;
+	width:250px;
+}
+
+select{ width:265px; margin:2px 0px 2px 0px;}
+
+textarea{
+    width:250px;
+	height:50px;
+	margin:2px 0px 2px 0px;
+}
+
+div.error {
+    margin-left:0px;
+	width:265px;
+}
+.page_color,body{
+	font-family:Arial, Helvetica, sans-serif;
+	font-size:13px;
+	}
+	
+#uni_middle_str4{
+width:100px;
+}
+
+ </style>
+
+<script>
+
+
+   var base_url=location.protocol + "//" + location.hostname + (location.port && ":" + location.port) + "/{{=request.application}}/";
+
+$(function() {
+ 
+ var employeeListStr="";  
+    // alert (base_url+'seen_rx_brand/seen_rx_brand')
+    $.ajax({
+      url: base_url+'seen_rx_brand/rx_band_list',
+      success: function(retStr) {
+        // alert (retStr)
+        employeeListStr=retStr 
+      }
+    }); 
+// alert (employeeListStr)
+
+// =================================
+$('#searchValue_BrandName').keyup(function(){
+      // alert('ok')
+      //-------------------------
+      var ref_list = employeeListStr.split(',');  
+      var ref_name=$("#searchValue_BrandName").val();
+      // alert(ref_name)
+      
+      //---------------- auto complete combo list
+      var ref_list_new=new Array();
+      lc=0;
+      i =0;
+      var refStr="";        
+      while (i < ref_list.length)
+      {
+        refStr=ref_list[i];
+        i=i+1;          
+        var res=refStr.toUpperCase().match(ref_name.toUpperCase());
+        if (res!=null){
+          ref_list_new[lc]=refStr;
+          lc=lc+1;
+          if (lc==30){
+            break;
+          };
+        }else{
+          continue;
+        }         
+      };
+      
+      //-------------- auto complete source
+      $( "input#searchValue_BrandName" ).autocomplete({
+        source: ref_list_new
+      });
+    
+    }); 
+// =======================
+ 
+// -----------------------------------
+});
+
+
+</script>  
+
+
+
+<table width="100%"  border="0" cellspacing="0" cellpadding="0" style="background-color:#FFFFFF;margin-left:auto;margin-right:auto;" >
+  <tr height="30px" >
+    <td width="500"><span class="blackCatTitle">&nbsp;Add Brand</span></td>
+  <td width="500" align="right">&nbsp;</td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr  height="1px" style="background-color:#CCCCCC;">
+  <td colspan="3" ></td>
+  </tr>
+</table>
+
+<table width="100%" height="100%" border="0"  cellpadding="0" cellspacing="0" style="margin-left:auto;margin-right:auto;" >
+  
+  <tr>
+    <td height="80%" align="left" valign="left">
+
+      <form  name="form1" action="{{=URL(c='seen_rx_brand',f='seen_rx_brand')}}" method="post"  >
+
+        <table width="500" align="left" cellpadding="2" class="rounded_corner" style="background-color:#F5F5F5">
+
+                    <!-- INSERT BRAND NAME -->
+         
+            <tr >
+              <td width="10" align="left" >&nbsp;</td>
+              <td align="left" >&nbsp;</td>
+              <td align="left" >&nbsp;</td>
+              <td align="left" >&nbsp;</td>
+            </tr>
+           
+
+            <tr >
+              <td width="05" align="left" ></td>
+              <td align="left" >Brand Name &nbsp;</td>
+              <td align="left" ><input  type="text" name="brand_name" id="brand_name" size="10px" /></td>
+              <td align="left" ></td>
+            </tr>
+            
+            <tr>
+                <td width="10" align="center" >&nbsp;</td>
+                <td align="center" >&nbsp;</td>
+                <td align="center" >
+                  <div align="left">
+                    
+                    <input type="submit" name="submit" id="submit" value=" ADD " style="vertical-align:middle;height:25px ;" />
+                  </div>
+                </td>
+                <td align="center" >&nbsp;</td>
+            </tr>
+            <tr>
+              <td align="center" >&nbsp;</td>
+            </tr>
+          
+      </table>
+                        <!-- FILTERING BY BRAND NAME -->
+
+
+      <table width="100%" border="1" class="sample_border" >
+      
+           <tr align="left" height="20px"; class="filterRow" style="background:#eee"><!--row change class here--->
+           <td width="100%" class="tdDecoratoin"><!---Class td decoration-->
+           {{=session.searchValue_BrandName}}
+                                 
+             {{if session.searchValue_BrandName=='' or session.searchValue_BrandName==None:}}
+             <input type="text" class="text" name="searchValue_BrandName" id="searchValue_BrandName" value="" placeholder="Select a value" autocomplete="on" />
+             {{else:}}
+              <input type="text" name="searchValue_BrandName" id="searchValue_BrandName" value="{{=session.searchValue_BrandName}}" autocomplete="on" />
+             {{pass}}
+             
+             <input type="submit" name="btn_filter" id="btn_filter" value="Filter" style="vertical-align:middle;height:25px ;" class="button_update" title=""/>
+             <input type="submit" name="btn_all" id="btn_all" value="All" style="vertical-align:middle;height:25px ;"  class="button_update"/>
+            <a href="{{=URL(c='seen_rx_brand',f='brand_list_Download')}}" style="text-align:left;">
+              <input type="button" name="Input2" id="Input2" value="Download" style="vertical-align:middle;height:25px ;"  class="button_update"/></a>
+           </td>
+           </tr>
+
+           <tr>
+            <td width="400" class="tdDecoratoin inputSubmitStyle"><!---Class td decoration-->
+           </td>
+           <td>
+          </td>
+           </tr>
+      
+    </table>
+
+    </form>
+                            <!-- SHOW ALL BRAND  -->
+
+      <table width="40%" border="1" cellpadding="1" cellspacing="1" class="sample_border" >
+               <tr align="left" class="blackCatHead" height="20px" vertical-align:middle>
+                 <!-- <td width="25%"  >CID</td> -->
+                 <td width="100%"  >Brand Name</td>
+                 <!-- <td   ></td>  -->
+               
+
+      
+
+
+               </tr>
+               {{for i in range(len(userRows)):
+                  records_ov_dict=userRows[i]
+                  record_id=str(records_ov_dict["id"])   
+                  brand_Name=str(records_ov_dict["brand_name"])
+                                                           
+                }}
+                {{#=record_id}}
+<form  name="form1" action="{{=URL(c='seen_rx_brand',f='seen_rx_brand_delete',args=[record_id])}}" method="post"  >
+               
+               <tr  align="left" class="blackCat"  style="vertical-align:middle; font-size:12px;"> 
+                <td>{{#=record_id}}    {{=brand_Name}}</td>
+                 <td width="38" align="right"  >
+               <input type="submit" name="btn_delete" id="btn_delete" value=" X "   class="button_update"/> 
+                  </td>
+
+              </tr>
+              </form> 
+            {{pass}}
+
+              {{pass}}
+      </table>      
+
+  </td>
+  </tr>
+ 
+</table>

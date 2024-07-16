@@ -1,0 +1,294 @@
+
+{{extend 'layout.html'}}
+  <link rel="stylesheet" href="{{=URL('static', 'js_and_css/ui.theme.css')}}" type="text/css" />
+  <link rel="stylesheet" href="{{=URL('static', 'js_and_css/jquery-ui.css')}}" type="text/css" />
+  <link rel="stylesheet" href="{{=URL('static', 'js_and_css/style.css')}}" type="text/css" />
+   <script src="{{=URL('static','js_and_css/jquery-1.8.2.js')}}"></script>
+    <script src="{{=URL('static','js_and_css/jquery-ui.js')}}"></script>
+  
+  
+  <style type="text/css">
+	 input[type=text], input[type=password],  select {
+		margin: 2px 0px 2px 0px;
+		width: 200px;
+	}
+	div.error {
+		width: 200px;
+	}
+	
+	#sm_promo_approved_rate_bonus_type,#sm_promo_approved_rate_status{
+		width: 215px;
+	}
+.page_color,body{
+	font-family:Arial, Helvetica, sans-serif;
+	font-size:13px;	
+	}
+ </style>
+ 
+ <script>
+var base_url=location.protocol + "//" + location.hostname + (location.port && ":" + location.port) + "/{{=request.application}}/";
+
+$(function() {
+		
+		$('#sm_depot_store_depot_id').attr('placeholder','Select Branch');
+		
+		/*$('#sm_depot_store_depot_id').blur(function(){
+			var depotIdName=$('#sm_depot_store_depot_id').val();
+			if(depotIdName!=''){
+				var dpIdNameArray=depotIdName.split("|");
+				if(dpIdNameArray.length==2){
+					$('#sm_depot_store_depot_id').val(dpIdNameArray[0]);
+					}
+				}
+			
+		});*/
+			
+			
+	 	var valueListStr="";
+		
+		$('#search_type').blur(function(){
+			if ($('#search_type').val()=='Depot_id'){
+				$.ajax({
+					  url: base_url+'default/get_depot_list',
+					  success: function(resStr) {
+						  valueListStr=resStr
+					  }
+					});
+			}else if ($('#search_type').val()=='TYPE'){
+				valueListStr='SALES,OTHERS'					  
+			}
+			
+	 	});
+	 
+		$('#search_value').keyup(function(){
+			//-------------------------
+			var valueList = valueListStr.split(',');				
+			var searchValue=$("#search_value").val();
+			
+			//---------------- auto complete combo list
+			var valueList_new=new Array();
+			lc=0;
+			i =0;
+			var valueStr="";				
+			while (i < valueList.length)
+			{
+				valueStr=valueList[i];
+				i=i+1;					
+				var res=valueStr.toUpperCase().match(searchValue.toUpperCase());
+				if (res!=null){
+					valueList_new[lc]=valueStr;
+					lc=lc+1;
+					if (lc==30){
+						break;
+					};
+				}else{
+					continue;
+				}					
+			};
+			//alert (ref_list_new);
+			
+			//-------------- auto complete source
+			$( "input#search_value" ).autocomplete({
+				source: valueList_new
+			});
+		
+	  }); 
+	   //==============	   
+}); 
+
+
+
+//========================depotId
+$(function() {
+  var scListStr="";
+  //alert(base_url+'credit_policy/get_client_list');
+		$.ajax({
+			  url: base_url+'default/get_depot_list',
+			  success: function(resStr) {
+				  scListStr=resStr
+			  }
+			});
+	 	
+		$('#sm_depot_store_depot_id').keyup(function(){	
+			
+			//-------------------------
+			var ref_list = scListStr.split(',');				
+			var ref_name=$("#sm_depot_store_depot_id").val();
+			
+			//---------------- auto complete combo list
+			var ref_list_new=new Array();
+			lc=0;
+			i =0;
+			var refStr="";				
+			while (i < ref_list.length)
+			{
+				refStr=ref_list[i];
+				i=i+1;					
+				var res=refStr.toUpperCase().match(ref_name.toUpperCase());
+				if (res!=null){
+					ref_list_new[lc]=refStr;
+					lc=lc+1;
+					if (lc==30){
+						break;
+					};
+				}else{
+					continue;
+				}					
+			};
+			//alert (ref_list_new);
+			
+			//-------------- auto complete source
+			$( "input#sm_depot_store_depot_id" ).autocomplete({
+				source: ref_list_new
+			});
+		
+	  });    
+});
+
+
+</script>
+ 
+<table width="100%"  border="0" cellspacing="0" cellpadding="0" style="background-color:#FFFFFF;" >
+  <tr height="30px" >
+    <td><span class="blackCatTitle">Branch Store(Location)</span></td>
+    <td align="right"><span class="blackCatTitle">
+   
+    </span></td>
+    <td align="right" width="20px">&nbsp;</td>
+  </tr>
+  <tr  height="1px" style="background-color:#CCCCCC;">
+	    <td ></td><td ></td><td ></td>
+  </tr>
+  </table>
+  
+  
+  <table width="100%" height="500px"  border="0" cellspacing="0" cellpadding="0" class="page_color"  >
+  <tr height="100%"  style="vertical-align:top;">
+    <td>
+	<table width="100%"  border="0" cellpadding="0" cellspacing="0"  >
+
+      <tr>
+        <td width="10">&nbsp;</td>
+        <td>
+		
+		<br />
+	
+		{{if access_permission==True:}} 
+		<table width="800">
+			<tr>
+				<td width="485">
+          <table width="400" class="blackCat">
+		  {{=form.custom.begin}}
+              <tr>
+                <td width="130">Branch ID</td>
+                <td width="337">{{=form.custom.widget.depot_id}}</td>
+                </tr>
+              <tr>
+                <td>Store ID</td>
+                <td>{{=form.custom.widget.store_id}}</td>
+              </tr>
+              <tr>
+                <td>Store Name</td>
+                <td>{{=form.custom.widget.store_name}}</td>
+              </tr>
+              <tr>
+                <td>Store Type</td>
+                <td>{{=form.custom.widget.store_type}}</td>
+              </tr>
+              <tr>
+                <td>&nbsp;</td>
+                <td>{{=form.custom.submit}}</td>
+              </tr>
+              
+                  {{=form.custom.end}} 
+            </table>
+			</td>
+			
+			<td width="303">&nbsp;</td>
+			</tr>
+			</table>
+            <br />
+         {{pass}} 
+		 
+         <table width="900" border="1" cellpadding="1" cellspacing="1" class="sample_border" >
+		   
+		   <form id="form1" name="form1" method="post" action="{{=URL(c='depot_store',f='depot_store_add')}}">
+            <tr align="left" class="blackCatHead"  height="20px" ;"vertical-align:middle">
+              <td width="100" >
+                <select name="search_type" id="search_type" style="width:150px" >
+                  <option value="" selected="selected">Select a type</option>
+                    {{if session.search_type_depot_store=='Depot_id':}}<option value="Depot_id" selected="selected">Branch ID</option>{{else:}}<option value="Depot_id" >Branch ID</option>{{pass}}
+                    {{if session.search_type_depot_store=='TYPE':}}<option value="TYPE" selected="selected">Type</option>{{else:}}<option value="TYPE" >Type</option>{{pass}}
+                </select>
+              </td>
+              <td width="166" >
+              {{if session.search_value_depot_store=='' or session.search_value_depot_store==None:}}
+              	<input  name="search_value" type="text" id="search_value" size="25" value="" placeholder="Select a value" autocomplete="off" style="width:300px"/>
+              {{else:}}
+              	<input  name="search_value" type="text" id="search_value" size="25" value="{{=session.search_value_depot_store}}" placeholder="Select a value" autocomplete="off" style="width:300px"/>
+              {{pass}}
+              
+              </td>
+              <td width="100" ><input type="submit" name="btn_filter_depot_store" id="btn_filter_depot_store" value="Filter"   class="button_update"/>
+			  <input type="submit" name="btn_all" id="btn_all" value="All"   class="button_update"/>		
+		  	   </td>
+				
+              <td align="right" >
+			  <a href="{{=URL(c='depot_store',f='depot_store_download')}}">
+				 	<input type="button" name="" id="" value="Download"   class="button_update"/></a>
+			  {{if access_permission==True:}} 
+			  <a href="{{=URL(c='depot_store',f='depot_store_batch_upload')}}">
+			  <input type="button" name="" id="" value="Batch Upload"   class="button_update"/></a>
+			  {{pass}}
+              
+			  </td>
+            </tr>
+		      </form>
+          </table>
+		 <strong>Total:</strong> {{=recordsCount}}<br />
+		 
+			 <table width="900" border="1" cellpadding="1" cellspacing="1" class="sample_border" >
+                <tr align="left" class="blackCatHead"  height="20px" ;"vertical-align:middle">
+                  <td >Branch</td>
+                  <td width="100" >Store ID</td>
+                  <td width="250" >Name</td>
+                  <td width="80" align="center"  >Type</td>
+                  <td width="40" align="center"  ></td>
+                </tr>
+			   
+			    {{for i,record in enumerate(records):}}
+			    	{{ if i==items_per_page: break}}
+                    <tr  align="left" class="blackCat"  style=" font-size:13px"> 
+                      <td >{{=record.sm_depot_store.depot_id}} | {{=record.sm_depot.name}} | {{=record.sm_depot.short_name}}</td>
+                      <td width="100" >{{=record.sm_depot_store.store_id}}</td>
+                      <td width="250" >{{=record.sm_depot_store.store_name}}</td>
+                      <td width="80" align="center"  >{{=record.sm_depot_store.store_type}}</td>
+                      
+                      <form id="form1" name="form1" method="post" action="{{=URL(c='depot_store',f='depot_store_edit',args=[page,record.sm_depot_store.id])}}">
+                
+                      <td width="40" align="center"  >
+                        {{if access_permission==True:}} 
+                        <input type="submit" name="btn_go" id="btn_go" value="&gt;&gt;"   class="button_update"/>
+                        {{pass}}
+                      </td>
+                      </form>
+                    </tr>
+			    {{pass}}
+		    </table>
+			  <p>&nbsp;</p>
+	      </td></tr>
+    </table>
+    
+{{if page:}}
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="{{=URL(args=[page-page])}}">first</a> |  
+&nbsp;&nbsp;<a href="{{=URL(args=[page-1])}}">previous</a> |
+{{pass}}
+
+{{if len(records)>items_per_page:}}
+&nbsp;&nbsp;<a href="{{=URL(args=[page+1])}}">next</a>
+{{pass}}
+	</td>
+  </tr>
+</table>
+<br />
+

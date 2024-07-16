@@ -1,0 +1,248 @@
+{{extend 'layout.html'}}
+
+
+ <link rel="stylesheet" href="{{=URL('static', 'js_and_css/ui.theme.css')}}" type="text/css" />
+  <link rel="stylesheet" href="{{=URL('static', 'js_and_css/jquery-ui.css')}}" type="text/css" />
+  <link rel="stylesheet" href="{{=URL('static', 'js_and_css/style.css')}}" type="text/css" />
+  <script src="{{=URL('static','js_and_css/jquery-1.8.2.js')}}"></script>
+  <script src="{{=URL('static','js_and_css/jquery-ui.js')}}"></script>
+<style>
+body {
+  font-family: "Lato", sans-serif;
+}
+
+
+
+#main {
+  transition: margin-left .5s;
+  padding: 16px;
+}
+
+@media screen and (max-height: 450px) {
+  .sidenav {padding-top: 15px;}
+  .sidenav a {font-size: 18px;}
+}
+</style>
+ 
+  <style type="text/css">
+ input[type=text], input[type=password],  select {
+    margin: 2px 0px 2px 0px;
+	width:250px;
+}
+
+select{ width:265px; margin:2px 0px 2px 0px;}
+
+textarea{
+    width:250px;
+	height:50px;
+	margin:2px 0px 2px 0px;
+}
+
+div.error {
+    margin-left:0px;
+	width:265px;
+}
+.page_color,body{
+	font-family:Arial, Helvetica, sans-serif;
+	font-size:13px;
+	}
+	
+#uni_middle_str4{
+width:100px;
+}
+
+ </style>
+
+<script>
+
+
+   var base_url=location.protocol + "//" + location.hostname + (location.port && ":" + location.port) + "/{{=request.application}}/";
+
+$(function() {
+ 
+ var employeeListStr="";  
+   
+    // alert(base_url+'doctor_speciality/speciality_list')
+    $.ajax({
+      url: base_url+'doctor_speciality/speciality_list',
+      success: function(retStr) {
+        // alert (retStr)
+        employeeListStr=retStr 
+      }
+    }); 
+// alert (employeeListStr)
+
+// =================================
+$('#searchValue_OpName').keyup(function(){
+      // alert('ok')
+      //-------------------------
+      var ref_list = employeeListStr.split(',');  
+      var ref_name=$("#searchValue_OpName").val();
+      // alert(ref_name)
+      
+      //---------------- auto complete combo list
+      var ref_list_new=new Array();
+      lc=0;
+      i =0;
+      var refStr="";        
+      while (i < ref_list.length)
+      {
+        refStr=ref_list[i];
+        i=i+1;          
+        var res=refStr.toUpperCase().match(ref_name.toUpperCase());
+        if (res!=null){
+          ref_list_new[lc]=refStr;
+          lc=lc+1;
+          if (lc==30){
+            break;
+          };
+        }else{
+          continue;
+        }         
+      };
+      
+      //-------------- auto complete source
+      $( "input#searchValue_OpName" ).autocomplete({
+        source: ref_list_new
+      });
+    
+    }); 
+// =======================
+ 
+// -----------------------------------
+});
+
+
+</script>  
+
+
+<table width="100%"   border="0" cellspacing="0" cellpadding="0" style="background-color:#F5F5F5;" >
+ 
+  <tr  height="1px" >
+  <td colspan="3" ></td>
+  </tr>
+
+  <tr>
+    <td>
+      
+ 
+
+<tabl border="0" cellspacing="0" cellpadding="0" style="background-color:#FFFFFF;" >
+  <tr height="30px" >
+    <td width="100%" style="background-color:#FFFFFF;" ><span class="blackCatTitle">&nbsp;Doctor Speciality</span></td>
+  <td width="500" >&nbsp;</td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr  height="1px" style="background-color:#CCCCCC;">
+  <td colspan="3" ></td>
+  </tr>
+</table>
+
+<table width="50%" align="left" height="100%" border="0"  cellpadding="0" cellspacing="0" style="margin-left:auto;margin-right:auto;" >
+  
+  <tr>
+    <td height="80%" valign="middle">
+
+      <form  name="form1" action="{{=URL(c='doctor_speciality',f='speciality_add')}}" method="post"  >
+
+        <table width="100%" align="left" cellpadding="2" class="rounded_corner">
+
+                    <!-- INSERT ADMIN / OPERATOR -->
+         
+            <tr >
+              <td width="10" align="left" >&nbsp;</td>
+              
+            </tr>
+            <tr >
+              <td width="10" >&nbsp;</td>
+              <td width="100px" style="vertical-align: middle;">Speciality&nbsp;ID&nbsp;</td>
+              <td>
+              	<input  type="text" name="speciality_id" id="speciality_id" size="10" style="width:140px"/>
+              </td>
+              <td width="10" >&nbsp;</td>
+              <td width="100px" style="vertical-align: middle;">Speciality&nbsp;Name</td>
+              <td style="padding-left: 5px;">
+              	<input  type="text" name="speciality_name" id="speciality_name" size="10"style="width:140px" />
+              </td>
+              <td>&nbsp;&nbsp;&nbsp;</td>
+                <td align="center" >
+                  <div align="left">
+                    <input align="left" type="submit" name="submit" id="submit" value=" ADD " style="vertical-align:middle;height:25px ;" />
+                  </div>
+                </td>
+            </tr>
+          
+      </table>
+                        <!-- FILTERING BY USER TYPE -->
+
+    <table width="100%" border="1" class="sample_border" >
+      
+           <tr align="left" height="30px"; class="filterRow" style="background:#eee"><!--row change class here--->
+           <td width="70%" class="tdDecoratoin"><!---Class td decoration-->
+           
+                                 
+             {{if session.searchValue_OpName=='' or session.searchValue_OpName==None:}}
+             <input type="text" class="text" name="searchValue_OpName" id="searchValue_OpName" value="" placeholder="Speciality Name" autocomplete="on" style="width:140px"/>
+             {{else:}}
+              <input type="text" name="searchValue_OpName" id="searchValue_OpName" value="{{=session.speciality_name}}" autocomplete="on" />
+             {{pass}}
+             
+           </td>
+            <td class="tdDecoratoin inputSubmitStyle">
+             <input type="submit" name="btn_filter" id="btn_filter" value="Filter" style="vertical-align:middle;height:30px ;" class="button_update" title=""/>
+             <input type="submit" name="btn_all" id="btn_all" value="All" style="vertical-align:middle;height:30px ;"  class="button_update"/>
+            <a href="{{=URL(c='doctor_speciality',f='speciality_list_Download')}}" style="text-align:left;">
+              <input type="button" name="Input2" id="Input2" value="Download" style="vertical-align:middle;height:30px ;"  class="button_update"/>
+            </a>
+           </td>
+           </tr>
+
+           
+      
+    </table>
+                            <!-- SHOW ALL USER  -->
+
+      <table width="100%" border="1" cellpadding="1" cellspacing="1" class="sample_border" >
+               <tr align="left" class="blackCatHead" height="20px" vertical-align:middle>
+                 <td width="50%"  >Speciality ID</td>
+                 <td width="50%"  >Speciality Name</td>
+                 <td   ></td> 
+                 <td   ></td> 
+               </tr>
+               {{for i in range(len(specialityRows)):
+                  records_ov_dict=specialityRows[i]   
+                  #record_id=str(records_ov_dict["id"])      
+                  speciality_id=str(records_ov_dict["sl"])      
+                  speciality_name=str(records_ov_dict["specialty"])                                         
+                }}
+
+               <tr  align="left" class="blackCat"  style="vertical-align:middle; font-size:12px;"> 
+                <td>{{=speciality_id}}</td>
+                <td>{{=speciality_name}}</td>
+
+                 <form  name="form1" action="{{=URL(c='doctor_speciality',f='speciality_delete',args=[speciality_id])}}" method="post"  >
+                		<td>
+                			<button type="submit" name="btn_delete" id="btn_delete" value="" style="background-color: transparent;border: none;" onclick="if (!confirm('Do you really want to delete?')) { return false }">X</button> 
+                    </td>
+                </form> 
+                 <form  name="form2" action="{{=URL(c='doctor_speciality',f='speciality_edit',args=[speciality_id,speciality_name])}}" method="post"  >
+                      <td align="center" width="20px"style="vertical-align:top;">
+                          <button type="submit" name="btn_edit" id="btn_edit" value="" style="background-color: transparent;border: none;">>>
+                          </button> 
+                      </td>
+                </form> 
+              </tr>
+
+              {{pass}}
+      </table>
+      
+      
+</form>
+  </td>
+  </tr>
+ 
+</table>
+   </td>
+
+</tr>
+</table>

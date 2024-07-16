@@ -1,0 +1,355 @@
+{{extend 'layout_invoice.html'}}
+
+<html>
+
+<head>
+<style type="text/css">
+	@media print{
+	body{-webkit-print-color-adjust: exact;}
+		}
+</style>
+
+
+</head>
+
+<body>
+
+<!--<div class="blackCatTitle">Invoice</div>-->
+
+<!--<br/> -->
+
+	{{pageFlag=1}}
+
+	{{for i in sorted(range(len(data_List))):}}
+
+		{{dictData=data_List[i]}}
+
+		<!--page break-->
+
+		{{if pageFlag==0:}}
+
+			<span style="page-break-before:always"></span>	
+
+			<!-- Report header-->	
+			
+		<table width="902">
+            <tr>
+              <td width="50" >&nbsp;</td>
+                <td width="15" rowspan="2" style="padding:0px; margin-bottom:0px;"><img width="25px" height="40px" src="{{=URL('static','images/comp_logo2.png')}}"/></td>
+                <td style="text-align:center; font-size:24px; font-weight:bold">{{=session.cName}}</td>
+                <td width="100">&nbsp;</td>
+          </tr>
+            <tr style="height:10px; background-color:#F0F0F0">
+              <td width="50" style="border-bottom:solid 1px #999; border-top:solid 1px #999;"></td>
+              <td style="border-bottom:solid 1px #999; border-top:solid 1px #999;"></td>
+              <td style="border-bottom:solid 1px #999; border-top:solid 1px #999;"></td>
+            </tr>        
+        </table>
+        			
+<table width="900" >
+                <tr style="border-bottom:solid 2px #999;border-left:none; border-right:none; border-top:none">
+                  <td align="center">{{=session.user_depot_address}}</td>
+              </tr>
+</table>
+            		
+			<!--<hr/>-->
+			<!-- end report header  -->
+
+		{{pass}}
+
+		{{pageFlag=0}}
+
+		<!--end page break-->
+		
+		<!--<img src="{{#=URL('static','images/SKFLogo.png')}}"/> style="background:url({{#=URL('static','images/SKFLogo.png')}}); background-repeat:no-repeat; background-position:center"-->
+        
+        
+		<table width="900" border="0" cellspacing="1" cellpadding="1" >
+		<tr>
+		  <th colspan="8" align="center" style="font-size:26px; font-weight:bold" >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;INVOICE</th>
+		  </tr>
+		<tr style="font-size:15px; font-weight:bold">
+		  <th width="120" align="left" >&nbsp;</th>
+		  <th width="1" align="left" >&nbsp;</th>
+		  <th width="240" align="left" >&nbsp;</th>
+		  <th align="left" >&nbsp;</th>
+		  <th width="5" align="left" >&nbsp;</th>
+		  <th colspan="3" align="right" ><span style="font-size:20px; font-weight:bold">{{=session.prefix_invoice}}INV{{=dictData['depot_id']}}-{{=dictData['sl']}}</span>&nbsp;&nbsp;</th>
+		  </tr>
+		<tr style="font-size:15px; font-weight:bold">
+		  <th width="120" align="left" >Bill To:</th>
+		  <th width="1" align="left" >&nbsp;</th>
+		  <th colspan="2" align="right" >Date: {{try:}}{{=datetime.datetime.strptime(str(dictData['invoice_date']),'%Y-%m-%d').strftime('%B %d, %Y')}}{{except:}}Not Invoiced{{pass}}</th>
+		  <th width="5" align="left" >&nbsp;</th>
+		  <th colspan="3" align="left" >Customer/Market Information:</th>
+		  </tr>
+		<tr >
+	      <td width="120" valign="top" >Customer New ID</td>
+	      <td width="1" valign="top" ><strong>:</strong></td>
+	      <td colspan="3" valign="top" ><span style="font-size:16px; font-weight:bold">{{=dictData['client_id']}}</span></td>
+	      <td width="100" valign="top" >Branch</td>
+	      <td width="1" valign="top" ><b>:</b></td>
+	      <td width="180" valign="top" >{{=dictData['depot_id']}}|{{=dictData['depot_name']}}</td>
+	      </tr>
+		  <tr >
+		    <td valign="top" >Customer Old ID</td>
+		    <td valign="top" ><strong>:</strong></td>
+		    <td colspan="3" valign="top" ><strong>{{=dictData['client_old_id']}}</strong></td>
+		    <td valign="top" >District</td>
+		    <td valign="top" ><b>:</b></td>
+		    <td valign="top" >{{=dictData['district']}}</td>
+	      </tr>
+		  <tr >
+		    <td width="120" valign="top" >Customer Name</td>
+		    <td width="1" valign="top" ><strong>:</strong></td>
+		    <td valign="top" ><span style="font-size:16px; font-weight:bold">{{=dictData['client_name']}}</span></td>
+		    <td rowspan="3" align="center" valign="middle" ><img width="160px" height="60px" src="{{=URL('static','images/comp_logo1.png')}}"/></td>
+		    <td valign="top" >&nbsp;</td>
+		    <td width="100" valign="top" >{{=session.level0Name}}</td>
+		    <td width="1" valign="top" ><b>:</b></td>
+		    <td width="180" valign="top" >{{=dictData['level0_name']}}</td>
+	      </tr>
+		  <tr >
+		    <td width="120" valign="top" >Customer Address</td>
+		    <td width="1" valign="top" ><strong>:</strong></td>
+		    <td width="240" valign="top" >{{=dictData['address']}}</td>
+		    <td width="5" valign="top" >&nbsp;</td>
+		    <td width="100" valign="top" >Market</td>
+		    <td width="1" valign="top" ><b>:</b></td>
+		    <td width="180" valign="top" >{{=dictData['market_name']}}|{{=dictData['market_id']}}</td>
+	      </tr>
+		  <tr >
+		    <td width="120" valign="top" >Sub Category</td>
+		    <td width="1" valign="top" ><strong>:</strong></td>
+		    <td valign="top" >{{=dictData['sub_category_name']}}</td>
+		    <td valign="top" >&nbsp;</td>
+		    <td width="100" valign="top" >Contact Name</td>
+		    <td width="1" valign="top" ><b>:</b></td>
+		    <td width="180" valign="top" >{{=dictData['owner_name']}}</td>
+	      </tr>
+		  <tr >
+		    <td width="120" valign="top" >Phone Number</td>
+		    <td width="1" valign="top" ><strong>:</strong></td>
+		    <td colspan="3" valign="top" >{{=dictData['contact_no1']}}</td>
+		    <td width="100" valign="top" >Status</td>
+		    <td width="1" valign="top" ><b>:</b></td>
+		    <td width="180" valign="top" >{{=dictData['status']}}</td>
+	      </tr>
+</table>
+
+<table width="900" cellpadding="1" cellspacing="1">
+        <tr style="border-top: solid 2px #999999">
+          <td width="300" align="center">
+          <strong>Territory Code<br>
+            {{=dictData['area_id']}}</strong></td>
+          <td width="300" align="center">
+          <strong>Sales Order<br>
+        {{=dictData['order_sl']}}</strong>
+        </td>
+          <td width="300" align="center">
+            <strong>Warehouse<br>
+        {{=dictData['store_name']}}|{{=dictData['store_id']}}</strong>
+      </td></tr>
+</table>
+
+<!--Outstanding -->
+{{invoiceCollection=dictData['collection_amount']}}
+
+{{osRows=db((db.sm_invoice_head.cid==session.cid)& (db.sm_invoice_head.depot_id==dictData['depot_id']) & (db.sm_invoice_head.sl!=dictData['sl']) & (db.sm_invoice_head.client_id==dictData['client_id']) & (db.sm_invoice_head.status=='Invoiced') & ((db.sm_invoice_head.total_amount-(db.sm_invoice_head.return_tp+db.sm_invoice_head.return_vat-db.sm_invoice_head.return_discount)) > db.sm_invoice_head.collection_amount)).select(db.sm_invoice_head.ALL,orderby=~db.sm_invoice_head.id)}}
+  {{prevReceivableTotal=0}}  
+  {{for osRow in osRows:}}
+  	{{recInvTotal=osRow.total_amount-(osRow.return_tp+osRow.return_vat-osRow.return_discount)}}
+  	{{prevReceivableTotal+=(recInvTotal-osRow.collection_amount)}}         
+  {{pass}}
+    
+    
+<!-- end Outstanding -->
+    
+  <table width="900" border="0" cellpadding="1" cellspacing="1" class="sample_border" >
+
+  <tr align="left" class="blackCatHead"  height="20px" style="background-color:#E6E6E6; border:solid 2px #999999">
+
+    <td width="20" >Sl.No</td>
+    <td width="40" >Item ID</td>
+    <td >Item Name</td>
+
+    <td width="50" >Batch</td>
+    <td width="60" >UOM</td>
+    <td width="60" align="right"  >TP</td>
+
+    <td width="60" align="right"  >VAT</td>
+
+    <td colspan="2" align="right"  >Quantity</td>
+    <td width="50" align="right"  >Bonus Qnty</td>
+    <td width="60" align="right"  >Special Discount</td>
+
+    <td width="100" align="right"  >Total TP </td>
+
+    </tr>
+
+	 {{gross_total=0.0}}
+	 {{total_tp=0.0}}
+     {{total_vat=0.0}}
+     {{spDiscountTotal=0}}
+     
+	  {{vdList=dictData['vdList']}}
+
+	  {{for j in sorted(range(len(vdList))):}}
+
+          {{vdDict=vdList[j]}}
+    
+         {{qty=0;rate=0}}
+
+          <tr  align="left" class="blackCat" style="background-color:#FBFBFB; border:solid 1px #999;">
+        
+            <td width="20">{{=vdDict['p_sl']}}</td>
+            <td width="40" >{{=vdDict['item_id']}}</td>
+            <td >{{=vdDict['item_name']}}</td>
+        
+            <td width="50" style="font-size:14px;">{{=vdDict['batch_id']}}</td>
+            <td width="60" >{{=vdDict['item_unit']}}</td>
+            <td width="60" align="right" >{{actualTp=vdDict['actual_tp']}}{{=easy_format(actualTp)}}{{rate=vdDict['price']}}</td>
+        
+            <td width="60" align="right" >{{itemVat=vdDict['item_vat']}}{{=easy_format(itemVat)}}</td>
+        
+            <td colspan="2" align="right" >{{qty=vdDict['quantity']}}{{=qty}} </td>
+            <td width="50" align="right" >{{=int(vdDict['bonus_qty'])}}</td>
+            <td width="60" align="right" >{{spDiscount=(actualTp-rate)*qty}}{{if spDiscount < 0:}}{{spDiscount=0}}{{pass}}{{spDiscountTotal+=spDiscount}}{{if spDiscount!=0:}}{{=easy_format(spDiscount)}}{{pass}}</td>
+        
+            <td width="100" align="right" >{{tpAmt=qty*actualTp}}{{=easy_format(tpAmt)}}{{total_tp+=tpAmt}}{{total_vat+=qty*itemVat}}</td>
+        
+          </tr>
+
+    {{pass}}
+
+{{import math}}
+
+{{total_tp=round(total_tp,2)}}
+{{#total_vat=round(total_vat,2)}}
+{{total_vat=math.ceil(total_vat*100)/100}}
+
+
+{{gross_total=round(total_tp+total_vat,2)}}
+
+  <tr  align="left" class="blackCat"  style="vertical-align:middle; background-color:#FBFBFB">
+
+    <td colspan="11" align="right" style="border-bottom-style:none; border-left:none; border-bottom:none"><strong>Total Trade Price:</strong></td>
+
+    <td align="right" ><strong>{{=easy_format(total_tp)}}</strong></td>
+
+  </tr>
+
+  <tr  align="left" class="blackCat"  style="background-color:#FBFBFB">
+    <td colspan="11" align="right" style="border-bottom-style:none; border-left:none; border-top:none"><strong>Vat:</strong></td>
+    <td align="right" ><strong>{{=easy_format(total_vat)}}</strong></td>
+  </tr>
+  <tr  align="left" class="blackCat"  style="background-color:#FBFBFB">
+    <td colspan="3" align="left" style="border-bottom-style:none; border-left:none; border-top:none; border-right:none">&nbsp;</td>
+    <td colspan="8" align="right" style="border-bottom-style:none; border-left:none; border-top:none">
+    Trade Concession @ {{=dictData['discount_precent']}}% on TP (except special offer item)<strong>:</strong></td>
+    <td align="right" ><strong>{{discAmt=round(float(dictData['discount']),2)}}{{=easy_format(discAmt)}}</strong></td>
+  </tr>
+  <tr  align="left" class="blackCat"  style="background-color:#FBFBFB">
+    <td colspan="3" align="left" style="border-bottom-style:none; border-left:none; border-top:none; border-right:none"><span style="font-weight:bold">Sales Terms :</span> <span style="font-size:20px; font-weight:bold">{{=str(dictData['payment_mode']).capitalize()}}</span></td>
+    <td colspan="8" align="right" style="border-bottom-style:none; border-left:none; border-top:none">Special Discount<strong>:</strong></td>
+    <td align="right" ><strong>{{=easy_format(spDiscountTotal)}}</strong></td>
+  </tr>
+  
+	{{netTotal=gross_total-discAmt-spDiscountTotal}}
+  <tr  align="left" class="blackCat"  style="vertical-align:middle; background-color:#FBFBFB">
+    <td colspan="8" style="border-bottom-style:none;  border-left:none; border-top:none; border-right:none"><strong>Taka in Words :</strong> {{try:}}{{=num2word(str(netTotal))}}{{except:}}-{{pass}}</td>
+    <td colspan="3" align="right" style="border-bottom-style:none;  border-left:none; border-top:none"><strong> Net Total:</strong></td>
+    <td align="right" ><strong>{{=easy_format(netTotal)}}</strong></td>
+  </tr>
+  
+  <tr  align="left" class="blackCat"  style="vertical-align:middle; background-color:#FBFBFB">
+    <td colspan="11" align="right" style="border-bottom-style:none;  border-left:none; border-top:none">Net Receivable:</td>
+    <td align="right" >{{invoiceOutstanding=round(netTotal,2)-round(invoiceCollection,2)}}{{=easy_format(invoiceOutstanding)}}</td>
+  </tr>
+  <tr  align="left" class="blackCat"  style="vertical-align:middle; background-color:#FBFBFB">
+    <td colspan="11" align="right" style="border-bottom-style:none;  border-left:none; border-top:none">Previous Receivable:</td>
+    <td align="right" >{{=easy_format(prevReceivableTotal)}}</td>
+  </tr>
+  <tr  align="left" class="blackCat"  style="vertical-align:middle; background-color:#FBFBFB">
+    <td colspan="11" align="right" style="border-bottom-style:none;  border-left:none; border-top:none"><strong>Total Receivable:</strong></td>
+    <td align="right" ><strong>{{=easy_format(prevReceivableTotal+invoiceOutstanding)}}</strong><div style="border-bottom:solid 2px #666666"></div><div style="border-bottom:solid 2px #666666; padding-top:3px;"></div></td>
+  </tr>
+
+</table>
+
+<br>
+<span style="font-size:18px; font-weight:bold">Outstanding:</span>
+<table width="900"  class="sample_border" style="border: solid 1px #999999" >  
+  <tr class="blackCatHead" style="background-color:#E6E6E6; border: solid 2px #999999"><td width="50">Sl.No</td><td width="80">Date</td><td>Ship No</td><td>Invoice No</td><td>Cust.ID</td><td>Customer Name</td><td width="60" align="center">Terms</td><td width="80" align="right">Invoice Net</td><td width="60" align="right">Net O/S</td><td width="50" align="center">Aging(Days)</td><td width="60" align="center">Outstanding%</td></tr>
+  {{netPrevInvTotal=0}}
+  {{netPrevOstTotal=0}}
+  
+  {{slNo=0}}
+  {{for osRow in osRows:}}
+  	{{slNo+=1}}
+    <tr class="blackCat" style="background-color:#FBFBFB">
+    	<td width="50">{{=slNo}}</td>
+        <td width="80">{{=osRow.invoice_date}}</td>
+        <td>&nbsp;</td>
+      	<td>{{=osRow.depot_id}}-{{=osRow.sl}}</td>
+        <td>{{=osRow.client_id}}</td>
+        <td>{{=osRow.client_name}}</td>
+        <td width="60" align="center">{{=osRow.payment_mode}}</td>
+  		<td width="80" align="right">{{invTotal=osRow.total_amount-(osRow.return_tp+osRow.return_vat-osRow.return_discount)}}{{=easy_format(invTotal)}}{{netPrevInvTotal+=invTotal}}</td>
+  		<td width="60" align="right">{{netOs=(invTotal-osRow.collection_amount)}}{{=easy_format(netOs)}}{{netPrevOstTotal+=netOs}}</td>
+        <td width="50" align="center">{{=(datetime.datetime.strptime(current_date,'%Y-%m-%d')-datetime.datetime.strptime(str(osRow.invoice_date),'%Y-%m-%d')).days}}</td>
+        <td width="60" align="center">{{=round((netOs*100)/invTotal,2)}}%</td>
+    </tr>  
+  {{pass}}
+  
+  <tr class="blackCat" style="background-color:#FBFBFB">
+    <td colspan="7" align="right" style="border-bottom:solid 1px #F5F5F5"><strong>Previous Receivable Total:</strong></td>
+      	<td width="80" align="right" style="border-bottom:solid 1px">{{=easy_format(netPrevInvTotal)}}</td>
+  		<td width="60" align="right" style="border-bottom:solid 1px"><strong>{{=easy_format(netPrevOstTotal)}}</strong></td>
+        <td colspan="2" align="center">&nbsp;</td>
+  </tr>
+    
+</table>
+
+<br>
+<span style="font-size:18px; font-weight:bold">Remarks:</span>
+<table width="900" style="border: solid 1px #F5F5F5">	
+  <tr>
+    <td width="120"><strong>Goods Recieved & Delivered By</strong></td>
+    <td><br>
+      :{{=dictData['d_man_id']}} : {{=dictData['d_man_name']}}</td><td width="180"><strong>MSO/SPO/MIO/PPO Name</strong></td><td width="250"><b>: </b>{{=dictData['rep_name']}}&nbsp;[ {{=dictData['rep_id']}} ]</td></tr>
+    <tr><td width="120"><strong>Prepared By</strong></td><td>: {{=dictData['updated_by']}}</td><td width="180"><strong>FM/BIC/AM/TM/SCSE/CSE</strong></td><td width="250">:</td></tr>
+  <tr><td width="120"><strong>Authenticated By</strong></td><td>: </td><td width="180"></td>
+  <td width="250"></td></tr>
+</table>
+
+<br/>
+
+<table width="900" >
+	<tr>
+	  <td align="center">____________________</td>
+	  <td align="center">__________________</td>
+	  <td align="center">__________________</td>
+	  <td align="center">&nbsp;</td>
+	  <td align="center">______________________________________</td>
+  </tr>
+	<tr>
+	  <td width="150" align="center"><strong>Customer</strong></td>
+	  <td width="150" align="center"><strong>Accounts</strong></td>
+	  <td width="150" align="center"><strong>Store</strong></td>
+	  <td width="50" align="center"><strong>for</strong></td>
+	  <td align="center"><strong>{{=session.cName}}<!--Transcom Distribution Co. Ltd.--></strong></td>
+  </tr>
+</table>
+
+<br/>
+<table width="900" style="border: solid 1px #F5F5F5">
+	<tr>
+	  <td width="120"><strong>WARRANTY: </strong>We do hereby give this warranty that the goods or classes of goods here above described as sold by us, do not contravene in any way the provisions of section 18 of the drugs act, 1940</td>
+  </tr>
+</table>
+<strong>Goods sold are not to be returned</strong>
+{{pass}}
+</body>
+</html>
+

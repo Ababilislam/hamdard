@@ -1,0 +1,364 @@
+{{extend 'layout_salesreport.html'}}
+
+<link rel="stylesheet" href="{{=URL('static', 'js_and_css/ui.theme.css')}}" type="text/css" />
+<link rel="stylesheet" href="{{=URL('static', 'js_and_css/jquery-ui.css')}}" type="text/css" />
+<!-- <link rel="stylesheet" href="{{=URL('static', 'js_and_css/style.css')}}" type="text/css" /> -->
+<script src="{{=URL('static','js_and_css/jquery-1.8.2.js')}}"></script>
+<script src="{{=URL('static','js_and_css/jquery-ui.js')}}"></script>
+ <script>
+var base_url=location.protocol + "//" + location.hostname + (location.port && ":" + location.port) + "/{{=request.application}}/";
+
+$(function() {
+
+     // ....................................CLIENT CATEGORY
+
+    // alert(base_url+'client_coverage/get_client_category')
+    $.ajax({
+          url: base_url+'client_coverage/get_client_category',
+          success: function(categorystr) {
+              category_datastr=categorystr
+          }
+        });
+    
+    // doctor 2
+    $('#category_name').keyup(function(){  
+        
+        //-------------------------
+        var ref_list = category_datastr.split(',');               
+        var ref_name=$("#category_name").val();
+        
+        //---------------- auto complete combo list
+        var ref_list_new=new Array();
+        lc=0;
+        i =0;
+        var refStr="";              
+        while (i < ref_list.length)
+        {
+            refStr=ref_list[i];
+            i=i+1;                  
+            var res=refStr.toUpperCase().match(ref_name.toUpperCase());
+            if (res!=null){
+                ref_list_new[lc]=refStr;
+                lc=lc+1;
+                if (lc==30){
+                    break;
+                };
+            }else{
+                continue;
+            }                   
+        };
+        //alert (ref_list_new);
+        
+        //-------------- auto complete source
+        $( "input#category_name" ).autocomplete({
+            source: ref_list_new
+        });
+        
+    });
+
+
+        
+    });
+
+</script> 
+<script>
+    var base_url=location.protocol + "//" + location.hostname + (location.port && ":" + location.port) + "/{{=request.application}}/";
+    
+    $(function() {
+            var valueListStr="";
+
+            $('#search_type').blur(function(){
+                // if ($('#search_type').val()=='DocID'){
+                //     $.ajax({
+                //           url: base_url+'default/get_doctor_list',
+                //           success: function(resStr) {
+                //               valueListStr=resStr
+                //           }
+                //         });
+                // }else if ($('#search_type').val()=='Status'){
+                //     valueListStr='ACTIVE,INACTIVE'}
+                    
+                if ($('#search_type').val()=='RegionID'){
+                    // alert( base_url+'default/get_region_list')
+                    $.ajax({
+                          url: base_url+'default/get_region_list',
+                          success: function(retStr) {
+                              valueListStr=retStr
+                          }
+                        });
+    
+                }else if ($('#search_type').val()=='ZoneID'){
+                    // alert( base_url+'default/get_rsm_list')
+                    $.ajax({
+                          url: base_url+'default/get_rsm_list',
+                          success: function(retStr) {
+                              valueListStr=retStr
+                          }
+                        });
+    
+                }else if ($('#search_type').val()=='TlID'){
+                    // alert( base_url+'default/get_fm_list')
+                    $.ajax({
+                          url: base_url+'default/get_fm_list',
+                          success: function(retStr) {
+                              valueListStr=retStr
+                          }
+                        });
+
+                }else if ($('#search_type').val()=='RouteID'){
+                    $.ajax({
+                          url: base_url+'default/get_area_list',
+                          success: function(resStr) {
+                              valueListStr=resStr
+                          }
+                        });
+                
+                }else if ($('#search_type').val()=='DepotID'){
+                    $.ajax({
+                          url: base_url+'default/get_depot_list',
+                          success: function(resStr) {
+                              valueListStr=resStr
+                          }
+                        });
+                
+                }else if ($('#search_type').val()=='Region'){
+                    $.ajax({
+                          url: base_url+'default/get_region_list',
+                          success: function(resStr) {
+                              valueListStr=resStr
+                          }
+                        });
+                
+                }else if ($('#search_type').val()=='RepID'){
+                    $.ajax({
+                          url: base_url+'default/get_all_ff_list',
+                          success: function(resStr) {
+                              valueListStr=resStr
+                          }
+                        });
+                }else if ($('#search_type').val()=='ClientID'){
+                    // alert(base_url+'client_coverage_report/get_all_client_list')
+                    $.ajax({
+                          url: base_url+'client_coverage_report/get_all_client_list',
+                          success: function(resStr) {
+                              valueListStr=resStr
+                          }
+                        });
+                };      
+                
+            });
+
+            $('#search_value').keyup(function(){
+                //-------------------------
+                var valueList = valueListStr.split(',');                
+                // alert(valueListStr)
+                var searchValue=$("#search_value").val();
+                
+                //---------------- auto complete combo list
+                var valueList_new=new Array();
+                lc=0;
+                i =0;
+                var valueStr="";                
+                while (i < valueList.length)
+                {
+                    valueStr=valueList[i];
+                    i=i+1;                  
+                    var res=valueStr.toUpperCase().match(searchValue.toUpperCase());
+                    if (res!=null){
+                        valueList_new[lc]=valueStr;
+                        lc=lc+1;
+                        if (lc==30){
+                            break;
+                        };
+                    }else{
+                        continue;
+                    }                   
+                };
+                //alert (ref_list_new);
+                
+                //-------------- auto complete source
+                $( "input#search_value" ).autocomplete({
+                    source: valueList_new
+                });
+            
+          }); 
+          
+    }); 
+</script>
+
+<html>
+    <head>    
+    </head>
+    <body>    
+        <div class="blackCatTitle">Client Coverage</div>    
+        <br/>
+        <!-- card row  -->
+        <table width="100%" style="margin-bottom:10px;" >            
+            <tr>
+                <td width="300" >
+                    <div style="background-color:#6dbb60; color:#FFF; margin:1px; text-align:center; border-radius:5px;">                    	                 	
+                        <h4>Total Client Count</h4>
+                        <h3 style="background-color:#cbe5c6; color:#000;">{{=total_client}}</h3>
+                    </div>
+                </td>
+                
+                <td width="300" >
+                    <div style="background-color:#6dbb60; color:#FFF; margin:1px; text-align:center; border-radius:5px;">      
+                        <h4>Unique Client Cover</h4>
+                        <h3 style="background-color:#cbe5c6; color:#000;">{{=unique_client_cover_show}}</h3>
+                    </div>
+                </td>
+
+                <td width="300" >
+                    <div style="background-color:#6dbb60; color:#FFF; margin:1px; text-align:center; border-radius:5px;">                       
+                        <h4>Client Cover Percentage</h4>
+                        <h3 style="background-color:#cbe5c6; color:#000;">{{=unique_client_cover_per}}</h3>
+                    </div>
+                </td>
+            </tr>
+            {{pass}}
+        </table>    
+        <br/>
+        <br>
+        <!-- filter row  -->
+        <table width="100%"  >
+            <form action="{{=URL(c='client_coverage_report',f='client_coverage_url',vars=dict(cid=cid,rep_id=rep_id,rep_pass=rep_pass))}}">
+                <input type="hidden" name="cid" value="{{=cid}}">
+                <input type="hidden" name="rep_id" id="rep_id" value="{{=rep_id}}">
+                <input type="hidden" name="rep_pass" id="rep_pass" value="{{=rep_pass}}">
+            
+                <tr>            
+                    <!-- <td>Date Range:</td> -->
+                    <td align="left" style="width: 280px;">
+                        {{if session.from_dt!='' or  session.from_dt!='None':}}
+                            <input class="date" id="sm_search_date_to_dt_2" name="to_dt_2" type="text" value="{{=session.from_dt}} "autocomplete="off" style="width: 100px;">
+                        {{else:}}
+                            {{=search_form.custom.widget.to_dt_2}} 
+                        {{pass}}
+                        To
+                        &nbsp;&nbsp;
+                        {{if session.to_date!='' or  session.to_date!='None'  :}}
+                            <input class="date" id="sm_search_date_to_dt_3" name="to_dt_3" type="text" value="{{=session.to_date}}" autocomplete="off" style="width: 100px;">
+                        {{else:}}
+                        {{=search_form.custom.widget.to_dt_3}} 
+                        {{pass}}
+                    </td>
+                
+                    <td>
+                        <select name="search_type" id="search_type" style="width:200px" >
+                            <option selected="selected" value="">Select a Type</option>
+                            {{if session.searchType_coverage=='RegionID':}}<option value="RegionID" selected="selected">Division ID/Name</option>{{else:}}<option value="RegionID">Division ID/Name</option>{{pass}}
+        
+                            {{if session.searchType_coverage=='ZoneID':}}<option value="ZoneID" selected="selected">Zone ID/Name</option>{{else:}}<option value="ZoneID">Zone ID/Name</option>{{pass}}
+        
+                            {{if session.searchType_coverage=='TlID':}}<option value="TlID" selected="selected">Area ID/Name</option>{{else:}}<option value="TlID">Area ID/Name</option>{{pass}}
+        
+                            {{if session.searchType_coverage=='RouteID':}}<option value="RouteID" selected="selected">Market ID/Name</option>{{else:}}<option value="RouteID">Market ID/Name</option>{{pass}}
+                            
+                            {{if session.searchType_coverage=='RepID':}}<option value="RepID" selected="selected">MSO ID/Name</option>{{else:}}<option value="RepID">MSO ID/Name</option>{{pass}}       
+                            
+                            {{if session.searchType_coverage=='ClientID':}}<option value="ClientID" selected="selected">Client ID/Name</option>{{else:}}<option value="ClientID">Client ID/Name</option>{{pass}} 
+                        </select>
+                    </td>
+                    <td width="50px" >
+                        {{if session.searchValue_coverage=='' or session.searchValue_coverage==None:}}
+                            <input name="search_value" type="text" id="search_value" size="25" value="" placeholder="Select value" autocomplete="off" style="width:210px"/>
+                        {{else:}}
+                            <input name="search_value" type="text" id="search_value" size="25" value="{{=session.searchValue_coverage}}" placeholder="Select value" autocomplete="off" style="width:200px"/>
+                        {{pass}}                
+                    </td>
+                    <!-- <td align="left">
+                        {{#if session.division_name!='' and session.division_name!='None' and session.division_name!=None:}}
+                            <input type="text" name="division_name" id="division_name" value="{{=session.division_name}}" placeholder="Select Division" autocomplete="off" style="width:250px"/>
+                        {{#else:}}
+                            <input type="text" name="division_name" id="division_name" size="25" value="" autocomplete="off" style="width:250px" placeholder="Select Division"/>
+                        {{#pass}}
+                    </td> -->
+                    <td align="left">
+                        {{if session.category_name!='' and session.category_name!='None' and session.category_name!=None:}}
+                            <input type="text" name="category_name" id="category_name" value="{{=session.category_name}}" placeholder="Client Category" autocomplete="off" style="width:250px"/>
+                        {{else:}}
+                            <input type="text" name="category_name" id="category_name" size="25" value="" autocomplete="off" style="width:250px" placeholder="Select Category"/>
+                        {{pass}}
+                        <input type="submit" name="btn_filter" id="btn_filter" value="Filter" class="button_update"/>
+                        <input type="submit" name="btn_all" id="btn_all" value="Remove Filter" class="button_update"/>
+                    <td>
+                        <a href="{{=URL(c='client_coverage_report',f='download_data')}}">
+                            <input type="button" name="download_btn" id="download_btn" value="Download"/> 
+                        </a>
+                    </td>
+                </tr>
+                {{pass}}
+            </form>
+        </table>
+          
+        <!-- data row  -->
+        {{if session.levelId_name == '' or session.levelId_name == None :}}
+        <table width="100%" border="1" cellpadding="1" cellspacing="1" class="sample_border" >
+            <tr align="left" class="blackCatHead" height="20px" ;  style="font-size:12px; background-color:#E9E9E9;">
+                <td align="center">Division</td>
+                <td align="center">Zone</td>
+                <td align="center">Area</td>
+                <td align="center">Branch</td>
+                <td align="center">Market</td>
+                <td align="center">MSO</td>
+                <td align="center">Inv. Count</td> 
+                <td align="center">Total Client</td>
+                <td align="center">Client Covered</td>
+                <td align="center">Coverage(%)</td>          
+            </tr>
+        </table> 
+        {{else:}}
+        <!-- data  -->
+        <table width="100%" border="1" cellpadding="1" cellspacing="1" class="sample_border" >
+            <tr align="left" class="blackCatHead" height="20px" ;  style="font-size:12px; background-color:#E9E9E9;">
+                <td align="center">Division</td>
+                <td align="center">Zone</td>
+                <td align="center">Area</td>
+                <td align="center">Branch</td>
+                <td align="center">Market</td>
+                <td align="center">MSO</td>
+                <td align="center">Inv. Count</td> 
+                <td align="center">Total Client</td>
+                <td align="center">Client Covered</td>
+                <td align="center">Coverage(%)</td>             
+            </tr> 
+
+            {{client_id=''}}
+            {{client_name=''}}
+            {{depot_id = ''}}
+            {{inv_count=0}}
+            {{invoice_totalCount=0}}
+            {{#for data in data_list:}}
+            {{for i in range(len(data_rec)):}}
+            {{data = data_rec[i]}}
+            <tr align="left" class="blackCat" style="vertical-align:middle; font-size:11px;">
+                <td align="left">{{=data['level0_id']}}</td>
+                <td align="left">{{=data['level1_name']}}</td>
+                <td align="left">{{=data['level2_name']}}</td>
+                <td align="left">{{=data['depot_name']}}</td>
+                <td align="left">{{=data['level3_name']}} | {{=data['level3_id']}}</td>
+                <td align="left">{{=data['rep_name']}} | {{=data['rep_id']}}</td>
+                <td align="center">
+                {{=data['total_inv_count']}}
+                {{invoice_totalCount+=int(data['total_inv_count'])}}
+                </td>
+                <td class="text-center">{{=data['total_client']}}</td>
+                <td class="text-center">{{=data['total_outlet_covered']}}</td>
+                {{coverage_per = 0.00}}
+                {{coverage_perc = float(data['total_outlet_covered'])/float(data['total_client'])}}
+                {{coverage_p = float(coverage_perc*100)}}
+                {{coverage_per = round((coverage_p),2)}}
+                <td class="text-center">{{=coverage_per}}</td>  
+            </tr>
+            {{pass}}
+            <tr align="left" class="blackCatHead" height="20px" ;  style="font-size:12px; background-color:#E9E9E9;">
+                <td colspan="6" style="font-weight: bold; text-align: right;">Total Invoice</td>
+                <td  class="text-center">{{=invoice_totalCount}}</td>
+            </tr> 
+        </table>  
+        {{pass}}
+    
+    </body>
+</html>
+

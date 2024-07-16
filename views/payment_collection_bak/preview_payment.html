@@ -1,0 +1,166 @@
+{{extend 'layout_invoice.html'}}
+
+<html>
+
+<head>
+<script type="text/javascript">
+
+function print_page()
+
+  {
+
+    window.print()
+
+  }
+
+</script>
+
+
+</head>
+
+<body>
+
+		<!--<img src="{{#=URL('static','images/SKFLogo.png')}}"/> style="background:url({{#=URL('static','images/SKFLogo.png')}}); background-repeat:no-repeat; background-position:center"-->
+        
+        
+<table width="900" border="0" cellspacing="1" cellpadding="1" >         
+
+		<tr style="font-size:15px; font-weight:bold">
+		  <th width="1081" colspan="3" align="left" style="vertical-align:middle"><img src="{{=URL('static','images/comp_logo1.png')}}"/></th>
+		  <th width="1066" colspan="5" align="center" >&nbsp;</th>
+		  <th width="180" align="center" >&nbsp;</th>
+  </tr>
+	</table>
+  
+  
+<table width="900" border="0" cellpadding="0" cellspacing="0" >
+
+  <tr align="left" class="blackCatHead"  height="20px" ; style="vertical-align:middle; background-color:#E6E6E6">
+
+    <td colspan="2" align="center" ><span style="font-size:20px; font-weight:bold;"> Payment</span></td>
+
+  </tr>
+
+
+
+  <tr  align="left" class="blackCat"  >
+    <td ><strong>TR.SL</strong></td>
+    <td ><strong>:&nbsp;{{=records[0].id}}</strong></td>
+  </tr>
+  <tr  align="left" class="blackCat"  >
+
+    <td width="130" >Depot</td>
+
+    <td >:&nbsp;{{=records[0].depot_name}}|{{=records[0].depot_id}}</td>
+
+  </tr>
+
+  <tr  align="left" class="blackCat"  >
+
+    <td width="130" >Customer</td>
+
+    <td >:&nbsp;{{=records[0].client_name}}|{{=records[0].client_id}}</td>
+
+  </tr>
+
+  <tr  align="left" class="blackCat"  >
+
+    <td width="130" >Market</td>
+
+    <td >:&nbsp;{{=records[0].market_name}}|{{=records[0].market_id}}</td>
+
+  </tr>
+
+  
+
+  <tr  align="left" class="blackCat"  >
+    <td width="130" >Address</td>
+    <td >:&nbsp;{{=client_address}}</td>
+  </tr>
+  <tr  align="left" class="blackCat"  >
+    <td width="130" >Invoice Date</td>
+    <td >:&nbsp;{{=records[0].invoice_date.strftime('%d-%b-%Y')}}</td>
+  </tr>
+  <tr  align="left" class="blackCat" >
+
+    <td width="130" >SL</td>
+
+    <td >:&nbsp;INV{{=records[0].depot_id}}-{{=records[0].sl}}</td>
+
+  </tr>
+
+  
+
+  <tr  align="left" class="blackCat" >
+    <td width="130" >Ref.</td>
+    <td >:&nbsp;{{=records[0].head_rowid}}</td>
+  </tr>
+  <tr  align="left" class="blackCat" >
+
+    <td width="130" >Payment Type </td>
+
+    <td >:&nbsp;{{=records[0].payment_type}}</td>
+
+  </tr>
+
+  <tr  align="left" class="blackCat" >
+
+    <td width="130" >Description</td>
+
+    <td >:&nbsp;{{=records[0].collection_note}}</td>
+
+  </tr>
+
+  <tr  align="left" class="blackCat">
+    <td >Transaction Date</td>
+    <td >:&nbsp;{{=records[0].collection_date.strftime('%d-%b-%Y')}}</td>
+  </tr>
+  <tr  align="left" class="blackCat">
+    <td >Transaction Type</td>
+    <td >:&nbsp;{{=records[0].transaction_type}} - Applied Amount</td>
+  </tr>
+  <tr  align="left" class="blackCat">
+    <td >Transaction Cause</td>
+    <td >:&nbsp;{{=records[0].transaction_cause}}</td>
+  </tr>
+  <tr  align="left" class="blackCat">
+
+    <td width="130" >Transaction Amount</td>
+
+    <td >:&nbsp;{{=easy_format(records[0].collection_amount)}}</td>
+
+  </tr>
+
+  <tr  align="left" class="blackCat" >
+
+    <td width="130" >&nbsp;</td>
+
+    <td >&nbsp;</td>
+
+  </tr>
+
+</table>
+<br/>
+<br/>
+<table width="900" >
+	<tr>
+	  <td >{{=records[0].updated_by}}</td>
+	  <td >&nbsp;</td>
+	  <td >&nbsp;</td>
+  </tr>
+ <tr style="height:2px;">
+	  <td align="center" style="height:2px;">____________________</td>
+	  <td align="center" style="height:2px;">______________________________________</td>
+	  <td width="150" align="right" style="height:2px;">_______________</td>
+  </tr>
+	<tr>
+	  <td width="150" align="left"><strong>Prepared By</strong></td>
+	  <td align="center"><strong>for {{=session.cName}}</strong></td>
+	  <td width="150" align="right"><strong>Checked By</strong></td>
+  </tr>
+</table>
+
+</body>
+</html>
+
+

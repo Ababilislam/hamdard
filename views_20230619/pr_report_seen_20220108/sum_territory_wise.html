@@ -1,0 +1,73 @@
+{{extend 'layout_sample_report.html'}}
+
+<html>
+<head>
+</head>
+<body>
+<table width="900px" style="border:none; text-align:center; font-weight:bold;" >
+        <tr >
+            <td width="100" >&nbsp;</td>
+            <td align="center" ><span style="border-bottom:1px solid #333;">Prescription Summary Territory Wise (Seen)</span></td>
+            <td width="100" ><img  height="30px" src="{{=URL('static','images/comp_logo1.png')}}"/></td>
+        </tr>
+    </table>
+
+<table width="900" style="border:none; font-weight:bold;" >
+    <tr >
+    	<td >Date Range&nbsp;:&nbsp;&nbsp;{{=date_from}}&nbsp;&nbsp; To &nbsp;&nbsp; {{=date_to}}</td>                        
+    </tr>        
+    <tr >
+        <td >
+        {{if reg_name=='':}}REGION &nbsp;:National{{else:}}REGION &nbsp;:{{=reg_name}}{{pass}}&nbsp;&nbsp;&nbsp;
+        {{if pr_zone!='':}}Zone &nbsp;:{{=pr_zone}}{{else:}}{{pass}}&nbsp;&nbsp;&nbsp;
+        {{if pr_area!='':}}Area &nbsp;:{{=pr_area}}{{else:}}{{pass}}&nbsp;&nbsp;&nbsp;             
+        </td>                           
+    </tr>
+    <tr >
+        <td >
+        {{if pr_territory!='':}}Territory &nbsp;:{{=pr_territory}}{{else:}}{{pass}}&nbsp;&nbsp;&nbsp;
+		Brand &nbsp;:{{if pr_brand!='':}}{{=str(pr_brand).replace("'","").replace("','","")}}{{else:}}ALL{{pass}}&nbsp;&nbsp;&nbsp;
+        {{if pr_ff!='':}}Field Force &nbsp;:{{=pr_ff}}{{else:}}{{pass}}&nbsp;&nbsp;&nbsp;
+        {{if pr_doctor!='':}}Doctor &nbsp;:{{=pr_doctor}}{{else:}}{{pass}}&nbsp;&nbsp;&nbsp;            
+        </td>                           
+    </tr>   
+</table>
+	
+    <table width="900px" border="1" cellpadding="1" cellspacing="1" class="sample_border" >
+        <tr align="left" style="background-color:#EBEBEB; font-size:12px; font-weight:bold;" >		    
+            <td style="width:200px;">Region</td>
+			<td style="width:200px;">Zone</td>
+			<td style="width:200px;">Area</td>
+			<td style="width:200px;">Territory</td>
+			<td style="width:100px; text-align:center;">Total Rx</td>			
+            <td style="width:100px; text-align:center;">Brand Presence</td>
+      </tr>
+        
+        {{gTotal=0;gTotal1=0}}
+        {{for i in range(len(recordList)):}}
+		{{recordListStr=recordList[i]}}
+        
+        <tr  align="left" style="font-size:11px;">
+            <td >{{=recordListStr['level0']}}&nbsp;|&nbsp;{{=recordListStr['level0_name']}}</td>
+			<td >{{=recordListStr['level1']}}&nbsp;|&nbsp;{{=recordListStr['level1_name']}}</td>
+			<td >{{=recordListStr['level2']}}&nbsp;|&nbsp;{{=recordListStr['level2_name']}}</td>
+			<td >{{=recordListStr['level3']}}&nbsp;|&nbsp;{{=recordListStr['level3_name']}}</td>
+			<td style="text-align:center;">{{=recordListStr['totalRx']}}{{gTotal+=recordListStr['totalRx']}}</td>
+            <td style="text-align:center;">{{=recordListStr['brandPrecence']}}{{gTotal1+=recordListStr['brandPrecence']}}</td>
+        </tr>
+        {{pass}}        
+        <tr  align="left" style=" background-color:#F4F4F4; font-size:11px; font-weight:bold;">
+			<td style="text-align:right"></td>
+			<td style="text-align:right"></td>
+			<td style="text-align:right"></td>
+            <td style="text-align:right">Total</td>
+			<td style="text-align:center">{{=gTotal}}</td>			
+            <td style="text-align:center;">{{=gTotal1}}</td>
+        </tr>
+        
+</table>		 
+
+</body>
+
+</html>
+

@@ -1,0 +1,429 @@
+{{extend 'layout.html'}}
+
+
+ <link rel="stylesheet" href="{{=URL('static', 'js_and_css/ui.theme.css')}}" type="text/css" />
+  <link rel="stylesheet" href="{{=URL('static', 'js_and_css/jquery-ui.css')}}" type="text/css" />
+  <link rel="stylesheet" href="{{=URL('static', 'js_and_css/style.css')}}" type="text/css" />
+  <script src="{{=URL('static','js_and_css/jquery-1.8.2.js')}}"></script>
+  <script src="{{=URL('static','js_and_css/jquery-ui.js')}}"></script>
+<style>
+body {
+  font-family: "Lato", sans-serif;
+}
+
+
+
+
+#main {
+  transition: margin-left .5s;
+  padding: 16px;
+}
+
+@media screen and (max-height: 450px) {
+  .sidenav {padding-top: 15px;}
+  .sidenav a {font-size: 18px;}
+}
+</style>
+ 
+  <style type="text/css">
+.password-mask {
+/*  display: inline-block;*/
+/*  padding: 2px;
+  background-color: black;
+  color: black;
+  font-size: 0;
+  line-height: 1;
+  letter-spacing: 0.5em;*/
+  -webkit-text-security: disc;
+  -moz-binding: url('https://example.com#fake_moz_binding');
+}
+
+
+ input[type=text], input[type=password],  select {
+    margin: 2px 0px 2px 0px;
+	width:250px;
+}
+
+select{ width:265px; margin:2px 0px 2px 0px;}
+
+textarea{
+    width:250px;
+	height:50px;
+	margin:2px 0px 2px 0px;
+}
+
+div.error {
+    margin-left:0px;
+	width:265px;
+}
+.page_color,body{
+	font-family:Arial, Helvetica, sans-serif;
+	font-size:13px;
+	}
+	
+#uni_middle_str4{
+width:100px;
+}
+
+ </style>
+
+<script>
+
+
+   var base_url=location.protocol + "//" + location.hostname + (location.port && ":" + location.port) + "/{{=request.application}}/";
+
+$(function() {
+ 
+ var employeeListStr="";  
+   
+    // alert(base_url+'doctor_physician/physician_list')
+    $.ajax({
+      url: base_url+'counter_item_discount/item_list',
+      success: function(retStr) {
+        // alert (retStr)
+        employeeListStr=retStr 
+      }
+    }); 
+// alert (employeeListStr)
+
+// =================================
+$('#item_id').keyup(function(){
+      // alert('ok')
+      //-------------------------
+      var ref_list = employeeListStr.split(',');  
+      var ref_name=$("#item_id").val();
+      // alert(ref_name)
+      
+      //---------------- auto complete combo list
+      var ref_list_new=new Array();
+      lc=0;
+      i =0;
+      var refStr="";        
+      while (i < ref_list.length)
+      {
+        refStr=ref_list[i];
+        i=i+1;          
+        var res=refStr.toUpperCase().match(ref_name.toUpperCase());
+        if (res!=null){
+          ref_list_new[lc]=refStr;
+          lc=lc+1;
+          if (lc==30){
+            break;
+          };
+        }else{
+          continue;
+        }         
+      };
+      
+      //-------------- auto complete source
+      $( "input#item_id" ).autocomplete({
+        source: ref_list_new
+      });
+    
+    }); 
+// =======================
+ var scListStr_no="";
+    $.ajax({
+      type:'POST',
+      url: base_url+'counter_item_discount/discount_type_list',
+
+      success: function(resStr) {
+        scListStr_no=resStr
+
+
+      }
+
+    }); 
+  
+    $('#discount_type').keyup(function(){
+      //-------------------------
+      var ref_list_no = scListStr_no.split(',');        
+      var ref_name_no=$("#discount_type").val();
+      
+      //---------------- auto complete combo list
+      var ref_list_no_new=new Array();
+      lc_no=0;
+      i =0;
+      var refStr_no="";       
+      while (i < ref_list_no.length)
+      {
+        refStr_no=ref_list_no[i];
+        i=i+1;          
+        var res=refStr_no.toUpperCase().match(ref_name_no.toUpperCase());
+        if (res!=null){
+          ref_list_no_new[lc_no]=refStr_no;
+          lc_no=lc_no+1;
+          if (lc_no==30){
+            break;
+          };
+        }else{
+          continue;
+        }         
+      };
+        //-------------- auto complete source
+      $( "input#discount_type" ).autocomplete({
+        source: ref_list_no_new
+      });
+    });
+    var discount_typeStr="";  
+   
+    // alert(base_url+'doctor_speciality/speciality_list')
+    $.ajax({
+      url: base_url+'counter_item_discount/item_list',
+      success: function(retStr) {
+        // alert (retStr)
+        discount_typeStr=retStr 
+      }
+    }); 
+// alert (discount_typeStr)
+
+// =================================
+$('#searchValue_OpName').keyup(function(){
+      // alert('ok')
+      //-------------------------
+      var ref_list = discount_typeStr.split(',');  
+      var ref_name=$("#searchValue_OpName").val();
+      // alert(ref_name)
+      
+      //---------------- auto complete combo list
+      var ref_list_new=new Array();
+      lc=0;
+      i =0;
+      var refStr="";        
+      while (i < ref_list.length)
+      {
+        refStr=ref_list[i];
+        i=i+1;          
+        var res=refStr.toUpperCase().match(ref_name.toUpperCase());
+        if (res!=null){
+          ref_list_new[lc]=refStr;
+          lc=lc+1;
+          if (lc==30){
+            break;
+          };
+        }else{
+          continue;
+        }         
+      };
+      
+      //-------------- auto complete source
+      $( "input#searchValue_OpName" ).autocomplete({
+        source: ref_list_new
+      });
+    
+    }); 
+var discount_type="";  
+   
+    // alert(base_url+'doctor_speciality/speciality_list')
+    $.ajax({
+      url: base_url+'counter_item_discount/discount_type_list',
+      success: function(retStr) {
+        // alert (retStr)
+        discount_type=retStr 
+      }
+    }); 
+// alert (discount_typeStr)
+
+// =================================
+$('#discount_type1').keyup(function(){
+      // alert('ok')
+      //-------------------------
+      var ref_list = discount_type.split(',');  
+      var ref_name=$("#discount_type1").val();
+      // alert(ref_name)
+      
+      //---------------- auto complete combo list
+      var ref_list_new=new Array();
+      lc=0;
+      i =0;
+      var refStr="";        
+      while (i < ref_list.length)
+      {
+        refStr=ref_list[i];
+        i=i+1;          
+        var res=refStr.toUpperCase().match(ref_name.toUpperCase());
+        if (res!=null){
+          ref_list_new[lc]=refStr;
+          lc=lc+1;
+          if (lc==30){
+            break;
+          };
+        }else{
+          continue;
+        }         
+      };
+      
+      //-------------- auto complete source
+      $( "input#discount_type1" ).autocomplete({
+        source: ref_list_new
+      });
+    
+    });
+// -----------------------------------
+});
+
+
+</script>  
+
+
+<table width="100%"   border="0" cellspacing="0" cellpadding="0" style="background-color:#F5F5F5;" >
+  <tr  height="1px" >
+  <td colspan="3" ></td>
+  </tr>
+  <tr>
+    <td>
+      
+<table cellspacing="0" cellpadding="0" style="background-color:#FFFFFF;" >
+  <tr height="30px" >
+    <td width="100%" style="background-color:#FFFFFF;" ><span class="blackCatTitle">&nbsp;Counter Item Discount</span></td>
+  <td width="500" >&nbsp;</td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr  height="1px" style="background-color:#CCCCCC;">
+  <td colspan="3" ></td>
+  </tr>
+</table>
+
+<table width="70%" align="left" height="100%" border="0"  cellpadding="0" cellspacing="0" style="margin-left:auto;margin-right:auto; margin:15px; background-color:#F5F5F5;" >
+  
+  <tr>
+    <td height="60%" valign="middle">
+
+    <table width="100%" border="1" class="sample_border" style="background-color: #EBEBEB;" >
+      
+      <form  name="form1" action="{{=URL(c='counter_item_discount',f='counter_item_discount_add')}}" method="post"  >
+                        <!-- FILTERING BY USER TYPE -->
+
+           <tr align="left" height="30px;"style="background:#eee"><!--row change class here--->
+           <td width="20%" class="tdDecoratoin"><!---Class td decoration-->
+                         
+             {{if session.item_id=='' or session.item_id=='None' or session.item_id == None:}}
+             <input type="text" class="text" name="searchValue_OpName" id="searchValue_OpName" value="" placeholder="Item ID/Name" autocomplete="on" style="width:150px"/>
+             {{else:}}
+              <input type="text" name="searchValue_OpName" id="searchValue_OpName" value="{{=session.item_id}}" autocomplete="on" />
+             {{pass}}
+             </td>
+             <td width="20%" class="tdDecoratoin">
+             {{if session.discount_type1=='' or session.discount_type1=='None' or session.discount_type1 == None:}}
+             <input type="text" class="text" name="discount_type1" id="discount_type1" value="" placeholder="Discount Type" autocomplete="on" style="width:150px"/>
+             {{else:}}
+              <input type="text" name="discount_type1" id="discount_type1" value="{{=session.discount_type1}}" autocomplete="on" />
+             {{pass}}
+           </td>
+           
+            <td  width="20%" align="left">
+             <input  type="submit" name="btn_filter" id="btn_filter" value="Filter" style="vertical-align:left;height:30px ; width:70px;" class="button_update" title=""/>
+
+             <input type="submit" name="btn_all" id="btn_all" value="All" style="vertical-align:middle;height:30px ; width: 70px;"  class="button_update"/>
+               
+             </td>
+             <td align="right">
+            <a href="{{=URL(c='counter_item_discount',f='counter_item_discount_Download')}}" style="text-align:left;">
+              <input type="button" name="Input2" id="Input2" value="Download" style="vertical-align:middle;height:30px ;"  class="button_update"/>&nbsp;
+            </a>
+             <a href="{{=URL(c='counter_item_discount',f='counter_item_discount_batch_upload')}}" style="text-align:left;">
+              <input type="button" name="Input2" id="Input2" value="Batch Upload" style="vertical-align:middle;height:30px ;"  class="button_update"/>&nbsp;
+            </a>
+            
+           </td>
+           </tr>
+           <tr>
+             <td style="font-family: sans-serif;  font-weight: bold;">Total: {{=len(itemDiscountRows_count)}}</td>
+           </tr>
+    
+    </table>
+    
+
+                    <!-- INSERT ADMIN / OPERATOR -->
+       <table width="100%" align="left" cellpadding="2" class="rounded_corner" style="background-color:#EBEBEB">
+            <tr  align="left" class="blackCatHead" height="25px" >
+                 <td width="130px">Item ID</td>
+                 <td width="150px">Item Name</td>
+                 <td width="120px">Discount Type</td>
+                 <td width="250px">Discount Percentage</td>
+                 <td width="100px">&nbsp;</td>
+             </tr>
+
+      </table>
+      <table width="100%" class="sample_border" style="background-color: #EBEBEB;" >
+            <tr style="background-color:#F5F5F5" >
+              
+              <td width="220px" >
+                <input  type="text" name="item_id" id="item_id" size="10" placeholder="Item ID|Name" style="width:350px"/>
+              </td>
+              <td width="60px">
+                
+              </td>
+             
+              <td width="210px">
+                <input  type="text" name="discount_type" id="discount_type" size="10" placeholder="Discount Type"style="width:150px" />
+              </td>
+              
+              <td width="60px">
+                <input  type="text" name="percentage" id="percentage" size="10" placeholder="Percentage"style="width:150px" />
+              </td>
+              
+              <!-- <td > -->
+                <!-- <input  type="text" name="physician_password" id="physician_password" size="10"style="width:150px" /> -->
+              <!-- </td> -->
+                <td align="right" style="margin-left: 5px;" >
+                  
+                    <input align="left" type="submit" name="btn_submit" id="btn_submit" value=" Save " style="vertical-align:middle;height:25px ;" />
+                </td> 
+            </tr>
+            <!-- <tr height="1px" style="background-color:#CCCCCC;">
+            
+            </tr> -->
+          
+      </table>
+      </form>
+                            <!-- SHOW ALL USER  -->
+
+      <table width="100%" border="0" cellpadding="1" cellspacing="1" class="sample_border" >
+
+               {{for i in range(len(itemDiscountRows)):
+                  records_ov_dict=itemDiscountRows[i]   
+                  
+                  row_id=str(records_ov_dict["id"])      
+                  item_id=str(records_ov_dict["item_id"])      
+                  name=str(records_ov_dict["name"])                                         
+                  discount_type=str(records_ov_dict["discount_type"])                                         
+                  discount_percentage=str(records_ov_dict["discount_percentage"])                                         
+                }}
+             
+               <tr  align="left" class="blackCat"  style="vertical-align:middle; font-size:12px;"> 
+                <td width="100px">&nbsp;&nbsp;{{=item_id}}</td>
+                <td width="125px">{{=name}}</td>
+                <td width="140px">{{=discount_type}}</td>
+                <td width="220px">{{=discount_percentage}}</td>
+            
+                 <form  name="form2" action="{{=URL(c='counter_item_discount',f='counter_item_discount_edit',args=[row_id,item_id,name,discount_type,discount_percentage])}}" method="post"  >
+                      <td align="center" width="20px"style="vertical-align:top;">
+                          <button type="submit" name="btn_edit" id="btn_edit" value="" style="background-color: transparent;border: none;">>>
+                          </button> 
+                      </td>
+                </form> 
+              </tr>
+              {{pass}}
+      </table>
+
+  </td>
+  </tr>
+  <tr>
+    <td>
+      {{if page_Number:}}
+      <a href="{{=URL(args=[0])}}">First</a> | &nbsp;&nbsp;
+      <a href="{{=URL(args=[page_Number-1 if page_Number>0 else 0])}}">Previous</a> |
+      {{pass}}
+      {{if len(itemDiscountRows)>=item_per_page:}}
+      &nbsp;&nbsp;
+      <a href="{{=URL(args=[page_Number+1])}}">Next &nbsp;&nbsp;</a>
+      {{pass}}
+    </td>
+  </tr>
+ 
+</table>
+   </td>
+
+</tr>
+</table>

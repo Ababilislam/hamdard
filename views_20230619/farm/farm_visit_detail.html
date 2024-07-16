@@ -1,0 +1,219 @@
+{{extend 'layout.html'}}
+  <link rel="stylesheet" href="{{=URL('static', 'js_and_css/ui.theme.css')}}" type="text/css" />
+  <link rel="stylesheet" href="{{=URL('static', 'js_and_css/jquery-ui.css')}}" type="text/css" />
+  <link rel="stylesheet" href="{{=URL('static', 'js_and_css/style.css')}}" type="text/css" />
+   <script src="{{=URL('static','js_and_css/jquery-1.8.2.js')}}"></script>
+    <script src="{{=URL('static','js_and_css/jquery-ui.js')}}"></script>
+    
+ <style type="text/css">
+	input[type=text], input[type=password],  select {
+		margin: 2px 0px 2px 0px;
+		width:150px;
+	}
+	div.error {
+		margin-left:0px;
+		width:auto;
+	}
+	#sm_doctor_area_field2{
+	width:50px;
+	text-align:right;
+	}
+	.page_color,body{
+		font-family:Arial, Helvetica, sans-serif;
+		font-size:13px;	
+		}
+ </style>
+<script>
+var base_url=location.protocol + "//" + location.hostname + (location.port && ":" + location.port) + "/{{=request.application}}/";
+$(function() {
+	 	var valueListStr="";
+		//alert(base_url+'farm/get_rep_list');
+		$('#search_type').blur(function(){
+			if ($('#search_type').val()=='FarmName'){
+				
+				$.ajax({
+					  url: base_url+'default/get_farm_list',
+					  success: function(resStr) {
+						  valueListStr=resStr
+					  }
+					});
+			}else if ($('#search_type').val()=='RepName'){
+				$.ajax({
+					  url: base_url+'farm/get_rep_list',
+					  success: function(retStr) {
+						  valueListStr=retStr
+					  }
+					});
+			};
+			
+	 	});
+	 
+		$('#search_value').keyup(function(){
+			//-------------------------
+			var valueList = valueListStr.split(',');				
+			var searchValue=$("#search_value").val();
+			//alert(searchValue)
+			//---------------- auto complete combo list
+			var valueList_new=new Array();
+			lc=0;
+			i =0;
+			var valueStr="";				
+			while (i < valueList.length)
+			{
+				valueStr=valueList[i];
+			//	alert(valueStr)
+				i=i+1;					
+				var res=valueStr.toUpperCase().match(searchValue.toUpperCase());
+				if (res!=null){
+					valueList_new[lc]=valueStr;
+					lc=lc+1;
+					if (lc==30){
+						break;
+					};
+				}else{
+					continue;
+				}					
+			};
+			//alert (valueList_new);
+			
+			//-------------- auto complete source
+			$( "input#search_value" ).autocomplete({
+				source: valueList_new
+			});
+		
+	  }); 
+	   //==============	   
+});
+
+</script>
+ 
+<body class="claro">   
+<table width="100%"  border="0" cellspacing="0" cellpadding="0" style="background-color:#FFFFFF;" >
+  <tr height="30px" >
+    <td width="800"><span class="blackCatTitle">Farm Visit</span></td>
+	<td width="210" align="right">&nbsp;</td>	
+    <td>&nbsp;</td>
+  </tr>
+  <tr  height="1px" style="background-color:#CCCCCC;">
+	    <td colspan="3" ></td>
+  </tr>
+</table>
+  
+  <table width="100%" height="500px"  border="0" cellspacing="0" cellpadding="0" class="page_color" id="table_big"  >
+  <tr height="100%"  style="vertical-align:top;">
+    <td width="10px">&nbsp;</td>
+    <td>
+	<table width="100%"  border="0" cellpadding="0" cellspacing="0"  >
+      <tr>
+        <td>&nbsp;</td>
+      </tr>
+      <tr>
+        <td>
+		{{if session.filterBy!=None:}}<strong>Filtered By:</strong>&nbsp;{{=session.filterBy}}=&nbsp;{{=session.searchValue}}{{pass}}
+		<table width="1000" border="1"  class="sample_border" >
+          <form id="form1" name="form1" method="post" action="{{=URL(c='farm',f='farm_visit_detail')}}">
+            <tr align="left" class="blackCatHead"  height="20px">
+             
+             <td width="120px">{{=search_form.custom.widget.from_dt}}</td>
+             
+              <td width="120px">
+              {{ if ( session.date_to_m!=None):}}
+             	{{=search_form.custom.widget.to_dt}}
+            
+             {{ else:}}
+                 {{=search_form.custom.widget.to_dt}}
+			 {{pass}}
+              
+              </td>
+             
+             
+              <td width="100">
+                <select name="search_type" id="search_type" style="width:250px" >
+                 
+                  <option selected="selected" value="">Select a Type</option>
+                  
+                  {{if session.search_type=='FarmName':}}<option value="FarmName" selected="selected">Farm</option>{{else:}}<option value="FarmName" >Farm</option>{{pass}}  
+                  {{if session.search_type=='RepName':}}<option value="RepName" selected="selected">Rep </option>{{else:}}<option value="RepName" >Rep</option>{{pass}}
+                </select>
+              </td>
+              
+              <td width="120" >
+              {{if session.searchValue_farm=='' or session.searchValue_farm==None:}}
+                    <input name="search_value" type="text" id="search_value" size="25" value="" placeholder="Select value" autocomplete="off" style="width:150px"/>
+                {{else:}}
+                    <input name="search_value" type="text" id="search_value" size="25" value="{{=session.search_value}}" placeholder="Select value" autocomplete="off" style="width:150px"/>
+                {{pass}}                
+              </td>
+              <td align="left"><input type="submit" name="btn_filter" id="btn_filter" value="Filter"   class="button_update"/>
+              <input type="submit" name="btn_filter_all" id="btn_filter_all" value="All"   class="button_update"/>
+              </td>
+              
+       <!--08_02_2020_start-->
+              <td width="100" align="right"  >
+              <a href="{{=URL(c='farm',f='download_farm_visit')}}">
+              <input type="button" name="" id="" value="Download"   class="btn_download"/></a>
+              </td>
+              <!--08_02_2020_end--> 
+		  </form>
+
+        </table>
+		Total: {{=totalCount}}<br />
+         <table width="1000" border="1" cellpadding="1" cellspacing="1" class="sample_border" >
+           <tr align="left" class="blackCatHead"  height="20px" ;"vertical-align:middle">
+            <td width="100" >SL</td>
+            <td width="100" >Visit Time</td>
+             <td width="100" >RepID</td>
+             <td width="200" >Farm</td>
+             <td width="100" >Farm Type</td>
+             <td width="100" >Route</td>          
+             <td width="100" align="left" >Visit Type</td>
+            <td width="100" align="left" >Meeting With</td>
+             <td width="100" align="left" >Doc Support</td>
+             <td width="100" align="left" >Location</td>
+             <td></td>
+           </tr>
+           
+			   
+	   {{ p=0}} 		  
+	   {{for i,record in enumerate(records):}}
+	   {{ if i==items_per_page: break}}
+  
+		  <tr  align="left" class="blackCat"  style="vertical-align:middle; font-size:11px;"> 
+           <td width="100" >{{=record.id}}</td>
+           <td width="100" >{{=record.created_on}}</td>
+          <td width="100" >{{=record.rep_name}}|{{=record.rep_id}}</td>
+		  <td width="200" >{{=record.farm_name}}|{{=record.farm_id}}</td>
+          <td width="100" >{{=record.farm_type}}</td>
+		  <td width="100" >{{=record.route}}</td>		 
+         <td align="left" >{{=record.visit_type}}</td>
+          <td align="left" >{{=record.meet_with}}</td>
+           <td align="left" >{{=record.doc_support}}</td>
+           
+         <td align="left" >{{lat_long=str(record.latitude)+','+str(record.longitude)
+         if ((str(record.latitude)!='0') & (str(record.longitude)!='0')):}} <a href="{{='https://maps.google.com/?q='+str(lat_long)}}" target="_blank">Location</a>
+         {{pass}}
+         </td>
+
+		  <!--<form id="form1" name="form1" method="post" action="{{#=URL(c='farm',f='farm_visit_details',vars=dict(farm_id=record.farm_id))}}">
+	    
+		    <td width="50" align="right"><input type="submit" name="btn_go2" id="btn_go2" value="Details"   class="button_update"/></td>
+		    </form>-->
+		</tr>
+			   {{pass}}
+		    </table>
+		  <p>&nbsp;</p>
+        </td></tr>
+    </table>
+   
+{{if page:}}
+<a href="{{=URL(args=[page-page])}}">first</a> |   
+<a href="{{=URL(args=[page-1])}}">previous</a> |
+{{pass}}
+
+{{if len(records)>items_per_page:}}
+<a href="{{=URL(args=[page+1])}}">next</a>
+{{pass}}	</td>
+  </tr>
+</table>
+
+</body>

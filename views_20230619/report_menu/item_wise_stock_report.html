@@ -1,0 +1,211 @@
+{{extend 'layout_report.html'}}
+
+
+<html>
+
+
+<head>
+
+
+<script type="text/javascript">
+
+
+function print_page()
+
+
+  {
+
+
+    window.print()
+
+
+  }
+
+
+</script>
+
+
+
+
+
+</head>
+
+
+<body>
+
+{{today=datetime.datetime.strptime(current_date,'%Y-%m-%d')}}
+
+<div class="blackCatTitle">Item wise stock report</div>
+
+
+<br/>
+
+
+<table width="500" border="0" cellspacing="0" cellpadding="0">
+
+
+  <tr >
+
+
+    <td width="80" style="padding-left:0px;"><b>Item ID</b></td>
+
+
+    <td width="5"><b>:</b></td>
+
+
+    <td align="left">{{=item_id}} </td>
+
+
+  </tr>
+
+
+  <tr>
+
+
+    <td width="80" style="padding-left:0px;"><b>Item Name</b></td>
+
+
+    <td width="5"><b>:</b></td>
+
+
+    <td>{{=item_name}} </td>
+
+
+  </tr>
+
+
+</table>
+
+<table width="800" border="1" cellspacing="1" cellpadding="1"  class="sample_border">          
+
+
+          <tr class="table_title">
+
+            <td width="100" >Branch ID </td> 
+            <td >Name</td>
+            <td width="200" >Store</td>
+            <td width="100" >BatchID</td>
+            <td width="100" >Expiary Date</td>
+            <td width="100" align="right">Quantity</td>
+          </tr>   
+
+		  {{ p=0}}
+
+		  {{ c=''}}
+
+		   {{for i,record in enumerate(stockBalanceRecords):}}
+
+
+			{{ if i==items_per_page: break}}
+			
+			{{depot_id=record.depot_id}}
+            {{store_id=record.store_id}}
+            {{store_name=record.store_name}}
+            
+            {{batch_id=record.batch_id}}
+            {{expiary_date=record.expiary_date}}
+            
+            {{if expiary_date!=None:}}
+                {{expiaryDate=datetime.datetime.strptime(str(expiary_date),'%Y-%m-%d')}}
+            {{pass}}
+                        
+			{{quantity=record.quantity}}
+
+			{{depot_name=''}}
+
+			{{for i in range(len(depotList)):}}
+				
+				{{depotDict=depotList[i]}}
+				
+				{{depotId=depotDict['depot_id']}}
+				{{depotName=depotDict['name']}}
+				{{if str(depotId).strip()==str(depot_id).strip():}}
+					{{depot_name=str(depotName).replace(',', ' ');break}}
+				{{pass}}
+			
+			{{pass}}
+
+			{{ if p==0:}} {{c ='table_row1'}}{{ p=1}} {{ else:}} {{c ='table_row2'}}{{ p=0}} {{ pass}} 				 
+			
+            {{if expiaryDate < today:}}
+                <tr class='{{=c}}' style="background-color:#FFE8E8">
+            {{else:}}
+            <tr class='{{=c}}' >
+            {{pass}}
+			
+
+				<td width="100" >{{=depot_id}}</td>
+				<td >{{=depot_name}}</td>
+				<td width="200" >{{=store_id}}|{{=store_name}}</td>
+			  <td width="100" >{{=batch_id}}</td>
+			  <td width="100" >{{=expiary_date}}</td>
+				<td width="100" align="right">{{=quantity}}</td>
+			</tr>
+
+
+		   {{pass}}
+
+
+</table>
+
+
+
+{{if page:}}
+
+
+{{ =A('first', _href =URL(c ='report_menu',f='item_wise_stock_report',vars=dict(page=(page-page),item_id=item_id,item_name=item_name)))}} |
+
+
+{{ =A('previous', _href =URL(c ='report_menu',f='item_wise_stock_report',vars=dict(page=(page-page),item_id=item_id,item_name=item_name)))}} |
+
+
+{{pass}}
+
+
+
+
+
+{{if len(stockBalanceRecords)>items_per_page:}}
+{{ =A('next', _href =URL(c ='report_menu',f='item_wise_stock_report',vars=dict(page=(page+1),item_id=item_id,item_name=item_name)))}}
+{{pass}}
+
+
+	 
+
+
+  <table width="800" border="0">
+
+
+	  <tr>
+
+
+		<td align="left" class="report_body">{{ =A('download', _href =URL(r=request, c ='report_menu',f ='download_item_wise_stock',vars=dict(item_id=item_id,item_name=item_name)))}}</td>
+
+
+		<td align="right" class="report_body"><a href="" onClick="print_page()" style="text-decoration:none">Print</a></td>
+
+
+	  </tr>
+
+
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</body>
+
+
+</html>
+
+

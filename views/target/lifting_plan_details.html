@@ -1,0 +1,245 @@
+{{extend 'layout.html'}}
+
+  
+<style type="text/css">
+ 
+ input[type=text], input[type=password],  select {
+    margin: 2px 0px 2px 0px;
+	width:250px;
+}
+
+div.error {
+    margin-left:0px;
+	width: 200px;
+}
+
+.page_color,body{
+	font-family:Arial, Helvetica, sans-serif;
+	font-size:13px;	
+	}
+	
+ </style>
+
+ 
+<table width="100%"  border="0" cellspacing="0" cellpadding="0" style="background-color:#FFFFFF;" >
+  <tr height="30px" >
+    <td width="500"><span class="blackCatTitle">Lifting Plan Details</span></td>
+    <form action="{{=URL(c='target',f='lifting_plan_add',args=[page])}}" method="post">
+    <td><input name="" type="submit"  value="Back"/></td>
+    </form>
+    <td>&nbsp;</td>
+    
+  </tr>
+  <tr  height="1px" style="background-color:#CCCCCC;">
+	    <td colspan="3" ></td>
+  </tr>
+</table>
+  
+  
+  <table width="100%" height="500px"  border="0" cellspacing="0" cellpadding="0" class="page_color"  >
+  <tr height="100%"  style="vertical-align:top;">
+    <td width="10px">&nbsp;</td>
+    <td>
+	<table width="100%"  border="0" cellpadding="0" cellspacing="0"  >
+      <tr>
+        <td>&nbsp;</td>
+      </tr>
+      <tr>
+        <td align="left" valign="top">
+        <table width="600">
+        	<tr><td width="100">Year-Month</td>
+        	  <td>: {{=records[0].first_date.strftime('%Y-%b')}}</td></tr>
+            <tr><td width="100">Distributor/Party</td>
+              <td>: {{=records[0].distributor_name}}- {{=records[0].distributor_id}}</td></tr>
+            <tr><td width="100">Super Dealer</td><td>: {{=records[0].super_depot_name}}- {{=records[0].super_depot_id}}</td></tr>
+            <tr><td width="100">Mode</td>
+              <td>: {{=records[0].mode}}</td></tr>            
+         </table>
+        <table width="400" border="1" cellpadding="1" cellspacing="1" class="sample_border" >
+              <tr align="left" class="blackCatHead"  height="20px" ;"vertical-align:middle">
+                 <td width="50" align="center" style="border-right-width:3px;">Day</td>
+                 <td width="150" align="right" >Target (Bag)</td>
+                 <td align="right" style="border-right-width:3px;">Achievement (Bag)</td>
+               </tr>
+			    
+               <tr  align="left" class="blackCat"  style="vertical-align:middle"> 
+                  <td width="50" align="center"  style="border-right-width:3px;">1</td>
+                  <td width="150" align="right"  >{{=records[0].t_1}}&nbsp;</td>
+                  <td align="right"  style="border-right-width:3px;">{{=records[0].a_1}}</td>
+               </tr>
+               <tr  align="left" class="blackCat"  style="vertical-align:middle"> 
+                  <td width="50" align="center"  style="border-right-width:3px;">2</td>
+                  <td width="150" align="right"  >{{=records[0].t_2}}&nbsp;</td>
+                  <td align="right"  style="border-right-width:3px;">{{=records[0].a_2}}</td>
+               </tr>
+               <tr  align="left" class="blackCat"  style="vertical-align:middle"> 
+                  <td width="50" align="center"  style="border-right-width:3px;">3</td>
+                  <td width="150" align="right"  >{{=records[0].t_3}}&nbsp;</td>
+                  <td align="right"  style="border-right-width:3px;">{{=records[0].a_3}}</td>
+               </tr>
+               <tr  align="left" class="blackCat"  style="vertical-align:middle"> 
+                  <td width="50" align="center"  style="border-right-width:3px;">4</td>
+                  <td width="150" align="right"  >{{=records[0].t_4}}&nbsp;</td>
+                  <td align="right"  style="border-right-width:3px;">{{=records[0].a_4}}</td>
+               </tr>
+               <tr  align="left" class="blackCat"  style="vertical-align:middle"> 
+                  <td width="50" align="center"  style="border-right-width:3px;">5</td>
+                  <td width="150" align="right"  >{{=records[0].t_5}}&nbsp;</td>
+                  <td align="right"  style="border-right-width:3px;">{{=records[0].a_5}}</td>
+               </tr>
+               <tr  align="left" class="blackCat"  style="vertical-align:middle"> 
+                  <td width="50" align="center"  style="border-right-width:3px;">6</td>
+                  <td width="150" align="right"  >{{=records[0].t_6}}&nbsp;</td>
+                  <td align="right"  style="border-right-width:3px;">{{=records[0].a_6}}</td>
+               </tr>
+               <tr  align="left" class="blackCat"  style="vertical-align:middle"> 
+                  <td width="50" align="center"  style="border-right-width:3px;">7</td>
+                  <td width="150" align="right"  >{{=records[0].t_7}}&nbsp;</td>
+                  <td align="right"  style="border-right-width:3px;">{{=records[0].a_7}}</td>
+               </tr>
+               <tr  align="left" class="blackCat"  style="vertical-align:middle"> 
+                  <td width="50" align="center"  style="border-right-width:3px;">8</td>
+                  <td width="150" align="right"  >{{=records[0].t_8}}&nbsp;</td>
+                  <td align="right"  style="border-right-width:3px;">{{=records[0].a_8}}</td>
+               </tr>
+               <tr  align="left" class="blackCat"  style="vertical-align:middle"> 
+                  <td width="50" align="center"  style="border-right-width:3px;">9</td>
+                  <td width="150" align="right"  >{{=records[0].t_9}}&nbsp;</td>
+                  <td align="right"  style="border-right-width:3px;">{{=records[0].a_9}}</td>
+               </tr>
+               <tr  align="left" class="blackCat"  style="vertical-align:middle"> 
+                  <td width="50" align="center"  style="border-right-width:3px;">10</td>
+                  <td width="150" align="right"  >{{=records[0].t_10}}&nbsp;</td>
+                  <td align="right"  style="border-right-width:3px;">{{=records[0].a_10}}</td>
+               </tr>
+               <tr  align="left" class="blackCat"  style="vertical-align:middle"> 
+                  <td width="50" align="center"  style="border-right-width:3px;">11</td>
+                  <td width="150" align="right"  >{{=records[0].t_11}}&nbsp;</td>
+                  <td align="right"  style="border-right-width:3px;">{{=records[0].a_11}}</td>
+               </tr>
+               <tr  align="left" class="blackCat"  style="vertical-align:middle"> 
+                  <td width="50" align="center"  style="border-right-width:3px;">12</td>
+                  <td width="150" align="right"  >{{=records[0].t_12}}&nbsp;</td>
+                  <td align="right"  style="border-right-width:3px;">{{=records[0].a_12}}</td>
+               </tr>
+               <tr  align="left" class="blackCat"  style="vertical-align:middle"> 
+                  <td width="50" align="center"  style="border-right-width:3px;">13</td>
+                  <td width="150" align="right"  >{{=records[0].t_13}}&nbsp;</td>
+                  <td align="right"  style="border-right-width:3px;">{{=records[0].a_13}}</td>
+               </tr>
+               <tr  align="left" class="blackCat"  style="vertical-align:middle"> 
+                  <td width="50" align="center"  style="border-right-width:3px;">14</td>
+                  <td width="150" align="right"  >{{=records[0].t_14}}&nbsp;</td>
+                  <td align="right"  style="border-right-width:3px;">{{=records[0].a_14}}</td>
+               </tr>
+               <tr  align="left" class="blackCat"  style="vertical-align:middle"> 
+                  <td width="50" align="center"  style="border-right-width:3px;">15</td>
+                  <td width="150" align="right"  >{{=records[0].t_15}}&nbsp;</td>
+                  <td align="right"  style="border-right-width:3px;">{{=records[0].a_15}}</td>
+               </tr>
+               <tr  align="left" class="blackCat"  style="vertical-align:middle"> 
+                  <td width="50" align="center"  style="border-right-width:3px;">16</td>
+                  <td width="150" align="right"  >{{=records[0].t_16}}&nbsp;</td>
+                  <td align="right"  style="border-right-width:3px;">{{=records[0].a_16}}</td>
+               </tr>
+               <tr  align="left" class="blackCat"  style="vertical-align:middle"> 
+                  <td width="50" align="center"  style="border-right-width:3px;">17</td>
+                  <td width="150" align="right"  >{{=records[0].t_17}}&nbsp;</td>
+                  <td align="right"  style="border-right-width:3px;">{{=records[0].a_17}}</td>
+               </tr>
+               <tr  align="left" class="blackCat"  style="vertical-align:middle"> 
+                  <td width="50" align="center"  style="border-right-width:3px;">18</td>
+                  <td width="150" align="right"  >{{=records[0].t_18}}&nbsp;</td>
+                  <td align="right"  style="border-right-width:3px;">{{=records[0].a_18}}</td>
+               </tr>
+               <tr  align="left" class="blackCat"  style="vertical-align:middle"> 
+                  <td width="50" align="center"  style="border-right-width:3px;">19</td>
+                  <td width="150" align="right"  >{{=records[0].t_19}}&nbsp;</td>
+                  <td align="right"  style="border-right-width:3px;">{{=records[0].a_19}}</td>
+               </tr>
+               <tr  align="left" class="blackCat"  style="vertical-align:middle"> 
+                  <td width="50" align="center"  style="border-right-width:3px;">20</td>
+                  <td width="150" align="right"  >{{=records[0].t_20}}&nbsp;</td>
+                  <td align="right"  style="border-right-width:3px;">{{=records[0].a_20}}</td>
+               </tr>
+               <tr  align="left" class="blackCat"  style="vertical-align:middle"> 
+                  <td width="50" align="center"  style="border-right-width:3px;">21</td>
+                  <td width="150" align="right"  >{{=records[0].t_21}}&nbsp;</td>
+                  <td align="right"  style="border-right-width:3px;">{{=records[0].a_21}}</td>
+               </tr>
+               <tr  align="left" class="blackCat"  style="vertical-align:middle"> 
+                  <td width="50" align="center"  style="border-right-width:3px;">22</td>
+                  <td width="150" align="right"  >{{=records[0].t_22}}&nbsp;</td>
+                  <td align="right"  style="border-right-width:3px;">{{=records[0].a_22}}</td>
+               </tr>
+               <tr  align="left" class="blackCat"  style="vertical-align:middle"> 
+                  <td width="50" align="center"  style="border-right-width:3px;">23</td>
+                  <td width="150" align="right"  >{{=records[0].t_23}}&nbsp;</td>
+                  <td align="right"  style="border-right-width:3px;">{{=records[0].a_23}}</td>
+               </tr>
+               <tr  align="left" class="blackCat"  style="vertical-align:middle"> 
+                  <td width="50" align="center"  style="border-right-width:3px;">24</td>
+                  <td width="150" align="right"  >{{=records[0].t_24}}&nbsp;</td>
+                  <td align="right"  style="border-right-width:3px;">{{=records[0].a_24}}</td>
+               </tr>
+               <tr  align="left" class="blackCat"  style="vertical-align:middle"> 
+                  <td width="50" align="center"  style="border-right-width:3px;">25</td>
+                  <td width="150" align="right"  >{{=records[0].t_25}}&nbsp;</td>
+                  <td align="right"  style="border-right-width:3px;">{{=records[0].a_25}}</td>
+               </tr>
+               <tr  align="left" class="blackCat"  style="vertical-align:middle"> 
+                  <td width="50" align="center"  style="border-right-width:3px;">26</td>
+                  <td width="150" align="right"  >{{=records[0].t_26}}&nbsp;</td>
+                  <td align="right"  style="border-right-width:3px;">{{=records[0].a_26}}</td>
+               </tr>
+               <tr  align="left" class="blackCat"  style="vertical-align:middle"> 
+                  <td width="50" align="center"  style="border-right-width:3px;">27</td>
+                  <td width="150" align="right"  >{{=records[0].t_27}}&nbsp;</td>
+                  <td align="right"  style="border-right-width:3px;">{{=records[0].a_27}}</td>
+               </tr>
+               <tr  align="left" class="blackCat"  style="vertical-align:middle"> 
+                  <td width="50" align="center"  style="border-right-width:3px;">28</td>
+                  <td width="150" align="right"  >{{=records[0].t_28}}&nbsp;</td>
+                  <td align="right"  style="border-right-width:3px;">{{=records[0].a_28}}</td>
+               </tr>
+               <tr  align="left" class="blackCat"  style="vertical-align:middle"> 
+                  <td width="50" align="center"  style="border-right-width:3px;">29</td>
+                  <td width="150" align="right"  >{{=records[0].t_29}}&nbsp;</td>
+                  <td align="right"  style="border-right-width:3px;">{{=records[0].a_29}}</td>
+               </tr>
+               <tr  align="left" class="blackCat"  style="vertical-align:middle"> 
+                  <td width="50" align="center"  style="border-right-width:3px;">30</td>
+                  <td width="150" align="right"  >{{=records[0].t_30}}&nbsp;</td>
+                  <td align="right"  style="border-right-width:3px;">{{=records[0].a_30}}</td>
+               </tr>
+               <tr  align="left" class="blackCat"  style="vertical-align:middle"> 
+                  <td width="50" align="center"  style="border-right-width:3px;">31</td>
+                  <td width="150" align="right"  >{{=records[0].t_31}}&nbsp;</td>
+                  <td align="right"  style="border-right-width:3px;">{{=records[0].a_31}}</td>
+               </tr>
+               
+               {{totalTarget=records[0].t_1+records[0].t_2+records[0].t_3+records[0].t_4+records[0].t_5+records[0].t_6+records[0].t_7+records[0].t_8+records[0].t_9+records[0].t_10
+               +records[0].t_11+records[0].t_12+records[0].t_13+records[0].t_14+records[0].t_15+records[0].t_16+records[0].t_17+records[0].t_18+records[0].t_19+records[0].t_20
+               +records[0].t_21+records[0].t_22+records[0].t_23+records[0].t_24+records[0].t_25+records[0].t_26+records[0].t_27+records[0].t_28+records[0].t_29+records[0].t_30+records[0].t_31}}
+               
+               {{totalAchievement=records[0].a_1+records[0].a_2+records[0].a_3+records[0].a_4+records[0].a_5+records[0].a_6+records[0].a_7+records[0].a_8+records[0].a_9+records[0].a_10
+               +records[0].a_11+records[0].a_12+records[0].a_13+records[0].a_14+records[0].a_15+records[0].a_16+records[0].a_17+records[0].a_18+records[0].a_19+records[0].a_20
+               +records[0].a_21+records[0].a_22+records[0].a_23+records[0].a_24+records[0].a_25+records[0].a_26+records[0].a_27+records[0].a_28+records[0].a_29+records[0].a_30+records[0].a_31}}
+               
+               
+               <tr  align="left" class="blackCat"  style="vertical-align:middle">
+                 <td align="center"  style="border-right-width:3px;"><strong>Total</strong></td>
+                 <td align="right"  ><strong>{{=totalTarget}}&nbsp;</strong></td>
+                 <td align="right"  style="border-right-width:3px;"><strong>{{=totalAchievement}}</strong></td>
+               </tr>
+		    </table>
+	   
+        </td></tr>
+    </table>
+      
+</td>
+</tr>
+</table>
+<br />
+<br />
+

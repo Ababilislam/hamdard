@@ -1,0 +1,87 @@
+{{extend 'layout_report.html'}}
+<html>
+    <head>
+    </head>
+    <body>    
+    <div class="blackCatTitle">&nbsp;Product Performance</div>       
+    
+    <table width="900" class="sample_border" >
+        <tr style="background-color:#E6E6E6;">
+            <td width="150" >Date Range</td>
+            <td width="100" >{{=session.level0Name}}</td>
+            <td width="100" >{{=session.level1Name}}</td>
+            <td width="150" >Visit By</td>
+        </tr>
+        <tr style="background-color:#F0FAFF">
+            <td width="150" >							
+            {{=datetime.datetime.strptime(fromDate,'%Y-%m-%d').strftime('%d-%m-%Y ')}} <b> To</b> {{=datetime.datetime.strptime(toDate,'%Y-%m-%d').strftime('%d-%m-%Y ')}}</td>
+            <td width="100" align="left" valign="top">{{if regionValue=='':}}
+            All
+            {{else:}}
+            {{=regionValueShow}}{{pass}}</td>
+            <td width="100" align="left" valign="top">{{if areaValue=='':}}
+            All
+            {{else:}}
+            {{=areaValueShow}}{{pass}}</td>
+            <td width="150" align="left" valign="top">{{if repCM=='':}}
+            All
+            {{else:}}
+            {{=repCM}}{{pass}}
+            </td>
+        </tr>
+    </table>		
+    <br/>
+    {{if len(records)==0:}}
+        Data not available
+    {{else:}}    
+        <table width="900" style="margin-bottom:10px;" >        
+            
+            {{for i in range(len(recordsSum)):}}
+            {{recSumStr=recordsSum[i]}}
+            <tr>
+                <td width="300" >
+                    <div style="background-color:#603CBA; color:#FFF; margin:1px; text-align:center; border-radius:5px;">
+                        <h4>Total No. of Order</h4>
+                        <h2>{{=recSumStr['orderCount']}}</h2>
+                    </div>
+                </td>
+                <td width="300" >
+                    <div style="background-color:#00A300; color:#FFF; margin:1px; text-align:center; border-radius:5px;">
+                        <h4>Total Order Quantity</h4>
+                        <h2>{{=recSumStr['orderQty']}}</h2>
+                    </div>
+                </td>
+                <td width="300" >
+                    <div style="background-color:#2D89EF; color:#FFF; margin:1px; text-align:center; border-radius:5px;">
+                        <h4>Total Order Amount</h4>
+                        <h2>{{=easy_format(recSumStr['orderAmount'])}}</h2>
+                    </div>
+                </td>                               
+            </tr> 
+            {{pass}}  
+        </table>			
+        
+        <table width="900" border="1" cellpadding="1" cellspacing="1" class="sample_border" >
+            <tr align="left" class="blackCatHead" height="20px" ;  style="font-size:12px; background-color:#E9E9E9;">
+                
+                <td width="100" align="left"  >Item</td>
+                <td width="100"   align="center" >Order Count </td>
+                <td width="100"   align="center" >Order Quantity </td>
+                <td width="100"   align="center" >Order Amount </td>               
+            </tr>        
+            {{for i in range(len(records)):}}
+            {{recStr=records[i]}}
+            <tr  align="left" class="blackCat"  style="vertical-align:middle; font-size:11px;">
+               
+                <td width="100"  align="left" style=" text-align:left;">{{=recStr['item_id']}}|{{=recStr['item_name']}}</td>
+                <td width="100"   style=" text-align:center;">{{=recStr['orderCount']}}</td> 
+                <td width="100" style=" text-align:center;">{{=recStr['orderQty']}}</td>
+                <td width="100"  style=" text-align:center;">{{=easy_format(recStr['orderAmount'])}}</td>                        
+            </tr>
+            {{pass}}       
+        </table>
+     {{pass}}  
+     <br>  <br><br>
+    </body>
+</html>
+

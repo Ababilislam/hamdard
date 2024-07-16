@@ -1,0 +1,121 @@
+{{extend 'layout_sample_report.html'}}
+
+<html>
+<head>
+</head>
+<body>
+<table width="900px" style="border:none; text-align:center; font-weight:bold;" >
+        <tr >
+            <td width="100" >&nbsp;</td>
+            <td align="center" ><span style="border-bottom:1px solid #333;">Summary</span></td>
+            <td width="100" ><img  height="30px" src="{{=URL('static','images/comp_logo1.png')}}"/></td>
+        </tr>
+    </table>
+
+    <table width="900" style="border:none; font-weight:bold;" >
+        <tr >
+            <td width="100"  >Date Range</td>
+            <td width="2" >:</td>
+            <td colspan="4" >{{=date_from}}&nbsp;&nbsp; To &nbsp;&nbsp; {{=date_to}}</td>    
+            <td width="100"  ></td>
+            <td width="2" ></td>
+            <td></td>
+            <td width="100"  ></td>
+            <td width="2" ></td>
+            <td></td>            
+        </tr>
+        <tr >
+        	<td width="100"  >Region</td>
+            <td width="2" >:</td>
+            <td width="100" >{{if pr_region=='':}}ALL{{else:}}{{=pr_region}}{{pass}}</td>
+        	<td width="100"  >Zone</td>
+            <td width="2" >:</td>
+            <td width="100" >{{if pr_zone=='':}}ALL{{else:}}{{=pr_zone}}{{pass}}</td>
+            <td width="100"  >Area</td>
+            <td width="2" >:</td>
+            <td width="100" >{{if pr_area=='':}}ALL{{else:}}{{=pr_area}}{{pass}}</td>    
+            <td width="100"  >Territory</td>
+            <td width="2" >:</td>
+            <td>{{if pr_territory=='':}}ALL{{else:}}{{=pr_territory}}{{pass}}</td>            
+        </tr>
+        <tr >
+            <td width="100"  >Field Force</td>
+            <td width="2" >:</td>
+            <td colspan="4" >{{if pr_ff=='':}}ALL{{else:}}{{=pr_ff}}{{pass}}</td>    
+            <td width="100"  >Doctor</td>
+            <td width="2" >:</td>
+            <td colspan="4" >{{if pr_doctor=='':}}ALL{{else:}}{{=pr_doctor}}{{pass}}</td>
+            <td width="100"  ></td>
+            <td width="2" ></td>
+            <td></td>            
+        </tr>		  
+    </table>
+	
+    <table width="900px" border="1" cellpadding="1" cellspacing="1" class="sample_border" >
+        <tr align="left" style="background-color:#EBEBEB; font-size:12px; font-weight:bold;" >		    
+            <td style="width:100px;">Sl</td> 
+            <td style="width:100px;">DATE</td> 
+            <td style="width:100px;">PHY_ID</td>
+            <td style="width:100px;">PHY_NM</td>  
+            <td style="width:100px;">PHY_DEGREE</td> 
+            <td style="width:100px;">PHY_SPECIALTY</td>
+            <td style="width:100px;">COMPANY_NAME</td>                   
+            <td style="width:100px;">UNIT_PRC</td>
+            <td style="width:100px;">GENERIC</td>
+            <td style="width:100px;">BRAND</td>
+            <td style="width:100px;">Rx_QT</td>
+            <td style="width:100px;">MPO</td>
+            <td style="width:100px;">AM</td>
+            <td style="width:100px;">RM</td>
+            <td style="width:100px;">REGION</td>
+            <td style="width:100px;">MPO_TM</td>
+            <td style="width:100px;">AM_TM</td>
+            <td style="width:100px;">MPO_NAME</td>
+            <td style="width:100px;">AM_NAME</td>
+            <td style="width:100px;">CHAMBER_ADDRESS</td>
+            <td style="width:100px;">MPO_NAME_S</td>
+            <td style="width:100px;">AM_NAME_S</td>
+            <td style="width:100px;">TL_NAME_S</td>
+      </tr>
+        
+        {{slNo=0}}
+        {{for i,record in enumerate(records):}}
+        {{slNo+=1}}
+        
+        <tr  align="left" style="font-size:11px;">
+            <td >{{=slNo}}</td>
+            <td >{{=record[db.sm_prescription_head.submit_date]}}</td>
+            <td >{{=str(record[db.sm_prescription_head.doctor_id]).replace(',',' ')}}</td>
+            <td >{{=str(record[db.sm_prescription_head.doctor_name]).replace(',',' ')}}</td>
+            <td >{{=str(record[db.sm_prescription_head.doctor_degree]).replace(',',' ')}}</td>
+            <td >{{=str(record[db.sm_prescription_head.doctor_speciality]).replace(',',' ')}}</td>
+            <td >{{=str(record[db.sm_prescription_details.company]).replace(',',' ')}}</td>
+            <td >0</td>
+            <td >{{=str(record[db.sm_prescription_details.generic]).replace(',',' ')}}</td>
+            <td >{{=str(record[db.sm_prescription_details.brand]).replace(',',' ')}}</td>
+            <td >{{=str(record[db.sm_prescription_details.id.count()]).replace(',',' ')}}</td>
+            <td >{{=str(record[db.sm_prescription_head.area_id]).replace(',',' ')}}</td>
+            <td >{{=str(record[db.sm_prescription_head.tl_id]).replace(',',' ')}}</td>
+            <td >{{=str(record[db.sm_prescription_head.reg_id]).replace(',',' ')}}</td>
+            <td >{{=str(record[db.sm_prescription_head.zone_id]).replace(',',' ')}}</td>
+            <td >{{=str(record[db.sm_prescription_head.area_name]).replace(',',' ')}}</td>
+            <td >{{=str(record[db.sm_prescription_head.tl_name]).replace(',',' ')}}</td>
+            <td >{{=str(record[db.sm_prescription_head.level3_sup_name]).replace(',',' ')}}</td>
+            <td >{{=str(record[db.sm_prescription_head.level2_sup_name]).replace(',',' ')}}</td>
+            <td >{{=str(record[db.sm_prescription_head.level3_sup_name_s]).replace(',',' ')}}</td>
+            <td >{{=str(record[db.sm_prescription_head.level2_sup_name_s]).replace(',',' ')}}</td>
+            <td >{{=str(record[db.sm_prescription_head.level1_sup_name_s]).replace(',',' ')}}</td>
+            <td >{{=str(record[db.sm_prescription_head.doctor_chamber_address]).replace(',',' ')}}</td>            
+        </tr>
+        {{pass}}        
+        <!--<tr  align="left" style=" background-color:#F4F4F4; font-size:11px; font-weight:bold;">
+            <td style="text-align:center" colspan="6"></td>                    
+            <td style="text-align:right;"></td>
+        </tr>-->
+        
+</table>		 
+
+</body>
+
+</html>
+

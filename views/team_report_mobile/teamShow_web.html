@@ -1,0 +1,306 @@
+<!--start-->
+
+{{#extend 'layout.html'}}
+
+
+
+<link rel="stylesheet" href="{{=URL('static', 'js_and_css/ui.theme.css')}}" type="text/css" />
+
+<link rel="stylesheet" href="{{=URL('static', 'js_and_css/jquery-ui.css')}}" type="text/css" />
+
+<link rel="stylesheet" href="{{=URL('static', 'js_and_css/style.css')}}" type="text/css" />
+
+<script src="{{=URL('static','js_and_css/jquery-1.8.2.js')}}"></script>
+
+<script src="{{=URL('static','js_and_css/jquery-ui.js')}}"></script>
+
+  
+
+<style type="text/css">
+
+
+
+ input[type=text], input[type=password],  select {
+
+    margin: 2px 0px 2px 0px;
+
+	width:100px;
+
+}
+
+
+
+div.error {
+
+    padding: 0px;
+
+	width:inherit;
+
+	margin-left:0px;
+
+}
+
+
+
+.page_color,body{
+
+	font-family:Arial, Helvetica, sans-serif;
+
+	font-size:13px;	
+
+	}
+
+
+
+ </style>
+
+ 
+
+ 
+
+ <script>
+
+var base_url=location.protocol + "//" + location.hostname + (location.port && ":" + location.port) + "/{{=request.application}}/";
+
+
+
+
+</script>
+
+ 
+
+
+
+<table width="100%"  border="0" cellspacing="0" cellpadding="0" style="background-color:#FFFFFF;" >
+
+  <tr height="30px" >
+
+    <td width="500"><span class="blackCatTitle">Order/Visit List</span></td>
+
+    
+
+	
+
+    <td>&nbsp;</td>
+
+  </tr>
+
+  <tr  height="1px" style="background-color:#CCCCCC;">
+
+	    <td colspan="3" ></td>
+
+  </tr>
+
+</table>
+
+   {{if totalRecords != 0 :}}  
+
+  
+
+            <table width="1000" border="0" cellpadding="0" cellspacing="0" >
+
+            <form id="form1" name="form1" method="post" action="{{=URL(c='z_test',f='order_details',vars=dict(req_sl=0))}}" target="_blank">
+
+          <tr  align="left" class="blackCat"  style="vertical-align:middle">
+
+            <td width="807" align="left" >      
+
+            <td width="93" align="right"  >&nbsp;</td>
+
+          </tr>
+
+            </form>
+
+	 
+
+	  </table>
+
+      
+
+     <br />
+
+
+				  
+			  <table width="600" height="78" border="0" cellpadding="0" cellspacing="0">            
+
+            <tr>
+
+              <td width="100%" colspan="2">
+				
+              	
+
+				  <strong>Total:</strong> {{=totalCount}}<br />
+                  
+              </td>
+              </tr>
+              </table>    
+                  
+                  
+              <br />    
+
+			  <table width="100%" border="1" cellpadding="0" cellspacing="0" class="sample_border" >
+
+                  <tr align="left" class="blackCatHead"  height="20px" ;"vertical-align:middle" style="background-color:#B1D8D8">
+                
+                     
+
+                    <td width="20%" >Depot<br />
+					{{=session.level3Name}}</td>
+                   
+                   
+                   
+                   <td width="5%" >SL</td>
+                   
+
+                    <td width="20%" >Client</td>
+
+                
+
+                    <td width="25%"  >Rep/Sup<br />
+                    Mobile</td>
+
+                    <td width="10%"  >Visit Date<br />
+                    DeliveryDate</td>
+
+                   
+                  
+
+                  
+
+                    <td width="10%" align="left"  >
+                    
+                    Location</td>
+
+                    <td width="10%"  >&nbsp;</td>
+
+                 
+                  </tr>
+
+				  
+
+				  {{#preSl=0}}
+
+				  {{#newsl=0}}
+
+				  {{#j=0}}
+					{{#record=''}}
+ 		  
+				<form name="headForm" id="headForm" method="post" action="{{=URL(c='z_test',f='order')}}">
+					<input type="hidden" name="vslList" id="vslfield" value="-1">
+                  
+			   {{for i,record in enumerate(records):}}
+				{{#record=''}}
+			   	{{if i==items_per_page: break}}
+
+					 {{if i%2==0:}}
+
+					<tr align="left" style=" background-color:#F1F1F1;vertical-align:middle;  font-size:11px"  class="blackCat">
+
+					<!--<tr  align="left" class="blackCat"  style="vertical-align:middle; font-size:11px;">-->
+					{{else:}}
+					<tr align="left" style=" background-color:#DCEFEF; vertical-align:middle;  font-size:11px"  class="blackCat">
+					{{pass}}	
+					  
+
+					  <td  >{{=record.depot_id}}-
+
+				      <font size="1">{{=record.depot_name}}</font><br />
+                      
+                      {{=record.area_id}}- <font size="1">{{=record.area_name}}</font></td>
+                      
+                      
+                      
+                      <td  >{{=record.sl}}</td>
+
+					  
+
+					  <td >{{=record.client_id}}<br />
+
+				      <font size="1">{{=record.client_name}}</font></td>
+
+
+
+					  <td  >{{=record.rep_id}}-
+
+				      <font size="1">{{=record.rep_name}}</font><br />
+                      
+                      {{=record.mobile_no}}</td>
+
+					  
+
+					  <td  >{{=record.order_datetime.strftime('%d-%m-%Y %I:%M%p')}}<br />
+                      
+                      {{=record.delivery_date.strftime('%d-%m-%Y')}}</td>
+
+					 
+					  
+						
+					 <td align="left"  >
+                     
+                       
+						
+                        
+                      {{if ((str(record.lat_long)!='0') & (str(record.lat_long)!='0,')):}}
+                      <a href="{{='https://maps.google.com/?q='+str(record.lat_long)}}" target="_blank">Location</a>
+                      {{pass}}
+                       
+                       
+                       
+                                        
+
+                      </td>
+					  
+                     
+					  <td  align="right">
+                      {{#ordRow=db((db.sm_order.cid==session.cid)&(db.sm_order.vsl==record.id)).select(db.sm_order.vsl,limitby=(0,1))}}
+						
+                      {{#if ordRow:}}
+                      
+                      {{ if record.field1=='ORDER':}}
+						<a href="{{=URL(c='z_test',f='order_details',vars=dict(req_sl=record.sl,dptid=record.depot_id),args=[page])}}" target="_blank">
+                      		<input type="button" name="btn_detail" id="btn_detail" value="Details &gt;" style="background-color:#005E5E; color:#FFF"  class="button_update"/>
+						</a>                        
+                      {{pass}} 
+                      </td>
+					  
+					</tr>
+					
+					
+					{{pass}}
+                    
+                 <tr  align="left" class="blackCat"  style="vertical-align:middle; font-size:13px;">
+					  <td colspan="16" >
+                      
+                      
+					    {{if page:}}
+					    &nbsp;&nbsp;<a href="{{=URL(args=[page-page])}}">first</a> |
+					    &nbsp;&nbsp;<a href="{{=URL(args=[page-1])}}">previous</a> |
+					    {{pass}}
+					    
+					    {{if len(records)>items_per_page:}}
+					    &nbsp;&nbsp;<a href="{{=URL(args=[page+1])}}">next</a>
+					    {{pass}}
+					    {{pass}}   <!--if record != '' -->
+					    </td>
+					  </tr>                    
+<!--				<tr  align="left" class="blackCat"  style="vertical-align:middle; font-size:13px;">
+
+					  </tr>
+					<tr  align="left" class="blackCat"  style="vertical-align:middle; font-size:13px;">
+
+					  </tr>
+-->               
+
+
+			 </form>
+                
+              </table>
+              
+<br />
+
+
+
+
+
+
+

@@ -1,0 +1,288 @@
+{{extend 'layout.html'}}
+
+  <link rel="stylesheet" href="{{=URL('static', 'js_and_css/ui.theme.css')}}" type="text/css" />
+  <link rel="stylesheet" href="{{=URL('static', 'js_and_css/jquery-ui.css')}}" type="text/css" />
+  <link rel="stylesheet" href="{{=URL('static', 'js_and_css/style.css')}}" type="text/css" />
+   <script src="{{=URL('static','js_and_css/jquery-1.8.2.js')}}"></script>
+    <script src="{{=URL('static','js_and_css/jquery-ui.js')}}"></script>
+  
+  
+  <style type="text/css">
+	 input[type=text], input[type=password],  select {
+    margin: 2px 0px 2px 0px;
+	}
+	
+	#sm_client_status,#sm_client_category_id{
+	width:auto;
+	}
+	#sm_client_client_id,#sm_client_area_id{
+	width:70px;
+	}
+	
+	#sm_client_op_balance,#sm_client_balance,#sm_client_credit_limit{
+	width:60px;
+	text-align:right;
+	}
+	
+	div.error {
+		color: white;
+		padding: 0px;
+		width: auto; 
+		margin-left:0px;
+	}
+	.page_color,body{
+		font-family:Arial, Helvetica, sans-serif;
+		font-size:13px;	
+		}
+ </style>
+ 
+<script>
+var base_url=location.protocol + "//" + location.hostname + (location.port && ":" + location.port) + "/{{=request.application}}/";
+
+$(function() {	 	
+		//--------------------
+		var approveSpoListStr=''
+		
+		$('#spo_idname').keyup(function(){
+			//---------------------------;
+			$.ajax({
+				  url: base_url+'default/get_rep_list',
+				  success: function(resStr) {
+					  approveSpoListStr=resStr
+				  }
+				});
+			
+			//-------------------------
+			var approveSpoList = approveSpoListStr.split(',');				
+			var searchValue1=$("#spo_idname").val();
+			
+			//---------------- auto complete combo list
+			var approveSpoList_new=new Array();
+			lc=0;
+			i =0;
+			var valueStr1="";				
+			while (i < approveSpoList.length)
+			{
+				valueStr1=approveSpoList[i];
+				i=i+1;					
+				var res1=valueStr1.toUpperCase().match(searchValue1.toUpperCase());
+				if (res1!=null){
+					approveSpoList_new[lc]=valueStr1;
+					lc=lc+1;
+					if (lc==30){
+						break;
+					};
+				}else{
+					continue;
+				}					
+			};
+			
+			//-------------- auto complete source
+			$( "input#spo_idname" ).autocomplete({
+				source: approveSpoList_new
+			});
+	  }); 
+	  
+		
+		
+		//---------------------
+		var valueListStr="";
+		
+		$('#search_type').blur(function(){
+			if ($('#search_type').val()=='SubmitBy'){
+				//alert(base_url+'default/get_route_list');
+				$.ajax({
+					  url: base_url+'default/get_rep_list',
+					  success: function(resStr) {
+						  valueListStr=resStr
+					  }
+					});
+			}else if ($('#search_type').val()=='ComplainFrom'){
+				$.ajax({
+					  url: base_url+'default/get_complain_from_list',
+					  success: function(resStr) {
+						  valueListStr=resStr
+					  }
+					});				
+			}else if ($('#search_type').val()=='ComplainType'){
+				$.ajax({
+					  url: base_url+'default/get_complain_type_list',
+					  success: function(resStr) {
+						  valueListStr=resStr
+					  }
+					});				
+			}else if ($('#search_type').val()=='Status'){
+				valueListStr='Submitted,Replied'
+				
+			}else if ($('#search_type').val()=='Action'){
+				valueListStr='Pending,Resolved'
+				
+			}else if ($('#search_type').val()=='DepotID'){
+				$.ajax({
+					  url: base_url+'default/get_depot_list',
+					  success: function(resStr) {
+						  valueListStr=resStr
+					  }
+					});
+			
+			};
+			
+	 	});
+	 
+	 
+		$('#search_value').keyup(function(){
+			//-------------------------
+			var valueList = valueListStr.split(',');				
+			var searchValue=$("#search_value").val();
+			
+			//---------------- auto complete combo list
+			var valueList_new=new Array();
+			lc=0;
+			i =0;
+			var valueStr="";				
+			while (i < valueList.length)
+			{
+				valueStr=valueList[i];
+				i=i+1;					
+				var res=valueStr.toUpperCase().match(searchValue.toUpperCase());
+				if (res!=null){
+					valueList_new[lc]=valueStr;
+					lc=lc+1;
+					if (lc==30){
+						break;
+					};
+				}else{
+					continue;
+				}					
+			};
+			//alert (ref_list_new);
+			
+			//-------------- auto complete source
+			$( "input#search_value" ).autocomplete({
+				source: valueList_new
+			});
+		
+	  }); 
+	    
+}); 
+
+</script>
+
+{{currYear=str(date_fixed)[0:4]}}
+{{currMonth=str(date_fixed)[5:7]}}
+
+<table width="100%"  border="0" cellspacing="0" cellpadding="0" style="background-color:#FFFFFF;" >
+  <tr height="30px" >
+    <td><span class="blackCatTitle">Market Feedback</span></td>
+  </tr>
+  <tr  height="1px" style="background-color:#CCCCCC;">
+	    <td ></td>
+  </tr>
+  </table>
+  
+  
+  <table width="100%" height="500px"  border="0" cellspacing="0" cellpadding="0" class="page_color"  >
+  <tr height="100%"  style="vertical-align:top;">
+    <td>
+	<table width="100%"  border="0" cellpadding="0" cellspacing="0"  >
+      <tr>
+        <td width="5">&nbsp;</td>
+        <td>
+		
+		<table width="1000" border="0" cellpadding="0" cellspacing="0" >
+			<form id="form1" name="form1" method="post" action="{{#=URL(c='client_visit',f='visit_plan')}}">
+            <tr>
+				<td width="100">&nbsp;</td>
+				<td width="900" align="right">&nbsp;</td>
+				<td align="right">&nbsp;</td>
+			</tr>
+            </form>
+		</table>
+		
+		</td>
+      </tr>
+      <tr>
+        <td width="5">&nbsp;</td>
+        <td>			
+            <br />
+               <table width="1000" border="1" cellpadding="1" cellspacing="1" class="sample_border" >
+               
+			   <form id="form1" name="form1" method="post" action="{{=URL(c='client_visit',f='complain')}}">
+                 <tr align="left" class="blackCatHead"  height="20px" ;"vertical-align:middle">
+                   <td width="180" >
+                   <select name="search_type" id="search_type" style="width:180px" >
+                       <option selected="selected">Select a Type</option>
+                        {{if session.search_type_comp=='SubmitBy':}}<option value="SubmitBy" selected="selected">SubmitBy ID/Name</option>{{else:}}<option value="SubmitBy" >SubmitBy ID/Name</option>{{pass}}
+                        {{if session.search_type_comp=='ComplainType':}}<option value="ComplainType" selected="selected">Feedback Type</option>{{else:}}<option value="ComplainType" >Feedback Type</option>{{pass}}
+                        </select>
+				   </td>
+                   <td >
+                   {{if session.search_value_comp=='' or session.search_value_comp==None:}}
+                    <input  name="search_value" type="text" id="search_value" size="25" value="" placeholder="Select a value" autocomplete="off" style="width:300px"/>
+                  {{else:}}
+                    <input  name="search_value" type="text" id="search_value" size="25" value="{{=session.search_value_comp}}" placeholder="Select a value" autocomplete="off" style="width:300px"/>
+                  {{pass}}
+                   
+                   </td>
+                   <td width="100" align="right"  ><input type="submit" name="btn_filter" id="btn_filter" value="Filter"   class="button_update"/>
+                   <input type="submit" name="btn_all" id="btn_all" value="All"   class="button_update"/></td>
+                   <td width="200" align="right"  >&nbsp;</td>
+                   <td width="80" align="right"  >&nbsp;</td>
+                   
+                   {{if access_permission==True:}}
+                   <td width="80" align="right"  >&nbsp;</td>
+                   {{pass}}
+                   
+                  </tr>
+			     </form>
+            </table>
+				<br />
+			 <table width="1000" border="1" cellpadding="1" cellspacing="1" class="sample_border" >
+               <tr align="left" class="blackCatHead"  height="20px" ;"vertical-align:middle">
+                 <td width="100" >Date</td>
+                 <td width="150" >Submitted By</td>
+                 <td width="120" >Feedback Type</td>
+                 <td >Feedback</td>
+                                   {{if access_permission==True:}}                 {{pass}}
+               </tr>
+			   
+			   {{for i,record in enumerate(records):}}
+			   		{{ if i==items_per_page: break}}
+  					
+                      <tr  align="left" class="blackCat"  style="font-size:12px"> 
+                      <td width="100" >{{=record.submit_date}}</td>
+                      <td width="150" >{{=record.submitted_by_id}} - {{=record.submitted_by_name}}</td>
+                      <td width="120" >{{=record.complain_type}}</td>
+                      <td >{{=record.ref}}</td>
+                      <form id="form1" name="form1" method="post" action="{{=URL(c='client_visit',f='complain_update',args=[page,record.id])}}">
+                      
+                      
+                      {{if access_permission==True:}}
+                      {{pass}}
+                      
+                      </form>
+                      
+                    </tr>
+  			 {{pass}}
+	
+      </table>
+    
+    
+	      </td>
+         </tr>
+    </table>
+
+{{if page:}}
+&nbsp;&nbsp;<a href="{{=URL(args=[page-page])}}">first</a> |  
+&nbsp;&nbsp;<a href="{{=URL(args=[page-1])}}">previous</a> |
+{{pass}}
+
+{{if len(records)>items_per_page:}}
+&nbsp;&nbsp;<a href="{{=URL(args=[page+1])}}">next</a>
+{{pass}}
+	</td>
+  </tr>
+</table>
+<br />
+<br />
+

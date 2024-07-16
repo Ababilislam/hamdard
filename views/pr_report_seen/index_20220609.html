@@ -1,0 +1,1223 @@
+{{extend 'layout.html'}}
+<head>
+<link rel="stylesheet" href="{{=URL('static', 'js_and_css/ui.theme.css')}}" type="text/css" />
+<link rel="stylesheet" href="{{=URL('static', 'js_and_css/jquery-ui.css')}}" type="text/css" />
+<link rel="stylesheet" href="{{=URL('static', 'js_and_css/style.css')}}" type="text/css" />
+
+<script src="{{=URL('static','js_and_css/jquery-1.8.2.js')}}"></script>
+<script src="{{=URL('static','js_and_css/jquery-ui.js')}}"></script>
+
+<style type="text/css">
+
+	input[type=submit] {
+		margin: 2px 0px 2px 0px;
+		padding: 0px 0px 2px 0px;
+		font-size:10px;
+	}
+
+	input[type=text] {
+		width:120px;
+	}
+	.checkbox{
+	padding-left:0px;
+
+	}
+
+		
+	.rptlist{height:auto; }
+	.rptlist:hover{ height:auto;}
+	.rptul{color:#0076AE; background-color:#F0F0F0;}
+	.rptdiv{  font-size:16px; color:#0076AE; background-color:#F0F0F0;}
+	#accordionReport ul{ list-style-type:none;margin:0; }
+	#accordionReport li{ margin:1px; border-radius:5px; border-bottom:1px solid #CCCCCC; background-color:#F7F7F7; height:20px; padding:5px 2px 2px 15px;}/*:#F7F7F7*/
+	#accordionReport li:hover{ height:21px;background-color:#F5F5F5;}
+
+</style>
+
+
+
+<script>
+var base_url=location.protocol + "//" + location.hostname + (location.port && ":" + location.port) + "/{{=request.application}}/";
+
+ $(function() { 
+	
+	$( "#accordionReport" ).accordion({
+	  active:0,
+      heightStyle: "content",
+	  collapsible: true
+    });
+
+
+	
+
+
+
+
+
+	$.ajax({
+		  //url: base_url+'default/get_generic_name_list',
+		  success: function(resStr) {
+			  genStr=resStr
+		  }
+		});
+ 
+	$('#med_generic3').keyup(function(){	
+		
+		//-------------------------
+		var ref_list = genStr.split(',');				
+		var ref_name=$("#med_generic3").val();
+		
+		//---------------- auto complete combo list
+		var ref_list_new=new Array();
+		lc=0;
+		i =0;
+		var refStr="";				
+		while (i < ref_list.length)
+		{
+			refStr=ref_list[i];
+			i=i+1;					
+			var res=refStr.toUpperCase().match(ref_name.toUpperCase());
+			if (res!=null){
+				ref_list_new[lc]=refStr;
+				lc=lc+1;
+				if (lc==30){
+					break;
+				};
+			}else{
+				continue;
+			}					
+		};
+		//alert (ref_list_new);
+		
+		//-------------- auto complete source
+		$( "input#med_generic3" ).autocomplete({
+			source: ref_list_new
+		});
+		
+	});	
+	
+// ========================== ff 
+	$.ajax({
+		  //url: base_url+'default/get_rep_list',
+		  success: function(resStr) {
+			  ffStr=resStr
+		  }
+		});
+ 	
+	// ff 2
+	$('#pr_ff2').keyup(function(){		
+		//-------------------------
+		var ref_list = ffStr.split(',');				
+		var ref_name=$("#pr_ff2").val();
+		
+		//---------------- auto complete combo list
+		var ref_list_new=new Array();
+		lc=0;
+		i =0;
+		var refStr="";				
+		while (i < ref_list.length)
+		{
+			refStr=ref_list[i];
+			i=i+1;					
+			var res=refStr.toUpperCase().match(ref_name.toUpperCase());
+			if (res!=null){
+				ref_list_new[lc]=refStr;
+				lc=lc+1;
+				if (lc==30){
+					break;
+				};
+			}else{
+				continue;
+			}					
+		};
+		//alert (ref_list_new);
+		
+		//-------------- auto complete source
+		$( "input#pr_ff2" ).autocomplete({
+			source: ref_list_new
+		});
+		
+	});	
+	// ff 3
+	$('#pr_ff3').keyup(function(){		
+		//-------------------------
+		var ref_list = ffStr.split(',');				
+		var ref_name=$("#pr_ff3").val();
+		
+		//---------------- auto complete combo list
+		var ref_list_new=new Array();
+		lc=0;
+		i =0;
+		var refStr="";				
+		while (i < ref_list.length)
+		{
+			refStr=ref_list[i];
+			i=i+1;					
+			var res=refStr.toUpperCase().match(ref_name.toUpperCase());
+			if (res!=null){
+				ref_list_new[lc]=refStr;
+				lc=lc+1;
+				if (lc==30){
+					break;
+				};
+			}else{
+				continue;
+			}					
+		};
+		//alert (ref_list_new);
+		
+		//-------------- auto complete source
+		$( "input#pr_ff3" ).autocomplete({
+			source: ref_list_new
+		});
+		
+	});	
+	// ff 4
+	$('#pr_ff4').keyup(function(){		
+		//-------------------------
+		var ref_list = ffStr.split(',');				
+		var ref_name=$("#pr_ff4").val();
+		
+		//---------------- auto complete combo list
+		var ref_list_new=new Array();
+		lc=0;
+		i =0;
+		var refStr="";				
+		while (i < ref_list.length)
+		{
+			refStr=ref_list[i];
+			i=i+1;					
+			var res=refStr.toUpperCase().match(ref_name.toUpperCase());
+			if (res!=null){
+				ref_list_new[lc]=refStr;
+				lc=lc+1;
+				if (lc==30){
+					break;
+				};
+			}else{
+				continue;
+			}					
+		};
+		//alert (ref_list_new);
+		
+		//-------------- auto complete source
+		$( "input#pr_ff4" ).autocomplete({
+			source: ref_list_new
+		});
+		
+	});	
+	
+	
+	
+	// ========================== doctor
+
+
+$.ajax({
+		  url: base_url+'default/get_doctor_list',
+		  success: function(resStr) {
+			  docStr=resStr
+		  }
+		});
+ 	
+	// doctor 2
+	$('#pr_doctor2').keyup(function(){	
+		
+		//-------------------------
+		var ref_list = docStr.split(',');				
+		var ref_name=$("#pr_doctor2").val();
+		
+		//---------------- auto complete combo list
+		var ref_list_new=new Array();
+		lc=0;
+		i =0;
+		var refStr="";				
+		while (i < ref_list.length)
+		{
+			refStr=ref_list[i];
+			i=i+1;					
+			var res=refStr.toUpperCase().match(ref_name.toUpperCase());
+			if (res!=null){
+				ref_list_new[lc]=refStr;
+				lc=lc+1;
+				if (lc==30){
+					break;
+				};
+			}else{
+				continue;
+			}					
+		};
+		//alert (ref_list_new);
+		
+		//-------------- auto complete source
+		$( "input#pr_doctor2" ).autocomplete({
+			source: ref_list_new
+		});
+		
+	});	
+	// doctor 3
+	$('#pr_doctor3').keyup(function(){	
+		
+		//-------------------------
+		var ref_list = docStr.split(',');				
+		var ref_name=$("#pr_doctor3").val();
+		
+		//---------------- auto complete combo list
+		var ref_list_new=new Array();
+		lc=0;
+		i =0;
+		var refStr="";				
+		while (i < ref_list.length)
+		{
+			refStr=ref_list[i];
+			i=i+1;					
+			var res=refStr.toUpperCase().match(ref_name.toUpperCase());
+			if (res!=null){
+				ref_list_new[lc]=refStr;
+				lc=lc+1;
+				if (lc==30){
+					break;
+				};
+			}else{
+				continue;
+			}					
+		};
+		//alert (ref_list_new);
+		
+		//-------------- auto complete source
+		$( "input#pr_doctor3" ).autocomplete({
+			source: ref_list_new
+		});
+		
+	});
+	//doctor 4
+	$('#pr_doctor4').keyup(function(){	
+		
+		//-------------------------
+		var ref_list = docStr.split(',');				
+		var ref_name=$("#pr_doctor4").val();
+		
+		//---------------- auto complete combo list
+		var ref_list_new=new Array();
+		lc=0;
+		i =0;
+		var refStr="";				
+		while (i < ref_list.length)
+		{
+			refStr=ref_list[i];
+			i=i+1;					
+			var res=refStr.toUpperCase().match(ref_name.toUpperCase());
+			if (res!=null){
+				ref_list_new[lc]=refStr;
+				lc=lc+1;
+				if (lc==30){
+					break;
+				};
+			}else{
+				continue;
+			}					
+		};
+		//alert (ref_list_new);
+		
+		//-------------- auto complete source
+		$( "input#pr_doctor4" ).autocomplete({
+			source: ref_list_new
+		});
+		
+	});
+	
+});
+
+/*
+// get quater
+function getQuarter(i){		
+	var combStr='<option value="">Quater</option>';
+	combStr+='<option value="1">One</option>';
+	combStr+='<option value="2">Two</option>';
+	combStr+='<option value="3">Three</option>';
+	combStr+='<option value="4">Four</option>';
+	
+	$("#pr_quarter"+i).empty();	
+	$("#pr_quarter"+i).append(combStr);
+	
+	$("#pr_month"+i).empty();
+	$("#pr_cycle"+i).empty();	
+	}
+
+// get month
+function ctGetMonth(i){
+	var quarter=$("#pr_quarter"+i).val();
+	var combStr='';
+	
+	if(quarter==1){
+		combStr='<option value="">Month</option>';
+		combStr+='<option value="01">Jan</option>';
+		combStr+='<option value="02">Feb</option>';
+		combStr+='<option value="03">March</option>';
+	}else if(quarter==2){
+		combStr='<option value="">Month</option>';
+		combStr+='<option value="04">Apr</option>';
+		combStr+='<option value="05">May</option>';
+		combStr+='<option value="06">Jun</option>';
+	}else if(quarter==3){
+		combStr='<option value="">Month</option>';
+		combStr+='<option value="07">July</option>';
+		combStr+='<option value="08">Aug</option>';
+		combStr+='<option value="09">Sep</option>';
+	}else if(quarter==4){
+		combStr='<option value="">Month</option>';
+		combStr+='<option value="10">Oct</option>';
+		combStr+='<option value="11">Nov</option>';
+		combStr+='<option value="12">Dec</option>';
+	}else{
+		combStr='<option value="">Month</option>';
+	}		
+
+	
+	$("#pr_month"+i).empty();	
+	$("#pr_month"+i).append(combStr);
+	
+	
+	$("#pr_cycle"+i).empty();
+	}
+// get cycle
+function getCycle(i){
+	var pr_month=$("#pr_month1").val();
+	
+	var combStr='<option value="">Cycle</option>';
+	combStr+='<option value="1">C1</option>';
+	combStr+='<option value="2">C2</option>';
+	combStr+='<option value="3">C3</option>';
+	combStr+='<option value="4">C4</option>';
+	
+	$("#pr_cycle"+i).empty();	
+	$("#pr_cycle"+i).append(combStr);	
+	
+	
+	}
+*/
+
+//------------ get zone
+function getZone(k){	
+	var pr_region=$("#pr_region"+k).val();
+	$("#pr_zone"+k).empty();
+	$("#pr_area"+k).empty();
+	$("#pr_territory"+k).empty();	
+	$.ajax({
+		  url: base_url+'pr_report/get_zone?region='+pr_region,
+		  success: function(resStr) {
+			  retStr1=resStr.split("<rd>");
+			  retStrLen=retStr1.length;
+			  var combStr='<option value="">ALL</option>';
+			  for(i=0;i<retStrLen;i++){
+				  retStr2=retStr1[i].split('<fd>');				  
+				  combStr+='<option value="'+retStr2[0]+'">'+retStr2[1]+'</option>';
+				  }
+			  $("#pr_zone"+k).empty();
+			  $("#pr_zone"+k).append(combStr);
+		  }
+		});
+	
+	}
+
+//------------ get area
+function getArea(k){	
+	var pr_region=$("#pr_region"+k).val();
+	var pr_zone=$("#pr_zone"+k).val();
+	$("#pr_area"+k).empty();
+	$("#pr_territory"+k).empty();
+	$.ajax({
+		  url: base_url+'pr_report/get_area?region='+pr_region+'&zone='+pr_zone,
+		  success: function(resStr) {
+			  retStr1=resStr.split("<rd>");
+			  retStrLen=retStr1.length;	
+			  var combStr='<option value="">ALL</option>';		  
+			  for(i=0;i<retStrLen;i++){
+				  retStr2=retStr1[i].split('<fd>');				  
+				  combStr+='<option value="'+retStr2[0]+'">'+retStr2[1]+'</option>';
+				  }
+			  $("#pr_area"+k).append(combStr);
+		  }
+		});
+}
+
+//------------ get area
+function getTerritory(k){
+	var pr_region=$("#pr_region"+k).val();
+	var pr_zone=$("#pr_zone"+k).val();
+	var pr_area=$("#pr_area"+k).val();
+	
+	$.ajax({
+		  url: base_url+'pr_report/get_territory?region='+pr_region+'&zone='+pr_zone+'&area='+pr_area,
+		  success: function(resStr) {
+			  retStr1=resStr.split("<rd>");
+			  retStrLen=retStr1.length;			  
+			  var combStr='<option value="">ALL</option>';
+			  for(i=0;i<retStrLen;i++){
+				  retStr2=retStr1[i].split('<fd>');				  
+				  combStr+='<option value="'+retStr2[0]+'">'+retStr2[1]+'</option>';
+				  }
+			  $("#pr_territory"+k).empty();	
+			  $("#pr_territory"+k).append(combStr);
+		  }
+		});
+}
+
+
+</script>
+
+
+
+</head>
+<body >
+<table width="100%" border="0" cellspacing="0" cellpadding="0" style="background-color:#FFFFFF;">
+    <tr height="30px">
+    	<td><div class="blackCatTitle">Prescription Report Seen Rx</div></td>
+    </tr>
+    <tr >
+    	<td height="1px" style="background-color:#CCCCCC;"></td>
+    </tr>
+</table>
+
+<div id="accordionReport"  style="width:90%; margin:20px 0px 0px 10px;">
+    <!--<div  class="rptdiv">
+        <ul class="rptul">
+        	<li class="rptlist"> Company Track </li>
+        </ul>
+    </div>
+    <div >  
+        <table width="750" border="0" cellpadding="0" cellspacing="0" style="margin:10px; font-size:13px;" >
+        	<form name="form1" id="form1" action="{{=URL(c='pr_report',f='index')}}" target="_blank">
+                <tr>
+                    <td width="500" valign="top" style="background-color:#F8F8F8;">
+                        <table width="500" >
+                            <tr style="background-color:#E9E9E9; height:25px">
+                                <td width="1">&nbsp;</td>
+                                <td width="92">&nbsp;</td>
+                                <td width="7">&nbsp;</td>
+                                <td colspan="4">&nbsp;</td>
+                            </tr>
+                            <tr >
+                                <td>&nbsp;</td>
+                                <td>Identical</td>
+                                <td>:</td>
+                                <td colspan="4">
+                                    <select id="med_identical1" name="med_identical1" style="width:335px" >
+                                        <option value="1" selected>Yes</option>
+                                        <option value="0">No</option>
+                                    </select>
+                                </td>
+                            </tr>
+                            <tr >
+                                <td>&nbsp;</td>
+                                <td>Division</td>
+                                <td>:</td>
+                                <td colspan="4">
+                                    <select id="med_division1" name="med_division1" style="width:335px" >
+                                        <option value="PHARMA" selected>PHARMA</option>
+                                        <option value="SINAVISION">SINAVISION</option>
+                                    </select>
+                                </td>
+                            </tr>        
+                            <tr >
+                                <td>&nbsp;</td>
+                                <td>&nbsp;</td>
+                                <td>&nbsp;</td>
+                                <td width="78">Year</td>
+                                <td width="83">Quarter</td>
+                                <td width="75">Month</td>
+                                <td width="132">Cycle</td>
+                            </tr>
+                            <tr >
+                                <td>&nbsp;</td>
+                                <td>Previous</td>
+                                <td>:</td>
+                                <td colspan="4">
+                                    <select id="pr_year1" name="pr_year1" style="width:80px" onChange="getQuarter(1)">
+                                        <option value="">Year</option>
+                                        {{for i in range(2017,2026):}}
+                                        <option value="{{=i}}">{{=i}}</option>
+                                        {{pass}}
+                                    </select>
+                                    
+                                    <select id="pr_quarter1" name="pr_quarter1" style="width:80px" onChange="ctGetMonth(1)">
+                                    	<option value="">Quater</option>                        	
+                                    </select>
+                                    
+                                    <select id="pr_month1" name="pr_month1" style="width:80px" onChange="getCycle(1)">
+                                    	<option value="">Month</option>
+                                    </select>
+                                    
+                                    <select id="pr_cycle1" name="pr_cycle1" style="width:80px" >
+                                    	<option value="">Cycle</option>
+                                    </select>        
+                                </td>
+                            </tr> 
+                            <tr >
+                                <td>&nbsp;</td>
+                                <td>Current</td>
+                                <td>:</td>
+                                <td colspan="4">
+                                    <select id="pr_year2" name="pr_year2" style="width:80px" onChange="getQuarter(2)">
+                                        <option value="">Year</option>
+                                        {{for i in range(2017,2026):}}
+                                        <option value="{{=i}}">{{=i}}</option>
+                                        {{pass}}
+                                    </select>
+                                    
+                                    <select id="pr_quarter2" name="pr_quarter2" style="width:80px" onChange="ctGetMonth(2)">
+                                    	<option value="">Quater</option>
+                                    </select>
+                                    
+                                    <select id="pr_month2" name="pr_month2" style="width:80px" onChange="getCycle(2)">
+                                    	<option value="">Month</option>
+                                    </select>
+                                    
+                                    <select id="pr_cycle2" name="pr_cycle2" style="width:80px" >
+                                    	<option value="">Cycle</option>
+                                    </select>        
+                                </td>
+                            </tr>
+                            <tr >
+                                <td>&nbsp;</td>
+                                <td>Region</td>
+                                <td>:</td>
+                                <td colspan="4">
+                                    <select id="pr_region1" name="pr_region1" style="width:335px" onChange="getZone(1)">
+                                        <option value="">National</option>
+                                        {{for row in regionRows:}}
+                                        <option value="{{=row.level_id}}">{{=row.level_name}}</option>
+                                        {{pass}}
+                                    </select>
+                                </td>                    
+                            </tr>
+                            <tr >
+                                <td>&nbsp;</td>
+                                <td>Zone</td>
+                                <td>:</td>
+                                <td colspan="4">
+                                    <select id="pr_zone1" name="pr_zone1" style="width:335px" onChange="getArea(1)">
+                                    </select>
+                                </td>
+                            </tr>
+                            <tr >
+                                <td>&nbsp;</td>
+                                <td>Area</td>
+                                <td>:</td>
+                                <td colspan="4">
+                                    <select id="pr_area1" name="pr_area1" style="width:335px" onChange="getTerritory(1)">                    
+                                    </select>
+                                </td>
+                            </tr>        
+                            <tr >
+                                <td>&nbsp;</td>
+                                <td>&nbsp;</td>
+                                <td>&nbsp;</td>
+                                <td colspan="4">&nbsp;</td>
+                            </tr>
+                                       
+                        </table>
+                    </td>
+                    <td valign="top">
+                        <table width="250">
+                            <tr style="background-color:#E9E9E9; height:25px">
+                            	<td></td>        
+                            </tr>
+                            <tr style="background-color:#E6FFFF; height:25px">
+                            	<td >General Prescription Share <font style="color:#B93976; font-size:20px"></font></td>        
+                            </tr>        
+                            <tr style="height:25px" >
+                            	<td><input type="submit" name="btn_company_track2" style="width:100%;" value="Company Track Region Details"  /></td>        
+                            </tr>
+                            <tr style="height:25px" >
+                            	<td><input type="submit" name="btn_company_track2_rm" style="width:100%;" value="Company Track ( RM Summary )" /></td>        
+                            </tr>
+                            <tr style="height:25px" >
+                            	<td><input type="submit" name="btn_company_track_zm" style="width:100%;" value="Company Track (ZM)" disabled /></td>        
+                            </tr>
+                            <tr style="height:25px" >
+                            	<td><input type="submit" name="btn_company_track_am" style="width:100%;" value="Company Track (AM)" disabled /></td>        
+                            </tr>
+                            <tr style="height:25px" >
+                            	<td><input type="submit" name="btn_company_track_mpo" style="width:100%;" value="Company Track (MPO)" disabled /></td>        
+                            </tr>-->
+                            <!--<tr style="height:20px;" >
+                            	<td></td>        
+                            </tr>
+                            <tr style="background-color:#E6FFFF; height:25px">
+                            	<td >Institute Prescription Share <font style="color:#B93976; font-size:20px"></font></td>        
+                            </tr>
+                            <tr style="height:25px" >
+                            	<td><input type="submit" name="btn_institute_track2" style="width:100%;" value="Institute Track Region Details" /></td>        
+                            </tr>
+                            <tr style="height:20px;" >
+                            	<td></td>        
+                            </tr>
+                            <tr style="height:20px;" >
+                            	<td></td>        
+                            </tr>
+                            <tr style="height:25px" >
+                            	<td><input type="submit" name="btn_corp_share_by_brand" style="width:100%;" value="Corporate Share by Brand" /></td>        
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+        	</form>
+        </table>
+    </div>           
+    <div  class="rptdiv">
+        <ul class="rptul">
+        	<li class="rptlist"> Physician Track  </li>
+        </ul>
+    </div>
+    <div >
+    	<table width="750" border="0" cellpadding="0" cellspacing="0" style="margin:10px; font-size:13px;" >
+        	<form name="form1" id="form1" action="{{=URL(c='pr_report',f='index')}}" target="_blank">
+                <tr>
+                    <td width="500" valign="top" style="background-color:#F8F8F8;">
+                        <table width="500" >
+                            <tr style="background-color:#E9E9E9; height:25px">
+                                <td width="1">&nbsp;</td>
+                                <td width="92">&nbsp;</td>
+                                <td width="7">&nbsp;</td>
+                                <td colspan="4">&nbsp;</td>
+                            </tr>
+                            <tr >
+                                <td>&nbsp;</td>
+                                <td>Identical</td>
+                                <td>:</td>
+                                <td colspan="4">
+                                    <select id="med_identical2" name="med_identical2" style="width:295px" >
+                                        <option value="1" selected>Yes</option>
+                                        <option value="0">No</option>
+                                    </select>
+                                </td>
+                            </tr>                            
+                            <tr >
+                                <td>&nbsp;</td>
+                                <td>Division</td>
+                                <td>:</td>
+                                <td colspan="4">
+                                    <select id="med_division2" name="med_division2" style="width:295px" >
+                                        <option value="PHARMA" selected>PHARMA</option>
+                                        <option value="SINAVISION">SINAVISION</option>
+                                    </select>
+                                </td>
+                            </tr>                            
+                            <tr >
+                                <td>&nbsp;</td>
+                                <td>Date Range</td>
+                                <td>:</td>
+                                <td colspan="4">
+                                    {{=search_form.custom.widget.from_dt}} To {{=search_form.custom.widget.to_dt}}    
+                                </td>
+                            </tr>
+							<tr >
+                                <td>&nbsp;</td>
+                                <td>Doctor</td>
+                                <td>:</td>
+                                <td colspan="4">
+                                    <input type="text" name="pr_doctor2"  id="pr_doctor2" size="25" value="" placeholder="Search Doctor" autocomplete="off" style="width:280px"/>
+                                </td>
+                            </tr>							
+                            
+                            <tr >
+                                <td>&nbsp;</td>
+                                <td>Region</td>
+                                <td>:</td>
+                                <td colspan="4">
+                                    <select id="pr_region2" name="pr_region2" style="width:295px" onChange="getZone(2)">
+                                        <option value="">National</option>
+                                        {{for row in regionRows:}}
+                                        <option value="{{=row.level_id}}">{{=row.level_name}}</option>
+                                        {{pass}}
+                                    </select>
+                                </td>                    
+                            </tr>
+                            <tr >
+                                <td>&nbsp;</td>
+                                <td>Zone</td>
+                                <td>:</td>
+                                <td colspan="4">
+                                    <select id="pr_zone2" name="pr_zone2" style="width:295px" onChange="getArea(2)">
+                                    </select>
+                                </td>
+                            </tr>
+                            <tr >
+                                <td>&nbsp;</td>
+                                <td>Area</td>
+                                <td>:</td>
+                                <td colspan="4">
+                                    <select id="pr_area2" name="pr_area2" style="width:295px" onChange="getTerritory(2)">                    
+                                    </select>
+                                </td>
+                            </tr>
+                            <tr >
+                                <td>&nbsp;</td>
+                                <td>Field Force</td>
+                                <td>:</td>
+                                <td colspan="4">
+                                    <input type="text" name="pr_ff2"  id="pr_ff2" size="25" value="" placeholder="Search Field Force" autocomplete="off" style="width:280px"/>
+                                </td>
+                            </tr>  
+                            
+                            <tr >
+                                <td>&nbsp;</td>
+                                <td>KOL </td>
+                                <td>:</td>
+                                <td colspan="4">
+                                    <select id="kol_doctor2" name="kol_doctor2" style="width:295px" >
+                                        <option value="0" >ALL</option>
+                                        <option value="1" >Yes</option>
+                                        <option value="2">No</option>
+                                    </select>
+                                </td>
+                            </tr>                                  
+                            <tr >
+                                <td>&nbsp;</td>
+                                <td>&nbsp;</td>
+                                <td>&nbsp;</td>
+                                <td colspan="4">&nbsp;</td>
+                            </tr>                                         
+                        </table>
+                    </td>
+                    <td valign="top">
+                        <table width="250">
+                            <tr style="background-color:#E9E9E9; height:25px">
+                            	<td></td>
+                                <td></td>         
+                            </tr>                                  
+                            <tr style="height:25px" >
+                            	<td><input type="submit" name="btn_physician_track2" style="width:98%;" title="Date Range, Region, Zone, Area, Territory, Field Forece, Doctor" value="Physician Track" /></td> 
+                                <td><input type="submit" name="btn_physician_track2_d" style="width:100%;" title="Date Range, Region, Zone, Area, Territory, Field Forece, Doctor" value=" D " /></td>        
+                            </tr>
+                            <tr style="height:25px;" >
+                            	<td></td> 
+                                <td></td>        
+                            </tr>
+                            
+                        </table>
+                    </td>
+                </tr>
+        	</form>
+        </table>    	          
+    </div>
+    <div  class="rptdiv">
+        <ul class="rptul">
+        	<li class="rptlist"> Details </li>
+        </ul>
+    </div>
+    <div >
+    	<table width="750" border="0" cellpadding="0" cellspacing="0" style="margin:10px; font-size:13px;" >
+        	<form name="form1" id="form1" action="{{=URL(c='pr_report',f='index')}}" target="_blank">
+                <tr>
+                    <td width="500" valign="top" style="background-color:#F8F8F8;">
+                        <table width="500" >
+                            <tr style="background-color:#E9E9E9; height:25px">
+                                <td width="1">&nbsp;</td>
+                                <td width="92">&nbsp;</td>
+                                <td width="7">&nbsp;</td>
+                                <td colspan="4">&nbsp;</td>
+                            </tr>                            
+                            <tr >
+                                <td>&nbsp;</td>
+                                <td>Division</td>
+                                <td>:</td>
+                                <td colspan="4">
+                                    <select id="med_division3" name="med_division3" style="width:295px" >
+                                        <option value="PHARMA" selected>PHARMA</option>
+                                        <option value="SINAVISION">SINAVISION</option>
+                                    </select>
+                                </td>
+                            </tr>                            
+                            <tr >
+                                <td>&nbsp;</td>
+                                <td>Date Range</td>
+                                <td>:</td>
+                                <td colspan="4">
+                                    {{=search_form.custom.widget.from_dt_2}} To {{=search_form.custom.widget.to_dt_2}}    
+                                </td>
+                            </tr> 
+                            
+                            <tr >
+                                <td>&nbsp;</td>
+                                <td>Region</td>
+                                <td>:</td>
+                                <td colspan="4">
+                                    <select id="pr_region3" name="pr_region3" style="width:295px" onChange="getZone(3)">
+                                        <option value="">National</option>
+                                        {{for row in regionRows:}}
+                                        <option value="{{=row.level_id}}">{{=row.level_name}}</option>
+                                        {{pass}}
+                                    </select>
+                                </td>                    
+                            </tr>
+                            <tr >
+                                <td>&nbsp;</td>
+                                <td>Zone</td>
+                                <td>:</td>
+                                <td colspan="4">
+                                    <select id="pr_zone3" name="pr_zone3" style="width:295px" onChange="getArea(3)">
+                                    </select>
+                                </td>
+                            </tr>
+                            <tr >
+                                <td>&nbsp;</td>
+                                <td>Area</td>
+                                <td>:</td>
+                                <td colspan="4">
+                                    <select id="pr_area3" name="pr_area3" style="width:295px" onChange="getTerritory(3)">                    
+                                    </select>
+                                </td>
+                            </tr>
+                            <tr >
+                                <td>&nbsp;</td>
+                                <td>Field Force</td>
+                                <td>:</td>
+                                <td colspan="4">
+                                    <input  name="pr_ff3" type="text" id="pr_ff3" size="25" value="" placeholder="Search Field Force" autocomplete="off" style="width:280px"/>
+                                </td>
+                            </tr> 
+                            <tr >
+                                <td>&nbsp;</td>
+                                <td>Doctor</td>
+                                <td>:</td>
+                                <td colspan="4">
+                                    <input  name="pr_doctor3" type="text" id="pr_doctor3" size="25" value="" placeholder="Search Doctor" autocomplete="off" style="width:280px"/>
+                                </td>
+                            </tr>
+                                   
+                            <tr >
+                                <td>&nbsp;</td>
+                                <td>Generic</td>
+                                <td>:</td>
+                                <td colspan="4"><input  name="med_generic3" type="text" id="med_generic3" size="25" value="" placeholder="Search Generic" autocomplete="off" style="width:280px"/></td>
+                            </tr>                                        
+                        </table>
+                    </td>
+                    <td valign="top">
+                        <table width="250">
+                            <tr style="background-color:#E9E9E9; height:25px">
+                            	<td></td>
+                                <td></td>        
+                            </tr>                                  
+                            <tr style="height:25px" >
+                            	<td><input type="submit" name="btn_pr_details" style="width:98%;" title="Date Range, Region, Zone, Area, Territory, Field Forece, Doctor, Generic" value=" Details " /></td>        
+                            	<td style="width:20px;"><input type="submit" name="btn_pr_details_d" style="width:20px;" title="Date Range, Region, Zone, Area, Territory, Field Forece, Doctor, Generic" value=" D " /></td>
+                            </tr>
+                            <tr style="height:25px;" >
+                            	<td colspan="2"><input type="submit" name="btn_pr_summary" style="width:100%; background-color:#E6FFFF;" value="Summary" title="Date Range, Region, Zone, Area, Territory, Field Forece, Doctor, Generic" /></td>        
+                            	
+                            </tr>
+                            <tr style="height:25px;" >
+                            	<td colspan="2"></td>                            	
+                            </tr>
+                            <tr style="height:25px;" >
+                            	<td colspan="2"><input type="submit" name="btn_generic_track2_by_physician" style="width:100%;" value="Generic Track By Physician" title="Date Range, Region, Zone, Area, Territory, Field Forece, Doctor, Generic" /></td>        
+                            	
+                            </tr> 
+                            <tr style="height:25px;" >
+                            	<td colspan="2"></td>                            	
+                            </tr>
+                            <tr style="height:25px;" >
+                            	<td colspan="2"><input type="submit" name="btn_generic_track2_by_competitions" style="width:100%;" value="Generic Track By Competition" title="Date Range, Region, Zone, Area, Territory, Field Forece, Doctor, Generic" /></td>  
+                            	
+                            </tr>
+                            <tr style="height:25px;" >
+                            	<td colspan="2"></td>                            	
+                            </tr>
+                            <tr style="height:25px;" >
+                            	<td colspan="2"><input type="submit" name="btn_company_track2_by_competitions" style="width:100%;" value="Company Track By Competition" title="Date Range, Region, Zone, Area, Territory, Field Forece, Doctor, Generic" /></td>  
+                            	
+                            </tr>                            
+                        </table>
+                    </td>
+                </tr>
+        	</form>
+        </table>
+    </div> -->
+    <div  class="rptdiv">
+        <ul class="rptul">
+        	<li class="rptlist"> Summary  </li>
+        </ul>
+    </div>
+    <div > 
+    	<table width="750" border="0" cellpadding="0" cellspacing="0" style="margin:10px; font-size:13px;" >
+        	<form name="form1" id="form1" action="{{=URL(c='pr_report_seen',f='index')}}" target="_blank">
+                <tr>
+                    <td width="500" valign="top" style="background-color:#F8F8F8;">
+                        <table width="500" >
+                            <tr style="background-color:#E9E9E9; height:25px">
+                                <td width="1">&nbsp;</td>
+                                <td width="92">&nbsp;</td>
+                                <td width="7">&nbsp;</td>
+                                <td colspan="4">&nbsp;</td>
+                            </tr>                            
+                            <!--<tr >
+                                <td>&nbsp;</td>
+                                <td>Division</td>
+                                <td>:</td>
+                                <td colspan="4">
+                                    <select id="med_division4" name="med_division4" style="width:295px" >
+                                        <option value="PHARMA" selected>PHARMA</option>
+                                        <option value="SINAVISION">SINAVISION</option>
+                                    </select>
+                                </td>
+                            </tr>  -->                          
+                            <tr >
+                                <td>&nbsp;</td>
+                                <td>Date Range</td>
+                                <td>:</td>
+                                <td colspan="4">
+                                    {{=search_form.custom.widget.from_dt_3}} To {{=search_form.custom.widget.to_dt_3}}    
+                                </td>
+                            </tr> 
+                            
+                            <tr >
+                                <td>&nbsp;</td>
+                                <td>Region</td>
+                                <td>:</td>
+                                <td colspan="4">
+                                    <select id="pr_region4" name="pr_region4" style="width:295px" onChange="getZone(4)">
+                                        <option value="">National</option>
+                                        {{for row in regionRows:}}
+                                        <option value="{{=row.level_id}}">{{=row.level_name}}</option>
+                                        {{pass}}
+                                    </select>
+                                </td>                    
+                            </tr>
+                            <tr >
+                                <td>&nbsp;</td>
+                                <td>Zone</td>
+                                <td>:</td>
+                                <td colspan="4">
+                                    <select id="pr_zone4" name="pr_zone4" style="width:295px" onChange="getArea(4)">
+                                    </select>
+                                </td>
+                            </tr>
+                            <tr >
+                                <td>&nbsp;</td>
+                                <td>Area</td>
+                                <td>:</td>
+                                <td colspan="4">
+                                    <select id="pr_area4" name="pr_area4" style="width:295px" onChange="getTerritory(4)">                    
+                                    </select>
+                                </td>
+                            </tr>
+							
+
+							<tr >
+                                <td>&nbsp;</td>
+                                <td>Territory</td>
+                                <td>:</td>
+                                <td colspan="4">
+                                    <select id="pr_territory4" name="pr_territory4" style="width:295px" >                    
+                                    </select>
+                                </td>
+                            </tr>
+							
+                            <tr >
+                                <td>&nbsp;</td>
+                                <td>Doctor</td>
+                                <td>:</td>
+                                <td colspan="4"><input  name="pr_doctor3" type="text" id="pr_doctor3" size="25" value="" placeholder="Dr" autocomplete="off" style="width:288px"/>
+                                    
+                                </td>
+                            </tr>
+
+
+							<tr >
+                                <td>&nbsp;</td>
+                                <td>Brand</td>
+                                <td>:</td>
+                                <td colspan="4">
+                                    <select id="pr_brand4" name="pr_brand4" style="width:295px; height:130px;" multiple='True' >
+                                        <option value="">ALL Brand</option>
+                                        {{for row in brandRows:}}
+                                        <option value="{{=row.brand_name}}">{{=row.brand_name}}</option>
+                                        {{pass}}
+                                    </select>
+                                </td>                    
+                            </tr>
+                            <!-- <tr >
+                                <td>&nbsp;</td>
+                                <td>Doctor</td>
+                                <td>:</td>
+                                <td colspan="4">
+                                    <input  name="pr_doctor4" type="text" id="pr_doctor4" size="25" value="" placeholder="Search Doctor" autocomplete="off" style="width:280px"/>
+                                </td>
+                            </tr>
+                            <tr >
+                                <td>&nbsp;</td>
+                                <td>Field Force</td>
+                                <td>:</td>
+                                <td colspan="4">
+                                    <input  name="pr_ff4" type="text" id="pr_ff4" size="25" value="" placeholder="Search Field Force" autocomplete="off" style="width:280px"/>
+                                </td>
+                            </tr> -->        
+                                         
+                        </table>
+                    </td>
+                    <td valign="top">
+                        <table width="250">
+                            <tr style="background-color:#E9E9E9; height:25px">
+                            	<td style="width:230px;"></td><td style="width:20px;"></td>        
+                            </tr>                            
+                            <!-- <tr style="height:25px" >
+                            	<td><input type="submit" name="btn_sum_day_wise" style="width:100%;" title="Date Range, Region, Zone, Area, Territory, Field Forece, Doctor" value="Summary Day Wise" /></td>        
+                            </tr>
+                            <tr style="height:25px" >
+                            	<td><input type="submit" name="btn_sum_area_wise" style="width:100%;" title="Date Range, Region, Zone, Area, Territory, Field Forece, Doctor" value="Summary Area Wise" /></td>        
+                            </tr> -->
+							<tr style="height:25px" >
+                            	<td><input type="submit" name="btn_sum_reg_wise" style="width:98%;" title="Date Range, Region, Zone, Area, Territory, Brand" value="Region Wise" /></td>
+								<td><input type="submit" name="btn_sum_reg_wise_d" style="width:98%;" title="Date Range, Region, Zone, Area, Territory, Brand" value=" D " /></td>								
+                            </tr>
+
+
+							<tr style="height:25px" >
+                            	<td><input type="submit" name="btn_sum_zone_wise" style="width:98%;" title="Date Range, Region, Zone, Area, Territory, Brand" value="Zone Wise" /></td>
+								<td><input type="submit" name="btn_sum_zone_wise_d" style="width:98%;" title="Date Range, Region, Zone, Area, Territory, Brand" value=" D " /></td>
+                            </tr>
+							<tr style="height:25px" >
+                            	<td><input type="submit" name="btn_sum_area_wise1" style="width:98%;" title="Date Range, Region, Zone, Area, Territory, Brand" value="Area Wise" /></td>
+								<td><input type="submit" name="btn_sum_area_wise1_d" style="width:98%;" title="Date Range, Region, Zone, Area, Territory, Brand" value=" D " /></td>
+                            </tr>
+							<tr style="height:25px" >
+                            	<td><input type="submit" name="btn_sum_territory_wise" style="width:98%;" title="Date Range, Region, Zone, Area, Territory, Brand" value="Territory Wise" /></td>
+								<td><input type="submit" name="btn_sum_territory_wise_d" style="width:98%;" title="Date Range, Region, Zone, Area, Territory, Brand" value=" D " /></td>
+                            </tr>
+							<tr style="height:25px" >
+                            	<td><input type="submit" name="btn_sum_submit_by_wise" style="width:98%;" title="Date Range, Region, Zone, Area, Territory, Brand" value="Submitted By Wise" /></td>
+								<td><input type="submit" name="btn_sum_submit_by_wise_d" style="width:98%;" title="Date Range, Region, Zone, Area, Territory, Brand" value=" D " /></td>
+                            </tr>
+							<tr style="height:25px" >
+                            	<td><input type="submit" name="btn_sum_no_submission" style="width:98%;" title="Date Range" value="No Submission Area" /></td>
+								<td><input type="submit" name="btn_sum_no_submission_d" style="width:98%;" title="Date Range" value=" D " /></td>
+                            </tr>
+
+
+
+                        <tr style="height:15px; background-color:#D3E2EC " >
+					    <td></td>
+					    <td></td>
+					    </tr>
+
+
+                       <tr style="height:25px" >
+					    <td><input type="submit" name="mpo_ranking" style="width:98%;"  value="MPO Wise Ranking" /></td>
+					    <td><!-- <input type="submit"  style="width:98%;" title="Date Range" value=" D " readonly="" /> --></td>
+					  </tr>
+
+					 <tr >
+					    <td><input type="submit" name="am_ranking" style="width:98%;"  value="Area Manager Wise Ranking" /></td>
+					    <td><!-- <input type="submit"  style="width:98%;" title="Date Range" value=" D " readonly="" /> --></td>
+					  </tr>
+
+
+					  <tr >
+					    <td><input type="submit" name="zm_ranking" style="width:98%;"  value="Region Wise Ranking" /></td>
+					    <td><!-- <input type="submit"  style="width:98%;" title="Date Range" value=" D " readonly="" /> --></td>
+					  </tr>
+
+					   <tr >
+					    <td><input type="submit" name="rsm_ranking" style="width:98%;"  value="Zone Wise Ranking" /></td>
+					    <td><!-- <input type="submit"  style="width:98%;" title="Date Range" value=" D " readonly="" /> --></td>
+					  </tr>
+
+
+
+
+
+					  <tr style="height:15px; background-color:#D3E2EC " >
+					    <td></td>
+					    <td></td>
+					    </tr>
+
+
+                       <tr style="height:25px" >
+					    <td><input type="submit" name="dr_mpo_ranking" style="width:98%;"  value="MPO Wise Doctor Ranking" /></td>
+					    <td><!-- <input type="submit"  style="width:98%;" title="Date Range" value=" D " readonly="" /> --></td>
+					  </tr>
+
+					 <tr >
+					    <td><input type="submit" name="dr_am_ranking" style="width:98%;"  value="Area Manager Wise Doctor Ranking" /></td>
+					    <td><!-- <input type="submit"  style="width:98%;" title="Date Range" value=" D " readonly="" /> --></td>
+					  </tr>
+
+
+					  <tr >
+					    <td><input type="submit" name="dr_zm_ranking" style="width:98%;"  value="Zone Wise Doctor Ranking" /></td>
+					    <td><!-- <input type="submit"  style="width:98%;" title="Date Range" value=" D " readonly="" /> --></td>
+					  </tr>
+
+					   <tr >
+					    <td><input type="submit" name="dr_rsm_ranking" style="width:98%;"  value="Region Wise Doctor Ranking" /></td>
+					    <td><!-- <input type="submit"  style="width:98%;" title="Date Range" value=" D " readonly="" /> --></td>
+					  </tr>
+
+                            <tr style="height:25px;" >
+                            	<td></td>        
+                            </tr> 
+                            
+                        </table>
+                    </td>
+                </tr>
+        	</form>
+        </table>
+    </div>
+    <!--<div  class="rptdiv">
+        <ul class="rptul">
+        	<li class="rptlist"> Others  </li>
+        </ul>
+    </div>
+    <div > 
+    	<table width="750" border="0" cellpadding="0" cellspacing="0" style="margin:10px; font-size:13px;" >
+        	<form name="form1" id="form1" action="{{=URL(c='pr_report',f='index')}}" target="_blank">
+                <tr>
+                    <td width="500" valign="top" style="background-color:#F8F8F8;">
+                        <table width="500" >
+                            <tr style="background-color:#E9E9E9; height:25px">
+                                <td width="1">&nbsp;</td>
+                                <td width="92">&nbsp;</td>
+                                <td width="7">&nbsp;</td>
+                                <td colspan="4">&nbsp;</td>
+                            </tr>                      
+                            <tr >
+                                <td>&nbsp;</td>
+                                <td>Date Range</td>
+                                <td>:</td>
+                                <td colspan="4">
+                                    {{=search_form.custom.widget.from_dt_4}} To {{=search_form.custom.widget.to_dt_4}}    
+                                </td>
+                            </tr> 
+                            
+                            <tr >
+                                <td>&nbsp;</td>
+                                <td>&nbsp;</td>
+                                <td>&nbsp;</td>
+                                <td colspan="4">&nbsp;</td>
+                            </tr>             
+                        </table>
+                    </td>
+                    <td valign="top">
+                        <table width="250">
+                            <tr style="background-color:#E9E9E9; height:25px">
+                            	<td></td>        
+                            </tr>                                  
+                            <tr style="height:25px" >
+                            	<td><input type="submit" name="btn_orphan_med_list" style="width:100%;" value="Orphan Medicine List" title="Date Range" /></td>        
+                            </tr>                            
+                            <tr style="height:25px;" >
+                            	<td></td>        
+                            </tr>
+                            
+                        </table>
+                    </td>
+                </tr>
+        	</form>
+        </table>
+    </div> -->    
+</div>
+
+</body> 
+

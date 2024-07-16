@@ -1,0 +1,57 @@
+CREATE TABLE `sm_score_card_details` (
+  `id` int(11) NOT NULL,
+  `cid` varchar(10) DEFAULT NULL,
+  `submit_date` date DEFAULT NULL,
+  `submit_ym_date` date DEFAULT NULL,
+  `level0_id` varchar(20) DEFAULT NULL,
+  `level0_name` varchar(100) DEFAULT NULL,
+  `level1_id` varchar(20) DEFAULT NULL,
+  `level1_name` varchar(100) DEFAULT NULL,
+  `level2_id` varchar(20) DEFAULT NULL,
+  `level2_name` varchar(100) DEFAULT NULL,
+  `level3_id` varchar(20) DEFAULT NULL,
+  `level3_name` varchar(100) DEFAULT NULL,
+  `rep_id` varchar(20) DEFAULT NULL,
+  `rep_name` varchar(100) DEFAULT NULL,
+  `ach` double NOT NULL DEFAULT 0,
+  `pd_knowledge` double NOT NULL DEFAULT 0,
+  `rx_pres_share` double NOT NULL DEFAULT 0,
+  `pcpm` double NOT NULL DEFAULT 0,
+  `four_p` double NOT NULL DEFAULT 0,
+  `reject_count` double NOT NULL DEFAULT 0,
+  `facetime` double NOT NULL DEFAULT 0,
+  `walk_step_act_score` double NOT NULL DEFAULT 0,
+  `overall_rate` double NOT NULL DEFAULT 0
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `sm_score_card_details`
+--
+
+INSERT INTO `sm_score_card_details` (`id`, `cid`, `submit_date`, `submit_ym_date`, `level0_id`, `level0_name`, `level1_id`, `level1_name`, `level2_id`, `level2_name`, `level3_id`, `level3_name`, `rep_id`, `rep_name`, `ach`, `pd_knowledge`, `rx_pres_share`, `pcpm`, `four_p`, `reject_count`, `facetime`, `walk_step_act_score`, `overall_rate`) VALUES
+(1, 'HAMDARD', '2021-07-08', '2021-07-01', 'ZDIVISION', 'ZDIVISION', 'ZREGION', 'ZREGION', 'ZAREA01', 'ZAREA01', 'DEMO03', 'DEMO03', 'IT03', 'IT03', 4.5, 4, 5, 4.5, 3, 5, 4.2, 4, 4.275);
+
+--
+-- Indexes for dumped tables
+--
+
+--
+-- Indexes for table `sm_score_card_details`
+--
+ALTER TABLE `sm_score_card_details`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- AUTO_INCREMENT for dumped tables
+--
+
+--
+-- AUTO_INCREMENT for table `sm_score_card_details`
+--
+ALTER TABLE `sm_score_card_details`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+COMMIT;
+
+
+
+-- http://127.0.0.1:8000/hamdard/score_card_mobile/index?cid=Hamdard&rep_id=it03&rep_pass=1234

@@ -1,0 +1,402 @@
+{{extend 'layout.html'}}
+
+
+ <link rel="stylesheet" href="{{=URL('static', 'js_and_css/ui.theme.css')}}" type="text/css" />
+  <link rel="stylesheet" href="{{=URL('static', 'js_and_css/jquery-ui.css')}}" type="text/css" />
+  <link rel="stylesheet" href="{{=URL('static', 'js_and_css/style.css')}}" type="text/css" />
+  <script src="{{=URL('static','js_and_css/jquery-1.8.2.js')}}"></script>
+  <script src="{{=URL('static','js_and_css/jquery-ui.js')}}"></script>
+<style>
+body {
+  font-family: "Lato", sans-serif;
+}
+
+
+
+#main {
+  transition: margin-left .5s;
+  padding: 16px;
+}
+
+@media screen and (max-height: 450px) {
+  .sidenav {padding-top: 15px;}
+  .sidenav a {font-size: 18px;}
+}
+</style>
+ 
+  <style type="text/css">
+.password-mask {
+/*  display: inline-block;*/
+/*  padding: 2px;
+  background-color: black;
+  color: black;
+  font-size: 0;
+  line-height: 1;
+  letter-spacing: 0.5em;*/
+  -webkit-text-security: disc;
+  -moz-binding: url('https://example.com#fake_moz_binding');
+}
+
+
+ input[type=text], input[type=password],  select {
+    margin: 2px 0px 2px 0px;
+	width:250px;
+}
+
+select{ width:265px; margin:2px 0px 2px 0px;}
+
+textarea{
+    width:250px;
+	height:50px;
+	margin:2px 0px 2px 0px;
+}
+
+div.error {
+    margin-left:0px;
+	width:265px;
+}
+.page_color,body{
+	font-family:Arial, Helvetica, sans-serif;
+	font-size:13px;
+	}
+	
+#uni_middle_str4{
+width:100px;
+}
+
+ </style>
+
+<script>
+
+
+   var base_url=location.protocol + "//" + location.hostname + (location.port && ":" + location.port) + "/{{=request.application}}/";
+
+$(function() {
+ 
+
+employeeListStr="";  
+      
+    // alert(base_url+'counter_market_transaction/get_active_item_list')  
+    $.ajax({
+      url: base_url+'counter_market_transaction/get_active_item_list',
+      success: function(retStr) {
+        employeeListStr=retStr 
+
+        
+      }
+    }); 
+
+
+    $('#item_id').keyup(function(){
+      $("#item_per_unit_id").html('')
+
+      // alert(employeeListStr)
+      
+      
+      localStorage.employeeListStr=employeeListStr
+      valueList = employeeListStr.split(','); 
+      var searchValue=$("#item_id").val();
+
+
+      var valueList_new=new Array();
+      lc=0;
+      i =0;
+      var valueStr="";    
+      
+      while (i < valueList.length)
+      {
+        valueStr=valueList[i];
+        i=i+1;  
+        // alert ('fgdf')       
+        var ret=valueStr.toUpperCase().match(searchValue.toUpperCase());
+
+        if (ret!=null){
+          valueList_new[lc]=valueStr;
+          lc=lc+1;
+          if (lc==30){
+            break;
+          };
+        }else{
+          continue;
+        }         
+      }; 
+
+       //-------------- auto complete source
+      $( "input#item_id" ).autocomplete({
+        source: valueList_new
+      });  
+
+
+      
+      }); 
+
+
+    // $(document).on('blur', '#item_id', function() {
+    //   var item_id=$("#item_id").val().split('|')[0];
+    //   var item_id_n=$("#item_id").val() 
+
+
+    //   $.ajax({
+    //     // alert(base_url+'counter_market_transaction/get_item_per_unit?item_id='+item_id)
+    //     url: base_url+'counter_market_transaction/get_item_per_unit?item_id='+item_id,
+    //     success: function(data) {
+    //       var resultArray = data.replace('</START>','').replace('</END>','').split('<SYNCDATA>'); 
+    //       // alert(resultArray)
+    //     if (resultArray[0]=='FAILED'){  
+    //       alert('Invalid Item')      
+    //     }
+    //     else if (resultArray[0]=='SUCCESS'){
+    //     $("#item_per_unit_id").html(resultArray[1]) 
+        
+    //     }
+    //     }
+    //   }); 
+      
+    // });
+ 
+// -----------------------------------
+});
+
+function get_item_per_unit(){
+  var item_id=$("#item_id").val().split('|')[0];
+  var item_id_n=$("#item_id").val() 
+
+  // alert(base_url+'counter_market_transaction/get_item_per_unit?item_id='+item_id)
+  $.ajax({
+    // alert(base_url+'counter_market_transaction/get_item_per_unit?item_id='+item_id)
+    url: base_url+'counter_market_transaction/get_item_per_unit?item_id='+item_id,
+    success: function(data) {
+    
+    $("#item_per_unit_id").val(data) 
+    
+  }
+  }); 
+
+}
+</script>  
+
+
+<table width="100%"  height="100%"   border="0" cellspacing="0" cellpadding="0" style="background-color:#F5F5F5;" >
+ 
+  <tr  height="1px" >
+      <td colspan="3" ></td>
+  </tr>
+
+  <tr>
+    <td>
+      
+        <table border="0" cellspacing="0" cellpadding="0" style="background-color:#FFFFFF;" >
+              <tr height="30px" >
+                <td width="100%" style="background-color:#FFFFFF;" >
+                  <span class="blackCatTitle">Stock Transaction</span>
+                </td>
+              <td width="500" >&nbsp;</td>
+                <td>&nbsp;</td>
+              </tr>
+              <tr  height="1px" style="background-color:#CCCCCC;">
+                <td colspan="3" ></td>
+              </tr>
+        </table>
+
+        <table width="80%" align="left" height="100%" border="0"  cellpadding="0" cellspacing="0" style="margin-left:auto;margin-right:auto;background-color:#F5F5F5;" >
+          
+          <tr>
+            <td height="80%" valign="middle">
+
+              <form  name="form1" action="{{=URL(c='counter_market_transaction',f='counter_market_transaction')}}" method="post"  >
+
+                            <!-- INSERT ADMIN / OPERATOR -->
+                <table width="70%" align="left" cellpadding="2" class="rounded_corner" style="background-color:#F5F5F5">
+                    <tr >
+                      <td width="10" >&nbsp;</td>
+                      <td width="120px" style="vertical-align: middle;">Transaction SL</td>
+                      <td width="10px" style="vertical-align: middle;font-size: 20px;">:</td>
+                      <td>
+                        <input  type="text" name="t_sl_id" id="t_sl_id" value="{{=t_sl}}" size="10"  style="width:200px" readonly />
+                      </td>
+                      <td></td>
+                    </tr>
+                    <tr >
+                      <td width="10" >&nbsp;</td>
+                      <td width="120px" style="vertical-align: middle;">Depot</td>
+                      <td width="10px" style="vertical-align: middle;font-size: 20px;">:</td>
+
+                      <td>
+                      	<input  type="text" name="depot_id" id="depot_id" value="{{=session.depot_id}}" size="10" readonly style="width:200px"/>
+                      </td>
+                      <td></td>
+                    </tr>
+
+                    <tr >
+                      <td width="10">&nbsp;</td>
+                      <td width="120px" style="vertical-align: middle;">Transaction Type</td>
+                      <td width="10px" style="vertical-align: middle;font-size: 20px;">:</td>
+
+                      <td>
+                      	<select name="search_type" id="search_type" style="width:215px" >
+                          {{if session.search_type == 'market_to_counter':}}
+                            <option value="market_to_counter" selected>Market To Counter</option>
+                            <option value="counter_to_market" >Counter To Market</option>
+                          {{elif session.search_type == 'counter_to_market':}}
+                            <option value="counter_to_market" selected>Counter To Market</option>
+                            <option value="market_to_counter" >Market To Counter</option>
+                          {{else:}}
+                            <option value="market_to_counter" >Market To Counter</option>
+                            <option value="counter_to_market" >Counter To Market</option>
+                            {{pass}}
+                        </select>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td width="10" height="20px" >&nbsp;</td>
+                    </tr>
+                </table>
+
+                <table >
+
+                    <tr>
+                      <td>
+                        {{if session.item == '' or session.item == 'None' or session.item==None :}}
+                        <input  type="text" name="item_id" id="item_id" required size="10" value="" autocomplete="off" placeholder="Item ID / Name" style="width:200px"  />
+                        {{else:}}
+                        <input  type="text" name="item_id" id="item_id" required size="10" autocomplete="off" value="{{=session.item}}" style="width:200px"  />
+                        {{pass}}
+                      </td>
+
+                      <td style="padding-left: 10px" >
+                          {{if session.item_per_unit == '' or session.item_per_unit == 'None' or session.item_per_unit==None :}}
+                          <input  type="text" name="item_per_unit_id" id="item_per_unit_id" value="" placeholder="Item Per Unit" size="10"style="width:80px" readonly />
+                          {{else:}}
+                          <input  type="text" name="item_per_unit_id" id="item_per_unit_id" value="{{=session.item_per_unit}}"  size="10"style="width:80px" readonly />
+                          {{pass}}
+                      </td>
+
+                      <td style="padding-left: 10px; padding-top:2px" >
+                        {{if session.quantity == '' or session.quantity == 'None' or session.quantity==None :}}
+                        <input  type="number" name="quantity_id" id="quantity_id" required size="10" autocomplete="off" value="" placeholder="Quantity"  style="width:70px" onclick="get_item_per_unit()" />
+                        {{else:}}
+                        <input  type="number" name="quantity_id" id="quantity_id" autocomplete="off" required size="10" value="{{=session.quantity}}" style="width:80px" onclick="get_item_per_unit()" />
+                        {{pass}}
+                      </td>
+                      <td style="padding-left: 10px" >
+                          <input align="left" type="submit" name="save_btn" id="save_btn" value="Save" style="height:30px ; width: 60px;" />
+                      </td> 
+                      
+                    </tr>
+
+                  
+              </table>
+            </form>
+            <table width="100%"  border="1" cellpadding="1" cellspacing="2" class="sample_border"  >
+
+                  <tr class="blackCatHead">
+                    <td width="25%" style="vertical-align: middle; padding-left: 10px; height: 30px;">Name</td>
+                    <td width="10%"  style="vertical-align: middle;">ID</td>
+                    <td width="20%" style="vertical-align: middle;">Transaction&nbsp;Type</td>
+                    <td align="right"  width="15%" style="vertical-align: middle;">Item&nbsp;Per&nbsp;Unit</td>
+                    <td align="right" width="10%"  style="vertical-align: middle;">Quantity</td>
+                    <td  align="center"width="20%" style="vertical-align: middle;">Counter&nbsp;Quantity</td>
+                    <!-- <td  align="right"width="10%"" style="vertical-align: middle;">Market&nbsp;Quantity</td> -->
+                    <td  align="right"width="15%" style="vertical-align: middle;"></td>
+                    <td  align="right"width="10%" style="vertical-align: middle;"></td>
+                  </tr>
+
+                  {{if len(counter_market_transaction_temp_record) > 0:}}
+
+                  {{
+
+                    for i in range(len(counter_market_transaction_temp_record)):
+                     records_ov_dict=counter_market_transaction_temp_record[i]  
+                     record_id=str(records_ov_dict["id"]) 
+                     t_sl=str(records_ov_dict["t_sl"]) 
+                     item_id=str(records_ov_dict["item_id"]) 
+                     item_name=str(records_ov_dict["item_name"])      
+                     transaction_type= records_ov_dict["transaction_type"]
+                     Item_per_unit= records_ov_dict["Item_per_unit"]
+                     qty= records_ov_dict["qty"]    
+                     counter_qty=records_ov_dict["counter_qty"]
+
+                   }}
+
+                   <tr>
+                    <form  name="form2" action="{{=URL(c='counter_market_transaction',f='counter_market_transaction', args = [record_id, item_id, Item_per_unit, qty, transaction_type])}}" method="post"  >
+                     <td style="vertical-align: middle;padding-left: 5px">{{=item_name}}</td>
+                     <td style="vertical-align: middle;">{{=item_id}}</td>
+                     <td style="vertical-align: middle;">{{=transaction_type.upper()}}</td>
+                     <td align="right" >
+                       <input align="right" type="text" name="item_per_unit_id" id="item_per_unit_id" value="{{=Item_per_unit}}" readonly size="10"  style="width:40px;height:25px"/>
+                     </td> 
+                     <td align="right" >
+                       <input align="right" type="text" name="quantity_id" id="quantity_id" value="{{=qty}}" size="10" autocomplete="off" style="width:50px;height:25px" />
+                     </td> 
+                     <td align="center" width="70px" style="vertical-align: middle;">{{=counter_qty}}</td>
+                       <td  align="right" width="60px" style="vertical-align: middle;">
+                         <input  type="submit" name="update_btn" id="update_btn" value="Update" style="vertical-align:middle;height:30px ; width:60px;" />
+                       </td>
+                     </form>
+
+                       <form  name="form3" action="{{=URL(c='counter_market_transaction',f='counter_market_transaction_delete',args=[record_id, t_sl])}}" method="post">
+                       <td align="center" width="30px" style="vertical-align: middle;">
+                         <input  type="submit" name="delete_btn" id="delete_btn" value="X" style="vertical-align:middle;height:30px ; width:30px;" />
+                       </td>
+                     </form>
+
+                   </tr>
+                   {{pass}}
+
+                      <tr style="border:none">
+                       <td colspan="9" style="height:30px;border: none;">&nbsp;&nbsp;</td>
+                      </tr>
+
+                      <tr class="blackCat">
+    
+                      <form  name="form2" action="{{=URL(c='counter_market_transaction',f='counter_market_transaction', args = [t_sl])}}" method="post"  >
+                        <td colspan="6" align="right" width="40px" style="vertical-align: middle;border: none;">
+                          <input  type="submit" name="cancel_btn" id="cancel_btn" value="Cancel" style="vertical-align:middle;height:30px ; width:80px;"/>
+                        </td>
+                      </form>
+                      <form  name="form2" action="{{=URL(c='counter_market_transaction',f='counter_market_transaction', args = [t_sl])}}" method="post"  >
+                        <td colspan="2" width="40px" align="right" style="vertical-align: middle; border: none;">
+                          <input  type="submit" name="submit_all_btn" id="submit_all_btn" value="Submit" style="vertical-align:middle;height:30px ; width:80px;"/>
+                        </td>
+                      </form>
+                      </tr>
+                   {{else:}}
+                     <tr>
+                         <td></td>
+                         <td></td>
+                         <td></td>
+                         <td></td>
+                         <td></td>
+                         <td></td>
+                         <td></td>
+                         <td></td>
+                         <td></td>
+
+                      </tr>
+
+                   {{pass}}
+
+
+
+
+            </table>
+
+
+            <table>
+                    <tr>
+                      <td height="400px">
+                        &nbsp; &nbsp; &nbsp; &nbsp;
+                      </td>
+                    </tr>
+
+                    <tr height="1px" style="background-color:#CCCCCC;">
+                      <td colspan="20"  ></td>
+                    </tr>
+            </table>
+                            <!-- SHOW ALL USER  -->
+
+        </td>
+        </tr>
+        
+ </table>

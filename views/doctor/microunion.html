@@ -1,0 +1,611 @@
+{{extend 'layout.html'}}
+
+  <link rel="stylesheet" href="{{=URL('static', 'js_and_css/ui.theme.css')}}" type="text/css" />
+
+  <link rel="stylesheet" href="{{=URL('static', 'js_and_css/jquery-ui.css')}}" type="text/css" />
+
+  <link rel="stylesheet" href="{{=URL('static', 'js_and_css/style.css')}}" type="text/css" />
+
+   <script src="{{=URL('static','js_and_css/jquery-1.8.2.js')}}"></script>
+
+   <script src="{{=URL('static','js_and_css/jquery-ui.js')}}"></script>
+
+    
+
+ <style type="text/css">
+
+	input[type=text], input[type=password],  select {
+
+		margin: 2px 0px 2px 0px;
+
+		width:120px;
+
+	}
+
+	div.error {
+
+		margin-left:0px;
+
+		width:auto;
+
+	}
+
+	#sm_doctor_doc_id{
+
+	width:80px;
+
+	}
+
+	#sm_doctor_doc_name{
+
+	width:200px;
+
+	}
+
+	#sm_doctor_specialty{
+
+	width:120px;
+
+	}
+
+	
+
+	#sm_doctor_status{
+
+	width:auto;
+
+	}
+
+	
+
+	textarea{
+
+	width:200px;
+
+	height:30px;
+
+	}
+
+	
+
+	.page_color,body{
+
+		font-family:Arial, Helvetica, sans-serif;
+
+		font-size:13px;	
+
+		}
+
+	
+
+ </style>
+
+ 
+
+ 
+
+<script>
+
+var base_url=location.protocol + "//" + location.hostname + (location.port && ":" + location.port) + "/{{=request.application}}/";
+
+
+
+$(function() {
+
+
+		var valueListStr="";
+
+    
+
+    $('#search_type_dc').blur(function(){
+
+      if ($('#search_type_dc').val()=='chart_id'){
+
+        //alert(base_url+'default/get_route_list');
+
+        $.ajax({
+
+            url: base_url+'depot_chart/get_chart_list',
+
+            success: function(resStr) {
+
+              valueListStr=resStr
+
+            }
+
+          });
+
+      }else if ($('#search_type_dc').val()=='depot_id'){
+        $.ajax({
+
+            url: base_url+'depot_chart/get_depot_list',
+
+            success: function(retStr) {
+
+              valueListStr=retStr
+
+            }
+
+          });
+
+      
+
+      };
+
+      
+
+    });
+
+   
+
+    $('#search_value_dc').keyup(function(){
+
+      //-------------------------
+
+      var valueList = valueListStr.split(',');        
+
+      var searchValue=$("#search_value_dc").val();
+
+      
+
+      //---------------- auto complete combo list
+
+      var valueList_new=new Array();
+
+      lc=0;
+
+      i =0;
+
+      var valueStr="";        
+
+      while (i < valueList.length)
+
+      {
+
+        valueStr=valueList[i];
+
+        i=i+1;          
+
+        var res=valueStr.toUpperCase().match(searchValue.toUpperCase());
+
+        if (res!=null){
+
+          valueList_new[lc]=valueStr;
+
+          lc=lc+1;
+
+          if (lc==30){
+
+            break;
+
+          };
+
+        }else{
+
+          continue;
+
+        }         
+
+      };
+ 
+
+      $( "input#search_value_dc" ).autocomplete({
+
+        source: valueList_new
+
+      });
+
+    
+
+    }); 
+
+    
+
+
+// =============Depot ID autocomplete======
+
+  var prdListStr="";
+     // alert(base_url+'depot_chart/get_search_depot_id_list')
+  $.ajax({
+
+      url: base_url+'depot_chart/get_search_depot_id_list',
+      success: function(depotIdStr) {
+        prdListStr=depotIdStr
+      }
+    });
+
+// ==========
+$('#search_depot_id_list').keyup(function(){
+      // alert('ok')
+      //-------------------------
+      var ref_list = prdListStr.split(',');  
+      var ref_name=$("#search_depot_id_list").val();
+      // alert(ref_name)
+      
+      //---------------- auto complete combo list
+      var ref_list_new=new Array();
+      lc=0;
+      i =0;
+      var refStr="";        
+      while (i < ref_list.length)
+      {
+        refStr=ref_list[i];
+        i=i+1;          
+        var res=refStr.toUpperCase().match(ref_name.toUpperCase());
+        if (res!=null){
+          ref_list_new[lc]=refStr;
+          lc=lc+1;
+          if (lc==30){
+            break;
+          };
+        }else{
+          continue;
+        }         
+      };
+      
+      //-------------- auto complete source
+      $( "input#search_depot_id_list" ).autocomplete({
+        source: ref_list_new
+      });
+    
+    });
+
+// =============Chart ID autocomplete======
+
+  var prdChartListStr="";
+     // alert(base_url+'doctor/get_territory')
+  $.ajax({
+
+      url: base_url+'doctor/get_territory',
+      success: function(reiStr) {
+        prdChartListStr=reiStr
+      }
+    });
+
+// ==========
+$('#microunion_area').keyup(function(){
+      // alert('ok')
+      //-------------------------
+      var ref_list = prdChartListStr.split(',');  
+      var ref_name=$("#microunion_area").val();
+      // alert(ref_name)
+      
+      //---------------- auto complete combo list
+      var ref_list_new=new Array();
+      lc=0;
+      i =0;
+      var refStr="";        
+      while (i < ref_list.length)
+      {
+        refStr=ref_list[i];
+        i=i+1;          
+        var res=refStr.toUpperCase().match(ref_name.toUpperCase());
+        if (res!=null){
+          ref_list_new[lc]=refStr;
+          lc=lc+1;
+          if (lc==30){
+            break;
+          };
+        }else{
+          continue;
+        }         
+      };
+      
+      //-------------- auto complete source
+      $( "input#microunion_area" ).autocomplete({
+        source: ref_list_new
+      });
+    
+    });
+
+// =======================================================================
+
+  var prdChartListStrArea="";
+     // alert(base_url+'doctor/get_territory')
+  $.ajax({
+
+      url: base_url+'doctor/get_territory',
+      success: function(reiStr) {
+        prdChartListStrArea=reiStr
+      }
+    });
+
+// ==========
+$('#search_pocket_area_id_name').keyup(function(){
+      // alert('ok')
+      //-------------------------
+      var ref_list = prdChartListStrArea.split(',');  
+      var ref_name=$("#search_pocket_area_id_name").val();
+      // alert(ref_name)
+      
+      //---------------- auto complete combo list
+      var ref_list_new=new Array();
+      lc=0;
+      i =0;
+      var refStr="";        
+      while (i < ref_list.length)
+      {
+        refStr=ref_list[i];
+        i=i+1;          
+        var res=refStr.toUpperCase().match(ref_name.toUpperCase());
+        if (res!=null){
+          ref_list_new[lc]=refStr;
+          lc=lc+1;
+          if (lc==30){
+            break;
+          };
+        }else{
+          continue;
+        }         
+      };
+      
+      //-------------- auto complete source
+      $( "input#search_pocket_area_id_name" ).autocomplete({
+        source: ref_list_new
+      });
+    
+    });
+// ==========================================================
+
+
+  var pocketMarketIdName="";
+     // alert(base_url+'doctor/get_pocket_market_idName')
+  $.ajax({
+
+      url: base_url+'doctor/get_pocket_market_idName',
+      success: function(reiStrMarket) {
+        pocketMarketIdName=reiStrMarket
+      }
+    });
+
+// ==========
+$('#search_pocket_market').keyup(function(){
+      // alert('ok')
+      //-------------------------
+      var ref_list = pocketMarketIdName.split(',');  
+      var ref_name=$("#search_pocket_market").val();
+      // alert(ref_name)
+      
+      //---------------- auto complete combo list
+      var ref_list_new=new Array();
+      lc=0;
+      i =0;
+      var refStr="";        
+      while (i < ref_list.length)
+      {
+        refStr=ref_list[i];
+        i=i+1;          
+        var res=refStr.toUpperCase().match(ref_name.toUpperCase());
+        if (res!=null){
+          ref_list_new[lc]=refStr;
+          lc=lc+1;
+          if (lc==30){
+            break;
+          };
+        }else{
+          continue;
+        }         
+      };
+      
+      //-------------- auto complete source
+      $( "input#search_pocket_market" ).autocomplete({
+        source: ref_list_new
+      });
+    
+    });
+
+
+// =============================================
+
+}); 
+
+
+
+</script>
+
+
+
+
+ 
+
+ 
+<!-- ============================================== -->
+
+<table width="100%"  border="0" cellspacing="0" cellpadding="0" style="background-color:#FFFFFF;" >
+
+<tr height="30px" >
+
+<td style="padding-left: 6px"><span class="blackCatTitle">Pocket Market</span></td>
+
+<td align="right"><span class="blackCatTitle">
+</span></td>
+<td align="right" width="20px">&nbsp;</td>
+</tr>
+<tr  height="1px" style="background-color:#CCCCCC;">
+<td ></td><td ></td><td ></td>
+</tr>
+</table>
+
+
+
+<table width="100%" height="500px"  border="0" cellspacing="0" cellpadding="0" class="page_color"  >
+
+<tr height="100%"  style="vertical-align:top;">
+
+<td>
+
+<table width="100%"  border="0" cellpadding="0" cellspacing="0">
+
+<tr>
+
+<td>&nbsp;</td>
+
+<td>
+
+
+<!-- ======================================================== -->
+
+	<form id="form" name="form" method="post" action="{{#=URL(c='doctor',f='microunion')}}">  
+<table width="870px" border="1"  class="sample_border">
+	{{#=form.custom.begin}}
+<tr  align="left" class="blackCat"  style="vertical-align:middle">
+<td  >
+<input style="width:250px" name="microunion_id" id="microunion_id" type="text" placeholder="Enter Pocket Market ID"  /></td>
+<td  >
+<input style="width:250px" name="microunion_name" id="microunion_name" type="text" placeholder="Enter Pocket Market Name"  />
+</td>
+<td  >
+<input style="width:250px" name="microunion_area" id="microunion_area" type="text" placeholder="Enter Pocket Market Area" />
+</td>
+<td width="50" align="right"  >
+<input name="btn_add" type="submit"  value="Submit" style="height: 30px; width: 60px; background-color: black; color: #F8F5F2" />
+</td>
+</tr>
+</form>
+{{#=form.custom.end}}
+</table>
+
+<!-- ===================================== -->
+
+<!-- ================================================== -->
+
+<table width="870px" border="1"  class="sample_border" >
+
+<form id="form1" name="form1" method="post" action="{{=URL(c='doctor',f='microunion')}}">
+
+<tr align="left" class="blackCatHead"  height="20px" ;"vertical-align:middle">
+
+<td width="200px" align="left">                       
+{{if session.search_pocket_market=='' or session.search_pocket_market==None:}}
+<input  name="search_pocket_market" type="text" id="search_pocket_market" size="25" value="" 
+placeholder="Search Pocket Market" autocomplete="off" style="width:200px"/>
+{{else:}}
+<input  name="search_pocket_market" type="text" id="search_pocket_market" size="25" value="{{=session.search_pocket_market}}" placeholder="Search Pocket Market" autocomplete="off" style="width:200px"/>
+{{pass}}
+</td>
+
+<td width="200px" align="left">                       
+{{if session.search_pocket_area_id_name=='' or session.search_pocket_area_id_name==None:}}
+<input  name="search_pocket_area_id_name" type="text" id="search_pocket_area_id_name" size="25" value="" 
+placeholder="Search  Pocket Market Area" autocomplete="off" style="width:200px"/>
+{{else:}}
+<input  name="search_pocket_area_id_name" type="text" id="search_pocket_area_id_name" size="25" value="{{=session.search_pocket_area_id_name}}" placeholder="Search Pocket Market Area" autocomplete="off" style="width:200px"/>
+{{pass}}
+</td>
+
+<td align="left"  >
+<input type="submit" name="btn_filter_target_microunion" id="btn_filter_target_microunion" value="Filter"   class="button_update" style="height: 30px; width: 70px; background-color: black; color: #F8F5F2" />
+
+<input type="submit" name="btn_all" id="btn_all" value="All"   class="button_update" style="height: 30px; width: 70px; background-color: black; color: #F8F5F2" />
+
+<a href="{{=URL(c='doctor',f='microunionDownload')}}">
+          <input type="button" name="btn_add2" id="" value="Download"   class="button_update" style="height: 30px; width: 100px; background-color: black; color: #F8F5F2" /></a>
+
+<a href="{{=URL(c='doctor',f='microunion_batch_upload')}}">
+<input type="button" name="Input" id="Input" value="Batch Upload"   class="button_update" style="height: 30px; width: 100px; background-color: black; color: #F8F5F2" /></a>
+
+
+</td>
+
+
+<td width="" align="right"  >
+</td>
+
+</tr>
+
+</form>
+
+
+</table>
+
+
+
+<strong>Total:</strong> {{=recordsCount}}<br />
+
+<table width="700" border="1" cellpadding="1" cellspacing="1" class="sample_border" >
+
+<tr align="left" class="blackCatHead" height="20px" ;"vertical-align:middle">
+
+<td width="170" align="left" style="padding-left: 50px" >Pocket Market-ID</td>
+
+<td  width="170" align="left">Pocket Market Name</td>
+<td  width="170" align="left">BaseCode</td>
+<td></td>
+<td></td> 
+
+
+</tr>
+
+{{ p=0}} 		  
+
+{{for i,record in enumerate(records):}}
+
+{{ if i==items_per_page: break}}
+
+
+        <tr  align="left" class="blackCat"  style="vertical-align:middle"> 
+<form id="form1" name="form1" method="post" action="{{=URL(c='doctor',f='microunion')}}">
+
+            <td width="170" align="left" style="padding-left: 50px">
+                  <input  name="record_id" type="hidden" id="record_id" size="25" value="{{=record.id}}" title="" />
+                  {{=record.microunion_id}}
+            </td>
+            <td width="170" align="left">{{=record.microunion_name}}</td>
+            <td width="170" align="left">{{=record.area_id}}|{{=record.area_name}}</td>
+
+            <td width="30" align="right"  >
+                  {{if access_permission==True:}}
+                  <input type="submit" name="btn_delete" id="btn_delete" value=" X "   class="button_update"/> 
+                  {{pass}}
+            </td> 
+          </form>
+<form id="form2" name="form2" method="post" action="{{=URL(c='doctor',f='microunion_update',args=[record.id,page])}}">
+                  {{if access_permission==True:}} 
+                  {{a=record.microunion_id}}
+                      <td width="50" align="right"  >
+                          <input type="submit" name="btn_go" id="btn_go" value="&gt;&gt;" class="button_update"/>
+                      </td>
+</form>
+                <!-- </form> -->
+
+
+        {{pass}}
+        </tr>
+
+
+{{pass}}
+
+</table>
+
+</td></tr>
+
+</table>
+
+
+
+{{if page:}}
+
+&nbsp;&nbsp;<a href="{{=URL(args=[page-page])}}">first</a> |
+
+&nbsp;&nbsp;<a href="{{=URL(args=[page-1])}}">previous</a> |
+
+{{pass}}
+
+
+
+{{if len(records)>items_per_page:}}
+
+&nbsp;&nbsp;<a href="{{=URL(args=[page+1])}}">next</a>
+
+{{pass}}
+
+</td>
+
+</tr>
+
+</table>
+<br />
+
+
+<!-- ============================================ -->
+

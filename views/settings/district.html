@@ -1,0 +1,323 @@
+{{extend 'layout.html'}}
+
+
+
+ 
+
+ <style type="text/css">
+
+
+
+ input[type=text], input[type=password],  select {
+
+    margin: 2px 0px 2px 0px;
+
+	width: 250px;
+
+}
+
+
+
+div.error {
+
+    width: 250px;
+
+}
+#district_district_id{
+	width: 100px;
+	}
+
+ </style>
+
+
+
+
+
+
+
+<table width="100%"  border="0" cellspacing="0" cellpadding="0" style="background-color:#FFFFFF;" >
+
+
+
+  <tr height="30px" >
+
+
+
+    <td width="350"><span class="blackCatTitle">District</span></td>
+
+
+
+	<td width="210" align="right">&nbsp;</td>
+
+
+
+    <td>&nbsp;</td>
+
+
+
+  </tr>
+
+
+
+  <tr  height="1px" style="background-color:#CCCCCC;">
+
+
+
+	    <td colspan="3" ></td>
+
+
+
+  </tr>
+
+
+
+</table>
+
+
+
+  
+
+
+
+  <table width="100%" height="500px"  border="0" cellspacing="0" cellpadding="0" class="page_color"  >
+
+
+
+  <tr height="100%"  style="vertical-align:top;">
+
+
+
+    <td>
+
+
+
+	<table width="100%"  border="0" cellpadding="0" cellspacing="0"  >
+
+
+
+      <tr>
+
+
+
+        <td width="10px">&nbsp;</td>
+
+
+
+        <td>&nbsp;</td>
+
+
+
+      </tr>
+
+
+
+      <tr>
+
+
+
+        <td>&nbsp;</td>
+
+
+
+        <td>
+
+
+
+			<table width="500" border="1" cellpadding="1" cellspacing="1" class="sample_border" >
+
+
+
+            <tr align="left" height="20px">
+              <td colspan="2" >Total: {{=totalCount}}</td>
+              <td align="center"  colspan="2" ><a href="{{=URL(c='settings',f='district_batch_upload')}}">
+                     <input type="button" name="" id="" value="Batch Upload"   class="button_update" title=""/></a></td>
+            </tr>
+            <tr align="left" class="blackCatHead" height="20px" ;"vertical-align:middle">
+
+
+
+              <td >ID</td>
+              <td >Name</td>
+
+
+
+              <td align="center"  colspan="2" ></td>
+
+
+
+            </tr>
+
+
+
+			{{if access_permission==True:}} 
+
+
+
+			{{=form.custom.begin}}
+
+
+
+            <tr align="left"  height="20px" ;>
+
+
+
+              <td >{{=form.custom.widget.district_id}}</td>
+              <td >{{=form.custom.widget.name}}</td>
+
+
+
+              <td align="left"  colspan="2" >{{=form.custom.submit}}</td>
+
+
+
+            </tr>
+
+
+
+			{{=form.custom.end}}
+
+
+
+			{{pass}}
+
+
+
+			
+
+            {{ p=0}} 		  
+
+
+
+            {{for i,record in enumerate(records):}}
+
+
+
+				{{ if i==items_per_page: break}}
+
+			
+
+				<tr  align="left" class="blackCat"  style="vertical-align:middle">
+
+
+
+				  <td  >{{=record.district_id}}</td>
+				  <td  >{{=record.name}}</td>
+
+					
+
+				<form id="form2" name="form2" method="post" action="{{=URL(c='settings',f='thana',args=[page,0],vars=dict(distname=record.name))}}">
+
+				  <td width="50"  align="center"  ><!--<input type="submit" name="btn_thana" id="btn_thana" value="Thana &gt;" />--></td>				  
+
+				</form>
+
+				
+
+				<form id="form1" name="form1" method="post" action="{{=URL(c='settings',f='district',args=[page],vars=dict(recordID=record.id,distname=record.name))}}">
+
+				  <td width="50" align="right"  >
+
+
+
+					{{if access_permission==True:}}
+
+					  <input type="submit" name="btn_delete" id="btn_delete" value=" X "  class="button_update"/>
+
+					{{pass}}
+
+
+
+				  </td>
+
+			      </form>
+
+
+
+				</tr>
+
+
+
+
+
+            {{pass}}
+
+
+
+          </table>
+
+
+
+          
+
+
+
+		  </td>
+
+
+
+      </tr>
+
+
+
+    </table>
+
+
+
+
+
+
+
+      
+
+<br />
+
+
+
+{{if page:}}
+
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="{{=URL(args=[page-page])}}">first</a> |
+
+
+
+&nbsp;&nbsp;<a href="{{=URL(args=[page-1])}}">previous</a> |
+
+
+
+{{pass}}
+
+
+
+
+
+
+
+{{if len(records)>items_per_page:}}
+
+
+
+&nbsp;&nbsp;<a href="{{=URL(args=[page+1])}}">next</a>
+
+
+
+{{pass}}
+
+
+
+
+
+	</td>
+
+
+
+  </tr>
+
+
+
+</table>
+
+<br />
+
+
+
+
+

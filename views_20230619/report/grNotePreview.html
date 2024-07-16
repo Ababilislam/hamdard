@@ -1,0 +1,213 @@
+{{extend 'layout_invoice.html'}}
+
+<html>
+
+<head>
+<style type="text/css">
+	@media print{
+	body{-webkit-print-color-adjust: exact;}
+		}
+</style>
+
+
+</head>
+
+<body>
+
+
+	{{pageFlag=1}}
+
+	{{for i in sorted(range(len(data_List))):}}
+
+		{{dictData=data_List[i]}}
+
+<!--page break-->
+
+		{{if pageFlag==0:}}
+
+			<span style="page-break-before:always"></span>	
+
+			<!-- Report header-->	
+			
+		<table width="902">
+            <tr>
+              <td width="50" >&nbsp;</td>
+                <td width="15" rowspan="2" style="padding:0px; margin-bottom:0px;"><img width="25px" height="40px" src="{{=URL('static','images/comp_logo2.png')}}"/></td>
+                <td style="text-align:center; font-size:24px; font-weight:bold">{{=session.cName}}</td>
+                <td width="100">&nbsp;</td>
+          </tr>
+            <tr style="height:10px; background-color:#F0F0F0">
+              <td width="50" style="border-bottom:solid 1px #999; border-top:solid 1px #999;"></td>
+              <td style="border-bottom:solid 1px #999; border-top:solid 1px #999;"></td>
+              <td style="border-bottom:solid 1px #999; border-top:solid 1px #999;"></td>
+            </tr>        
+        </table>
+        			
+<table width="900" >
+                <tr style="border-bottom:solid 2px #999;border-left:none; border-right:none; border-top:none">
+                  <td align="center">{{=session.user_depot_address}}</td>
+              </tr>
+</table>
+            		
+			<!--<hr/>-->
+			<!-- end report header  -->
+
+		{{pass}}
+
+		{{pageFlag=0}}
+
+		<!--end page break-->
+		
+        
+<table width="900" border="0" cellspacing="1" cellpadding="1" >
+		<tr style="font-size:15px; font-weight:bold">
+		  <td width="120" align="left" >&nbsp;</td>
+		  <td width="1" align="left" >&nbsp;</td>
+		  <td width="240" align="left" >&nbsp;</td>
+		  <td align="left" >&nbsp;</td>
+		  <td width="5" align="left" >&nbsp;</td>
+		  <td colspan="3" align="left" style="font-size:20px">{{=depotName}}&nbsp;<span style="float:right; font-size:14px">#2.01</span></td>
+  		</tr>
+		<tr >
+	      <td colspan="3" valign="top" ><span style="font-size:28px; font-weight:bold">GR NOTE</span></td>
+	      <td rowspan="3" align="center" valign="middle" ><img src="{{=URL('static','images/comp_logo1.png')}}" height="60px"/></td>
+	      <td valign="top" >&nbsp;</td>
+	      <td colspan="3" valign="top" ><strong style="font-size:18px">{{=session.prefix_invoice}}GR{{=dictData['depot_id']}}-{{=dictData['sl']}}</strong></td>
+  		</tr>
+		  <tr >
+		    <td width="120" valign="top" >&nbsp;</td>
+		    <td width="1" valign="top" >&nbsp;</td>
+		    <td width="240" valign="top" ></td>
+		    <td width="5" valign="top" >&nbsp;</td>
+		    <td width="100" valign="top" >Receipt Date</td>
+		    <td width="1" valign="top" ><b>:</b></td>
+		    <td width="180" valign="top" >{{if dictData['receive_date']!=None:}}{{=dictData['receive_date'].strftime('%d-%b-%y')}}{{pass}}</td>
+	      </tr>
+		  <tr >
+		    <td width="120" valign="top" >Reference Number</td>
+		    <td width="1" valign="top" ><strong>:</strong></td>
+		    <td valign="top" >{{=dictData['ref_sl']}}</td>
+		    <td valign="top" >&nbsp;</td>
+		    <td width="100" valign="top" >Year-Period</td>
+		    <td width="1" valign="top" ><b>:</b></td>
+		    <td width="180" valign="top" >{{if dictData['receive_date']!=None:}}{{=dictData['receive_date'].strftime('%Y-%m')}}{{pass}}</td>
+	      </tr>
+		  <tr >
+		    <td width="120" valign="top" >Description</td>
+		    <td width="1" valign="top" ><strong>:</strong></td>
+		    <td colspan="3" valign="top" >{{=dictData['note']}}</td>
+		    <td width="100" valign="top" >Status</td>
+		    <td width="1" valign="top" ><b>:</b></td>
+		    <td width="180" valign="top" >{{=dictData['status']}}</td>
+	      </tr>
+    </table>
+	
+  <table width="900" border="0" cellpadding="1" cellspacing="1" class="sample_border" >
+	<thead>
+  	<tr align="left" class="blackCatHead"  height="20px" style="background-color:#E6E6E6; border:solid 2px #999999;border-top:solid 2px #999999">
+		<td width="40" >Item ID</td>
+        <td >Item Name</td>    
+        <td width="50" >UOM</td>
+        <td width="60" >Location</td>
+        <td width="150" >Location Description</td>
+        <td width="60" align="right"  >Quantity Received</td>    
+        <td width="50" align="right"  >Master Carton</td>    
+        <td width="50" align="right"  >Batch No</td>
+        <td width="70" align="center"  >Expiry Date</td>
+        <td width="60" align="right"  >TP Rate</td>    
+        <td width="100" align="right"  >TP Amount</td>
+    </tr>
+    </thead>
+    <tbody>
+	 {{total_tp=0.0}}     
+     {{totalQty=0}}
+	 
+     {{vdList=dictData['vdList']}}
+
+	  {{for j in sorted(range(len(vdList))):}}
+
+          {{vdDict=vdList[j]}}
+    
+         {{qty=0;rate=0}}
+
+          <tr  align="left" class="blackCat" style="background-color:#FBFBFB; border:solid 1px #999;">
+        
+            <td width="40" >{{=vdDict['item_id']}}</td>
+            <td >{{=vdDict['item_name']}}</td>
+        
+            <td width="50" style="font-size:14px;">{{=vdDict['item_unit']}}</td>
+            <td width="60" >{{=vdDict['store_id']}}</td>
+            <td width="150" >{{=vdDict['store_name']}}</td>
+            <td width="60" align="right" >{{qty=vdDict['quantity']}}{{=qty}}{{totalQty+=qty}}</td>
+        
+            <td width="50" align="right" >{{=vdDict['item_carton']}}</td>
+        
+            <td width="50" align="right" ><span style="font-size:14px;">{{=vdDict['batch_id']}}</span></td>
+            <td width="70" align="center" >{{=vdDict['expiary_date'].strftime('%d-%b-%Y')}}</td>
+            <td width="60" align="right" >{{rate=vdDict['price']}}{{=easy_format(rate)}}</td>
+        
+            <td width="100" align="right" >{{tpAmt=qty*rate}}{{=easy_format(tpAmt)}}{{total_tp+=tpAmt}}</td>
+        
+          </tr>
+
+    {{pass}}
+
+{{total_tp=round(total_tp,2)}}
+
+  <tr  align="left" class="blackCat"  style="vertical-align:middle; background-color:#FBFBFB">
+
+    <td align="right" style="border-bottom-style:none; border-left:none; border-bottom:none">&nbsp;</td>
+    <td align="right" style="border-bottom-style:none; border-left:none; border-bottom:none">&nbsp;</td>
+    <td align="right" style="border-bottom-style:none; border-left:none; border-bottom:none">&nbsp;</td>
+    <td width="60" align="right" style="border-bottom-style:none; border-left:none; border-bottom:none">&nbsp;</td>
+    <td width="150" align="right" style="border-bottom-style:none; border-left:none; border-bottom:none"><strong>Total Qty</strong></td>
+    <td align="right" style="border-bottom-style:none; border-left:none; border-bottom:none">{{=totalQty}}</td>
+    <td width="50" align="right" style="border-bottom-style:none; border-left:none; border-bottom:none">&nbsp;</td>
+    <td width="50" align="right" style="border-bottom-style:none; border-left:none; border-bottom:none">&nbsp;</td>
+    <td width="70" align="center" style="border-bottom-style:none; border-left:none; border-bottom:none">&nbsp;</td>
+    <td align="right" style="border-bottom-style:none; border-left:none; border-bottom:none"><strong>Total TP</strong></td>
+
+    <td align="right" ><strong>{{=easy_format(total_tp)}}</strong></td>
+
+  </tr>
+ </tbody>
+
+</table>
+
+<table width="900" >
+    <tr>
+      <td width="100" align="left"><strong>Master Carton</strong></td>
+      <td align="left"><strong>: {{=dictData['mCartonTotal']}}</strong></td>
+  </tr>
+    <tr>
+      <td width="100" align="left"><strong>Comments</strong></td>
+      <td align="left"><strong>:<!--Transcom Distribution Co. Ltd.-->
+      </strong></td>
+    </tr>
+</table>
+<br/>
+<br/>
+<table width="900" >
+	<tr>
+	  <td >{{=dictData['updatedBy']}}</td>
+	  <td >&nbsp;</td>
+	  <td >&nbsp;</td>
+  </tr>
+ <tr style="height:2px;">
+	  <td align="center" style="height:2px;">____________________</td>
+	  <td align="center" style="height:2px;">______________________________________</td>
+	  <td width="150" align="right" style="height:2px;">_______________</td>
+  </tr>
+	<tr>
+	  <td width="150" align="left"><strong>Prepared By</strong></td>
+	  <td align="center"><strong>for {{=session.cName}}</strong></td>
+	  <td width="150" align="right"><strong>Received By</strong></td>
+  </tr>
+</table>
+
+<br/>
+
+{{pass}}
+</body>
+</html>
+

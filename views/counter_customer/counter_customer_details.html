@@ -1,0 +1,110 @@
+{{extend 'layout.html'}}
+ 
+  <style type="text/css">
+	input[type=text], input[type=password],  select {
+		margin: 2px 0px 2px 0px;
+		width:250px;
+	}
+	
+	div.error {
+		width: 250px;
+	}
+	
+	#sm_doctor_gift_status{
+	width:auto;
+	}
+ </style>
+ 
+<table width="100%"  border="0" cellspacing="0" cellpadding="0" style="background-color:#FFFFFF;" >
+  <tr height="30px" >
+      <td width="40%">
+        <span class="blackCatTitle">Counter Invoice Details</span>
+      </td>
+    	<form action="{{=URL(c='counter_invoice',f='counter_invoice_show')}}" method="post">
+    	     <td width="200" align="right"><input name="" type="submit"  value="Back"/></td>
+    	</form>
+      <td>&nbsp;</td>
+  </tr>
+  <tr height="1px" style="background-color:#CCCCCC;">
+	    <td colspan="3"></td>
+  </tr>
+</table>
+  
+  
+  <table width="100%" height= "100%" border="1" cellpadding="0" cellspacing="0" class="sample_border" style="background-color:#F5F5F5;margin-left:10px;margin-right:auto; margin-top: 10px;" >
+        <tr class="blackCatHead" style="font-size:15px;">
+            <td width="60px">Invoice SL</td>
+             <td width="120px">Branch Name</td>
+             <td width="120px">Physician</td>
+             <td width="100px">Invoice Date</td>
+             <td width="200px">Item Name</td>
+             <td width="120px">Discount&nbsp;Type</td>
+             <td width="60px"align="right">Discount</td>
+             <td width="80px" align="right">Actual TP</td>
+             <td width="50px" align="right">Qty</td>
+             <td width="80px"align="right">Total&nbsp;Price</td>
+             <td width="20px"></td>
+        </tr>
+
+           {{
+            for d in range(len(counter_invoice_details_Rows)):
+                records_ov_dict=counter_invoice_details_Rows[d]   
+                record_id=str(records_ov_dict["id"])
+                sl=str(records_ov_dict["order_sl_counter"])
+                depot_id=str(records_ov_dict["depot_id"]) 
+                depot_name=str(records_ov_dict["depot_name"])
+                physician_id=str(records_ov_dict["physician_id"])
+                physician_name=str(records_ov_dict["physician_name"])
+                invoice_date=str(records_ov_dict["invoice_date"])
+                item_id=str(records_ov_dict["item_id"])
+                item_name=str(records_ov_dict["item_name"])
+                discount_type=str(records_ov_dict["discount_type"])                                         
+                item_discount_percent=str(records_ov_dict["item_discount_percent"])                                         
+                actual_tp=records_ov_dict["actual_tp"]
+                quantity=str(records_ov_dict["quantity"])
+                total_price= records_ov_dict["total_price"]
+                #discount= records_ov_dict["discount"]
+            }}
+
+           <tr align="left" class="blackCat"  style="vertical-align:middle; font-size:14px;"> 
+              <td width="60px" >{{=sl}}</td>
+              <td width="200px">{{=depot_id}}|{{=depot_name}}</td>
+              <td width="120px">{{=physician_id}}|{{=physician_name}}</td>
+              <td width="100px">{{=invoice_date}}</td>
+              <td width="200px">{{=item_id}}|{{=item_name}}</td>
+              <td width="80px">{{=discount_type}}</td>
+              <td width="60px" align="right" >{{=item_discount_percent}}</td>
+              <td width="80px" align="right" >{{=actual_tp}}</td>
+              <td width="50px" align="right" >{{=quantity}}</td>
+              <td width="80px" align="right" >{{=easy_format(total_price)}}</td>
+              <td width="20px"></td>              
+          </tr>
+
+          {{pass}}
+          <tr>
+            <td style="border: none" height="20px"></td>
+          </tr>
+
+          <tr border="None">
+              {{if session.user_type == 'Depot':}}
+              <form action="{{=URL(c='counter_invoice',f='counter_invoice_return', args=[sl])}}" method="post">
+                  <td align="right" colspan="9" style="border: none">
+                      <input  type="submit" name="return_btn" id="return_btn" value="Return" style="vertical-align:middle;height:30px ; width:80px;" onclick="if (!confirm('Do you really want to return Item?')){return false}"/>
+                  </td >
+              </form>
+              {{pass}}
+              <form action="{{=URL(c='counter_invoice',f='counter_invoice_print', args=[sl])}}" target="blank" method="post">
+                  <td align="right" colspan="10" style="padding-left: 10px; border: none;">
+                      <input  type="submit" name="print_btn" id="print_btn" value="Print" style="vertical-align:middle;height:30px ; width:80px; " />
+                  </td>
+              </form>
+          </tr>
+  </table>
+
+<table>
+    <tr>
+      <td height="400px"></td>
+    </tr>
+</table>
+       
+

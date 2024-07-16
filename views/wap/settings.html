@@ -1,0 +1,76 @@
+
+    
+{{extend 'layout_wap.html'}}
+    
+
+<table width="100%"  border="0" cellpadding="0" cellspacing="0">
+  
+  <tr style="background-color:#DDDDDD">
+      <td colspan="2" align="left" >Settings<br />       </td>
+      </tr>
+  
+ 
+  
+  <form  name="form1" action="{{=URL(c='wap',f='settings')}}" method="post"  >
+    
+    <tr >
+      <td colspan="2" align="left" >
+        First page Show Menu</td>
+      </tr>
+    
+    <tr {{if (session.wap_first_page=="menu"):}}
+	    style="color: #008000"
+		
+	   {{pass}}
+	   >
+      <td width="20" align="left" ><input type="radio" name="first_page" value="menu" /></td>
+      <td  align="left" >Menu</a></td>
+      </tr>
+    <tr 
+	
+	{{if (session.wap_first_page=="order"):}}
+	    style="color: #008000"
+		
+	   {{pass}}
+	
+	>
+      <td align="left" ><input type="radio" name="first_page" value="order" /></td>
+      <td align="left" >Order </td>
+      </tr>
+    <tr
+	
+	{{if (session.wap_first_page=="delivery"):}}
+	    style="color: #008000"
+		
+	   {{pass}}
+	
+	>
+      <td align="left" ><input type="radio" name="first_page" value="delivery" /></td>
+      <td align="left" >Delivery </td>
+      </tr>
+    <tr
+	
+	{{if (session.wap_first_page=="route"):}}
+	    style="color: #008000"
+		
+	   {{pass}}
+	
+	
+	>
+      <td align="left" ><input type="radio" name="first_page" value="route" /></td>
+      <td align="left" >Route </td>
+    </tr>
+    <tr>
+      <td align="left" >&nbsp;</td>
+      <td align="left" ><input type="submit" name="login" id="login" value="Set" onmouseover="device()" /></td>
+    </tr>
+    <tr>
+      <td align="left" >&nbsp;</td>
+      <td align="left" ><a href="{{=URL(c='wap',f='menu')}}">Menu</a></td>
+    </tr>
+	</form>
+</table>   
+
+
+
+

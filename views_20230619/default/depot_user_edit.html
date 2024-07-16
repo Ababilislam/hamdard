@@ -1,0 +1,131 @@
+{{extend 'layout.html'}}
+
+ 
+
+  <style type="text/css">
+
+	
+
+	select {
+
+    margin: 2px 0px 2px 0px;
+
+	width:350px;
+
+}
+
+</style>
+
+ 
+
+ 
+
+<table width="100%"  border="0" cellspacing="0" cellpadding="0" style="background-color:#FFFFFF;" >
+
+  <tr height="30px" >
+
+    <td width="300"><span class="blackCatTitle">Branch User-Edit</span></td>
+
+    <form action="{{=URL(c='default',f='depot_user',args=[page])}}" method="post">
+
+	<td width="200" align="right"><input name="" type="submit"  value="Back"/></td>
+
+	</form>
+
+    <td>&nbsp;</td>
+
+  </tr>
+
+  <tr  height="1px" style="background-color:#CCCCCC;">
+
+	    <td colspan="3" ></td>
+
+  </tr>
+
+  </table>
+
+  
+
+  
+
+  <table width="100%" height="500px"  border="0" cellspacing="0" cellpadding="0" class="page_color"  >
+
+  <tr height="100%"  style="vertical-align:top;">
+
+    <td>
+
+	<table width="100%"  border="0" cellpadding="0" cellspacing="0"  >
+
+      <tr>
+
+        <td>&nbsp;</td>
+
+      </tr>
+
+      <tr>
+
+        <td>{{=form.custom.begin}}
+
+          <table class="blackCat">
+
+            <tr>
+
+              <td>&nbsp;</td>
+
+              <td width="100"> UserID </td>
+
+              <td>{{=user_id}}</td>
+
+              <td>&nbsp;</td>
+
+            </tr>
+
+            <tr>
+
+              <td>&nbsp;</td>
+
+              <td width="100">Depot</td>
+
+              <td>{{=form.custom.widget.depot_id}}</td>
+
+              <td>&nbsp;</td>
+
+            </tr>
+
+            <tr>
+
+              <td>&nbsp;</td>
+
+              <td width="100">Delete</td>
+
+              <td>{{=form.custom.deletable}}</td>
+
+              <td>&nbsp;</td>
+
+            </tr>
+
+            <tr>
+
+              <td>&nbsp;</td>
+
+              <td width="100">&nbsp;</td>
+
+              <td>{{=form.custom.submit}}</td>
+
+              <td>&nbsp;</td>
+
+            </tr>
+
+          </table>
+
+          {{=form.custom.end}}
+
+<p>&nbsp;</p>	      </td></tr>
+
+	  </table>
+
+	</td>
+
+  </tr>
+
+</table>

@@ -1,0 +1,231 @@
+{{extend 'layout_report.html'}}
+
+<html>
+
+<head>
+
+<script type="text/javascript">
+
+function print_page()
+
+  {
+
+    window.print()
+
+  }
+
+</script>
+
+
+
+</head>
+
+<body>
+
+<!--<div class="blackCatTitle">Invoice</div>
+
+<br/> -->
+
+
+
+<table width="800" border="0" cellspacing="1" cellpadding="1"  class="table_row2">          
+
+		<tr> 
+
+          <th align="left" >Invoice SL</th>
+
+ 		  <th align="left" >:&nbsp; {{=sl}}</th>
+
+ 		  <th align="left" >&nbsp;</th>
+
+ 		  <th width="250" align="left" >&nbsp;</th>
+
+		</tr>
+
+
+
+          <tr >
+
+            <td width="100" valign="top" >
+
+            <b>Branch</b><br/>            </td>            
+
+            <td valign="top" ><b>: </b>{{=depot_id}}<b> | </b>{{=depotName}}</td>
+
+            <td width="100" valign="top" ><b>Client/Retailer</b></td>
+
+            <td width="250" valign="top" ><b>: </b>{{=client_id}}&nbsp;| {{=client_name}}</td>
+
+  </tr>
+
+          <tr >
+            <td valign="top" ><b>Store</b></td>
+            <td valign="top" ><b>: </b>{{=store_id}}<b> | </b>{{=store_name}}</td>
+            <td valign="top" ><b>Rep/Sup</b></td>
+            <td valign="top" ><b>: </b>{{=rep_id}}&nbsp;| {{=rep_name}} </td>
+          </tr>
+          <tr >
+
+            <td valign="top" ><b>Delivery Date</b></td>
+
+            <td valign="top" ><b>:</b> {{=delivery_date}}</td>
+
+            <td width="100" valign="top" ><b>{{=session.level3Name}}</b></td>
+
+            <td width="250" valign="top" ><b>: </b>{{=area_id}}&nbsp;| {{=area_name}} </td>
+
+          </tr>
+
+          <tr >
+
+            <td valign="top" ><b>Status</b></td>
+
+            <td valign="top" ><b>:</b> {{=status}}</td>
+
+            <td valign="top" >&nbsp;</td>
+
+            <td valign="top" >&nbsp;</td>
+
+          </tr>
+
+          <tr >
+
+            <td valign="top" ><b>Description</b></td>
+
+            <td valign="top" ><b>:</b> {{=req_note}}</td>
+
+            <td width="100" valign="top" >&nbsp;</td>
+
+            <td width="250" valign="top" >&nbsp;</td>
+
+          </tr>
+
+          <tr >
+
+            <td valign="top" >&nbsp;</td>
+
+            <td valign="top" >&nbsp;</td>
+
+            <td width="100" valign="top" >&nbsp;</td>
+
+            <td width="250" valign="top" >&nbsp;</td>
+
+          </tr>
+
+          
+
+          
+
+           {{pass}}
+
+</table>
+
+  <table width="800" border="1" cellpadding="1" cellspacing="1" class="sample_border" >
+
+
+
+  <tr align="left" class="blackCatHead"  height="20px" style="vertical-align:middle; background-color:#E6E6E6">
+
+    <td >Name</td>
+
+    <td width="60" >Item ID</td>
+    <td width="60" >BatchID</td>
+
+    <td width="60" align="center"  >Category</td>
+
+    <td width="80" align="right"  >Qty</td>
+
+    <td width="60" align="right"  >TotalQty</td>
+
+    <td width="80" align="right"  >TP</td>
+    <td width="60" align="right"  >Vat</td>
+
+    <td width="100" align="right"  >Amount </td>
+
+    </tr>
+
+    {{ p=0}} 		  
+
+    {{gross_total=0.0}}
+
+
+
+    {{for i in sorted(range(len(showList))):}}
+
+	{{dictData=showList[i]}}
+
+	
+
+	
+
+    {{qty=0;rate=0}}
+
+    
+
+    
+
+    {{ p=p%2 }}
+
+  <tr  align="left" class="blackCat"  style="vertical-align:middle; background-color:#FBFBFB">
+
+    <td >{{=dictData['item_name']}}</td>
+
+    <td width="60" >{{=dictData['item_id']}}</td>
+    <td width="60" >{{=dictData['batch_id']}}</td>
+
+    <td width="60" align="center" >{{=dictData['category_id']}}</td>
+
+    <td width="80" align="right" >{{qty=dictData['quantity']}}{{=qty}}{{bonus_qty=int(dictData['bonus_qty'])}}{{if bonus_qty > 0:}}+(B.{{=bonus_qty}}){{pass}}</td>
+
+    <td width="60" align="right" >{{=qty+bonus_qty}}</td>
+
+    <td width="80" align="right" >{{rate=dictData['price']}}{{=rate}} </td>
+    <td width="60" align="right" >{{itemVat=dictData['item_vat']}}{{=itemVat}}</td>
+
+    <td width="100" align="right" >{{amt=qty*(rate+itemVat)}}{{gross_total+=amt}}{{=amt}}</td>
+
+    </tr>
+
+	{{ p=p+1 }} 
+
+    {{pass}}
+
+	
+
+  <tr  align="left" class="blackCat"  style="vertical-align:middle; background-color:#FBFBFB">
+
+    <td colspan="6" rowspan="3" style="border-bottom-style:none; border-left:none">&nbsp;</td>
+
+    <td align="right" >Total</td>
+    <td width="60" align="right" >&nbsp;</td>
+
+    <td align="right" >{{=gross_total}}</td>
+
+  </tr>
+
+  <tr  align="left" class="blackCat"  style="vertical-align:middle; background-color:#FBFBFB">
+
+    <td align="right" >Discount</td>
+    <td width="60" align="right" >&nbsp;</td>
+
+    <td align="right" >{{=discount}}</td>
+
+  </tr>
+
+  <tr  align="left" class="blackCat"  style="vertical-align:middle; background-color:#FBFBFB">
+
+    <td align="right" >Net Total </td>
+    <td width="60" align="right" >&nbsp;</td>
+
+    <td align="right" >{{=gross_total-discount}}</td>
+
+  </tr>
+
+</table>
+
+
+
+</body>
+
+</html>
+

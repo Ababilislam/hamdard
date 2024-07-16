@@ -1,0 +1,278 @@
+{{extend 'layout_invoice_landscap.html'}}
+{{current_date=datetime.datetime.strptime(str(current_date),'%Y-%m-%d')}}
+
+<style>
+ #wrapper{ width:auto;}
+</style> 
+
+{{pageFlag=1}}	
+<!--page break-->
+{{if pageFlag==0:}}
+<span style="page-break-before:always"></span>        
+<!-- Report header-->                    
+<table width="1150">
+    <tr>
+        <td width="100" ><img width="25px" src="{{=URL('static','images/comp_logo2.png')}}"/></td>
+        <td style="text-align:center; font-size:24px; font-weight:bold">{{=session.cName}}</td>
+        <td width="100" >&nbsp;</td>
+    </tr>
+</table>			
+<table width="1150" style="border: solid 1px #C4C4C4">
+    <tr style="border-bottom:solid; border-bottom-color:#999">
+      <td align="center">{{=session.user_depot_address}}</td>
+  </tr>
+</table>
+    <!--<hr/>-->
+    <!-- end report header  -->
+{{pass}}
+
+{{pageFlag=0}}
+
+<!--end page break-->
+
+<table width="1150" cellpadding="1" cellspacing="1" style="border:none;" >
+    <tr >
+      <td width="100" align="right" >Inv Date From</td>
+      <td width="2" >:</td>
+      <td width="80" >{{=date_from}}</td>
+      <td width="100" align="right" >To Date</td>
+      <td width="2" >:</td>
+      <td width="80" >{{=date_to}}</td>
+      <td width="150" align="left" >Market:{{=market_name}}</td>
+      <td width="30" align="right" >Depot</td>
+      <td width="2" >:</td>
+      <td width="100" >{{=depotName}}</td>
+      <td width="30" align="right" >Store</td>
+      <td width="2" >:</td>
+      <td >{{=storeName}}</td>
+      <td width="50" ><span style="float:right">#9B</span></td>
+  </tr>
+    <tr >
+      <td align="right" >DP</td>
+      <td >:</td>
+      <td >{{=delivery_man_name}}</td>
+      <td align="right" >Territory</td>
+      <td >:</td>
+      <td >{{=territory_name}}</td>
+      <td width="150" align="left" >Customer: {{=customerName}}</td>
+      <td align="right" >MSO</td>
+      <td >:</td>
+      <td >{{=mso_name}}</td>
+      <td align="right" ></td>
+      <td ></td>
+      <td >&nbsp;</td>
+      <td ><a href="{{=URL(c='report_sales2',f='discount_type_wise_sales_ad_download',vars=dict(date_from=date_from,date_to=date_to,depot_id=depot_id,store_id=store_id,customer_id=customer_id,dman_id=dman_id,territory_id=territory_id,market_id=market_id,mso_id=mso_id))}}" >Download</a></td>
+    </tr>
+</table>      
+<table width="1150" cellpadding="1" cellspacing="1" style="border:none;" >
+        <tr >
+          <td align="center">
+          <div style="border: solid 1px #C4C4C4; width:90%; font-weight:bold;" >9B. Discount Type Wise Sales Statement (AD)</div></td>
+          <td width="50" align="center"><img style="width:80px;" src="{{=URL('static','images/comp_logo1.png')}}"/></td></tr>
+</table>
+
+<table width="1600" border="1" cellpadding="1" cellspacing="1" class="sample_border" >            
+
+    <tr align="left" class="blackCatHead" height="20px" ;  style="font-size:12px">
+      <td colspan="11" align="center" style="border-right:solid 2px #666; border-left-style:hidden; border-top-style:hidden">&nbsp;</td>
+      <td colspan="9" align="center" style="border-right:solid 2px #666" > Sales (AD)</td>
+    </tr>
+    <tr align="left" class="blackCatHead" height="20px" ;  style="font-size:12px">
+      <td width="60" align="center"  >Inv.Date</td>
+      <td width="100" align="left"  >Inv.Number</td>
+      <td width="80" align="left"  >Cust.ID</td>
+      <td width="150" align="left"  >Cust.Name</td>
+      <td width="50" align="left"  >MSOTr.</td>
+      <td width="100" align="left" style="border-right:solid 1px #666">Market Name</td>
+      <td width="50" align="center" style="border-right:solid 1px #666">Reg. Disc%</td>
+      <td width="50" align="center" style="border-right:solid 1px #666">Flat Disc%</td>
+      <td width="50" align="center" style="border-right:solid 1px #666">Approved Disc%</td>
+      <td width="50" align="center" style="border-right:solid 1px #666">Others Disc%</td>
+      <td width="50" align="center" style="border-right:solid 2px #666">No Disc TP%</td>
+      <td width="50" align="right"  >TP</td>
+      <td width="30" align="right"  >Reg.Disc Amt</td>
+      <td width="30" align="right"  >Flat Disc Amt</td>
+      <td width="30" align="right"  >Approved Disc Amt</td>
+      <td width="30" align="right"  >Others Disc Amt</td>
+      <td width="30" align="right"  >Total Disc Amt</td>
+      <td width="30" align="right"  >No Disc TP</td>
+      <td width="30" align="right"  >VAT</td>
+      <td width="50" align="right"  style="border-right:solid 2px #666">Net</td>
+  </tr>
+    
+    {{invTpTotal=0}}
+    {{invDiscTotal=0}}
+    {{invNetTotal=0}}
+    {{invVatTotal=0}}
+        
+    {{retTpTotal=0}}
+    {{retDiscTotal=0}}
+    {{retNetTotal=0}}
+    {{retVatTotal=0}}
+    
+    {{netTpTotal=0}}
+    {{netDiscTotal=0}}
+    {{netVatTotal=0}}
+    {{netGrandTotal=0}}
+    
+    {{net_DiscAmtTotal=0}}
+    {{net_sp_flatTotal=0}}
+    {{net_sp_approvedTotal=0}}
+    {{net_sp_othersTotal=0}}
+    {{net_no_disc_tpTotal=0}}
+    
+    {{for i in range(len(recordList)):}}    
+    {{ #if i==items_per_page: break}}
+	
+    {{recData=recordList[i]}}
+	
+     {{invTpAmt=round(recData['actualTpAmt'],2)}}{{invTpTotal+=invTpAmt}}
+     {{invDiscAmt=round(recData['discAmt']+recData['spDiscAmt'],2)}}{{invDiscTotal+=invDiscAmt}}
+     {{invVatAmt=round(recData['vatTotalAmt'],2)}}{{invVatTotal+=invVatAmt}}
+     {{invNetAmt=round(invTpAmt+invVatAmt-invDiscAmt,2)}}{{invNetTotal+=invNetAmt}}
+     
+     {{retTpAmt=round(recData['retTpAmt']+recData['retSpDiscAmt'],2)}}{{retTpTotal+=retTpAmt}}
+     {{retDiscAmt=round(recData['retDiscAmt']+recData['retSpDiscAmt'],2)}}{{retDiscTotal+=retDiscAmt}}
+     {{retVatAmt=round(recData['retVatAmt'],2)}}{{retVatTotal+=retVatAmt}}
+     {{retNetAmt=round(retTpAmt+retVatAmt-retDiscAmt,2)}}{{retNetTotal+=retNetAmt}}
+     
+     {{netTp=invTpAmt-retTpAmt}}{{netTpTotal+=netTp}}
+     {{netDisc=invDiscAmt-retDiscAmt}}{{netDiscTotal+=netDisc}}
+     {{netVat=invVatAmt-retVatAmt}}{{netVatTotal+=netVat}}
+     {{netGrandAmt=invNetAmt-retNetAmt}}{{netGrandTotal+=netGrandAmt}}
+      
+      {{regular_disc_tp=round(recData['regular_disc_tp'],2)}}
+      {{flat_disc_tp=round(recData['flat_disc_tp'],2)}}
+      {{approved_disc_tp=round(recData['approved_disc_tp'],2)}}
+      {{others_disc_tp=round(recData['others_disc_tp'],2)}}
+      {{no_disc_tp=round(recData['no_disc_tp'],2)}}
+      
+      {{invDiscAmtRD=round(recData['discAmt'],2)}}
+      {{spFlatDiscAmtSP=round(recData['spFlatDiscAmt'],2)}}
+      {{spApprovedDiscAmtSP=round(recData['spApprovedDiscAmt'],2)}}
+      {{spOthersDiscAmtSP=round(recData['spOthersDiscAmt'],2)}}
+      
+      {{discount_precentRD=round(recData['discount_precent'],2)}}
+      
+      {{try:}}
+      	{{regularDiscRate=round((invDiscAmtRD*100)/regular_disc_tp,2)}}
+      {{except:}}
+      	{{regularDiscRate=0}}      	    
+      {{pass}}
+      <!--{{#discount_precentRD=regularDiscRate}}-->
+      
+      {{try:}}
+      	{{spFlatDiscRate=round((spFlatDiscAmtSP*100)/flat_disc_tp,2)}}
+      {{except:}}
+      	{{spFlatDiscRate=0}}      	    
+      {{pass}}
+      
+      {{try:}}
+      	{{spApprovedDiscRate=round((spApprovedDiscAmtSP*100)/approved_disc_tp,2)}}
+      {{except:}}
+      	{{spApprovedDiscRate=0}}      	    
+      {{pass}}
+      
+      {{try:}}
+      	{{spOthersDiscRate=round((spOthersDiscAmtSP*100)/others_disc_tp,2)}}
+      {{except:}}
+      	{{spOthersDiscRate=0}}      	    
+      {{pass}}
+      
+      {{try:}}
+      	{{noDiscRate=round((no_disc_tp*100)/invTpAmt,2)}}
+      {{except:}}
+      	{{noDiscRate=0}}      	    
+      {{pass}}
+       
+       <!--Return Discount  -->
+      {{ret_actual_total_tp=round(recData['ret_actual_total_tp'],2)}}
+      {{ret_regular_disc_tp=round(recData['ret_regular_disc_tp'],2)}}
+      {{ret_flat_disc_tp=round(recData['ret_flat_disc_tp'],2)}}
+      {{ret_approved_disc_tp=round(recData['ret_approved_disc_tp'],2)}}
+      {{ret_others_disc_tp=round(recData['ret_others_disc_tp'],2)}}
+      {{ret_no_disc_tp=round((ret_actual_total_tp-(ret_regular_disc_tp+ret_flat_disc_tp+ret_approved_disc_tp+ret_others_disc_tp)),2)}}
+      
+      {{ret_DiscAmt=round(recData['retDiscAmt'],2)}}
+      {{ret_sp_flat=round(recData['ret_sp_flat'],2)}}
+      {{ret_sp_approved=round(recData['ret_sp_approved'],2)}}
+      {{ret_sp_others=round(recData['ret_sp_others'],2)}}
+       
+      {{net_DiscAmt=round(invDiscAmtRD-ret_DiscAmt,2)}}
+      {{net_sp_flat=round(spFlatDiscAmtSP-ret_sp_flat,2)}}
+      {{net_sp_approved=round(spApprovedDiscAmtSP-ret_sp_approved,2)}}
+      {{net_sp_others=round(spOthersDiscAmtSP-ret_sp_others,2)}}
+      {{net_no_disc_tp=round((no_disc_tp-ret_no_disc_tp),2)}}
+       
+       
+       {{net_DiscAmtTotal+=net_DiscAmt}}
+       {{net_sp_flatTotal+=net_sp_flat}}
+       {{net_sp_approvedTotal+=net_sp_approved}}
+       {{net_sp_othersTotal+=net_sp_others}}
+       {{net_no_disc_tpTotal+=net_no_disc_tp}}
+       
+  <tr  align="left" class="blackCat"  style="background-color:#FBFBFB; font-size:11px;">
+    <td width="60" align="center" ><span style=" text-align:center;">{{=recData['invoice_date'].strftime('%d-%b-%Y')}}</span></td>	
+    <td width="100" align="left" >{{=session.prefix_invoice}}INV{{=recData['depot_id']}}-{{=recData['invSl']}}</td>
+    <td width="80" align="left" >{{=recData['client_id']}}</td>
+    <td width="150" align="left" >{{=recData['client_name']}}</td>
+    <td width="50" align="left" >{{=recData['area_id']}}</td>
+    <td width="100" align="left" style="border-right:solid 1px #666">{{=recData['market_name']}}</td>
+    <td width="50" align="center" style="border-right:solid 1px #666">{{if discount_precentRD==0:}}-{{else:}}{{=discount_precentRD}}{{pass}} <!--{{#if regularDiscRate==0:}}-{{#else:}}{{#=regularDiscRate}}%{{#pass}}--></td>
+    <td width="50" align="center" style="border-right:solid 1px #666">{{if spFlatDiscRate==0:}}-{{else:}}{{=spFlatDiscRate}}{{pass}}</td>
+    <td width="50" align="center" style="border-right:solid 1px #666">{{if spApprovedDiscRate==0:}}-{{else:}}{{=spApprovedDiscRate}}{{pass}}</td>
+    <td width="50" align="center" style="border-right:solid 1px #666">{{if spOthersDiscRate==0:}}-{{else:}}{{=spOthersDiscRate}}{{pass}}</td>
+    <td width="50" align="center" style="border-right:solid 2px #666">-<!--{{#if noDiscRate==0:}}-{{#else:}}{{#=noDiscRate}}{{#pass}}--></td>
+    <td width="50" align="right" style=" text-align:right;">{{if netTp==0:}}-{{else:}}{{=easy_format(netTp)}}{{pass}}</td>
+    <td width="30" align="right" style=" text-align:right;">{{if net_DiscAmt==0:}}-{{else:}}{{=easy_format(net_DiscAmt)}}{{pass}}</td>
+    <td width="30" align="right" style=" text-align:right;">{{if net_sp_flat==0:}}-{{else:}}{{=easy_format(net_sp_flat)}}{{pass}}</td>
+    <td width="30" align="right" style=" text-align:right;">{{if net_sp_approved==0:}}-{{else:}}{{=easy_format(net_sp_approved)}}{{pass}}</td>
+    <td width="30" align="right" style=" text-align:right;">{{if net_sp_others==0:}}-{{else:}}{{=easy_format(net_sp_others)}}{{pass}}</td>
+    <td width="30" align="right" style=" text-align:right;">{{if netDisc==0:}}-{{else:}}{{=easy_format(netDisc)}}{{pass}}</td>
+    <td width="30" align="right" style=" text-align:right;">{{if net_no_disc_tp==0:}}-{{else:}}{{=easy_format(net_no_disc_tp)}}{{pass}}</td>
+    <td width="30" align="right" style=" text-align:right;">{{if netVat==0:}}-{{else:}}{{=easy_format(netVat)}}{{pass}}</td>
+    <td width="50" align="right" style=" text-align:right;border-right:solid 2px #666">{{if netGrandAmt==0:}}-{{else:}}{{=easy_format(netGrandAmt)}}{{pass}}</td>
+  
+  </tr>
+  
+    {{pass}}
+   
+  <tr  align="left" class="blackCat"  style="background-color:#FBFBFB; font-size:11px;">
+    <td colspan="2" align="left" ><strong>&nbsp;{{=invocieCount}} Invoice(s)</strong></td>
+    <td width="80" align="left">&nbsp;</td>
+    <td width="150" align="left">&nbsp;</td>
+    <td width="50" align="left">&nbsp;</td>
+    <td width="100" align="left">&nbsp;</td>
+    <td width="50" align="center">&nbsp;</td>
+    <td width="50" align="center">&nbsp;</td>
+    <td width="50" align="center">&nbsp;</td>
+    <td width="50" align="center" style="border-right:solid 1px #666">&nbsp;</td>
+    <td width="50" align="center" style="border-right:solid 1px #666;border-right:solid 2px #666">&nbsp;</td>
+    <td width="50" align="right" style="border-bottom:solid 1px #666"><strong style="text-decoration:overline">{{=easy_format(netTpTotal)}}</strong></td>
+    <td width="30" align="right" style="border-bottom:solid 1px #666"><strong>{{=easy_format(net_DiscAmtTotal)}}</strong></td>
+    <td width="30" align="right" style="border-bottom:solid 1px #666"><strong>{{=easy_format(net_sp_flatTotal)}}</strong></td>
+    <td width="30" align="right" style="border-bottom:solid 1px #666"><strong>{{=easy_format(net_sp_approvedTotal)}}</strong></td>
+    <td width="30" align="right" style="border-bottom:solid 1px #666"><strong>{{=easy_format(net_sp_othersTotal)}}</strong></td>
+    <td width="30" align="right" style="border-bottom:solid 1px #666"><strong style="text-decoration:overline">{{=easy_format(netDiscTotal)}}</strong></td>
+    <td width="30" align="right" style="border-bottom:solid 1px #666"><strong>{{=easy_format(net_no_disc_tpTotal)}}</strong></td>
+    <td width="30" align="right" style="border-bottom:solid 1px #666"><strong style="text-decoration:overline">{{=easy_format(netVatTotal)}}</strong></td>
+    <td width="50" align="right" style="border-bottom:solid 1px #666;;border-right:solid 2px #666"><strong style="text-decoration:overline">{{=easy_format(netGrandTotal)}}</strong></td>
+  </tr>
+</table>
+<br>
+<br/>
+<table width="1150" >
+	<tr>
+	  <td width="150" align="center">__________________</td>
+	  <td width="150" align="center">_______________________________________</td>
+	  <td width="20" align="center">&nbsp;</td>
+	  <td width="180" align="center">&nbsp;</td>
+  </tr>
+	<tr>
+	  <td width="150" align="center"><strong>Printed By</strong></td>
+	  <td width="150" align="center"><span style="font-style:italic;">for</span>&nbsp; &nbsp;<strong>{{=session.cName}}</strong></td>
+	  <td width="20" align="center">&nbsp;</td>
+	  <td width="180" align="center">&nbsp;</td>
+  </tr>
+</table>
+

@@ -1,0 +1,102 @@
+
+{{extend 'layout.html'}}
+  
+  <style type="text/css">
+	 input[type=text], input[type=password]{
+		margin: 2px 0px 2px 0px;
+		width: 200px;
+	}
+	select {
+		margin: 2px 0px 2px 0px;
+		width: 201px;
+		height:50px;
+	}
+	textarea {
+		width: 201px;
+		height:50px;
+	}
+	div.error {
+		width: 200px;
+	}
+ </style>
+ 
+<table width="100%"  border="0" cellspacing="0" cellpadding="0" style="background-color:#FFFFFF;" >
+  <tr height="30px" >
+    <td width="800"><span class="blackCatTitle">Error Process</span></td>
+    <form action="{{=URL(c='inbox',f='inbox',args=[page])}}" method="post">
+    <td><input name="" type="submit"  value="Back"/></td>
+    </form>
+    <td>&nbsp;</td>
+  </tr>
+  <tr  height="1px" style="background-color:#CCCCCC;">
+	    <td colspan="3" ></td>
+  </tr>
+  </table>
+    
+  <table width="100%" height="500px"  border="0" cellspacing="0" cellpadding="0" class="page_color"  >
+  <tr height="100%"  style="vertical-align:top;">
+    <td>
+	<table width="100%"  border="0" cellpadding="0" cellspacing="0"  >
+      
+      <tr>
+        <td>&nbsp;</td>
+        <td>
+		
+		<br />
+	{{if (session.user_type=='Admin' and records):}}
+	  <table width="700" border="0" cellpadding="0" cellspacing="0" class="blackCatHead">
+	  <form name="form1" id="form1" action="{{=URL(c='inbox',f='error_process',args=[page,rowId])}}">
+      <tr >
+        <td width="12">&nbsp;</td>
+        <td width="100">SL:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+        <td width="3">:</td>
+        <td width="120" align="left">{{=records[0].sl}}</td>
+        <td>&nbsp;</td>
+      </tr>
+      <tr >
+        <td>&nbsp;</td>
+        <td width="100">Date</td>
+        <td width="3">:</td>
+        <td align="left">{{=records[0].sms_date}}</td>
+        <td>&nbsp;</td>
+      </tr>
+      <tr >
+        <td>&nbsp;</td>
+        <td width="100">Mobile</td>
+        <td width="3">:</td>
+        <td align="left"><input type="text" name="smsMobile" value="{{=records[0].mobile_no}}"/></td>
+        <td>&nbsp;</td>
+      </tr>
+      <tr >
+        <td>&nbsp;</td>
+        <td width="100">SMS</td>
+        <td width="3">:</td>
+        <td align="left"><textarea name="smsText" style="width:380px;">{{=records[0].sms}}</textarea></td>
+        <td>&nbsp;</td>
+      </tr>
+      <tr >
+        <td>&nbsp;</td>
+        <td width="100">&nbsp;</td>
+        <td width="3">&nbsp;</td>
+        <td align="left"><input type="submit" style="width:100px; background-color:#EFEFEF;" name="btn_resubmit" value="Re Submit" title=""/></td>
+        <td>&nbsp;</td>
+      </tr>
+      <tr >
+        <td>&nbsp;</td>
+        <td width="100">&nbsp;</td>
+        <td width="3">&nbsp;</td>
+        <td align="left">&nbsp;</td>
+        <td>&nbsp;</td>
+      </tr>
+      </form>
+    </table>
+	{{pass}}
+        
+         <br />
+         </td></tr>
+    </table>
+    
+	</td>
+  </tr>
+</table>
+<br />

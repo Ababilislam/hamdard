@@ -1,0 +1,67 @@
+{{extend 'layout_login.html'}}
+
+<table width="900px" border="0">
+  <tr>
+    <td align="left"><div class="blackCatTitle">Web Settings</div></td>
+    <td align="right">
+	<form action="{{=URL(c='super',f='home')}}" method="post">
+	<input name="" type="submit"  value="Back"/>
+	</form>
+	</td>
+  </tr>
+</table>
+
+{{=form}}
+
+<table width="600" border="0" >
+  <tr style="background-color:#F0F8FF;"><form action="{{=URL(c='super',f='sys_web_settings')}}" method="post">
+    <td width="300" align="left">CID:
+	  <input type="text" name="cid_value" id="cid_value" style="width:100px" value=""></td>
+	
+    <td align="right">	
+	<input name="btn_filter_web_sett" type="submit"  value="Filter" style="background-color:#ECF5FF" class="button_update"/>
+	<input name="btn_filter_all" type="submit"  value="All" style="background-color:#ECF5FF" class="button_update"/>	
+	<a href="{{=URL(c='super',f='web_settings_batch_upload')}}"><input type="button" name="" id="" value="Batch Upload" style="background-color:#ECF5FF"  class="button_update"/></a>
+	</td></form>
+  </tr>
+</table>
+
+<table width="600" class="sample2"  >
+  <tr align="left" class="blackCatHead" style="background-color:#CAE4FF;font-size:14px" height="auto";"vertical-align:middle"; >
+    <td width="50">CID</td>
+    <td>Key</td>
+    <td>Value</td>
+	<td width="50">&nbsp;</td>
+  </tr>
+  {{ p=0}} 
+
+  {{for i,record in enumerate(records):}}	
+	{{if i==items_per_page: break}}
+
+  {{ p=p%2 }}
+  {{ if p==0:}}
+  <tr  align="left" class="blackCat"  style="background-color:#F0F8FF;font-size:12px" ;"vertical-align:middle"> {{else:}}
+  <tr  align="left" valign="top" class="blackCat"  style="background-color:#DFEFFF;font-size:12px" ;"vertical-align:middle"> {{pass}}
+  
+  
+    <td width="50" height="30" >{{=record.cid}}</td>
+    <td >{{=record.s_key}}</td>
+    <td >{{=record.s_value}}</td>
+    <form id="form1" method="post" action="{{=URL(c='super',f='update_sys_web_settings',args=[page,record.id])}}">
+      <td width="50">
+      <input type="submit" name="update" id="update" value="Edit"  style="background-color:#ECF5FF" class="button_update"/></td></form>
+  </tr>
+  {{ p=p+1 }} 
+  {{pass}}
+</table>
+
+<br/>
+{{if page:}}
+<a href="{{=URL(args=[page-page])}}">first</a> | 
+<a href="{{=URL(args=[page-1])}}">previous</a> |
+{{pass}}
+
+{{if len(records)>items_per_page:}}
+<a href="{{=URL(args=[page+1])}}">next</a>
+{{pass}}
+ 

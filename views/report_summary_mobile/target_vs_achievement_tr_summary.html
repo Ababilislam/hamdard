@@ -1,0 +1,74 @@
+{{extend 'layout_report_mobile.html'}}
+<html>
+    <head>
+    </head>
+    <body style="font-size:60%;"> 
+    <table width="700"> 
+    	<form action="{{=URL(c='report_summary_mobile',f='report_home')}}" method="post">   	    
+        <tr >
+            <td ><input type="submit" value=" < Back "/></td>            
+        </tr> 
+        </form>            
+    </table>
+    <table width="500" style="margin-bottom:10px; font-weight:bold;" >    	    
+        <tr style="background-color:#F0FAFF">
+            <td width="100" >Month</td>
+            <td width="2" >:</td>
+            <td >{{=datetime.datetime.strptime(str(current_date)[0:7] + '-01', '%Y-%m-%d').strftime('%Y-%b')}}</td>
+        </tr>        
+    </table>
+        			
+    {{if len(targetAchRows)==0:}}
+    	Data not available.
+    {{else:}}
+        <table width="500" border="1" cellpadding="1" cellspacing="1" class="sample_border" >
+            <tr align="left" class="blackCatHead" height="20px" ;  style="font-size:12px; background-color:#E9E9E9;">                
+                <td width="100" align="left"  >Territory</td>        
+                <!--<td width="300" align="left"  >Territory Name </td>-->
+                <!--<td width="100"   style=" text-align:right;" >Target Amount</td>
+                <td width="100"   style=" text-align:right;" >Ach. Amount</td> -->
+                <td width="100"   style=" text-align:center;" >Ach. (%)</td> 
+                <td width="10"   style=" text-align:center;" ></td>     
+            </tr>
+            {{totalTgtAmt=0}}
+            {{totalAchAmt=0}}
+            {{AchPer=0}}
+            {{i=0}}
+            {{for row in targetAchRows:}}
+             {{tgtAmt=row[(db.target_vs_achievement_route_item.price*db.target_vs_achievement_route_item.target_qty).sum()]}}
+             {{achAmt=row[(db.target_vs_achievement_route_item.price*db.target_vs_achievement_route_item.achievement_qty).sum()]}}
+             {{totalTgtAmt+=tgtAmt}}
+             {{totalAchAmt+=achAmt}}
+            
+             {{if tgtAmt>0:}}
+             {{AchPer=round((float(achAmt)/float(tgtAmt)*100),2)}}
+             {{pass}}
+             {{i+=1}}
+             <form action="{{=URL(c='report_summary_mobile',f='target_vs_achievement_tr_summary',vars=dict(tr_id=row[db.target_vs_achievement_route_item.territory_id]))}}" method="post">
+             {{if i%2==0:}}
+             <tr  align="left" class="blackCat"  style="vertical-align:middle; font-size:11px; background-color:#F0FAFF; height:30px;">
+             {{else:}}
+            <tr  align="left" class="blackCat"  style="vertical-align:middle; font-size:11px; height:30px;">
+            {{pass}}
+                <td style=" text-align:left;">{{=row[db.target_vs_achievement_route_item.territory_id]}}</td> 
+                <!--<td style=" text-align:left;">{{#=row[db.target_vs_achievement_route_item.territory_name]}}</td> 
+                <td style=" text-align:right;">{{#=tgtAmt}}</td>
+                <td style=" text-align:right;">{{#=achAmt}}</td>-->
+                <td style=" text-align:center;">{{=round(AchPer,2)}}%</td>
+                <td style=" text-align:center;"><input type="submit" name="btn_submit" value=" >> "/></td>              
+            </tr>
+            {{pass}}
+            </form>
+            <!--<tr  align="left" class="blackCat"  style="vertical-align:middle; font-size:11px; background-color:#F4F4F4;">
+                <td style=" text-align:right;">Total=</td> 
+                <td style=" text-align:right;">{{=totalTgtAmt}}</td>
+                <td style=" text-align:right;">{{=totalAchAmt}}</td> 
+                <td style=" text-align:right;"></td>-->
+                <!--<td style=" text-align:right;"></td>-->            
+            <!--</tr>-->
+        </table>
+     {{pass}}
+   
+    </body>
+</html>
+

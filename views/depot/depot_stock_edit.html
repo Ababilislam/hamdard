@@ -1,0 +1,128 @@
+{{extend 'layout.html'}}
+
+ 
+
+<table width="100%"  border="0" cellspacing="0" cellpadding="0" style="background-color:#FFFFFF;" >
+
+  <tr height="30px" >
+
+    <td><span class="blackCatTitle">Branch Stock-Edit</span></td>
+
+  </tr>
+
+  <tr  height="1px" style="background-color:#CCCCCC;">
+
+	    <td ></td>
+
+  </tr>
+
+  </table>
+
+  
+
+  
+
+  <table width="100%" height="500px"  border="0" cellspacing="0" cellpadding="0" class="page_color"  >
+
+  <tr height="100%"  style="vertical-align:top;">
+
+    <td>
+
+	<table width="100%"  border="0" cellpadding="0" cellspacing="0"  >
+
+      <tr>
+
+        <td>&nbsp;</td>
+
+        <td>&nbsp;</td>
+
+      </tr>
+
+      <tr>
+
+        <td>&nbsp;</td>
+
+        <td>
+
+          <table class="blackCat">
+
+		  {{=form.custom.begin}}
+
+            <tr>
+
+              <td> BranchID </td>
+
+              <td>&nbsp;{{=depot_id}}</td>
+
+              <td>&nbsp;</td>
+
+              </tr>
+
+            <tr>
+
+              <td>ItemID</td>
+
+              <td>&nbsp;{{=item_id}}</td>
+
+              <td>&nbsp;</td>
+
+              </tr>
+
+            <tr>
+
+              <td>Quantity </td>
+
+              <td>{{=form.custom.widget.quantity}} </td>
+
+              <td>&nbsp;</td>
+
+              </tr>
+
+            <tr>
+
+              <td>Delivery Book</td>
+
+              <td>{{=form.custom.widget.booked_for_delivery}}</td>
+
+              <td>&nbsp;</td>
+
+            </tr>
+
+            <tr>
+
+              <td>Delete?</td>
+
+              <td>{{=form.custom.deletable}}</td>
+
+              <td>&nbsp;</td>
+
+              </tr>
+
+            <tr>
+
+              <td>&nbsp;</td>
+
+              <td>&nbsp;{{=form.custom.submit}}</td>
+
+              <td>&nbsp;</td>
+
+              </tr>
+
+			  {{=form.custom.end}}
+
+          </table>
+
+          </td>
+
+      </tr>
+
+    </table>
+
+	</td>
+
+  </tr>
+
+</table>
+
+
+

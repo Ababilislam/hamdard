@@ -1,0 +1,438 @@
+{{extend 'layout_invoice.html'}}
+
+<html>
+
+<head>
+
+
+
+</head>
+
+<body>
+	
+    
+	{{pageFlag=1}}
+
+	
+<!--page break-->
+
+		{{if pageFlag==0:}}
+        <span style="page-break-before:always"></span>	
+        
+<!-- Report header-->	
+        <table width="902">
+            <tr>
+          <td width="50" >&nbsp;</td>
+            <td width="15" rowspan="2" style="padding:0px; margin-bottom:0px;"><img width="25px" height="40px" src="{{=URL('static','images/comp_logo2.png')}}"/></td>
+            <td style="text-align:center; font-size:24px; font-weight:bold">{{=session.cName}}</td>
+            <td width="100">&nbsp;</td>
+          </tr>
+        <tr style="height:10px; background-color:#F0F0F0">
+          <td width="50" style="border-bottom:solid 1px #999; border-top:solid 1px #999;"></td>
+          <td style="border-bottom:solid 1px #999; border-top:solid 1px #999;"></td>
+          <td style="border-bottom:solid 1px #999; border-top:solid 1px #999;"></td>
+        </tr>        
+        </table>		
+        <table width="900" style="border: solid 1px #C4C4C4">
+            <tr style="border-bottom:solid; border-bottom-color:#999">
+              <td align="center">{{=session.user_depot_address}}</td>
+          </tr>
+        </table>     
+			<!--<hr/>-->
+			<!-- end report header  -->
+		{{pass}}
+		
+		{{pageFlag=0}}
+		
+		<!--end page break-->
+
+	
+	{{for i,record in enumerate(records):}}
+    
+	{{if i>0:}}
+    	<span style="page-break-before:always"></span>  
+        <table width="902">
+            <tr>
+          <td width="50" >&nbsp;</td>
+            <td width="15" rowspan="2" style="padding:0px; margin-bottom:0px;"><img width="25px" height="40px" src="{{=URL('static','images/comp_logo2.png')}}"/></td>
+            <td style="text-align:center; font-size:24px; font-weight:bold">{{=session.cName}}</td>
+            <td width="100">&nbsp;</td>
+          </tr>
+        <tr style="height:10px; background-color:#F0F0F0">
+          <td width="50" style="border-bottom:solid 1px #999; border-top:solid 1px #999;"></td>
+          <td style="border-bottom:solid 1px #999; border-top:solid 1px #999;"></td>
+          <td style="border-bottom:solid 1px #999; border-top:solid 1px #999;"></td>
+        </tr>        
+        </table>			
+        <table width="900" style="border: solid 1px #C4C4C4">
+            <tr style="border-bottom:solid; border-bottom-color:#999">
+              <td align="center">{{=session.user_depot_address}}</td>
+          </tr>
+        </table>
+     {{pass}}
+		<div style="float:right;">(Customer Copy)#3.02</div>
+        <table width="900" cellpadding="1" cellspacing="1" >
+          <tr >
+              <td width="300" align="left">
+                <table width="300" cellpadding="1" cellspacing="1" >
+                  <tr >
+                      <td width="100" align="left">MR No</td>
+                      <td width="2" align="left">:</td>
+                      <td align="left">{{=record[db.sm_payment_collection.id.max()]}}</td>
+                   </tr>
+                   <tr >
+                      <td width="100" align="left">Batch No</td>
+                      <td width="2" align="left">:</td>
+                      <td align="left">{{=record[db.sm_payment_collection.collection_batch.max()]}}</td>
+                   </tr>
+                  <tr >
+                      <td width="100" align="left">Customer ID</td>
+                      <td width="2" align="left">:</td>
+                      <td align="left">{{=record[db.sm_payment_collection.client_id.max()]}}</td>
+                  </tr>
+                   <tr >
+                      <td width="100" align="left">Customer Name</td>
+                      <td width="2" align="left">:</td>
+                      <td align="left">{{=record[db.sm_payment_collection.client_name.max()]}}</td>
+                   </tr>
+                   <tr >
+                      <td width="100" align="left">Market</td>
+                      <td width="2" align="left">:</td>
+                      <td align="left">{{=record[db.sm_payment_collection.market_name.max()]}}</td>
+                   </tr>
+                   <tr >
+                      <td width="100" align="left">branch</td>
+                      <td width="2" align="left">:</td>
+                      <td align="left">{{=record[db.sm_payment_collection.depot_name.max()]}}</td>
+                   </tr>
+                 </table>      
+              </td>
+              
+              <td width="300" align="center" style="vertical-align:top;">
+                <div style=" width:150px; height:25px; background-color:#EAEAEA; font-weight:bold; margin-bottom:5px;">MONEY RECEIPT</div>
+                <img style="height:15px;" src="{{=URL('static','images/comp_logo1.png')}}"/>
+              </td>
+              <td width="300" align="left">
+                <table width="300" cellpadding="1" cellspacing="1" >                  
+                  <tr >
+                      <td width="100" align="left">Date</td>
+                      <td width="2" align="left">:</td>
+                      <td width="180" align="left">{{=record.sm_payment_collection.payment_collection_date.strftime('%d-%b-%y')}}</td>
+                  </tr>
+                   <tr >
+                      <td width="100" align="left">Receipt Type</td>
+                      <td width="2" align="left">:</td>
+                      <td width="180" align="left">{{=record[db.sm_payment_collection.payment_type.max()]}}</td>
+                   </tr>
+                   <tr >
+                      <td width="100" align="left"></td>
+                      <td width="2" align="left"></td>
+                      <td width="180" align="left"></td>
+                   </tr>
+                   <tr >
+                      <td width="100" align="left"></td>
+                      <td width="2" align="left"></td>
+                      <td width="180" align="left"></td>
+                   </tr>
+                 </table>   
+              </td>    
+          </tr>
+        </table>
+
+        <table width="900" border="1" cellpadding="1" cellspacing="1" class="sample_border" style="border: solid 1px #C4C4C4">
+        
+          <tr align="left" class="blackCatHead"  style="vertical-align:middle; background-color:#E6E6E6">
+        
+            <td width="100" align="left" >Invoice No</td>
+            <td width="100" >Invoice Date</td>
+            <td width="200" align="left"  >Deliveryman Name</td>
+            <td width="200" align="right"  >Applied Amount</td>
+            <td width="200" align="left"  >Comments</td>
+          </tr>        
+          <tr  align="left" class="blackCat"  style="vertical-align:middle; background-color:#FBFBFB; font-size:11px;">	   
+            <td width="100" align="left" >{{=session.prefix_invoice}}INV{{=record[db.sm_payment_collection.depot_id.max()]}}-{{=record[db.sm_payment_collection.sl.max()]}}</td>	
+            <td width="100" >{{=record[db.sm_payment_collection.invoice_date.max()].strftime('%d-%b-%y')}}</td>
+            <td width="200" align="left" >{{=record[db.sm_payment_collection.d_man_name.max()]}}</td>
+            <td width="200" align="right" >{{=easy_format(record[db.sm_payment_collection.collection_amount.sum()])}}</td>
+            <td width="200" align="left" >{{=record[db.sm_payment_collection.collection_note.max()]}}</td>
+          </tr>  
+          <tr  align="left" style="background-color:#FFFFFF;">	
+            <td colspan="3" align="right"  ><strong>Total:</strong></td>
+            <td width="200" align="right" ><strong>{{=easy_format(record[db.sm_payment_collection.collection_amount.sum()])}}<strong></td>
+            <td width="200" align="right" ></td>    
+          </tr>  
+        </table>
+        <br>
+        <table width="250" cellpadding="1" cellspacing="1" >
+            <tr >
+              <td align="left"><strong><span style="font-size:14px; font-weight:bold">TAKA:</span></strong></td>
+              <td width="150" align="right" style="border: solid 1px #C4C4C4; font-weight:bold;">{{=easy_format(record[db.sm_payment_collection.collection_amount.sum()])}}</td>
+            </tr>
+        </table>
+        <strong> Taka in Words:</strong> {{try:}}{{=num2word(str(record[db.sm_payment_collection.collection_amount.sum()]))}}{{except:}}-{{pass}}
+        <br/>
+        <table width="900" >
+            <tr>
+              <td width="300" align="center"></td>
+              <td width="20" align="center">for</td>
+              <td align="left"><strong>{{=session.cName}}</strong></td>
+          </tr>
+        </table>
+        <!--<div style="border-bottom:dashed; border-bottom-color:#F0F0F0;"></div>-->
+        
+        <span style="page-break-before:always"></span>
+<!--Account copy-->        
+            <table width="902">
+                <tr>
+                    <td width="100" ><img width="25px" height="40px" src="{{=URL('static','images/comp_logo2.png')}}"/></td>
+                    <td style="text-align:center; font-size:24px; font-weight:bold">{{=session.cName}}</td>
+                    <td width="100" >&nbsp;</td>
+                </tr>
+            </table>			
+            <table width="900" style="border: solid 1px #C4C4C4">
+                <tr style="border-bottom:solid; border-bottom-color:#999">
+                  <td align="center">{{=session.user_depot_address}}<!--{{#=session.company_address}}--><!--Sadar Road, Mohakhali, Dhaka. Ph: 9896479,9862763, 8855371-80 Ext:258 Fax:8860325, mail: tdclmohakhali@transcombd.com--></td>
+              </tr>
+            </table>         
+<div style="float:right;">(Account Copy)#3.02</div>
+<table width="900" cellpadding="1" cellspacing="1" >
+          <tr >
+              <td width="300" align="left">
+                <table width="300" cellpadding="1" cellspacing="1" >
+                  <tr >
+                      <td width="100" align="left">MR No</td>
+                      <td width="2" align="left">:</td>
+                      <td align="left">{{=record[db.sm_payment_collection.id.max()]}}</td>
+                   </tr>
+                   <tr >
+                      <td width="100" align="left">Batch No</td>
+                      <td width="2" align="left">:</td>
+                      <td align="left">{{=record[db.sm_payment_collection.collection_batch.max()]}}</td>
+                   </tr>
+                  <tr >
+                      <td width="100" align="left">Customer ID</td>
+                      <td width="2" align="left">:</td>
+                      <td align="left">{{=record[db.sm_payment_collection.client_id.max()]}}</td>
+                  </tr>
+                   <tr >
+                      <td width="100" align="left">Customer Name</td>
+                      <td width="2" align="left">:</td>
+                      <td align="left">{{=record[db.sm_payment_collection.client_name.max()]}}</td>
+                   </tr>
+                   <tr >
+                      <td width="100" align="left">Market</td>
+                      <td width="2" align="left">:</td>
+                      <td align="left">{{=record[db.sm_payment_collection.market_name.max()]}}</td>
+                   </tr>
+                   <tr >
+                      <td width="100" align="left">branch</td>
+                      <td width="2" align="left">:</td>
+                      <td align="left">{{=record[db.sm_payment_collection.depot_name.max()]}}</td>
+                   </tr>
+                 </table>      
+              </td>
+              <td width="300" align="center" style="vertical-align:top;">
+                <div style=" width:150px; height:25px; background-color:#EAEAEA; font-weight:bold; margin-bottom:5px;">MONEY RECEIPT</div>
+                <img style="height:15px;" src="{{=URL('static','images/comp_logo1.png')}}"/>
+              </td>
+              <td width="300" align="left">
+                <table width="300" cellpadding="1" cellspacing="1" >
+                  <tr >
+                      <td width="100" align="left">Date</td>
+                      <td width="2" align="left">:</td>
+                      <td width="180" align="left">{{=record.sm_payment_collection.payment_collection_date.strftime('%d-%b-%y')}}</td>
+                   </tr>
+                   <tr >
+                      <td width="100" align="left">Receipt Type</td>
+                      <td width="2" align="left">:</td>
+                      <td width="180" align="left">{{=record[db.sm_payment_collection.payment_type.max()]}}</td>
+                   </tr>
+                   <tr >
+                      <td width="100" align="left"></td>
+                      <td width="2" align="left"></td>
+                      <td width="180" align="left"></td>
+                   </tr>
+                   <tr >
+                      <td width="100" align="left"></td>
+                      <td width="2" align="left"></td>
+                      <td width="180" align="left"></td>
+                   </tr>
+                 </table>   
+              </td>    
+          </tr>
+        </table>
+
+        <table width="900" border="1" cellpadding="1" cellspacing="1" class="sample_border" style="border: solid 1px #C4C4C4">
+        
+          <tr align="left" class="blackCatHead"  style="vertical-align:middle; background-color:#E6E6E6">
+        
+            <td width="100" align="left" >Invoice No</td>
+            <td width="100" >Invoice Date</td>
+            <td width="200" align="left"  >Deliveryman Name</td>
+            <td width="200" align="right"  >Applied Amount</td>
+            <td width="200" align="left"  >Comments</td>
+          </tr>        
+          <tr  align="left" class="blackCat"  style="vertical-align:middle; background-color:#FBFBFB; font-size:11px;">	   
+            <td width="100" align="left" >{{=session.prefix_invoice}}INV{{=record[db.sm_payment_collection.depot_id.max()]}}-{{=record[db.sm_payment_collection.sl.max()]}}</td>	
+            <td width="100" >{{=record[db.sm_payment_collection.invoice_date.max()].strftime('%d-%b-%y')}}</td>
+            <td width="200" align="left" >{{=record[db.sm_payment_collection.d_man_name.max()]}}</td>
+            <td width="200" align="right" >{{=easy_format(record[db.sm_payment_collection.collection_amount.sum()])}}</td>
+            <td width="200" align="left" >{{=record[db.sm_payment_collection.collection_note.max()]}}</td>
+          </tr>  
+          <tr  align="left" style="background-color:#FFFFFF;">	
+            <td colspan="3" align="right"  ><strong>Total:</strong></td>
+            <td width="200" align="right" ><strong>{{=easy_format(record[db.sm_payment_collection.collection_amount.sum()])}}<strong></td>
+            <td width="200" align="right" ></td>    
+          </tr>  
+        </table>
+        <br>
+        <table width="250" cellpadding="1" cellspacing="1" >
+            <tr >
+              <td align="left"><strong><span style="font-size:14px; font-weight:bold">TAKA:</span></strong></td>
+              <td width="150" align="right" style="border: solid 1px #C4C4C4; font-weight:bold;">{{=easy_format(record[db.sm_payment_collection.collection_amount.sum()])}}</td>
+            </tr>
+        </table>
+        <strong> Taka in Words:</strong> {{try:}}{{=num2word(str(record[db.sm_payment_collection.collection_amount.sum()]))}}{{except:}}-{{pass}}
+        <br/>
+        <table width="900" >
+            <tr>
+              <td width="300" align="center"></td>
+              <td width="20" align="center">for</td>
+              <td align="left"><strong>{{=session.cName}}</strong></td>
+          </tr>
+        </table>
+        
+        <br/>
+        <div style="border-bottom:dashed; border-bottom-color:#F0F0F0;"></div>
+        <br/>
+<!--book copy-->         
+<table width="902">
+                <tr>
+                    <td width="100" ><img width="25px" height="40px" src="{{=URL('static','images/comp_logo2.png')}}"/></td>
+                    <td style="text-align:center; font-size:24px; font-weight:bold">{{=session.cName}}</td>
+                    <td width="100" >&nbsp;</td>
+                </tr>
+            </table>			
+            <table width="900" style="border: solid 1px #C4C4C4">
+                <tr style="border-bottom:solid; border-bottom-color:#999">
+                  <td align="center">{{=session.user_depot_address}}<!--{{#=session.company_address}}--><!--Sadar Road, Mohakhali, Dhaka. Ph: 9896479,9862763, 8855371-80 Ext:258 Fax:8860325, mail: tdclmohakhali@transcombd.com--></td>
+              </tr>
+            </table>
+         
+        <div style="float:right;">(Book Copy)#3.02</div>
+<table width="900" cellpadding="1" cellspacing="1" >
+          <tr >
+              <td width="300" align="left">
+                <table width="300" cellpadding="1" cellspacing="1" >
+                  <tr >
+                      <td width="100" align="left">MR No</td>
+                      <td width="2" align="left">:</td>
+                      <td align="left">{{=record[db.sm_payment_collection.id.max()]}}</td>
+                   </tr>
+                   <tr >
+                      <td width="100" align="left">Batch No</td>
+                      <td width="2" align="left">:</td>
+                      <td align="left">{{=record[db.sm_payment_collection.collection_batch.max()]}}</td>
+                   </tr>
+                  <tr >
+                      <td width="100" align="left">Customer ID</td>
+                      <td width="2" align="left">:</td>
+                      <td align="left">{{=record[db.sm_payment_collection.client_id.max()]}}</td>
+                   </tr>
+                   <tr >
+                      <td width="100" align="left">Customer Name</td>
+                      <td width="2" align="left">:</td>
+                      <td align="left">{{=record[db.sm_payment_collection.client_name.max()]}}</td>
+                   </tr>
+                   <tr >
+                      <td width="100" align="left">Market</td>
+                      <td width="2" align="left">:</td>
+                      <td align="left">{{=record[db.sm_payment_collection.market_name.max()]}}</td>
+                   </tr>
+                   <tr >
+                      <td width="100" align="left">branch</td>
+                      <td width="2" align="left">:</td>
+                      <td align="left">{{=record[db.sm_payment_collection.depot_name.max()]}}</td>
+                   </tr>
+                 </table>      
+              </td>
+              <td width="300" align="center" style="vertical-align:top;">
+                <div style=" width:150px; height:25px; background-color:#EAEAEA; font-weight:bold; margin-bottom:5px;">MONEY RECEIPT</div>
+                <img style="height:15px;" src="{{=URL('static','images/comp_logo1.png')}}"/>
+              </td>
+              <td width="300" align="left">
+                <table width="300" cellpadding="1" cellspacing="1" >
+                  <tr >
+                      <td width="100" align="left">Date</td>
+                      <td width="2" align="left">:</td>
+                      <td width="180" align="left">{{=record.sm_payment_collection.payment_collection_date.strftime('%d-%b-%y')}}</td>
+                   </tr>
+                   <tr >
+                      <td width="100" align="left">Receipt Type</td>
+                      <td width="2" align="left">:</td>
+                      <td width="180" align="left">{{=record[db.sm_payment_collection.payment_type.max()]}}</td>
+                   </tr>
+                   <tr >
+                      <td width="100" align="left"></td>
+                      <td width="2" align="left"></td>
+                      <td width="180" align="left"></td>
+                   </tr>
+                   <tr >
+                      <td width="100" align="left"></td>
+                      <td width="2" align="left"></td>
+                      <td width="180" align="left"></td>
+                   </tr>
+                 </table>   
+              </td>    
+          </tr>
+        </table>
+
+        <table width="900" border="1" cellpadding="1" cellspacing="1" class="sample_border" style="border: solid 1px #C4C4C4">
+        
+          <tr align="left" class="blackCatHead"  style="vertical-align:middle; background-color:#E6E6E6">
+        
+            <td width="100" align="left" >Invoice No</td>
+            <td width="100" >Invoice Date</td>
+            <td width="200" align="left"  >Deliveryman Name</td>
+            <td width="200" align="right"  >Applied Amount</td>
+            <td width="200" align="left"  >Comments</td>
+          </tr>        
+          <tr  align="left" class="blackCat"  style="vertical-align:middle; background-color:#FBFBFB; font-size:11px;">	   
+            <td width="100" align="left" >{{=session.prefix_invoice}}INV{{=record[db.sm_payment_collection.depot_id.max()]}}-{{=record[db.sm_payment_collection.sl.max()]}}</td>	
+            <td width="100" >{{=record[db.sm_payment_collection.invoice_date.max()].strftime('%d-%b-%y')}}</td>
+            <td width="200" align="left" >{{=record[db.sm_payment_collection.d_man_name.max()]}}</td>
+            <td width="200" align="right" >{{=easy_format(record[db.sm_payment_collection.collection_amount.sum()])}}</td>
+            <td width="200" align="left" >{{=record[db.sm_payment_collection.collection_note.max()]}}</td>
+          </tr>  
+          <tr  align="left" style="background-color:#FFFFFF;">	
+            <td colspan="3" align="right"  ><strong>Total:</strong></td>
+            <td width="200" align="right" ><strong>{{=easy_format(record[db.sm_payment_collection.collection_amount.sum()])}}<strong></td>
+            <td width="200" align="right" ></td>    
+          </tr>  
+        </table>
+        <br>
+        <table width="250" cellpadding="1" cellspacing="1" >
+            <tr >
+              <td align="left"><strong><span style="font-size:14px; font-weight:bold">TAKA:</span></strong></td>
+              <td width="150" align="right" style="border: solid 1px #C4C4C4; font-weight:bold;">{{=easy_format(record[db.sm_payment_collection.collection_amount.sum()])}}</td>
+            </tr>
+        </table>
+        <strong> Taka in Words:</strong> {{try:}}{{=num2word(str(record[db.sm_payment_collection.collection_amount.sum()]))}}{{except:}}-{{pass}}
+        <br/>
+        <table width="900" >
+            <tr>
+              <td width="300" align="center"></td>
+              <td width="20" align="center">for</td>
+              <td align="left"><strong>{{=session.cName}}</strong></td>
+          </tr>
+        </table>
+        <br/>
+		<div style="border-bottom:dashed; border-bottom-color:#F0F0F0;"></div><br/>
+              
+{{pass}}
+
+
+</body>
+
+</html>
+

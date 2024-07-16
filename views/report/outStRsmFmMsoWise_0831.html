@@ -1,0 +1,431 @@
+{{extend 'layout_invoice_landscap.html'}}
+{{current_date=datetime.datetime.strptime(str(current_date),'%Y-%m-%d')}}
+    
+{{pageFlag=1}}	
+<!--page break-->
+{{if pageFlag==0:}}
+<span style="page-break-before:always"></span>        
+<!-- Report header-->                    
+<table width="1150">
+    <tr>
+        <td width="100" ><img width="25px" src="{{=URL('static','images/comp_logo2.png')}}"/></td>
+        <td style="text-align:center; font-size:24px; font-weight:bold">{{=session.cName}}</td>
+        <td width="100" >&nbsp;</td>
+    </tr>
+</table>			
+<table width="1150" style="border: solid 1px #C4C4C4">
+    <tr style="border-bottom:solid; border-bottom-color:#999">
+      <td align="center">{{=session.user_depot_address}}<!--{{#=session.company_address}}--><!--Sadar Road, Mohakhali, Dhaka. Ph: 9896479,9862763, 8855371-80 Ext:258 Fax:8860325, mail: tdclmohakhali@transcombd.com--></td>
+  </tr>
+</table>
+    <!--<hr/>-->
+    <!-- end report header  -->
+{{pass}}
+
+{{pageFlag=0}}
+
+<!--end page break-->
+
+<table width="1150" cellpadding="1" cellspacing="1" style="border:none;" >
+    <tr >
+      <td width="100" align="right" >Inv Date From</td>
+      <td width="1" >:</td>
+      <td width="80" >{{=fromDate}}</td>
+      <td width="100" align="right" >To/ as of Date</td>
+      <td width="1" >:</td>
+      <td width="80" >{{=toDate}}</td>
+      <td width="50" align="right" >Depot</td>
+      <td width="1" >:</td>
+      <td width="100" >{{=depotName}}</td>
+      <td width="50" align="right" >Store</td>
+      <td width="2" >:</td>
+      <td >{{=storeName}}</td>
+      <td width="50" ><span style="float:right">#6.09A</span></td>
+  </tr>
+    <tr >
+      <td align="right" >DP</td>
+      <td >:</td>
+      <td >{{=deliveryManName}}</td>
+      <td align="right" >Territory</td>
+      <td >:</td>
+      <td >{{=territoryName}}</td>
+      <td align="right" >Customer</td>
+      <td >:</td>
+      <td >{{=customerName}}</td>
+      <td align="right" >MSO</td>
+      <td >:</td>
+      <td >{{=msoName}}</td>
+      <td >&nbsp;</td>
+    </tr>
+    <tr >
+      <td align="right" >Inv Term</td>
+      <td >:</td>
+      <td >{{=invoice_term}}</td>
+      <td align="right" >Credit Type</td>
+      <td >:</td>
+      <td >{{=credit_type}}</td>
+      <td align="right" >Cust.Cat</td>
+      <td >:</td>
+      <td >{{=catName}}</td>
+      <td align="right" >Cust.SubCat</td>
+      <td >:</td>
+      <td >{{=subCatName}}</td>
+      <td >&nbsp;</td>
+    </tr>
+    <tr >
+      <td align="right" >{{=session.level1Name}}</td>
+      <td >:</td>
+      <td >{{=out_st_level1_id}}</td>
+      <td align="right" >{{=session.level2Name}}</td>
+      <td >:</td>
+      <td >{{=out_st_level2_id}}</td>
+      <td align="right" >&nbsp;</td>
+      <td >&nbsp;</td>
+      <td >&nbsp;</td>
+      <td align="right" >&nbsp;</td>
+      <td >&nbsp;</td>
+      <td >&nbsp;</td>
+      <td >&nbsp;</td>
+    </tr>
+</table>  
+      
+<table width="1150" cellpadding="1" cellspacing="1" style="border:none;" >
+        <tr >
+          <td align="center">
+          <div style="border: solid 1px #C4C4C4; width:90%; font-weight:bold;" > 6.09A Outstanding List: RSM FM MSO Wise Summary &amp; Details</div></td>
+          <td width="50" align="center"><img style="width:80px;" src="{{=URL('static','images/comp_logo1.png')}}"/></td></tr>
+</table>
+<!--<table width="1150px;"> <tr><td style="text-align:right"><a href="{{=URL(c='report',f='downloadOutstandingInvoiceWise',vars=dict(depotID=depotID,fromDate=fromDate,toDate=toDate,depotName=depotName,storeID=storeID,storeName=storeName,deliveryManID=deliveryManID,deliveryManName=deliveryManName,territoryID=territoryID,territoryName=territoryName,msoID=msoID,msoName=msoName))}}" >Downlaod</a></td></tr></table>
+-->
+<table width="1150" border="1" cellpadding="1" cellspacing="1" class="sample_border" >            
+
+    <tr align="left" class="blackCatHead" height="20px" ;  style="font-size:12px">
+      <td width="50" rowspan="2" align="center"  >SL</td>
+      <td width="50" rowspan="2" align="center"  >RSM Tr. Code</td>
+      <td width="50" rowspan="2" align="center"  >FM Tr. Code</td>
+      <td width="50" rowspan="2" align="center"  >MSO Tr. Code</td>
+      <td width="250" rowspan="2" align="center"  >Customer Name</td>
+      <td width="80" rowspan="2"  >Current Month</td>
+      <td width="80" rowspan="2"  >Last One Month</td>
+      <td width="80" rowspan="2" align="right"  >Last Two Month</td>
+      <td width="80" rowspan="2" align="right"  >Last Three Month</td>
+      <td width="80" rowspan="2" align="right"  >Last Four Month</td>
+      <td width="80" rowspan="2" align="right"  >Last Five Month</td>
+      <td width="80" rowspan="2" align="right"  >Last six Month</td>
+      <td width="80" rowspan="2" align="right"  >Earlier</td>
+      <td width="100" align="certer" style="text-align:center;"  > OutStanding</td>
+      <td width="100" rowspan="2" align="center"  >Remarks</td>
+  </tr>
+    <tr align="left" class="blackCatHead" height="20px" ;  style="font-size:12px">
+      <td width="100" align="center"  >Net Amt</td>
+    </tr>
+    
+	{{rowSL=0}}
+    
+   {{level1_id=''}}
+   {{level1_id_old=''}}
+   {{prelevel1_id=''}}
+   {{newlevel1_idRowFlag=0}}
+   {{level1_idsubTotalOutST_0=0}}
+   {{level1_idsubTotalOutST_1=0}}
+   {{level1_idsubTotalOutST_2=0}}
+   {{level1_idsubTotalOutST_3=0}}
+   {{level1_idsubTotalOutST_4=0}}
+   {{level1_idsubTotalOutST_5=0}}
+   {{level1_idsubTotalOutST_6=0}}
+   {{level1_idsubTotalOutST_e=0}}
+   {{level1_idsubTotalOutST=0}}
+   
+   {{level2_id=''}}
+   {{level2_id_old=''}}
+   {{prelevel2_id=''}}
+   {{newlevel2_idRowFlag=0}}
+   {{level2_idsubTotalOutST_0=0}}   
+   {{level2_idsubTotalOutST_1=0}}
+   {{level2_idsubTotalOutST_2=0}}
+   {{level2_idsubTotalOutST_3=0}}
+   {{level2_idsubTotalOutST_4=0}}
+   {{level2_idsubTotalOutST_5=0}}
+   {{level2_idsubTotalOutST_6=0}}
+   {{level2_idsubTotalOutST_e=0}}
+   {{level2_idsubTotalOutST=0}}
+   
+   {{level3_id=''}}
+   {{level3_id_old=''}}
+   {{prelevel3_id=''}}
+   {{newlevel3_idRowFlag=0}}
+   {{level3_idsubTotalOutST_0=0}}   
+   {{level3_idsubTotalOutST_1=0}}
+   {{level3_idsubTotalOutST_2=0}}
+   {{level3_idsubTotalOutST_3=0}}
+   {{level3_idsubTotalOutST_4=0}}
+   {{level3_idsubTotalOutST_5=0}}
+   {{level3_idsubTotalOutST_6=0}}
+   {{level3_idsubTotalOutST_e=0}}
+   {{level3_idsubTotalOutST=0}}
+   
+    {{for i in range(len(recordsHeadList)):}}    
+    {{ #if i==items_per_page: break}}
+		{{rowSL+=1}}
+    	{{recData=recordsHeadList[i]}}	
+    	
+       
+    <!-- Start Level 3-->
+        {{newlevel3_id=recData['level3_id']}} 
+         {{level3_id_old=newlevel3_id}}
+         {{if newlevel3_id!=prelevel3_id:}}
+         	{{level3_id=newlevel3_id}}
+            {{level3_id_old=prelevel3_id}}
+         {{else:}}
+         	{{level3_id=''}}
+         {{pass}} 
+                 
+        {{if ((prelevel3_id!='') and (newlevel3_id!='') and prelevel3_id!=newlevel3_id):}}
+            {{newlevel3_idRowFlag=1}}                        
+        {{pass}}
+        {{prelevel3_id=newlevel3_id}}
+      
+    {{if newlevel3_idRowFlag==1 and (level3_idsubTotalOutST_0!=0 or level3_idsubTotalOutST_1!=0 or level3_idsubTotalOutST_2!=0 or level3_idsubTotalOutST_3!=0 or level3_idsubTotalOutST_4!=0  or level3_idsubTotalOutST_5!=0 or level3_idsubTotalOutST_6!=0 or level3_idsubTotalOutST_e!=0):}}    <!---->
+    <tr  align="left" class="blackCat"  style="background-color:#EBEBEB; font-size:11px; font-weight:bold">
+       <td align="left" ></td>    	
+        <td align="right" style=" text-align:right;"></td>
+        <td align="right" style=" text-align:right;"></td>
+      <td align="right" style=" text-align:right;">{{=level3_id_old}}</td>
+        <td width="250" align="right"></td>
+        <td width="80" align="right" >{{=easy_format(level3_idsubTotalOutST_0)}}</td>
+        <td width="80" align="right" >{{=easy_format(level3_idsubTotalOutST_1)}}</td>
+        <td width="80" align="right" >{{=easy_format(level3_idsubTotalOutST_2)}}</td>
+        <td width="80" align="right" >{{=easy_format(level3_idsubTotalOutST_3)}}</td>
+        <td width="80" align="right" >{{=easy_format(level3_idsubTotalOutST_4)}}</td>
+        <td width="80" align="right" >{{=easy_format(level3_idsubTotalOutST_5)}}</td>
+        <td width="80" align="right" >{{=easy_format(level3_idsubTotalOutST_6)}}</td>
+        <td width="80" align="right" >{{=easy_format(level3_idsubTotalOutST_e)}}</td>
+        <td align="right" >{{=easy_format(level3_idsubTotalOutST_0+level3_idsubTotalOutST_1+level3_idsubTotalOutST_2+level3_idsubTotalOutST_3+level3_idsubTotalOutST_4+level3_idsubTotalOutST_5+level3_idsubTotalOutST_6+level3_idsubTotalOutST_e)}}</td>
+        <td align="right" ></td>
+  </tr>
+  	  {{newlevel3_idRowFlag=0}}  
+      {{level3_id_old=''}} 
+      {{level3_idsubTotalOutST_0=0}}
+      {{level3_idsubTotalOutST_1=0}}
+      {{level3_idsubTotalOutST_2=0}}
+      {{level3_idsubTotalOutST_3=0}}
+      {{level3_idsubTotalOutST_4=0}}
+      {{level3_idsubTotalOutST_5=0}}
+      {{level3_idsubTotalOutST_6=0}}
+      {{level3_idsubTotalOutST_e=0}}
+      {{level3_idsubTotalOutST=0}}
+    {{pass}}
+    <!-- End Level 3-->
+    
+    <!-- Start Level 2-->
+        {{newlevel2_id=recData['level2_id']}}  
+         {{level2_id_old=newlevel2_id}}
+         {{if newlevel2_id!=prelevel2_id:}}
+         	{{level2_id=newlevel2_id}}
+            {{level2_id_old=prelevel2_id}}
+         {{else:}}
+         	{{level2_id=''}}
+         {{pass}}       
+           
+        {{if ((prelevel2_id!='') and (newlevel2_id!='') and prelevel2_id!=newlevel2_id):}}
+            {{newlevel2_idRowFlag=1}}                        
+        {{pass}}
+        {{prelevel2_id=newlevel2_id}}
+      
+    {{if newlevel2_idRowFlag==1 and (level2_idsubTotalOutST_0!=0 or level2_idsubTotalOutST_1!=0 or level2_idsubTotalOutST_2!=0 or level2_idsubTotalOutST_3!=0 or level2_idsubTotalOutST_4!=0 or level2_idsubTotalOutST_5!=0 or level2_idsubTotalOutST_6!=0 or level2_idsubTotalOutST_e!=0):}}    <!---->
+    <tr  align="left" class="blackCat"  style="background-color:#EBEBEB; font-size:11px; font-weight:bold">
+       <td align="left" ></td>    	
+        <td align="right" style=" text-align:right;"></td>
+      <td align="right" style=" text-align:right;">{{=level2_id_old}}</td>
+      <td align="right" style=" text-align:right;"></td>
+        <td width="250" align="right"></td>
+        <td width="80" align="right" >{{=easy_format(level2_idsubTotalOutST_0)}}</td>
+        <td width="80" align="right" >{{=easy_format(level2_idsubTotalOutST_1)}}</td>
+        <td width="80" align="right" >{{=easy_format(level2_idsubTotalOutST_2)}}</td>
+        <td width="80" align="right" >{{=easy_format(level2_idsubTotalOutST_3)}}</td>
+        <td width="80" align="right" >{{=easy_format(level2_idsubTotalOutST_4)}}</td>
+        <td width="80" align="right" >{{=easy_format(level2_idsubTotalOutST_5)}}</td>
+        <td width="80" align="right" >{{=easy_format(level2_idsubTotalOutST_6)}}</td>
+        <td width="80" align="right" >{{=easy_format(level2_idsubTotalOutST_e)}}</td>
+        <td align="right" >{{=easy_format(level2_idsubTotalOutST_0+level2_idsubTotalOutST_1+level2_idsubTotalOutST_2+level2_idsubTotalOutST_3+level2_idsubTotalOutST_4+level2_idsubTotalOutST_5+level2_idsubTotalOutST_6+level2_idsubTotalOutST_e)}}</td>
+        <td align="right" ></td>
+  </tr>      
+      {{newlevel2_idRowFlag=0}}    
+      {{level2_id_old=''}}
+      {{level2_idsubTotalOutST_0=0}}
+      {{level2_idsubTotalOutST_1=0}}
+      {{level2_idsubTotalOutST_2=0}}
+      {{level2_idsubTotalOutST_3=0}}
+      {{level2_idsubTotalOutST_4=0}}
+      {{level2_idsubTotalOutST_5=0}}
+      {{level2_idsubTotalOutST_6=0}}
+      {{level2_idsubTotalOutST_e=0}}      
+    {{pass}}
+    <!-- End Level 2-->
+    	
+        
+       <!-- Start Level 1-->
+        {{newlevel1_id=recData['level1_id']}}
+        {{level1_id_old=newlevel1_id}}         
+         {{if newlevel1_id!=prelevel1_id:}}
+         	{{level1_id=newlevel1_id}}
+            {{level1_id_old=prelevel1_id}}
+         {{else:}}
+         	{{level1_id=''}}
+         {{pass}}        
+          
+        {{if ((prelevel1_id!='') and (newlevel1_id!='') and prelevel1_id!=newlevel1_id):}}
+            {{newlevel1_idRowFlag=1}}                        
+        {{pass}}
+        {{prelevel1_id=newlevel1_id}}
+      
+    {{if newlevel1_idRowFlag==1 and (level1_idsubTotalOutST_0!=0 or level1_idsubTotalOutST_1!=0 or level1_idsubTotalOutST_2!=0 or level1_idsubTotalOutST_3!=0 or level1_idsubTotalOutST_4!=0 or level1_idsubTotalOutST_5!=0 or level1_idsubTotalOutST_6!=0 or level1_idsubTotalOutST_e!=0):}}    <!---->
+    <tr  align="left" class="blackCat"  style="background-color:#EBEBEB; font-size:11px; font-weight:bold">
+       <td align="left" ></td>    	
+      <td align="right" style=" text-align:right;">{{=level1_id_old}}</td>
+        <td align="right" style=" text-align:right;"></td>
+      <td align="right" style=" text-align:right;"></td>
+        <td width="250" align="right"></td>
+        <td width="80" align="right" >{{=easy_format(level1_idsubTotalOutST_0)}}</td>
+        <td width="80" align="right" >{{=easy_format(level1_idsubTotalOutST_1)}}</td>
+        <td width="80" align="right" >{{=easy_format(level1_idsubTotalOutST_2)}}</td>
+        <td width="80" align="right" >{{=easy_format(level1_idsubTotalOutST_3)}}</td>
+        <td width="80" align="right" >{{=easy_format(level1_idsubTotalOutST_4)}}</td>
+        <td width="80" align="right" >{{=easy_format(level1_idsubTotalOutST_5)}}</td>
+        <td width="80" align="right" >{{=easy_format(level1_idsubTotalOutST_6)}}</td>
+        <td width="80" align="right" >{{=easy_format(level1_idsubTotalOutST_e)}}</td>
+        <td align="right" >{{=easy_format(level1_idsubTotalOutST_0+level1_idsubTotalOutST_1+level1_idsubTotalOutST_2+level1_idsubTotalOutST_3+level1_idsubTotalOutST_4+level1_idsubTotalOutST_5+level1_idsubTotalOutST_6+level1_idsubTotalOutST_e)}}</td>
+        <td align="right" ></td>
+  </tr>
+  	  {{newlevel1_idRowFlag=0}}    
+      {{level1_id_old=''}}
+      {{level1_idsubTotalOutST_0=0}}
+      {{level1_idsubTotalOutST_1=0}}
+      {{level1_idsubTotalOutST_2=0}}
+      {{level1_idsubTotalOutST_3=0}}
+      {{level1_idsubTotalOutST_4=0}}
+      {{level1_idsubTotalOutST_5=0}}
+      {{level1_idsubTotalOutST_6=0}}
+      {{level1_idsubTotalOutST_e=0}}
+    {{pass}}
+    <!-- End Level 1-->
+    
+  <tr  align="left" class="blackCat"  style="background-color:#FBFBFB; font-size:11px;">
+    <td width="50" align="center" >{{=rowSL}}</td>
+        <td width="50" align="center" style=" text-align:center;">{{=level1_id}}</td>
+    	<td width="50" align="center" style=" text-align:center;">{{=level2_id}}</td>
+    	<td width="50" align="center" style=" text-align:center;">{{=level3_id}}</td>
+    	<td width="250" align="left" style=" text-align:left;">{{=recData['client_id']}}|{{=recData['client_name']}}</td>
+    	<td width="80" align="right" style=" text-align:right;">{{ostAmt_0=round(float(recData['monthL0']),2)}}{{=easy_format(ostAmt_0)}} {{level1_idsubTotalOutST_0+=ostAmt_0}}{{level2_idsubTotalOutST_0+=ostAmt_0}}{{level3_idsubTotalOutST_0+=ostAmt_0}}</td>
+        <td width="80" align="right" style=" text-align:right;">{{ostAmt_1=round(float(recData['monthL1']),2)}}{{=easy_format(ostAmt_1)}} {{level1_idsubTotalOutST_1+=ostAmt_1}}{{level2_idsubTotalOutST_1+=ostAmt_1}}{{level3_idsubTotalOutST_1+=ostAmt_1}}</td>
+        <td width="80" align="right" style=" text-align:right;">{{ostAmt_2=round(float(recData['monthL2']),2)}}{{=easy_format(ostAmt_2)}} {{level1_idsubTotalOutST_2+=ostAmt_2}}{{level2_idsubTotalOutST_2+=ostAmt_2}}{{level3_idsubTotalOutST_2+=ostAmt_2}}</td>
+        <td width="80" align="right" style=" text-align:right;">{{ostAmt_3=round(float(recData['monthL3']),2)}}{{=easy_format(ostAmt_3)}} {{level1_idsubTotalOutST_3+=ostAmt_3}}{{level2_idsubTotalOutST_3+=ostAmt_3}}{{level3_idsubTotalOutST_3+=ostAmt_3}}</td>
+        <td width="80" align="right" style=" text-align:right;">{{ostAmt_4=round(float(recData['monthL4']),2)}}{{=easy_format(ostAmt_4)}} {{level1_idsubTotalOutST_4+=ostAmt_4}}{{level2_idsubTotalOutST_4+=ostAmt_4}}{{level3_idsubTotalOutST_4+=ostAmt_4}}</td>
+        <td width="80" align="right" style=" text-align:right;">{{ostAmt_5=round(float(recData['monthL5']),2)}}{{=easy_format(ostAmt_5)}} {{level1_idsubTotalOutST_5+=ostAmt_5}}{{level2_idsubTotalOutST_5+=ostAmt_5}}{{level3_idsubTotalOutST_5+=ostAmt_5}}</td>
+        <td width="80" align="right" style=" text-align:right;">{{ostAmt_6=round(float(recData['monthL6']),2)}}{{=easy_format(ostAmt_6)}} {{level1_idsubTotalOutST_6+=ostAmt_6}}{{level2_idsubTotalOutST_6+=ostAmt_6}}{{level3_idsubTotalOutST_6+=ostAmt_6}}</td>
+        <td width="80" align="right" style=" text-align:right;">{{ostAmt_e=round(float(recData['monthLE']),2)}}{{=easy_format(ostAmt_e)}} {{level1_idsubTotalOutST_e+=ostAmt_e}}{{level2_idsubTotalOutST_e+=ostAmt_e}}{{level3_idsubTotalOutST_e+=ostAmt_e}}</td>       
+        <td width="100" align="right" style=" text-align:right;">{{=easy_format(ostAmt_0+ostAmt_1+ostAmt_2+ostAmt_3+ostAmt_4+ostAmt_5+ostAmt_6+ostAmt_e)}}</td>
+        <td width="100" align="center" style=" text-align:center;"></td>
+  </tr>  	
+  {{pass}}
+   
+    <!--Level 3-->
+   {{if newlevel3_idRowFlag==0 and (level3_idsubTotalOutST_0!=0 or level3_idsubTotalOutST_1!=0 or level3_idsubTotalOutST_2!=0 or level3_idsubTotalOutST_3!=0 or level3_idsubTotalOutST_4!=0 or level3_idsubTotalOutST_5!=0 or level3_idsubTotalOutST_6!=0 or level3_idsubTotalOutST_e!=0):}}    
+    <tr  align="left" class="blackCat"  style="background-color:#EBEBEB; font-size:11px; font-weight:bold">
+        <td align="left" ></td>    	
+        <td align="right" style=" text-align:right;"></td>
+        <td align="right" style=" text-align:right;"></td>
+      <td align="right" style=" text-align:right;">{{=level3_id_old}}</td>
+        <td width="250" align="right"></td>
+        <td width="80" align="right" >{{=easy_format(level3_idsubTotalOutST_0)}}</td>
+        <td width="80" align="right" >{{=easy_format(level3_idsubTotalOutST_1)}}</td>
+        <td width="80" align="right" >{{=easy_format(level3_idsubTotalOutST_2)}}</td>
+        <td width="80" align="right" >{{=easy_format(level3_idsubTotalOutST_3)}}</td>
+        <td width="80" align="right" >{{=easy_format(level3_idsubTotalOutST_4)}}</td>
+        <td width="80" align="right" >{{=easy_format(level3_idsubTotalOutST_5)}}</td>
+        <td width="80" align="right" >{{=easy_format(level3_idsubTotalOutST_6)}}</td>
+        <td width="80" align="right" >{{=easy_format(level3_idsubTotalOutST_e)}}</td>
+        <td align="right" >{{=easy_format(level3_idsubTotalOutST_0+level3_idsubTotalOutST_1+level3_idsubTotalOutST_2+level3_idsubTotalOutST_3+level3_idsubTotalOutST_4+level3_idsubTotalOutST_5+level3_idsubTotalOutST_6+level3_idsubTotalOutST_e)}}</td>
+        <td align="right" ></td>
+  </tr>    
+    {{pass}}
+    
+   <!--Level 2-->
+   {{if newlevel2_idRowFlag==0 and (level2_idsubTotalOutST_0!=0 or level2_idsubTotalOutST_1!=0 or level2_idsubTotalOutST_2!=0 or level2_idsubTotalOutST_3!=0 or level2_idsubTotalOutST_4!=0 or level2_idsubTotalOutST_5!=0 or level2_idsubTotalOutST_6!=0 or level2_idsubTotalOutST_e!=0):}}    
+    <tr  align="left" class="blackCat"  style="background-color:#EBEBEB; font-size:11px; font-weight:bold">
+        <td align="left" ></td>    	
+        <td align="right" style=" text-align:right;"></td>
+      <td align="right" style=" text-align:right;">{{=level2_id_old}}</td>
+      <td align="right" style=" text-align:right;"></td>
+        <td width="250" align="right"></td>
+        <td width="80" align="right" >{{=easy_format(level2_idsubTotalOutST_0)}}</td>
+        <td width="80" align="right" >{{=easy_format(level2_idsubTotalOutST_1)}}</td>
+        <td width="80" align="right" >{{=easy_format(level2_idsubTotalOutST_2)}}</td>
+        <td width="80" align="right" >{{=easy_format(level2_idsubTotalOutST_3)}}</td>
+        <td width="80" align="right" >{{=easy_format(level2_idsubTotalOutST_4)}}</td>
+        <td width="80" align="right" >{{=easy_format(level2_idsubTotalOutST_5)}}</td>
+        <td width="80" align="right" >{{=easy_format(level2_idsubTotalOutST_6)}}</td>
+        <td width="80" align="right" >{{=easy_format(level2_idsubTotalOutST_e)}}</td>
+        <td align="right" >{{=easy_format(level2_idsubTotalOutST_0+level2_idsubTotalOutST_1+level2_idsubTotalOutST_2+level2_idsubTotalOutST_3+level2_idsubTotalOutST_4+level2_idsubTotalOutST_5+level2_idsubTotalOutST_6+level2_idsubTotalOutST_e)}}</td>
+        <td align="right" ></td>
+  </tr>    
+    {{pass}}
+    
+    <!--Level 1-->
+    {{if newlevel1_idRowFlag==0 and (level1_idsubTotalOutST_0!=0 or level1_idsubTotalOutST_1!=0 or level1_idsubTotalOutST_2!=0 or level1_idsubTotalOutST_3!=0 or level1_idsubTotalOutST_4!=0 or level1_idsubTotalOutST_5!=0 or level1_idsubTotalOutST_6!=0 or level1_idsubTotalOutST_e!=0):}}    
+    <tr  align="left" class="blackCat"  style="background-color:#EBEBEB; font-size:11px; font-weight:bold">
+      <td align="left" ></td>    	
+      <td align="right" style=" text-align:right;">{{=level1_id_old}}</td>
+        <td align="right" style=" text-align:right;"></td>
+      <td align="right" style=" text-align:right;"></td>
+        <td width="250" align="right"></td>
+        <td width="80" align="right" >{{=easy_format(level1_idsubTotalOutST_0)}}</td>
+        <td width="80" align="right" >{{=easy_format(level1_idsubTotalOutST_1)}}</td>
+        <td width="80" align="right" >{{=easy_format(level1_idsubTotalOutST_2)}}</td>
+        <td width="80" align="right" >{{=easy_format(level1_idsubTotalOutST_3)}}</td>
+        <td width="80" align="right" >{{=easy_format(level1_idsubTotalOutST_4)}}</td>
+        <td width="80" align="right" >{{=easy_format(level1_idsubTotalOutST_5)}}</td>
+      <td width="80" align="right" >{{=easy_format(level1_idsubTotalOutST_6)}}</td>
+      <td width="80" align="right" >{{=easy_format(level1_idsubTotalOutST_e)}}</td>
+      <td align="right" >{{=easy_format(level1_idsubTotalOutST_0+level1_idsubTotalOutST_1+level1_idsubTotalOutST_2+level1_idsubTotalOutST_3+level1_idsubTotalOutST_4+level1_idsubTotalOutST_5+level1_idsubTotalOutST_6+level1_idsubTotalOutST_e)}}</td>
+      <td align="right" ></td>
+  </tr>    
+    {{pass}}
+    
+ 
+</table>
+<br>
+
+<table width="1150" style="border:none;" >
+  <tr align="left">
+    <td width="450" >
+    	   
+    </td>
+    <td align="center" >
+   	<!--<span style="border:1px solid #666; margin:5px; padding:5px;">< Summary ></span>-->
+   
+    </td>
+    <td width="450" >
+    	  
+    </td>
+  </tr>
+</table>
+
+<br/>
+<table width="1150" >
+	<tr>
+	  <td width="150" align="center">__________________</td>
+	  <td width="150" align="center">_______________________________________</td>
+	  <td width="20" align="center">&nbsp;</td>
+	  <td width="180" align="center">&nbsp;</td>
+  </tr>
+	<tr>
+	  <td width="150" align="center"><strong>Printed By</strong></td>
+	  <td width="150" align="center"><span style="font-style:italic;">for</span>&nbsp; &nbsp;<strong>{{=session.cName}}</strong></td>
+	  <td width="20" align="center">&nbsp;</td>
+	  <td width="180" align="center">&nbsp;</td>
+  </tr>
+</table>
+
+
+

@@ -1,0 +1,359 @@
+{{extend 'layout.html'}}
+
+<script>
+    var base_url = location.protocol + "//" + location.hostname + (location.port && ":" + location.port) + "/{{=request.application}}/";
+    // insert depot auto complete///////////
+    $(function () {
+
+        // alert(base_url + 'depot_distributor/get_depot_id_list')
+        $.ajax({
+            url: base_url + 'depot_distributor/get_depot_id_list',
+            success: function (retStr) {
+                zmStr = retStr
+                //alert (zmStr)
+            }
+        });
+
+        $('#depot_id').keyup(function () {
+
+            // alert("YES")
+            //-------------------------
+            var rev_list = zmStr.split(',');
+            var ref_name = $("#depot_id").val();
+
+            //---------------- auto complete combo list
+            var ref_list_new = new Array();
+            lc = 0;
+            i = 0;
+            var revStr = "";
+            while (i < rev_list.length) {
+                revStr = rev_list[i];
+                i = i + 1;
+                var res = revStr.toUpperCase().match(ref_name.toUpperCase());
+                if (res != null) {
+                    ref_list_new[lc] = revStr;
+                    lc = lc + 1;
+                    if (lc == 30) {
+                        break;
+                    };
+                } else {
+                    continue;
+                }
+            };
+            //alert (ref_list_new);
+
+            //-------------- auto complete source
+            $("input#depot_id").autocomplete({
+                source: ref_list_new
+            });
+
+        });
+        
+        // ======================depot auto complete end===============
+        // depot auto complete for depot filter//////////////////////
+        // alert(base_url + 'depot_distributor/get_depot_id_list')
+        $.ajax({
+            url: base_url + 'depot_distributor/get_depot_id_list',
+            success: function (rezStr) {
+                tmStr = rezStr
+                //alert (tmStr)
+            }
+        });
+
+        $('#item_id_filter').keyup(function () {
+
+            // alert("YES")
+            //-------------------------
+            var ret_list = tmStr.split(',');
+            var ret_name = $("#item_id_filter").val();
+
+            //---------------- auto complete combo list
+            var ret_list_new = new Array();
+            lc = 0;
+            i = 0;
+            var resStr = "";
+            while (i < ret_list.length) {
+                resStr = ret_list[i];
+                i = i + 1;
+                var res = resStr.toUpperCase().match(ret_name.toUpperCase());
+                if (res != null) {
+                    ret_list_new[lc] = resStr;
+                    lc = lc + 1;
+                    if (lc == 30) {
+                        break;
+                    };
+                } else {
+                    continue;
+                }
+            };
+            //alert (ref_list_new);
+
+            //-------------- auto complete source
+            $("input#item_id_filter").autocomplete({
+                source: ret_list_new
+            });
+
+        });
+
+        $.ajax({
+            url: base_url + 'depot_distributor/get_dist_id_list_fr_depot?depot_id=',
+            success: function (reaStr) {
+                daStr = reaStr
+                // alert (riStr)
+            }
+        });
+
+
+        $('#route_id_filter').keyup(function () {
+
+            // alert("YES")
+            //-------------------------
+            var rea_list = daStr.split(',');
+            var rea_names = $("#route_id_filter").val();
+
+            //---------------- auto complete combo list
+            var rea_list_new = new Array();
+            lc = 0;
+            i = 0;
+            var reavStr = "";
+            while (i < rea_list.length) {
+                reavStr = rea_list[i];
+                i = i + 1;
+                var rest = reavStr.toUpperCase().match(rea_names.toUpperCase());
+                if (rest != null) {
+                    rea_list_new[lc] = reavStr;
+                    lc = lc + 1;
+                    if (lc == 30) {
+                        break;
+                    };
+                } else {
+                    continue;
+                }
+            };
+            //alert (ref_list_new);
+            //-------------- auto complete source
+            $("input#route_id_filter").autocomplete({
+                source: rea_list_new
+            });
+
+        });
+
+        
+    });
+    function sm_lost_focus() {
+
+    var depot_ids = $("#item_id_filter").val()
+    // alert(depot_id)
+
+    // alert(base_url + 'depot_distributor/get_dist_id_list_fr_depot?depot_id=' + depot_ids)
+    $.ajax({
+        url: base_url + 'depot_distributor/get_dist_id_list_fr_depot?depot_id=' + depot_ids,
+        success: function (reaStr) {
+            daStr = reaStr
+    }
+});
+    };
+        
+</script>
+
+
+
+<table width="100%" border="0" cellspacing="0" cellpadding="0" style="background-color:#FFFFFF;">
+    <tr height="30px">
+        <td width="280px"><span class="blackCatTitle">Depot
+
+            </span></td>
+
+        <td width="10px"></td>
+        <td align="right" width="20px">&nbsp;</td>
+    </tr>
+    <tr height="1px" style="background-color:#CCCCCC;">
+        <td></td>
+        <td></td>
+        <td width="100"></td>
+        <td></td>
+    </tr>
+</table>
+
+<table width="100%" height="500px" border="0" cellspacing="0" cellpadding="0" class="page_color">
+    <tr height="100%" style="vertical-align:top;">
+        <td>
+            <table width="100%" border="0" cellpadding="0" cellspacing="0">
+                <tr>
+                    <td width="10">&nbsp;</td>
+                    <td valign="top">
+                        <br />
+
+                        <!--=====INPUT VALUES===========-->
+                        <form action="{{=URL(c='depot_distributor',f='index')}}">
+                            <table width="800">
+                                <tr>
+                                    <td width="400">
+                                        <table width="400" class="blackCat">
+                                            <tr>
+                                                <td width="160" style="padding-top: 5px;"> Depot Id|Name </td>
+                                                <td>
+                                                    <input type="text" name="depot_id" id="depot_id" size="10" required
+                                                        style="width:200px" placeholder="Depot Id|Name" autocomplete="off" />
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td width="160" style="padding-top: 5px;"> Distributor Id </td>
+                                                <td><input style="width: 200px;" type="text" name="dist_id"
+                                                        id="dist_id" autocomplete="off" required placeholder="Distributor Id"></td>
+                                            </tr>
+                                            <tr>
+                                                <td width="160" style="padding-top: 5px;"> Distributor Name </td>
+                                                <td><input style="width: 200px;" type="text" name="dist_name"
+                                                        id="dist_name" autocomplete="off" required placeholder="Distributor Name"></td>
+                                            </tr>
+                                            <tr>
+                                                <td width="180" style="padding-top: 5px;">Discount Percentage </td>
+                                                <td><input style="width: 200px;" type="number" step="any" name="dist_disc_percent"
+                                                        id="route_desc" autocomplete="off" required placeholder="Discount Percentage"></td>
+                                            </tr>
+                                            <tr>
+                                                <td width="12"></td>
+                                                <td align="left" style="margin-left: 5px;">
+                                                    <div align="center" style="margin-left: 160px;">
+                                                        <input align="right" type="submit" name="submit" id="submit"
+                                                            value="Save"
+                                                            style="vertical-align:middle;height:30px ;border-radius:4px;" />
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+
+
+
+                                </tr>
+                            </table>
+                        </form>
+
+                    </td>
+                </tr>
+                <tr>
+                    <table width="90%" border="1" cellpadding="1" cellspacing="1" class="sample_border">
+
+                        <form id="form1" name="form1" method="post" action="{{=URL(c='depot_distributor',f='index')}}">
+                            <tr align="left" class="blackCatHead" height="20px" ;"vertical-align:middle">
+                                <td width="80" style="padding-left: 10px;">
+                                    {{if session.item_id_filter == '' or session.item_id_filter == 'None' or session.item_id_filter == None :}}
+                                    <input name="item_id_filter" type="text" id="item_id_filter" size="25" value=""
+                                        placeholder="Depot Id/Name" autocomplete="off" style="width:200px" onblur="sm_lost_focus()" />
+                                    {{else:}}
+                                    <input name="item_id_filter" type="text" id="item_id_filter" size="25"
+                                        value="{{=session.item_id_filter}}" placeholder="Depot ID/Name"
+                                        autocomplete="off" style="width:200px" onblur="sm_lost_focus()" />
+                                    {{pass}}
+
+                                </td>
+                                <td width="80">
+                                    {{if session.route_id_filter == '' or session.route_id_filter == 'None' or session.route_id_filter == None :}}
+                                    <input name="route_id_filter" type="text" id="route_id_filter" size="25" value=""
+                                        placeholder="Route Id/Name" autocomplete="off" style="width:200px" onblur="sm_lost_focus()" />
+                                    {{else:}}
+                                    <input name="route_id_filter" type="text" id="route_id_filter" size="25"
+                                        value="{{=session.route_id_filter}}" placeholder="Route ID/Name"
+                                        autocomplete="off" style="width:200px" onblur="sm_lost_focus()" />
+                                    {{pass}}
+
+                                </td>
+                                <td width="100">
+
+                                    <input type="submit" name="btn_filter_item" id="btn_filter_item" value="Filter"
+                                        style="border-radius: 4px; height: 30px;" class="button_update" />
+                                    <input type="submit" name="btn_all" id="btn_all" value="All"
+                                        style="border-radius: 4px; height: 30px;" class="button_update" />
+                                </td>
+
+                                <td align="right">
+                                    <a href="{{=URL(c='depot_distributor',f='depot_batch_upload')}}">
+                                        <input type="button" name="" id="" value="Batch Upload"
+                                            style="border-radius: 4px; height: 30px;" class="button_update" />
+                                    </a>
+                                    <a href="{{=URL(c='depot_distributor',f='depot_Download')}}">
+                                        <input type="button" name="btn_download" id="btn_download" value="Download"
+                                            style="border-radius: 4px; height: 30px;" class="button_update" />
+                                    </a>
+                                </td>
+                            </tr>
+                        </form>
+                    </table>
+                    <strong>&nbsp;&nbsp; Total:</strong> {{=total_rec}}<br />
+                    <!--======END=========-->
+                    <!--=========SHOW TABLE========-->
+                    <table width="90%" border="1" cellpadding="1" cellspacing="1" class="sample_border">
+                        <tr align="left" class="blackCatHead" height="20px" ;"vertical-align:middle"
+                            style="background-color: rgb(200, 248, 231);">
+                            <td width="215" style="padding-left: 10px;">Depot Id|Name</td>
+                            <!-- <td width="100" >Name</td> -->
+                            <td width="80">Dist Id|Name</td>
+                            <!-- <td width="100">Description</td> -->
+                            <td width="100" align="left">Dist Discount Percent</td>
+                            <!-- <td width="100" align="left" >Category ID sp</td> -->
+                            <td width="80" align="left">Entry Date</td>
+                            <!-- <td width="100" align="left" >Manufacturer</td> -->
+                            <td width="50" align="left">Added By</td>
+                            <td align="center">Action</td>
+                        </tr>
+
+                        {{for j in range(len(all_data)):
+                        records_ov_dict=all_data[j]
+                        id=str(records_ov_dict["id"])
+                        depot_id=str(records_ov_dict["depot_id"])
+                        depot_name=str(records_ov_dict["depot_name"])
+                        dist_id=str(records_ov_dict["dist_id"])
+                        dist_name=str(records_ov_dict["dist_name"])
+                        disc_price=str(records_ov_dict["dist_disc_percent"])
+                        created_on=str(records_ov_dict["created_on"]).split(" ")[0]
+
+                        created_by=str(records_ov_dict["created_by"])
+
+                        }}
+
+                        <form id="form1" name="form1" method="post" action="">
+
+                            <tr align="left" class="blackCat" style=" font-size:13px">
+                                <td width="215" hidden><input name="item_id" type="hidden" id="item_id" size="25"
+                                        value="{{=id}}" title="" />
+                                </td>
+
+                                <td width="80" style="padding-left: 10px;">{{=depot_id}}|{{=depot_name}}</td>
+                                <td width="80">{{=dist_id}}|{{=dist_name}}</td>
+                                <td width="80">{{=disc_price}}</td>
+                                <!-- <td width="100" >{{#=name}}</td> -->
+                                <!-- <td >{{#=description}}</td> -->
+                                <!-- <td width="100" align="right" >{{#=category_id_sp}}</td> -->
+                                <td width="80" align="left">{{=created_on}}</td>
+                                <!-- <td width="100" align="right"  >{{#=manufacturer}}</td> -->
+                                <td width="50" align="left">{{=created_by}}</td>
+                                <td width="38" align="center">
+                                    <a href="{{=URL(c='depot_distributor',f='depot_entry_edit',args=[id])}}">
+                                        <img src="{{=URL('static', 'images/edit.png')}}" alt="Edit"
+                                            style="width: 15px; height: 15px; max-width: 100%; display: block; margin-top: 6%;">
+                                        <!-- <img src="{{=URL('static', 'images/edit.png')}}" alt="Edit"
+                                            style="width: 15px; height: 15px; text-align: center; max-width: 100%; display: flex;
+                                            justify-content: center; align-items: center;"> -->
+                                    </a>
+                                </td>
+                            </tr>
+                        </form>
+                        {{pass}}
+                    </table>
+
+                    {{if page:}}
+                    &nbsp;&nbsp;<a href="{{=URL(args=[page-page])}}">first</a> |
+                    &nbsp;&nbsp;<a href="{{=URL(args=[page-1])}}">previous</a> |
+                    {{pass}}
+
+                    {{if len(all_data)>=items_per_page:}}
+                    &nbsp;&nbsp;<a href="{{=URL(args=[page+1])}}">next</a>
+                    {{pass}}
+        </td>
+    </tr>
+</table>
+</td>
+</tr>
+</table>

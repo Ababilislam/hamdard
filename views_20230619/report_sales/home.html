@@ -1,0 +1,3355 @@
+{{extend 'layout.html'}}
+
+
+
+<head>
+
+<link rel="stylesheet" href="{{=URL('static', 'jchart/styles/jchartfx.css')}}" type="text/css" />
+
+<script src="{{=URL('static','jchart/js/jchartfx.system.js')}}"></script>
+
+<script src="{{=URL('static','jchart/js/jchartfx.coreVector.js')}}"></script>
+
+<script src="{{=URL('static','jchart/js/jchartfx.advanced.js')}}"></script>
+
+
+
+<link rel="stylesheet" href="{{=URL('static', 'js_and_css/ui.theme.css')}}" type="text/css" />
+
+<link rel="stylesheet" href="{{=URL('static', 'js_and_css/jquery-ui.css')}}" type="text/css" />
+
+<link rel="stylesheet" href="{{=URL('static', 'js_and_css/style.css')}}" type="text/css" />
+
+
+
+<script src="{{=URL('static','js_and_css/jquery-1.8.2.js')}}"></script>
+
+<script src="{{=URL('static','js_and_css/jquery-ui.js')}}"></script>
+
+
+
+<style type="text/css">
+
+	.jchartfx .Title {
+
+		 font-size:12pt;
+
+		 font-weight: bold;
+
+		 color:#000000;
+
+	}
+
+
+
+	<!--Chart color-->
+
+	.jchartfx .Attribute3{
+
+		 fill:#C44000;
+
+	}
+
+	.jchartfx .Attribute0{
+
+		 fill:#4F81BD; 
+
+	}
+
+	.jchartfx .Attribute1{
+
+		 fill:#C0504D;
+
+	}
+
+	
+
+	.jchartfx .Attribute0Line{
+
+		 stroke:#C0504D;
+
+		 stroke-width:2;
+
+	}
+
+	 .jchartfx .Attribute1Line{
+
+		 stroke:#4F81BD;
+
+		 stroke-width:2;	
+
+	}
+
+	<!--color-->
+
+	
+
+	input[type=submit] {
+
+		margin: 2px 0px 2px 0px;
+
+		padding: 0px 0px 2px 0px;
+
+		width:200px;
+
+	}
+
+	
+
+	input[type=text] {
+
+		width:120px;
+
+	}
+
+	
+
+	.checkbox{
+
+	padding-left:0px;
+
+	}
+
+	
+
+	.multiselect{ 
+
+			text-align:left;
+
+			height:28px;
+
+	}
+
+	
+
+	.page_color,body{
+
+			font-family:Arial, Helvetica, sans-serif;
+
+			font-size:13px;	
+
+			}
+
+
+
+</style>
+
+
+
+<script>
+
+ $(function() { 
+
+	/*$( "#htmlbody" ).click(function(){		
+
+		$("#ChartDivSalesTrend").empty();		
+
+		 loadChart();
+
+    });*/
+
+	
+
+	$( "#accordionReport" ).accordion({
+
+	  active:0,
+
+      heightStyle: "content",
+
+	  collapsible: true
+
+    });
+
+	
+
+  });
+
+  </script>
+
+  
+
+   
+
+<script>
+
+var base_url=location.protocol + "//" + location.hostname + (location.port && ":" + location.port) + "/{{=request.application}}/";
+
+
+
+$(function() {
+
+
+  
+  //=======================Nadira
+//========================depot/Branch	
+    var scListStr="";
+	$.ajax({
+		  url: base_url+'default/get_depot_list',
+		  success: function(resStr) {
+			  scListStr=resStr
+		  }
+		});
+ 
+ 	$('#sales_depot_id_sales').blur(function(){
+		var depotIdName=$('#sales_depot_id_sales').val();
+		if(depotIdName!=''){
+			var dpIdNameArray=depotIdName.split("|");
+			
+			var depotId=dpIdNameArray[0];
+			
+			$.ajax({
+			  url: base_url+'default/get_depot_store_list?depotid='+depotId,
+			  success: function(resStr2) {
+				 // alert (resStr2)
+				  storeListStr=resStr2;
+			  }
+			});
+			
+			$.ajax({
+			  url: base_url+'default/get_depot_market_list?depotid='+depotId,
+			  success: function(resStr) {
+			  valueListStr_market=resStr
+				// alert (valueListStr_market)
+		  }
+		});
+			
+		}		
+	});
+ 
+ 
+ 	$('#sales_depot_id_order').blur(function(){
+		var depotIdName=$('#sales_depot_id_order').val();
+		if(depotIdName!=''){
+			var dpIdNameArray=depotIdName.split("|");
+			
+			var depotId=dpIdNameArray[0];
+			
+			$.ajax({
+			  url: base_url+'default/get_depot_store_list?depotid='+depotId,
+			  success: function(resStr2) {
+				 // alert (resStr2)
+				  storeListStr=resStr2;
+			  }
+			});
+			
+		}		
+	});
+ 
+ 
+  
+	$('#sales_depot_id_sales').keyup(function(){	
+		
+		//-------------------------
+		var ref_list = scListStr.split(',');				
+		var ref_name=$("#sales_depot_id_sales").val();
+		
+		//---------------- auto complete combo list
+		var ref_list_new=new Array();
+		lc=0;
+		i =0;
+		var refStr="";				
+		while (i < ref_list.length)
+		{
+			refStr=ref_list[i];
+			i=i+1;					
+			var res=refStr.toUpperCase().match(ref_name.toUpperCase());
+			if (res!=null){
+				ref_list_new[lc]=refStr;
+				lc=lc+1;
+				if (lc==30){
+					break;
+				};
+			}else{
+				continue;
+			}					
+		};
+		//alert (ref_list_new);
+		
+		//-------------- auto complete source
+		$( "input#sales_depot_id_sales" ).autocomplete({
+			source: ref_list_new
+		});
+	
+  });  
+  $('#sales_depot_id_order').keyup(function(){	
+		
+		//-------------------------
+		var ref_list = scListStr.split(',');				
+		var ref_name=$("#sales_depot_id_order").val();
+		
+		//---------------- auto complete combo list
+		var ref_list_new=new Array();
+		lc=0;
+		i =0;
+		var refStr="";				
+		while (i < ref_list.length)
+		{
+			refStr=ref_list[i];
+			i=i+1;					
+			var res=refStr.toUpperCase().match(ref_name.toUpperCase());
+			if (res!=null){
+				ref_list_new[lc]=refStr;
+				lc=lc+1;
+				if (lc==30){
+					break;
+				};
+			}else{
+				continue;
+			}					
+		};
+		//alert (ref_list_new);
+		
+		//-------------- auto complete source
+		$( "input#sales_depot_id_order" ).autocomplete({
+			source: ref_list_new
+		});
+	
+  });  
+  
+  $.ajax({
+		  url: base_url+'default/get_fm_list',
+		  success: function(resStr) {
+			  fmStr=resStr
+			  //alert (fmStr)
+		  }
+		});
+ 
+	$('#fm_order').keyup(function(){	
+		
+		//-------------------------
+		var ref_list = fmStr.split(',');				
+		var ref_name=$("#fm_order").val();
+		
+		//---------------- auto complete combo list
+		var ref_list_new=new Array();
+		lc=0;
+		i =0;
+		var refStr="";				
+		while (i < ref_list.length)
+		{
+			refStr=ref_list[i];
+			i=i+1;					
+			var res=refStr.toUpperCase().match(ref_name.toUpperCase());
+			if (res!=null){
+				ref_list_new[lc]=refStr;
+				lc=lc+1;
+				if (lc==30){
+					break;
+				};
+			}else{
+				continue;
+			}					
+		};
+		//alert (ref_list_new);
+		
+		//-------------- auto complete source
+		$( "input#fm_order" ).autocomplete({
+			source: ref_list_new
+		});
+		
+	});	
+  
+  
+//  ======================================
+  
+  	  //------------Depot Store
+	 var depotIdName=$('#sales_depot_id_sales').val(); 
+	 if(depotIdName!=''){
+			var dpIdNameArray=depotIdName.split("|");
+			var depotId=dpIdNameArray[0]; 
+	  $.ajax({
+			  url: base_url+'default/get_depot_store_list?depotid='+depotId,
+			  success: function(resStr2) {
+				 // alert (resStr2)
+				  storeListStr=resStr2;
+			  }
+			});
+	 }
+	  $('#store_id_sales').keyup(function(){	
+		
+		//-------------------------
+		var ref_list = storeListStr.split(',');				
+		var ref_name=$("#store_id_sales").val();
+		
+		//---------------- auto complete combo list
+		var ref_list_new=new Array();
+		lc=0;
+		i =0;
+		var refStr="";				
+		while (i < ref_list.length)
+		{
+			refStr=ref_list[i];
+			i=i+1;					
+			var res=refStr.toUpperCase().match(ref_name.toUpperCase());
+			if (res!=null){
+				ref_list_new[lc]=refStr;
+				lc=lc+1;
+				if (lc==30){
+					break;
+				};
+			}else{
+				continue;
+			}					
+		};
+		//alert (ref_list_new);
+		
+		//-------------- auto complete source
+		$( "input#store_id_sales" ).autocomplete({
+			source: ref_list_new
+		});
+		
+	  });
+
+	 $('#store_id_order').keyup(function(){	
+		
+		//-------------------------
+		var ref_list = storeListStr.split(',');				
+		var ref_name=$("#store_id_order").val();
+		
+		//---------------- auto complete combo list
+		var ref_list_new=new Array();
+		lc=0;
+		i =0;
+		var refStr="";				
+		while (i < ref_list.length)
+		{
+			refStr=ref_list[i];
+			i=i+1;					
+			var res=refStr.toUpperCase().match(ref_name.toUpperCase());
+			if (res!=null){
+				ref_list_new[lc]=refStr;
+				lc=lc+1;
+				if (lc==30){
+					break;
+				};
+			}else{
+				continue;
+			}					
+		};
+		//alert (ref_list_new);
+		
+		//-------------- auto complete source
+		$( "input#store_id_order" ).autocomplete({
+			source: ref_list_new
+		});
+		
+	  });	
+	//------------- delivery man
+	
+    var delManListStr="";
+	$.ajax({
+		  url: base_url+'default/get_delivery_man_list',
+		  success: function(resStr) {
+			  delManListStr=resStr
+		  }
+		});
+ 
+	$('#dman_id_sales').keyup(function(){	
+		
+		//-------------------------
+		var ref_list = delManListStr.split(',');				
+		var ref_name=$("#dman_id_sales").val();
+		
+		//---------------- auto complete combo list
+		var ref_list_new=new Array();
+		lc=0;
+		i =0;
+		var refStr="";				
+		while (i < ref_list.length)
+		{
+			refStr=ref_list[i];
+			i=i+1;					
+			var res=refStr.toUpperCase().match(ref_name.toUpperCase());
+			if (res!=null){
+				ref_list_new[lc]=refStr;
+				lc=lc+1;
+				if (lc==30){
+					break;
+				};
+			}else{
+				continue;
+			}					
+		};
+		//alert (ref_list_new);
+		
+		//-------------- auto complete source
+		$( "input#dman_id_sales" ).autocomplete({
+			source: ref_list_new
+		});
+		
+	});	
+	//===============Nadira
+  
+//==============MSO
+	//---------------- MSO		
+	
+    var collMSOListStr="";
+	$.ajax({
+		  url: base_url+'default/get_rep_list',
+		  success: function(resStr) {
+			  //alert (resStr)
+			  collMSOListStr=resStr
+		  }
+		});
+ 
+	$('#mso_id_sales').keyup(function(){	
+		
+		//-------------------------
+		var ref_list = collMSOListStr.split(',');
+					
+		var ref_name=$("#mso_id_sales").val();
+		
+		//---------------- auto complete combo list
+		var ref_list_new=new Array();
+		lc=0;
+		i =0;
+		var refStr="";				
+		while (i < ref_list.length)
+		{
+			refStr=ref_list[i];
+			i=i+1;					
+			var res=refStr.toUpperCase().match(ref_name.toUpperCase());
+			if (res!=null){
+				ref_list_new[lc]=refStr;
+				lc=lc+1;
+				if (lc==30){
+					break;
+				};
+			}else{
+				continue;
+			}					
+		};
+		//alert (ref_list_new);
+		
+		//-------------- auto complete source
+		$( "input#mso_id_sales" ).autocomplete({
+			source: ref_list_new
+		});	
+	
+  });  
+
+$('#mso_id_order').keyup(function(){	
+		
+		//-------------------------
+		var ref_list = collMSOListStr.split(',');
+					
+		var ref_name=$("#mso_id_order").val();
+		
+		//---------------- auto complete combo list
+		var ref_list_new=new Array();
+		lc=0;
+		i =0;
+		var refStr="";				
+		while (i < ref_list.length)
+		{
+			refStr=ref_list[i];
+			i=i+1;					
+			var res=refStr.toUpperCase().match(ref_name.toUpperCase());
+			if (res!=null){
+				ref_list_new[lc]=refStr;
+				lc=lc+1;
+				if (lc==30){
+					break;
+				};
+			}else{
+				continue;
+			}					
+		};
+		//alert (ref_list_new);
+		
+		//-------------- auto complete source
+		$( "input#mso_id_order" ).autocomplete({
+			source: ref_list_new
+		});	
+	
+  });  
+
+var valueListStr="";
+$.ajax({
+	  url: base_url+'default/get_client_list',
+	  success: function(resStr) {
+		  valueListStrClient=resStr
+	  }
+	});
+$('#customer_id_sales').keyup(function(){
+	//-------------------------
+	var valueList = valueListStrClient.split(',');				
+	var searchValue=$("#customer_id_sales").val();
+	
+	//---------------- auto complete combo list
+	var valueList_new=new Array();
+	lc=0;
+	i =0;
+	var valueStr="";				
+	while (i < valueList.length)
+	{
+		valueStr=valueList[i];
+		i=i+1;					
+		var res=valueStr.toUpperCase().match(searchValue.toUpperCase());
+		if (res!=null){
+			valueList_new[lc]=valueStr;
+			lc=lc+1;
+			if (lc==30){
+				break;
+			};
+		}else{
+			continue;
+		}					
+	};
+	//alert (ref_list_new);
+	
+	//-------------- auto complete source
+	$( "input#customer_id_sales" ).autocomplete({
+		source: valueList_new
+	});
+
+}); 
+
+
+$('#customer_id_order').keyup(function(){
+	//-------------------------
+	var valueList = valueListStrClient.split(',');	
+	//var valueList = valueListStr.split(',');				
+	var searchValue=$("#customer_id_order").val();
+	
+	//---------------- auto complete combo list
+	var valueList_new=new Array();
+	lc=0;
+	i =0;
+	var valueStr="";				
+	while (i < valueList.length)
+	{
+		valueStr=valueList[i];
+		i=i+1;					
+		var res=valueStr.toUpperCase().match(searchValue.toUpperCase());
+		if (res!=null){
+			valueList_new[lc]=valueStr;
+			lc=lc+1;
+			if (lc==30){
+				break;
+			};
+		}else{
+			continue;
+		}					
+	};
+	//alert (ref_list_new);
+	
+	//-------------- auto complete source
+	$( "input#customer_id_order" ).autocomplete({
+		source: valueList_new
+	});
+
+});
+
+
+
+
+var valueListStr="";
+$.ajax({
+	  url: base_url+'default/get_tl_list',
+	  success: function(resStr) {
+		  valueListStrtl=resStr
+		 // alert (valueListStr)
+	  }
+	});
+$('#t_id_order').keyup(function(){
+	//-------------------------
+	var valueList = valueListStrtl.split(',');				
+	var searchValue=$("#t_id_order").val();
+	
+	//---------------- auto complete combo list
+	var valueList_new=new Array();
+	lc=0;
+	i =0;
+	var valueStr="";				
+	while (i < valueList.length)
+	{
+		valueStr=valueList[i];
+		i=i+1;					
+		var res=valueStr.toUpperCase().match(searchValue.toUpperCase());
+		if (res!=null){
+			valueList_new[lc]=valueStr;
+			lc=lc+1;
+			if (lc==30){
+				break;
+			};
+		}else{
+			continue;
+		}					
+	};
+	//alert (ref_list_new);
+	
+	//-------------- auto complete source
+	$( "input#t_id_order" ).autocomplete({
+		source: valueList_new
+	});
+
+}); 
+
+ $.ajax({
+		  url: base_url+'default/get_item_list',
+		  success: function(resStr) {
+			  valueListStr=resStr
+		  }
+		});
+$('#itemSales').keyup(function(){
+			
+			//-------------------------
+			var valueList = valueListStr.split(',');				
+			var searchValue=$("#itemSales").val();
+			
+			//---------------- auto complete combo list
+			var valueList_new=new Array();
+			lc=0;
+			i =0;
+			var valueStr="";				
+			while (i < valueList.length)
+			{
+				valueStr=valueList[i];
+				i=i+1;					
+				var res=valueStr.toUpperCase().match(searchValue.toUpperCase());
+				if (res!=null){
+					valueList_new[lc]=valueStr;
+					lc=lc+1;
+					if (lc==30){
+						break;
+					};
+				}else{
+					continue;
+				}					
+			};
+			//alert (ref_list_new);
+			
+			//-------------- auto complete source
+			$( "input#itemSales" ).autocomplete({
+				source: valueList_new
+			});
+		
+	  }); 
+$.ajax({
+		  url: base_url+'default/get_rsm_list',
+		  success: function(resStr) {
+			  rsmStr=resStr
+			  //alert (fmStr)
+		  }
+		});
+ 
+	$('#rsm_Sales').keyup(function(){	
+		
+		//-------------------------
+		var ref_list = rsmStr.split(',');				
+		var ref_name=$("#rsm_Sales").val();
+		
+		//---------------- auto complete combo list
+		var ref_list_new=new Array();
+		lc=0;
+		i =0;
+		var refStr="";				
+		while (i < ref_list.length)
+		{
+			refStr=ref_list[i];
+			i=i+1;					
+			var res=refStr.toUpperCase().match(ref_name.toUpperCase());
+			if (res!=null){
+				ref_list_new[lc]=refStr;
+				lc=lc+1;
+				if (lc==30){
+					break;
+				};
+			}else{
+				continue;
+			}					
+		};
+		//alert (ref_list_new);
+		
+		//-------------- auto complete source
+		$( "input#rsm_Sales" ).autocomplete({
+			source: ref_list_new
+		});
+		
+	});	
+
+
+	$.ajax({
+		  url: base_url+'default/get_fm_list',
+		  success: function(resStr) {
+			  fmStr=resStr
+			  //alert (fmStr)
+		  }
+		});
+ 
+	$('#fm_Sales').keyup(function(){	
+		
+		//-------------------------
+		var ref_list = fmStr.split(',');				
+		var ref_name=$("#fm_Sales").val();
+		
+		//---------------- auto complete combo list
+		var ref_list_new=new Array();
+		lc=0;
+		i =0;
+		var refStr="";				
+		while (i < ref_list.length)
+		{
+			refStr=ref_list[i];
+			i=i+1;					
+			var res=refStr.toUpperCase().match(ref_name.toUpperCase());
+			if (res!=null){
+				ref_list_new[lc]=refStr;
+				lc=lc+1;
+				if (lc==30){
+					break;
+				};
+			}else{
+				continue;
+			}					
+		};
+		//alert (ref_list_new);
+		
+		//-------------- auto complete source
+		$( "input#fm_Sales" ).autocomplete({
+			source: ref_list_new
+		});
+		
+	});	
+
+
+
+
+
+$('#t_id_sales').keyup(function(){
+	//-------------------------
+	var valueList = valueListStrtl.split(',');				
+	var searchValue=$("#t_id_sales").val();
+	
+	//---------------- auto complete combo list
+	var valueList_new=new Array();
+	lc=0;
+	i =0;
+	var valueStr="";				
+	while (i < valueList.length)
+	{
+		valueStr=valueList[i];
+		i=i+1;					
+		var res=valueStr.toUpperCase().match(searchValue.toUpperCase());
+		if (res!=null){
+			valueList_new[lc]=valueStr;
+			lc=lc+1;
+			if (lc==30){
+				break;
+			};
+		}else{
+			continue;
+		}					
+	};
+	//alert (ref_list_new);
+	
+	//-------------- auto complete source
+	$( "input#t_id_sales" ).autocomplete({
+		source: valueList_new
+	});
+
+}); 
+//=================Sales Comparision
+$('#sales_depot_id_SC').blur(function(){
+		var depotIdName=$('#sales_depot_id_SC').val();
+		if(depotIdName!=''){
+			var dpIdNameArray=depotIdName.split("|");
+			
+			var depotId=dpIdNameArray[0];
+			
+			$.ajax({
+			  url: base_url+'default/get_depot_store_list?depotid='+depotId,
+			  success: function(resStr2) {
+				 // alert (resStr2)
+				  storeListStr=resStr2;
+			  }
+			});
+			
+		}		
+	});
+$('#sales_depot_id_SC').keyup(function(){	
+		
+		//-------------------------
+		var ref_list = scListStr.split(',');				
+		var ref_name=$("#sales_depot_id_SC").val();
+		
+		//---------------- auto complete combo list
+		var ref_list_new=new Array();
+		lc=0;
+		i =0;
+		var refStr="";				
+		while (i < ref_list.length)
+		{
+			refStr=ref_list[i];
+			i=i+1;					
+			var res=refStr.toUpperCase().match(ref_name.toUpperCase());
+			if (res!=null){
+				ref_list_new[lc]=refStr;
+				lc=lc+1;
+				if (lc==30){
+					break;
+				};
+			}else{
+				continue;
+			}					
+		};
+		//alert (ref_list_new);
+		
+		//-------------- auto complete source
+		$( "input#sales_depot_id_SC" ).autocomplete({
+			source: ref_list_new
+		});
+	
+  }); 
+ //------------Depot Store
+	 var depotIdNameSC=$('#sales_depot_id_SC').val(); 
+	 if(depotIdNameSC!=''){
+			var dpIdNameArray=depotIdName.split("|");
+			var depotId=dpIdNameArray[0]; 
+	  $.ajax({
+			  url: base_url+'default/get_depot_store_list?depotid='+depotId,
+			  success: function(resStr2) {
+				 // alert (resStr2)
+				  storeListStrSC=resStr2;
+			  }
+			});
+	 }
+	  $('#store_id_SC').keyup(function(){	
+		
+		//-------------------------
+		var ref_list = storeListStr.split(',');				
+		var ref_name=$("#store_id_SC").val();
+		
+		//---------------- auto complete combo list
+		var ref_list_new=new Array();
+		lc=0;
+		i =0;
+		var refStr="";				
+		while (i < ref_list.length)
+		{
+			refStr=ref_list[i];
+			i=i+1;					
+			var res=refStr.toUpperCase().match(ref_name.toUpperCase());
+			if (res!=null){
+				ref_list_new[lc]=refStr;
+				lc=lc+1;
+				if (lc==30){
+					break;
+				};
+			}else{
+				continue;
+			}					
+		};
+		//alert (ref_list_new);
+		
+		//-------------- auto complete source
+		$( "input#store_id_SC" ).autocomplete({
+			source: ref_list_new
+		});
+		
+	  });
+
+
+//===========Market
+var valueListStr_market="";
+
+$('#customer_market').keyup(function(){
+	//-------------------------
+	
+	var valueList = valueListStr_market.split(',');				
+	var searchValue=$("#customer_market").val();
+	//alert (searchValue)
+	//---------------- auto complete combo list
+	var valueList_new=new Array();
+	lc=0;
+	i =0;
+	var valueStr="";				
+	while (i < valueList.length)
+	{
+		valueStr=valueList[i];
+		i=i+1;					
+		var res=valueStr.toUpperCase().match(searchValue.toUpperCase());
+		if (res!=null){
+			valueList_new[lc]=valueStr;
+			lc=lc+1;
+			if (lc==30){
+				break;
+			};
+		}else{
+			continue;
+		}					
+	};
+	//alert (ref_list_new);
+	
+	//-------------- auto complete source
+	$( "input#customer_market" ).autocomplete({
+		source: valueList_new
+	});
+
+});
+
+var valueListStr_cat="";
+$.ajax({
+	  url: base_url+'default/get_clientCat_list',
+	  success: function(resStr) {
+		  valueListStr_cat=resStr
+		//  alert (valueListStr_cat)
+	  }
+	});
+$('#customer_category').keyup(function(){
+	//-------------------------
+	var valueList = valueListStr_cat.split(',');				
+	var searchValue=$("#customer_category").val();
+	//alert (searchValue)
+	//---------------- auto complete combo list
+	var valueList_new=new Array();
+	lc=0;
+	i =0;
+	var valueStr="";				
+	while (i < valueList.length)
+	{
+		valueStr=valueList[i];
+		i=i+1;					
+		var res=valueStr.toUpperCase().match(searchValue.toUpperCase());
+		if (res!=null){
+			valueList_new[lc]=valueStr;
+			lc=lc+1;
+			if (lc==30){
+				break;
+			};
+		}else{
+			continue;
+		}					
+	};
+	//alert (ref_list_new);
+	
+	//-------------- auto complete source
+	$( "input#customer_category" ).autocomplete({
+		source: valueList_new
+	});
+
+});
+
+var valueListStr_catSub="";
+$.ajax({
+	  url: base_url+'default/get_clientCatSub_list',
+	  success: function(resStr) {
+		  valueListStr_catSub=resStr
+		//  alert (valueListStr_cat)
+	  }
+	});
+$('#customer_categorySub').keyup(function(){
+	//-------------------------
+	var valueList = valueListStr_catSub.split(',');				
+	var searchValue=$("#customer_categorySub").val();
+	//alert (searchValue)
+	//---------------- auto complete combo list
+	var valueList_new=new Array();
+	lc=0;
+	i =0;
+	var valueStr="";				
+	while (i < valueList.length)
+	{
+		valueStr=valueList[i];
+		i=i+1;					
+		var res=valueStr.toUpperCase().match(searchValue.toUpperCase());
+		if (res!=null){
+			valueList_new[lc]=valueStr;
+			lc=lc+1;
+			if (lc==30){
+				break;
+			};
+		}else{
+			continue;
+		}					
+	};
+	//alert (ref_list_new);
+	
+	//-------------- auto complete source
+	$( "input#customer_categorySub" ).autocomplete({
+		source: valueList_new
+	});
+
+});
+//==============RSM FM TR
+	$.ajax({
+		  url: base_url+'default/get_rsm_list',
+		  success: function(resStr) {
+			  rsmStr=resStr
+			  //alert (fmStr)
+		  }
+		});
+ 
+	$('#rsm_SC').keyup(function(){	
+		
+		//-------------------------
+		var ref_list = rsmStr.split(',');				
+		var ref_name=$("#rsm_SC").val();
+		
+		//---------------- auto complete combo list
+		var ref_list_new=new Array();
+		lc=0;
+		i =0;
+		var refStr="";				
+		while (i < ref_list.length)
+		{
+			refStr=ref_list[i];
+			i=i+1;					
+			var res=refStr.toUpperCase().match(ref_name.toUpperCase());
+			if (res!=null){
+				ref_list_new[lc]=refStr;
+				lc=lc+1;
+				if (lc==30){
+					break;
+				};
+			}else{
+				continue;
+			}					
+		};
+		//alert (ref_list_new);
+		
+		//-------------- auto complete source
+		$( "input#rsm_SC" ).autocomplete({
+			source: ref_list_new
+		});
+		
+	});	
+
+
+	$.ajax({
+		  url: base_url+'default/get_fm_list',
+		  success: function(resStr) {
+			  fmStr=resStr
+			  //alert (fmStr)
+		  }
+		});
+ 
+	$('#fm_SC').keyup(function(){	
+		
+		//-------------------------
+		var ref_list = fmStr.split(',');				
+		var ref_name=$("#fm_SC").val();
+		
+		//---------------- auto complete combo list
+		var ref_list_new=new Array();
+		lc=0;
+		i =0;
+		var refStr="";				
+		while (i < ref_list.length)
+		{
+			refStr=ref_list[i];
+			i=i+1;					
+			var res=refStr.toUpperCase().match(ref_name.toUpperCase());
+			if (res!=null){
+				ref_list_new[lc]=refStr;
+				lc=lc+1;
+				if (lc==30){
+					break;
+				};
+			}else{
+				continue;
+			}					
+		};
+		//alert (ref_list_new);
+		
+		//-------------- auto complete source
+		$( "input#fm_SC" ).autocomplete({
+			source: ref_list_new
+		});
+		
+	});	
+	
+//	==============================================
+	 //------------------------Product
+  $.ajax({
+		  url: base_url+'default/get_item_list',
+		  success: function(resStr) {
+			  valueListStr=resStr
+		  }
+		});
+		$('#product').keyup(function(){
+			//-------------------------
+			var valueList = valueListStr.split(',');				
+			var searchValue=$("#product").val();
+			
+			//---------------- auto complete combo list
+			var valueList_new=new Array();
+			lc=0;
+			i =0;
+			var valueStr="";				
+			while (i < valueList.length)
+			{
+				valueStr=valueList[i];
+				i=i+1;					
+				var res=valueStr.toUpperCase().match(searchValue.toUpperCase());
+				if (res!=null){
+					valueList_new[lc]=valueStr;
+					lc=lc+1;
+					if (lc==30){
+						break;
+					};
+				}else{
+					continue;
+				}					
+			};
+			//alert (ref_list_new);
+			
+			//-------------- auto complete source
+			$( "input#product" ).autocomplete({
+				source: valueList_new
+			});
+		
+	  }); 
+	   //==============	  
+	
+//	=============================================
+	$.ajax({
+		  url: base_url+'default/get_tl_list',
+		  success: function(resStr) {
+			  trtStr=resStr
+		  }
+		});
+ 
+	$('#tr_SC').keyup(function(){	
+		
+		//-------------------------
+		var ref_list = trtStr.split(',');				
+		var ref_name=$("#tr_SC").val();
+		
+		//---------------- auto complete combo list
+		var ref_list_new=new Array();
+		lc=0;
+		i =0;
+		var refStr="";				
+		while (i < ref_list.length)
+		{
+			refStr=ref_list[i];
+			i=i+1;					
+			var res=refStr.toUpperCase().match(ref_name.toUpperCase());
+			if (res!=null){
+				ref_list_new[lc]=refStr;
+				lc=lc+1;
+				if (lc==30){
+					break;
+				};
+			}else{
+				continue;
+			}					
+		};
+		//alert (ref_list_new);
+		
+		//-------------- auto complete source
+		$( "input#tr_SC" ).autocomplete({
+			source: ref_list_new
+		});
+		
+	});	
+//===============================Cteam==================
+
+//=================Sales Comparision Cteam
+$('#sales_depot_id_SC_C').blur(function(){
+		var depotIdName=$('#sales_depot_id_SC_C').val();
+		if(depotIdName!=''){
+			var dpIdNameArray=depotIdName.split("|");
+			
+			var depotId=dpIdNameArray[0];
+			
+			$.ajax({
+			  url: base_url+'default/get_depot_store_list?depotid='+depotId,
+			  success: function(resStr2) {
+				 // alert (resStr2)
+				  storeListStr=resStr2;
+			  }
+			});
+			
+		}		
+	});
+$('#sales_depot_id_SC_C').keyup(function(){	
+		
+		//-------------------------
+		var ref_list = scListStr.split(',');				
+		var ref_name=$("#sales_depot_id_SC_C").val();
+		
+		//---------------- auto complete combo list
+		var ref_list_new=new Array();
+		lc=0;
+		i =0;
+		var refStr="";				
+		while (i < ref_list.length)
+		{
+			refStr=ref_list[i];
+			i=i+1;					
+			var res=refStr.toUpperCase().match(ref_name.toUpperCase());
+			if (res!=null){
+				ref_list_new[lc]=refStr;
+				lc=lc+1;
+				if (lc==30){
+					break;
+				};
+			}else{
+				continue;
+			}					
+		};
+		//alert (ref_list_new);
+		
+		//-------------- auto complete source
+		$( "input#sales_depot_id_SC_C" ).autocomplete({
+			source: ref_list_new
+		});
+	
+  }); 
+ //------------Depot Store
+	 var depotIdNameSC=$('#sales_depot_id_SC_C').val(); 
+	 if(depotIdNameSC!=''){
+			var dpIdNameArray=depotIdName.split("|");
+			var depotId=dpIdNameArray[0]; 
+	  $.ajax({
+			  url: base_url+'default/get_depot_store_list?depotid='+depotId,
+			  success: function(resStr2) {
+				 // alert (resStr2)
+				  storeListStrSC=resStr2;
+			  }
+			});
+	 }
+	  $('#store_id_SC_C').keyup(function(){	
+		
+		//-------------------------
+		var ref_list = storeListStr.split(',');				
+		var ref_name=$("#store_id_SC_C").val();
+		
+		//---------------- auto complete combo list
+		var ref_list_new=new Array();
+		lc=0;
+		i =0;
+		var refStr="";				
+		while (i < ref_list.length)
+		{
+			refStr=ref_list[i];
+			i=i+1;					
+			var res=refStr.toUpperCase().match(ref_name.toUpperCase());
+			if (res!=null){
+				ref_list_new[lc]=refStr;
+				lc=lc+1;
+				if (lc==30){
+					break;
+				};
+			}else{
+				continue;
+			}					
+		};
+		//alert (ref_list_new);
+		
+		//-------------- auto complete source
+		$( "input#store_id_SC_C" ).autocomplete({
+			source: ref_list_new
+		});
+		
+	  });
+
+
+
+
+
+//==========================================
+	 //------------------------Product
+		$('#product_c').keyup(function(){
+			//-------------------------
+			var valueList = valueListStr.split(',');				
+			var searchValue=$("#product_c").val();
+			
+			//---------------- auto complete combo list
+			var valueList_new=new Array();
+			lc=0;
+			i =0;
+			var valueStr="";				
+			while (i < valueList.length)
+			{
+				valueStr=valueList[i];
+				i=i+1;					
+				var res=valueStr.toUpperCase().match(searchValue.toUpperCase());
+				if (res!=null){
+					valueList_new[lc]=valueStr;
+					lc=lc+1;
+					if (lc==30){
+						break;
+					};
+				}else{
+					continue;
+				}					
+			};
+			//alert (ref_list_new);
+			
+			//-------------- auto complete source
+			$( "input#product_c" ).autocomplete({
+				source: valueList_new
+			});
+		
+	  }); 
+	   //==============	  
+
+});
+
+
+
+
+</script>
+
+
+
+
+
+<style>
+
+	.rptlist{font-size:15px; height:auto; }
+
+	.rptlist:hover{ height:auto;}
+
+	.rptul{color:#0076AE; background-color:#F0F0F0;}
+
+	.rptdiv{  font-size:16px; color:#0076AE; background-color:#F0F0F0;}
+
+	
+
+	#accordionReport ul{	list-style-type:none;margin:0; font-size:15px; }
+
+	#accordionReport li{ margin:1px; border-radius:5px; border-bottom:1px solid #CCCCCC; font-size:15px; background-color:#F7F7F7; height:20px; padding:5px 2px 2px 15px;}/*:#F7F7F7*/
+
+	
+
+	#accordionReport li:hover{ height:21px;background-color:#F5F5F5; font-size:15px;}
+
+</style>
+
+
+
+</head>
+
+<body id="htmlbody">
+
+<!--<input type="hidden" value="{{#=salesTrendList}}" id="chartDataSalesTrend"/>-->
+
+
+
+{{currYear=str(date_fixed)[0:4]}}
+
+{{currMonth=str(date_fixed)[5:7]}}
+
+
+
+<!--Form Title -->
+
+<table width="100%" border="0" cellspacing="0" cellpadding="0" style="background-color:#FFFFFF;">
+
+  <tr height="30px">
+
+    <td><div class="blackCatTitle">Report</div></td>
+
+  </tr>
+
+  <tr >
+
+    <td height="1px" style="background-color:#CCCCCC;"></td>
+
+  </tr>
+
+</table>
+
+<!--Form Content -->
+
+<table width="100%" border="0" cellspacing="0" cellpadding="0" class="page_color">
+
+  
+
+  <tr height="20px">
+
+  	<td width="10px"></td>
+
+  	<td> </td>	
+
+  </tr>
+
+  
+
+  <tr >
+
+    <td width="10px"></td>
+
+	<td valign="top">					
+
+		 <div id="accordionReport"  style="width:90%">
+
+		 	
+
+            <div  class="rptdiv">
+
+                <ul class="rptul">
+
+                    <li class="rptlist"> Sales </li>
+
+                </ul>
+
+		   </div>
+
+		   <div >  
+
+           
+			<table width="900" border="0" cellpadding="0" cellspacing="0">
+
+				<form name="form2" id="form2" action="{{=URL(c='report_sales',f='home')}}" target="_blank">
+
+                <tr>
+
+                	<td valign="top">
+
+                   	  <table width="450" height="300px;" style="background-color:#F8F8F8;">
+
+                        	
+
+                          <tr style="background-color:#E9E9E9; height:25px">
+
+                              <td width="10">&nbsp;</td>
+
+                              <td width="150">&nbsp;</td>
+
+                              <td width="2">&nbsp;</td>
+
+                              <td width="400">&nbsp;</td>
+
+                          </tr>
+
+                          <tr >
+                            <td>&nbsp;</td>
+                            <td>Date Range
+                              </td>
+                            <td>:</td>
+                            <td><span style="vertical-align:middle;">{{=search_form.custom.widget.from_dt_2}}&nbsp;To&nbsp;{{=search_form.custom.widget.to_dt_2}}</span></td>
+                          </tr>
+                          <tr >
+                            <td>&nbsp;</td>
+                            <td>Depot/Branch</td>
+                            <td>:</td>
+                            <td>
+                            {{if (session.user_type=='Depot' and session.user_depot_category=='DEPOT'):}}
+                                <input type="text" name="sales_depot_id_sales" id="sales_depot_id_sales" size="25" value="{{=session.depot_id}}|{{=session.user_depot_name}}" placeholder="Select Branch/Depot" autocomplete="off" style="width:288px"/>
+                            {{else:}}
+                            <input  name="sales_depot_id_sales" type="text" id="sales_depot_id_sales" class="depot_id" size="25" value="" placeholder="Select Branch/Depot" autocomplete="off" style="width:288px"/>
+                            {{pass}}
+                            
+                            </td>
+                          </tr>
+                          <tr >
+
+
+                            <td width="10">&nbsp;</td>
+
+                            <td>Branch/Depot Store</td>
+
+                            <td>:</td>
+
+                            <td width="400">
+                             {{if (session.user_type=='Depot' and not(session.report_store_id=='' or session.report_store_id==None)):}}
+                              	<input  name="store_id_sales" type="text" id="store_id_sales" size="25" value="{{=session.report_store_id}}|{{=session.report_store_name}}" placeholder="Select Branch/Depot Store" autocomplete="off" style="width:288px"/>
+                              {{else:}}
+                              	<input  name="store_id_sales" type="text" id="store_id_sales" size="25" value="" placeholder="Select Branch/Depot Store" autocomplete="off" style="width:288px"/>
+                              {{pass}}
+                            
+                            
+                           <!-- <input  name="store_id_sales" type="text" id="store_id_sales" size="25" value="" placeholder="Select Branch/Depot Store" autocomplete="off" style="width:288px"/>--></td>
+
+                          </tr>
+
+                          <tr >
+
+                            <td width="10">&nbsp;</td>
+
+                            <td>Customer</td>
+
+                            <td>:</td>
+
+                            <td width="400"><input  name="customer_id_sales" type="text" id="customer_id_sales" size="25" value="" placeholder="Select Customer" autocomplete="off" style="width:288px"/></td>
+
+                          </tr>
+
+                            <tr >
+                              <td>&nbsp;</td>
+                              <td>CustomerCategory</td>
+                              <td>:</td>
+                              <td><input  name="customer_category" type="text" id="customer_category" size="25" value="" placeholder="Select Customer Category" autocomplete="off" style="width:288px"/></td>
+                            </tr>
+                            
+                            <tr >
+                              <td>&nbsp;</td>
+                              <td>CustomerSubCategory<font style=" font-size:9px; font-weight:bold; color:#933"> *17.1</font></td>
+                              <td>:</td>
+                              <td><input  name="customer_categorySub" type="text" id="customer_categorySub" size="25" value="" placeholder="Select Customer Sub Category" autocomplete="off" style="width:288px"/>
+                             </td>
+                            </tr>
+                            
+                            <tr >
+                              <td>&nbsp;</td>
+                              <td>Market</td>
+                              <td>:</td>
+                              <td><input  name="customer_market" type="text" id="customer_market" size="25" value="" placeholder="Select Market" autocomplete="off" style="width:288px"/></td>
+                            </tr>
+                            <tr >
+
+                              <td width="10">&nbsp;</td>
+
+                              <td>Delivery Man</td>
+
+                              <td>:</td>
+
+                              <td width="400"><input  name="dman_id_sales" type="text" id="dman_id_sales" size="25" value="" placeholder="Select Branch/Depot Store" autocomplete="off" style="width:288px"/></td>
+
+                          </tr>
+                            <tr >
+                              <td>&nbsp;</td>
+                              <td>Teritory</td>
+                              <td>: </td>
+                              <td><input  name="t_id_sales" type="text" id="t_id_sales" size="25" value="" placeholder="Select Teritory" autocomplete="off" style="width:288px"/></td>
+                            </tr>
+                            <tr >
+                              <td>&nbsp;</td>
+                              <td>MSO</td>
+                              <td>:</td>
+                              <td><input  name="mso_id_sales" type="text" id="mso_id_sales" size="25" value="" placeholder="Select MSO" autocomplete="off" style="width:288px"/></td>
+                            </tr>
+                            <tr >
+                              <td>&nbsp;</td>
+                              <td>Status</td>
+                              <td>:</td>
+                              <td><select name="status_sales" id="status_sales" >
+                                <option value="Invoiced">Invoiced</option>
+                                <option value="Pending">Pending</option>
+                              </select>
+                              </td>
+                            </tr>
+                            <tr >
+                              <td>&nbsp;</td>
+                              <td>Sales Term<br>
+                              <font style=" font-size:9px; font-weight:bold; color:#933"> *12.5,12.6</font>
+                              </td>
+                              <td>&nbsp;</td>
+                              <td><select name="selesTerm" id="selesTerm" >
+                                <option value=""></option>
+                                <option value="CASH">CASH</option>
+                                <option value="CREDIT">CREDIT</option>
+                              </select></td>
+                            </tr>
+                            <tr >
+                              <td>&nbsp;</td>
+                              <td>Item<br><font style=" font-size:9px; font-weight:bold; color:#933">*10.2-10.11,11.1-11.4</font></td>
+                              <td>:</td>
+                              <td><input  name="itemSales" type="text" id="itemSales" size="25" value="" placeholder="Item" autocomplete="off" style="width:288px"/></td>
+                            </tr>
+                            <tr >
+                              <td>&nbsp;</td>
+                              <td>RSM
+                              <br><font style=" font-size:9px; font-weight:bold; color:#933">*10.2-10.11,11.1-11.4</font></td>
+                              <td>:</td>
+                              <td width="415"><input  name="rsm_Sales" type="text" id="rsm_Sales" size="25" value="" placeholder="RSM" autocomplete="off" style="width:288px"/></td>
+                            </tr>
+                            <tr >
+                              <td>&nbsp;</td>
+                              <td>FM
+                              <br><font style=" font-size:9px; font-weight:bold; color:#933">*10.2-10.11,11.1-11.4</font></td>
+                              <td width="10">:</td>
+                              <td><input  name="fm_Sales" type="text" id="fm_Sales" size="25" value="" placeholder="FM" autocomplete="off" style="width:288px"/></td>
+                            </tr>
+                            <tr >
+                              <td>&nbsp;</td>
+                              <td>&nbsp;</td>
+                              <td>&nbsp;</td>
+                              <td>&nbsp;</td>
+                            </tr>
+
+                      </table>
+
+                    
+
+                    
+
+                  </td>
+
+                    <td valign="top">
+
+                    	<table width="350">
+
+                        	
+
+                            <tr style="background-color:#E9E9E9; height:25px">
+
+                              <td colspan="5">&nbsp;</td>
+                              <td width="1">&nbsp;</td>
+                            </tr>
+							
+                            <tr >
+			
+                                <td colspan="5"><input type="submit" style="width:500px" name="btn_list_oderdetail" value="Order Detail" title="Depot/branch,Store"/></td>
+                                <td>&nbsp;</td>
+                            </tr> 
+                            <tr >
+			
+                                <td colspan="5"><input type="submit" style="width:500px" name="btn_list_oderdSummary_spowise" value="Order Count MSO wise" title="Depot/branch,Store"/></td>
+                                <td>&nbsp;</td>
+                            </tr>
+                            
+                             <tr >
+			
+                                <td colspan="5"><input type="submit" style="width:500px" name="btn_list_oderdSummary_spowiseDdate" value="Order Count MSO wise (Based on Delivery Date)" title="Depot/branch,Store"/></td>
+                                <td>&nbsp;</td>
+                            </tr>
+                            
+                             <tr >
+			
+                                <td colspan="5"><input type="submit" style="width:500px" name="btn_list_oderdSummary_Ddate" value="Order Count (Based on Delivery Date)" title="Depot/branch,Store"/></td>
+                                <td>&nbsp;</td>
+                            </tr>
+                         <!--     <tr style="height:25px" >
+
+                              <td colspan="2">--><!--<input type="submit" name="btn_item_wise_sales_sheet" style="width:440px;" value="Order Sheet" title="Depot/branch,Store"/>--><!--</td>
+                              <td>&nbsp;</td>
+                            </tr>
+                           <tr >
+
+                              <td colspan="2">&nbsp;</td>
+                              <td>&nbsp;</td>
+                            </tr> 
+                            <tr >
+			
+                                <td colspan="2"><input type="submit" style="width:500px" name="btn_list_sales" value="Sales Invoice Wise" title="Depot/branch,Store"/></td>
+                                <td>&nbsp;</td>
+                            </tr>  
+
+                            <tr >
+
+                              <td colspan="2"><input type="submit" name="btn_customer_wise_sales" style="width:500px;" value="Sales Customer Wise" title="Depot/branch,Store"/></td>
+                              <td>&nbsp;</td>
+                            </tr>
+                            <tr style="height:25px" >
+
+                              <td colspan="2"></td>
+                              <td></td>
+                            </tr>
+                            
+                            <tr >
+
+                              <td colspan="2"><input type="submit" name="btn_item_wise_batch_sales" style="width:500px;" value="Sales Item Wise (With Batch)" title="Depot/branch,Store"/></td>
+                              <td>&nbsp;</td>
+                            </tr>
+                           
+                            <tr style="height:25px" >
+
+                              <td colspan="2"><input type="submit" name="btn_item_wise_sales" style="width:500px;" value="Sales Item Wise (Without Batch)" title="Depot/branch,Store"/></td>
+                              <td>&nbsp;</td>
+                            </tr>-->
+                            
+                            <tr >
+
+                              <td colspan="5">&nbsp;</td>
+                              <td>&nbsp;</td>
+                            </tr>
+                            
+                            <tr >
+
+                              <td width="340"><input type="submit" style="width:340px" name="btn_item_wise_sale_detail" value="12.2 Item Wise Sales Detail" title="Depot/branch,Only Invoiced record will count" /></td>
+                              <td width="50"><input type="submit" style="width:50px" name="btn_item_wise_sale_detailDLoad" value="  D   " title="Depot/branch,Only Invoiced record will count" /></td>
+                              <td width="5">&nbsp;</td>
+                         <td width="50"><!--<input type="submit" style="width:50px" name="btn_item_wise_sale_detailPeriodic" value="  P   " title="Depot/branch,Only Invoiced record will count" />--></td>
+                         <td width="59"><!--<input type="submit" style="width:50px" name="btn_item_wise_sale_detailPeriodicDLoad" value="  PD   " title="Depot/branch,Only Invoiced record will count" />--></td>
+                              <td>&nbsp;</td>
+                            </tr>
+                            <tr >
+                              <td colspan="5"><input type="submit" style="width:500px" name="btn_item_wise_sale_detail_land" value="12.1 Item Wise Sales Detail Landscape" title="Depot/branch,Store,Only Invoiced record will count" /></td>
+                              <td>&nbsp;</td>
+                            </tr>
+                            
+                             <tr >
+                              <td colspan="4" ><input type="submit" style="width:440px" name="btn_invoice_wise_sale_detail" value="12.3,12.11 Invoice Wise Sales Detail " title="Depot/branch,Store,Only Invoiced record will count" /></td>
+                              <td><input type="submit" style="width:50px" name="btn_invoice_wise_sale_detailD" value="  D   " title="Depot/branch,Only Invoiced record will count" /></td>
+                              <td>&nbsp;</td>
+                            </tr>
+                            
+                             <tr >
+                              <td colspan="4" ><input type="submit" style="width:440px" name="btn_invoicewiseSD" value="12.4 Invoice Wise Detail" title="Depot/branch,Store,Teritory" /></td>
+                              <td><input type="submit" style="width:50px" name="btn_invoicewiseSDLoad" value="  D  " title="Depot/branch,Store,Teritory" /></td>
+                              <td>&nbsp;</td>
+                            </tr>
+                            
+                            <tr >
+                              <td colspan="5"><input type="submit" style="width:500px" name="btn_customer_wise_sale_detail" value="12.5 Customer Wise Sales Detail Landscape" title="Depot/branch,Store,Only Invoiced record will count" /></td>
+                              <td>&nbsp;</td>
+                            </tr>
+                            
+                            <tr >
+                              <td colspan="4" ><input type="submit" style="width:440px" name="btn_customer_wise_sale_detailP" value="12.6 Customer Wise Sales Detail " title="Depot/branch,Store,Only Invoiced record will count" /></td>
+                               <td><input type="submit" style="width:50px" name="btn_customer_wise_sale_detailPD" value="  D   " title="Depot/branch,Only Invoiced record will count"  /></td>
+                              <td>&nbsp;</td>
+                            </tr>
+                           <tr >
+                              <td colspan="4" ><input type="submit" style="width:440px" name="btn_mso_wise_sale_detail" value="12.8 MSO Wise Sales Detail " title="Depot/branch,Store,Only Invoiced record will count" /></td>
+                              <td><input type="submit" style="width:50px" name="btn_mso_wise_sale_detailD" value="  D   " title="Depot/branch,Only Invoiced record will count"  /></td>
+                              <td>&nbsp;</td>
+                            </tr>
+                             <tr >
+                              <td colspan="4" ><input type="submit" style="width:440px" name="btn_dp_wise_sale_detail" value="12.9 Delivery Person Wise Sales Detail " title="Depot/branch,Store,Only Invoiced record will count" /></td>
+                              <td><input type="submit" style="width:50px" name="btn_dp_wise_sale_detailD" value="  D   " title="Depot/branch,Only Invoiced record will count"  /></td>
+                              <td>&nbsp;</td>
+                            </tr>
+                             
+                             <tr >
+
+                              <td colspan="4" ><input type="submit" style="width:440px" name="btn_msowiseS" value="17.1 Category and MSO wise Sales" title="Depot/branch,Store,Teritory,Only Invoiced record will count" /></td>
+                               <td><input type="submit" style="width:50px" name="btn_msowiseSDLoad" value="  D   " title="Depot/branch,Only Invoiced record will count"  /></td>
+                              <td>&nbsp;</td>
+                            </tr>
+                            
+                            <tr >
+
+                              <td colspan="4"><input type="submit" style="width:440px" name="btn_causeofrtn" value="18 Cause of Return Analysis" title="Depot/branch" /></td>
+                              <td><input type="submit" style="width:50px" name="btn_causeofrtnDLoad" value="  D   " title="Depot/branch,Only Invoiced record will count"  /></td>
+                              <td>&nbsp;</td>
+                            </tr>
+                            <tr >
+                              <td colspan="4" ><input type="submit" style="width:440px" name="btn_discPWise" value="22 Discount and Bonus Statement Product Wise " title="Depot/branch,Store,Only Invoiced record will count" /></td>
+                              <td><input type="submit" style="width:50px" name="btn_discPWiseD" value="  D   " title="Depot/branch,Only Invoiced record will count"  /></td>
+                              <td>&nbsp;</td>
+                            </tr>
+                            <tr >
+
+                              <td colspan="5"><!--<input type="submit" style="width:500px" name="btn_catMSOwiseS" value="17.1 Catagory and MSO wise Sales" title="Depot/branch,Store,Teritory,MSO" />--></td>
+                              <td>&nbsp;</td>
+                            </tr>
+                             <tr >
+                              <td colspan="4"><input type="submit" style="width:440px" name="btn_DP_wise_sale_ss" value="15 Delivery Person Wise Sales Statement (TP)" title="Depot/branch,Delivery Person,Only Invoiced record will count" /></td>
+                              <td><input type="submit" style="width:50px" name="btn_DP_wise_sale_ssD" value="  D   " title="Depot/branch,Only Invoiced record will count"  /></td>
+                              <td>&nbsp;</td>
+                            </tr>
+                             <tr >
+
+                              <td colspan="4" ><input type="submit" style="width:440px" name="btn_catDPwiseS" value="17.2 Catagory and DP wise Sales (TP)" title="Depot/branch,Store" /></td>
+                              <td><input type="submit" style="width:50px" name="btn_catDPwiseSD" value="  D   " title="Depot/branch,Only Invoiced record will count"  /></td>
+                              <td>&nbsp;</td>
+                            </tr>
+                            
+                            <tr >
+
+                              <td colspan="4" ><input type="submit" style="width:440px" name="btn_dpwiseSD" value="12.10 DP wise Sales" title="Depot/branch,Store,Teritory,MSO,DP" /></td>
+                               <td><input type="submit" style="width:50px" name="btn_dpwiseSDD" value="  D   " title="Depot/branch,Only Invoiced record will count"  /></td>
+                              <td>&nbsp;</td>
+                            </tr>
+                            
+                     
+                            
+                            <tr >
+
+                              <td colspan="4" ><input type="submit" style="width:440px" name="btn_summary" value="11.0 Summary Report" title="Depot/branch" /></td>
+                              <td>
+                              <input type="submit" style="width:50px" name="btn_summaryD" value="  D   " title="Depot/branch,Only Invoiced record will count"  /></td>
+                              <td>&nbsp;</td>
+                            </tr> 
+                            <tr >
+							  <td colspan="4" ></td>
+                              <td></td>
+                              <td>&nbsp;</td>
+                            </tr>
+                            
+                              <tr>
+                                <td colspan="4" ><input type="submit" style="width:440px" name="btn_productS" value="11.1 Product wise Sales" title="Depot/branch,Store,Teritory,MSO" /></td>
+                              <td>
+                              <input type="submit" style="width:50px" name="btn_productSD" value="  D   " title="Depot/branch,Only Invoiced record will count" /></td>
+                              <td>&nbsp;</td>
+                            </tr>
+                            
+                            
+                            <tr >
+
+                              <td colspan="4" ><input type="submit" style="width:440px" name="btn_productSwithoutBonus" value="10.3 Product wise Sales Without Bonus" title="Depot/branch,Store,Teritory" /></td>
+                               <td>
+                              <input type="submit" style="width:50px" name="btn_productSwithoutBonusD" value="  D   " title="Depot/branch,Teritory,Only Invoiced record will count" /></td>
+                              <td>&nbsp;</td>
+                            </tr>
+                           
+                            
+                            
+                            <tr >
+
+                              <td colspan="4" ><input type="submit" style="width:440px" name="btn_customerProductS" value="10.2, 11.2 Customer Product wise Sales" title="Depot/branch,Store,Teritory" /></td>
+                               <td>
+                              <input type="submit" style="width:50px" name="btn_customerProductSD" value="  D   " title="Depot/branch,Teritory,Only Invoiced record will count"  /></td>
+                              <td>&nbsp;</td>
+                            </tr>
+                             <tr >
+
+                              <td colspan="4" ><input type="submit" style="width:440px" name="btn_customerProductSIncludinBonus" value="10.4 Customer Product wise Sales With Bonus" title="Depot/branch,Store,Teritory" /></td>
+                               <td>
+                              <input type="submit" style="width:50px" name="btn_customerProductSIncludinBonusD" value="  D   " title="Depot/branch,Teritory,Only Invoiced record will count"  /></td>
+                              <td>&nbsp;</td>
+                            </tr>
+                             <tr >
+
+                              <td colspan="4" ><input type="submit" style="width:440px" name="btn_customerProductSExcludinBonus" value="10.5 Customer Product wise Sales Without Bonus" title="Depot/branch,Store,Teritory" /></td>
+                               <td>
+                              <input type="submit" style="width:50px" name="btn_customerProductSExcludinBonusD" value="  D   " title="Depot/branch,Teritory,Only Invoiced record will count" /></td>
+                              <td>&nbsp;</td>
+                            </tr>
+                            
+                            <tr >
+                              <td colspan="4" ><input type="submit" style="width:440px" name="btn_customerInvoiceProductS" value="10.6,11.3 Customer Invoice Product wise Sales" title="Depot/branch,Store,Teritory" /></td>
+                              <td>
+                              <input type="submit" style="width:50px" name="btn_customerInvoiceProductSD" value="  D   " title="Depot/branch,Teritory,Only Invoiced record will count" /></td>
+                              <td>&nbsp;</td>
+                            </tr>
+                            <tr >
+                              <td colspan="4" ><input type="submit" style="width:440px" name="btn_customerInvoiceProductSwithBonus" value="10.7 Customer Invoice Product wise Sales With Bonus" title="Depot/branch,Store,Teritory" /></td>
+                              <td><input type="submit" style="width:50px" name="btn_customerInvoiceProductSwithBonusD" value="  D   " title="Depot/branch,Teritory,Only Invoiced record will count"  /></td>
+                              <td>&nbsp;</td>
+                            </tr>
+                            <tr >
+                              <td colspan="4" ><input type="submit" style="width:440px" name="btn_customerInvoiceProductSwithoutBonus" value="10.8 Customer Invoice Product wise Sales Without Bonus" title="Depot/branch,Store,Teritory" /></td>
+                              <td><input type="submit" style="width:50px" name="btn_customerInvoiceProductSwithoutBonusD" value="  D   " title="Depot/branch,Teritory,Only Invoiced record will count" /></td>
+                              <td>&nbsp;</td>
+                            </tr>
+                            
+                            <tr >
+                            <tr >
+                              <td colspan="4" ><input type="submit" style="width:440px" name="btn_productInvoicewiseSD" value="10.9,11.4 Product wise Invoice Detail" title="Depot/branch,Store,Teritory" /></td>
+                              <td><input type="submit" style="width:50px" name="btn_productInvoicewiseSDD" value="  D   " title="Depot/branch,Teritory,Only Invoiced record will count" /></td>
+                              <td>&nbsp;</td>
+                            </tr>
+                            
+                            <tr >
+                              <td colspan="4" ><input type="submit" style="width:440px" name="btn_productInvoicewiseSDwithBonus" value="10.10 Product wise Invoice Detail With Bonus" title="Depot/branch,Store,Teritory" /></td>
+                              <td><input type="submit" style="width:50px" name="btn_productInvoicewiseSDwithBonusD" value="  D   " title="Depot/branch,Teritory,Only Invoiced record will count" /></td>
+                              <td>&nbsp;</td>
+                            </tr>
+                            
+                            <tr >
+                              <td colspan="4" ><input type="submit" style="width:440px" name="btn_productInvoicewiseSDwithoutBonus" value="10.11 Product wise Invoice Detail Without Bonus" title="Depot/branch,Store,Teritory" /></td>
+                              <td><input type="submit" style="width:50px" name="btn_productInvoicewiseSDwithoutBonusD" value="  D   " title="Depot/branch,Teritory,Only Invoiced record will count" /></td>
+                              <td>&nbsp;</td>
+                            </tr>
+                            
+                           
+                          <tr >
+
+                              <td colspan="5">&nbsp;</td>
+                              <td>&nbsp;</td>
+                            </tr>
+                            <tr >
+
+                              <td colspan="4"  ><input type="submit" style="width:440px" name="btn_SalesClosingStockS" value="A Sales & Closing Stock Statement" title="Depot/branch" /></td>
+                             <td><input type="submit" style="width:50px" name="btn_SalesClosingStockSD" value="  D  " title="Depot/branch,Store,Teritory" /></td>
+                            </tr>
+                            <tr >
+
+                              <td colspan="4"  ><input type="submit" style="width:440px" name="btn_SalesClosingStockSB" value="B Sales & Closing Stock Statement" title="Depot/branch" /></td>
+                             <td><input type="submit" style="width:50px" name="btn_SalesClosingStockSBD" value="  D  " title="Depot/branch,Store,Teritory" /></td>
+                            </tr>
+							 <tr >
+
+                              <td colspan="4" ><input type="submit" style="width:440px" name="btn_customer_nformation" value="16 Customer Information" title="Depot/branch" /></td>
+                              <td><input type="submit" style="width:50px" name="btn_customer_nformationD" value="  D  " title="Depot/branch,Store,Teritory" /></td>
+                            </tr>
+                            
+
+                          <tr >
+
+                              <td colspan="5">&nbsp;</td>
+                              <td>&nbsp;</td>
+                            </tr>
+						<tr >
+
+                              <td colspan="5">&nbsp;</td>
+                              <td>&nbsp;</td>
+                            </tr>
+						<!--<tr >
+
+                              <td ><input type="submit" style="width:440px" name="btn_sComparision" value="8.1A Sales Comparision Summary" title="Depot/branch" /></td>
+                              <td><input type="submit" style="width:50px" name="btn_sComparisionD" value="  D  " title="Depot/branch,Store,Teritory"  /></td>
+                            </tr>-->
+                    </table>
+
+                    
+
+                    </td>                    
+
+                </tr>
+
+                
+
+               </form>
+
+            </table>
+           
+
+                
+
+		  
+
+                
+
+		   </div>
+           
+           
+           
+           
+           <!--<div  class="rptdiv">
+
+                <ul class="rptul">
+
+                    <li class="rptlist"> Sales Comparison  </li>
+
+                </ul>
+
+		   </div>
+
+		   <div >  -->
+
+           
+			<!--<table width="900" border="0" cellpadding="0" cellspacing="0">
+
+				<form name="form2" id="form2" action="{{=URL(c='report_sales',f='home')}}" target="_blank">
+
+                <tr>
+
+                	<td valign="top">
+
+                   	  <table width="550" height="300px;" style="background-color:#F8F8F8;">
+
+                        	
+
+                          <tr style="background-color:#E9E9E9; height:25px">
+
+                              <td width="1">&nbsp;</td>
+
+                              <td width="104">&nbsp;</td>
+
+                              <td width="10">&nbsp;</td>
+
+                              <td width="415">&nbsp;</td>
+
+                          </tr>
+
+                          <tr >
+                            <td>&nbsp;</td>
+                            <td>Date Range</td>
+                            <td>:</td>
+                            <td><span style="vertical-align:middle;"> {{=search_form.custom.widget.from_dt_3}} To {{=search_form.custom.widget.to_dt_3}}</span></td>
+                          </tr>
+                          <tr >
+                            <td>&nbsp;</td>
+                            <td>Depot/Branch</td>
+                            <td>:</td>
+                            <td>
+                            {{if (session.user_type=='Depot' and session.user_depot_category=='DEPOT'):}}
+                                <input type="text" name="sales_depot_id_SC" id="sales_depot_id_SC" size="25" value="{{=session.depot_id}}|{{=session.user_depot_name}}" placeholder="Select Branch/Depot" autocomplete="off" style="width:288px"/>
+                            {{else:}}
+                            <input  name="sales_depot_id_SC" type="text" id="sales_depot_id_SC" class="depot_id" size="25" value="" placeholder="Select Branch/Depot" autocomplete="off" style="width:288px"/>
+                            {{pass}}
+                            
+                            </td>
+                          </tr>
+                          <tr >
+
+
+                            <td width="1">&nbsp;</td>
+
+                            <td>Branch/Depot Store</td>
+
+                            <td>:</td>
+
+                            <td width="415">
+                             {{if (session.user_type=='Depot' and not(session.report_store_id=='' or session.report_store_id==None)):}}
+                              	<input  name="store_id_SC" type="text" id="store_id_SC" size="25" value="{{=session.report_store_id}}|{{=session.report_store_name}}" placeholder="Select Branch/Depot Store" autocomplete="off" style="width:288px"/>
+                              {{else:}}
+                              	<input  name="store_id_SC" type="text" id="store_id_SC" size="25" value="" placeholder="Select Branch/Depot Store" autocomplete="off" style="width:288px"/>
+                              {{pass}}-->
+                            
+                            
+                            
+                            
+                            <!--<input  name="store_id_SC" type="text" id="store_id_SC" size="25" value="" placeholder="Select Branch/Depot Store" autocomplete="off" style="width:288px"/>-->
+                            
+                            <!--</td>
+
+                          </tr>
+
+                          <tr >
+
+                            <td width="1">&nbsp;</td>
+
+                            <td>RSM</td>
+
+                            <td>:</td>
+
+                            <td width="415"><input  name="rsm_SC" type="text" id="rsm_SC" size="25" value="" placeholder="RSM" autocomplete="off" style="width:288px"/></td>
+
+                          </tr>
+                            <td>&nbsp;</td>
+
+                            <td>FM</td>
+
+                            <td width="10">:</td>                     
+                       <td><input  name="fm_SC" type="text" id="fm_SC" size="25" value="" placeholder="FM" autocomplete="off" style="width:288px"/></td>
+
+                          </tr>
+
+                            <tr >
+                              <td>&nbsp;</td>
+                              <td>TR</td>
+                              <td>:</td>
+                              <td><input  name="tr_SC" type="text" id="tr_SC" size="25" value="" placeholder="TR" autocomplete="off" style="width:288px"/></td>
+                            </tr>
+                            <tr >
+                              <td>&nbsp;</td>
+                              <td>Item</td>
+                              <td>:</td>
+                              <td><input  name="product" type="text" id="product" size="25" value="" placeholder="Product" autocomplete="off" style="width:288px"/></td>
+                            </tr>
+                            <tr >
+                              <td>&nbsp;</td>
+                              <td>&nbsp;</td>
+                              <td>&nbsp;</td>
+                              <td>&nbsp;</td>
+                            </tr>
+
+                      </table>
+
+                    
+
+                    
+
+                  </td>
+
+                    <td valign="top">
+
+                    	<table width="350">
+
+                        	
+
+                            <tr style="background-color:#E9E9E9; height:25px">
+
+                              <td>&nbsp;</td>
+                              <td>&nbsp;</td>
+
+                            </tr>
+                             <tr style="height:25px" >
+
+                              <td><input type="submit" name="btn_salesComparisionNational" style="width:245px;" value="National Summary" /></td>
+							<td><input type="submit" name="btn_salesComparisionNationalD" style="width:100px;" value="D"  /></td>
+                            </tr>
+                           <tr >
+
+                              <td><input type="submit" name="btn_salesComparisionRsm" style="width:245px;" value="RSM Summary"  /></td>
+							<td><input type="submit" name="btn_salesComparisionRsmD" style="width:100px;" value="D"  /></td>
+						
+                          </tr> 
+                           <tr >
+
+                              <td><input type="submit" name="btn_salesComparisionRsmDetail" style="width:245px;" value="RSM Detail" /></td>
+							 <td><input type="submit" name="btn_salesComparisionRsmDetailD" style="width:100px;" value="D"  disabled/></td>
+                            </tr>
+                            <tr >
+			
+                                <td><input type="submit" name="btn_salesComparisionFm" style="width:245px;" value="FM Summary" /></td>
+							<td><input type="submit" name="btn_salesComparisionFmD" style="width:100px;" value="D"  /></td>
+                            </tr>  
+
+   <tr >
+
+                              <td><input type="submit" name="btn_salesComparisionFmDetail" style="width:245px;" value="FM Detail" /></td>
+							 <td><input type="submit" name="btn_salesComparisionFmDetailD" style="width:100px;" value="D"  disabled/></td>
+                            </tr>
+                            <tr >
+
+                              <td><input type="submit" name="btn_salesComparisionTr" style="width:245px;" value="TR Summary" /></td>
+							 <td><input type="submit" name="btn_salesComparisionTrD" style="width:100px;" value="D"  /></td>
+                            </tr>
+                            
+                            <tr >
+
+                              <td><input type="submit" name="btn_salesComparisionTrDetail" style="width:245px;" value="TR Detail" /></td>
+							 <td><input type="submit" name="btn_salesComparisionTrDetailD" style="width:100px;" value="D"/></td>
+                            </tr>
+                            
+                            <tr >
+
+                              <td><input type="submit" name="btn_salesComparisionMarketDetail" style="width:245px;" value="Market Detail" /></td>
+							 <td><input type="submit" name="btn_salesComparisionTrDetailD" style="width:100px;" value="D"  disabled/></td>
+                            </tr>-->
+                            <!--<tr style="height:25px" >
+
+                              <td colspan="2"><input type="submit" name="btn_salesComparisionTRDLoad" style="width:350px;" value="TR Wise Download" /></td>
+                            </tr>
+                            <tr style="height:25px" >
+
+                              <td colspan="2"><input type="submit" name="btn_salesComparisionTRDLoadAB" style="width:350px;" value="TR Wise Download (A,B)" /></td>
+                            </tr>
+								
+                            
+                             <tr style="height:25px" >
+
+                              <td colspan="2"></td>
+                            </tr>
+                             
+                             <tr style="height:25px" >
+
+                              <td colspan="2"><input type="submit" name="btn_salesComparisionFMDLoad" style="width:350px;" value="FM Wise Download" /></td>
+                            </tr>
+                            <tr style="height:25px" >
+
+                              <td colspan="2"><input type="submit" name="btn_salesComparisionFMDLoadAB" style="width:350px;" value="FM Wise Download (A,B)" /></td>
+                            </tr>
+                            <tr style="height:25px" >
+                              <td colspan="2">&nbsp;</td>
+                            </tr>-->
+                           <!--<tr style="height:25px" >
+
+                              <td colspan="2"><input type="submit" name="btn_salesComparisionTRDLoadInvoice" style="width:350px;" value="TR Wise Download" /></td>
+                            </tr>
+                            
+                            
+                             <tr style="height:25px" >
+
+                              <td colspan="2" align="center" style="background-color:#EDF9FE; font-size:16px"><p><br>
+                              TR Wise Periodical Report</p>
+                               </td>
+                            </tr>
+                             <tr style="height:25px" >
+
+                              <td colspan="2"><table border="0">
+                                      <tr>
+                                        <td><input type="submit" name="btn_salesComparisionTRDLoadInvoicePeriodicProcess" style="width:350px;" value="Process" /></td>
+                                    </tr>  
+                                     <tr>  
+                                        <td align="right"><input type="submit" style="width:350px;" name="btn_salesComparisionTRDLoadInvoicePeriodic"  value="TR Wise DLoad" /></td>
+                                      </tr>
+                                      <tr>  
+                                        <td align="right"><input type="submit" name="btn_salesComparisionTRDLExCInvoicePeriodic" style="width:350px;" value="TR Wise DLoad excluding C " /></td>
+                                      </tr>
+                                    </table>
+</td>
+                            </tr>
+                            
+                            <tr style="height:25px" >
+
+                              <td ></td>
+                            </tr>
+                            
+                            <tr style="height:25px" >-->
+
+                              <!--<td colspan="2"><input type="submit" name="btn_salesComparisionTRDLExCInvoicePeriodic" style="width:350px;" value="TR Wise DLoad excluding C " /></td>-->
+                            <!--</tr>-->
+                             <!-- <tr style="height:25px" >
+
+                              <td><input type="submit" name="btn_salesComparisionNationalCteam" style="width:245px;" value="National Summary" /></td>
+							<td><input type="submit" name="btn_salesComparisionNationalCteamD" style="width:100px;" value="D" disabled  /></td>
+                            </tr>-->
+
+
+                    <!--</table>
+
+                    
+
+                    </td>                    
+
+                </tr>
+
+                
+
+               </form>
+
+            </table>-->
+            <!--</div>-->
+           
+           
+           
+           
+           
+           
+           
+         <!--=========================Cteam=============-->  
+           
+       <!--<div  class="rptdiv">
+
+                <ul class="rptul">
+
+                    <li class="rptlist"> Sales Comparison (C Team) </li>
+
+                </ul>
+
+		   </div>
+
+		   <div >-->  
+
+           
+			<!--<table width="900" border="0" cellpadding="0" cellspacing="0">
+
+				<form name="form2" id="form2" action="{{=URL(c='report_sales',f='home')}}" target="_blank">
+
+                <tr>
+
+                	<td valign="top">
+
+                   	  <table width="550" height="300px;" style="background-color:#F8F8F8;">
+
+                        	
+
+                          <tr style="background-color:#E9E9E9; height:25px">
+
+                              <td width="1">&nbsp;</td>
+
+                              <td width="104">&nbsp;</td>
+
+                              <td width="10">&nbsp;</td>
+
+                              <td width="415">&nbsp;</td>
+
+                          </tr>
+
+                          <tr >
+                            <td>&nbsp;</td>
+                            <td>Date Range</td>
+                            <td>:</td>
+                            <td><span style="vertical-align:middle;"> {{=search_form.custom.widget.from_dt_4}} To {{=search_form.custom.widget.to_dt_4}}</span></td>
+                          </tr>
+                          <tr >
+                            <td>&nbsp;</td>
+                            <td>Depot/Branch</td>
+                            <td>:</td>
+                            <td>
+                            {{if (session.user_type=='Depot' and session.user_depot_category=='DEPOT'):}}
+                                <input type="text" name="sales_depot_id_SC_C" id="sales_depot_id_SC_C" size="25" value="{{=session.depot_id}}|{{=session.user_depot_name}}" placeholder="Select Branch/Depot" autocomplete="off" style="width:288px"/>
+                            {{else:}}
+                            <input  name="sales_depot_id_SC_C" type="text" id="sales_depot_id_SC_C" class="depot_id" size="25" value="" placeholder="Select Branch/Depot" autocomplete="off" style="width:288px"/>
+                            {{pass}}
+                            
+                            </td>
+                          </tr>
+                          <tr >
+
+
+                            <td width="1">&nbsp;</td>
+
+                            <td>Branch/Depot Store</td>
+
+                            <td>:</td>
+
+                            <td width="415">
+                            {{if (session.user_type=='Depot' and not(session.report_store_id=='' or session.report_store_id==None)):}}
+                              	<input  name="store_id_SC_C" type="text" id="store_id_SC_C" size="25" value="{{=session.report_store_id}}|{{=session.report_store_name}}" placeholder="Select Branch/Depot Store" autocomplete="off" style="width:288px"/>
+                              {{else:}}
+                              	<input  name="store_id_SC_C" type="text" id="store_id_SC_C" size="25" value="" placeholder="Select Branch/Depot Store" autocomplete="off" style="width:288px"/>
+                              {{pass}}-->
+                            
+                            
+                            
+                            
+                            
+                            <!--<input  name="store_id_SC_C" type="text" id="store_id_SC_C" size="25" value="" placeholder="Select Branch/Depot Store" autocomplete="off" style="width:288px"/>-->
+                            
+                            <!--</td>
+
+                          </tr>
+
+                          <tr >
+
+                            <td width="1">&nbsp;</td>
+
+                            <td>RSM</td>
+
+                            <td>:</td>
+
+                            <td width="415"><input  name="rsm_SC_C" type="text" id="rsm_SC" size="25" value="" placeholder="RSM" autocomplete="off" style="width:288px"/></td>
+
+                          </tr>
+                            <td>&nbsp;</td>
+
+                            <td>FM</td>
+
+                            <td width="10">:</td>                     
+                       <td><input  name="fm_SC_C" type="text" id="fm_SC_C" size="25" value="" placeholder="FM" autocomplete="off" style="width:288px"/></td>
+
+                          </tr>
+
+                            <tr >
+                              <td>&nbsp;</td>
+                              <td>TR</td>
+                              <td>:</td>
+                              <td><input  name="tr_SC_C" type="text" id="tr_SC_C" size="25" value="" placeholder="TR" autocomplete="off" style="width:288px"/></td>
+                            </tr>
+                             <tr >
+                              <td>&nbsp;</td>
+                              <td>Item</td>
+                              <td>:</td>
+                              <td><input  name="product_c" type="text" id="product_c" size="25" value="" placeholder="Product" autocomplete="off" style="width:288px"/></td>
+                            </tr>
+                            <tr >
+                              <td>&nbsp;</td>
+                              <td>&nbsp;</td>
+                              <td>&nbsp;</td>
+                              <td>&nbsp;</td>
+                            </tr>
+
+                      </table>
+
+                    
+
+                    
+
+                  </td>
+
+                    <td valign="top">
+
+                    	<table width="350">
+
+                        	
+
+                            <tr style="background-color:#E9E9E9; height:25px">
+
+                              <td>&nbsp;</td>
+                              <td>&nbsp;</td>
+
+                            </tr>-->
+                            <!-- <tr style="height:25px" >
+
+                              <td><input type="submit" name="btn_salesComparisionNationalCteam" style="width:245px;" value="National Summary" /></td>
+							<td><input type="submit" name="btn_salesComparisionNationalCteamD" style="width:100px;" value="D" disabled  /></td>
+                            </tr>-->
+                            
+							 <!--<tr >
+
+                              <td><input type="submit" name="btn_salesComparisionRsmCteam" style="width:245px;" value="RSM Summary"  /></td>
+							<td><input type="submit" name="btn_salesComparisionRsmCteamD" style="width:100px;" value="D" disabled /></td>
+						
+                          </tr> 
+                           <tr >
+
+                              <td><input type="submit" name="btn_salesComparisionRsmDetailCteam" style="width:245px;" value="RSM Detail" /></td>
+							 <td><input type="submit" name="btn_salesComparisionRsmDetailCteamD" style="width:100px;" value="D"  disabled/></td>
+                            </tr>
+                            <tr >
+			
+                                <td><input type="submit" name="btn_salesComparisionFmCteam" style="width:245px;" value="FM Summary" /></td>
+							<td><input type="submit" name="btn_salesComparisionFmCteamD" style="width:100px;" value="D"  disabled/></td>
+                            </tr>  
+
+   <tr >
+
+                              <td><input type="submit" name="btn_salesComparisionFmDetailCteam" style="width:245px;" value="FM Detail" /></td>
+							 <td><input type="submit" name="btn_salesComparisionFmDetailCteamD" style="width:100px;" value="D"  disabled/></td>
+                            </tr>
+                            <tr >
+
+                              <td><input type="submit" name="btn_salesComparisionTrCteam" style="width:245px;" value="TR Summary" /></td>
+							 <td><input type="submit" name="btn_salesComparisionTrCteamD" style="width:100px;" value="D"  disabled/></td>
+                            </tr>
+                            
+                            <tr >
+
+                              <td><input type="submit" name="btn_salesComparisionTrDetailCteam" style="width:245px;" value="TR Detail" /></td>
+							 <td><input type="submit" name="btn_salesComparisionTrDetailCteamD" style="width:100px;" value="D"  disabled/></td>
+                            </tr>
+                            
+                            <tr >
+
+                              <td><input type="submit" name="btn_salesComparisionMarketDetailCteam" style="width:245px;" value="Market Detail" /></td>
+							 <td><input type="submit" name="btn_salesComparisionTrDetailCteamD" style="width:100px;" value="D"  disabled/></td>
+                            </tr>
+                            
+                            
+                            
+                            
+                            
+							 <tr style="height:25px" >
+
+                              <td colspan="2"><input type="submit" name="btn_salesComparisionTRDLoadCteam" style="width:350px;" value="TR Wise Download" /></td>
+                            </tr>
+                            
+                            
+                            
+                            
+                            
+                             <tr style="height:25px" >
+
+                              <td colspan="2" align="center" style="background-color:#EDF9FE; font-size:16px"><p><br>
+                              TR Wise Periodical Report</p>
+                               </td>
+                            </tr>
+                             <tr style="height:25px" >
+
+                              <td colspan="2"><table border="0">
+                                      <tr>
+                                        <td><input type="submit" name="btn_salesComparisionTRDLoadInvoicePeriodicCteamProcess" style="width:350px;" value="Process" /></td>
+                                    </tr>  
+                                     <tr>  
+                                        <td align="right"><input type="submit" name="btn_salesComparisionTRDLoadCteamPeriodic" style="width:350px;" value="TR Wise Download (Periodical)" /></td>
+                                      </tr>
+                                  
+                                    </table>
+</td>
+                            </tr>
+                             <tr style="height:25px" >
+
+                              <td colspan="2"></td>
+                            </tr>
+                             <tr style="height:25px" >
+
+                              <td colspan="2"></td>
+                            </tr>-->
+                            <!-- <tr style="height:25px" >
+
+                              <td colspan="2"><input type="submit" name="btn_salesComparisionFMDLoadCteam" style="width:350px;" value="FM Wise Download" /></td>
+                            </tr>-->
+                            <!--<tr style="height:25px" >
+
+                              <td colspan="2"><input type="submit" name="btn_salesComparisionTRDLoadABCteam" style="width:350px;" value="TR Wise Download (A,B)" /></td>
+                            </tr>-->
+
+                    <!--</table>
+
+                    
+
+                    </td>                    
+
+                </tr>
+
+                
+
+               </form>
+
+            </table>-->
+            <!--</div>-->
+            
+            <!--==================Cteam End=========================-->     
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           <div  class="rptdiv">
+
+                <ul class="rptul">
+
+                    <li class="rptlist"> Order  </li>
+
+                </ul>
+
+		   </div>
+
+		   <div >  
+
+           
+			<table width="900" border="0" cellpadding="0" cellspacing="0">
+
+				<form name="form2" id="form2" action="{{=URL(c='report_sales',f='home')}}" target="_blank">
+
+                <tr>
+
+                	<td valign="top">
+
+                   	  <table width="600" height="300px;" style="background-color:#F8F8F8;">
+
+                        	
+
+                          <tr style="background-color:#E9E9E9; height:25px">
+
+                              <td width="1">&nbsp;</td>
+
+                              <td width="103">&nbsp;</td>
+
+                              <td width="8">&nbsp;</td>
+
+                              <td colspan="3">&nbsp;</td>
+
+                          </tr>
+
+                          <tr >
+                            <td>&nbsp;</td>
+                            <td>Date Range
+                            </td>
+                            <td>:</td>
+                            <td width="300"><span style="vertical-align:middle;"> {{=search_form.custom.widget.to_dt}} To {{=search_form.custom.widget.to_dt_2}}</span></td>
+                            <td width="65">
+                              <label>
+                                  <input type="radio" name="RadioGroupCheck" value="Order" id="RadioGroup1_0" >
+                                  Order</label>
+</td>
+                            <td width="95"><label>
+    <input type="radio" name="RadioGroupCheck" value="Delivery" id="RadioGroup1_1" checked>
+    Delivery</label></td>
+                          </tr>
+                          <tr >
+                            <td>&nbsp;</td>
+                            <td>SL Range</td>
+                            <td>&nbsp;</td>
+                            <td colspan="3"><input  name="sales_sl_from" type="number" id="sales_sl_from"  size="25" value="" placeholder="SL" autocomplete="off" style="width:100px"/>
+                              To
+                              <input  name="sales_sl_to" type="number" id="sales_sl_to"  size="25" value="" placeholder="SL" autocomplete="off" style="width:100px"/></td>
+                          </tr>
+                          <tr >
+                            <td>&nbsp;</td>
+                            <td>Depot/Branch</td>
+                            <td>:</td>
+                            <td colspan="3">
+                            {{if (session.user_type=='Depot' and session.user_depot_category=='DEPOT'):}}
+                                <input type="text" name="sales_depot_id_order" id="sales_depot_id_order" size="25" value="{{=session.depot_id}}|{{=session.user_depot_name}}" placeholder="Select Branch/Depot" autocomplete="off" style="width:288px"/>
+                            {{else:}}
+                            <input  name="sales_depot_id_order" type="text" id="sales_depot_id_order" class="depot_id" size="25" value="" placeholder="Select Branch/Depot" autocomplete="off" style="width:288px"/>
+                            {{pass}}
+                            
+                            </td>
+                          </tr>
+                          <tr >
+
+
+                            <td width="1">&nbsp;</td>
+
+                            <td>Branch/Depot Store</td>
+
+                            <td>:</td>
+
+                            <td colspan="3">
+                            {{if (session.user_type=='Depot' and not(session.report_store_id=='' or session.report_store_id==None)):}}
+                              	<input  name="store_id_order" type="text" id="store_id_order" size="25" value="{{=session.report_store_id}}|{{=session.report_store_name}}" placeholder="Select Branch/Depot Store" autocomplete="off" style="width:288px"/>
+                              {{else:}}
+                              	<input  name="store_id_order" type="text" id="store_id_order" size="25" value="" placeholder="Select Branch/Depot Store" autocomplete="off" style="width:288px"/>
+                              {{pass}}
+                            
+                            
+                            
+                            
+                            <!--<input  name="store_id_order" type="text" id="store_id_order" size="25" value="" placeholder="Select Branch/Depot Store" autocomplete="off" style="width:288px"/>--></td>
+
+                          </tr>
+
+                          <tr >
+
+                            <td width="1">&nbsp;</td>
+
+                            <td>Customer</td>
+
+                            <td>:</td>
+
+                            <td colspan="3"><input  name="customer_id_order" type="text" id="customer_id_order" size="25" value="" placeholder="Select Customer" autocomplete="off" style="width:288px"/></td>
+
+                          </tr>
+                            <tr>
+                              <td>&nbsp;</td>
+
+                            <td>Teritory</td>
+
+                            <td width="8">:        </td>                     
+                       <td colspan="3"><input  name="t_id_order" type="text" id="t_id_order" size="25" value="" placeholder="Select Teritory" autocomplete="off" style="width:288px"/></td>
+
+                          </tr>
+
+                            <tr >
+                              <td>&nbsp;</td>
+                              <td>MSO</td>
+                              <td>:</td>
+                              <td colspan="3"><input  name="mso_id_order" type="text" id="mso_id_order" size="25" value="" placeholder="Select MSO" autocomplete="off" style="width:288px"/></td>
+                            </tr>
+                           <tr >  
+                            <td>&nbsp;</td>
+                            <td>FM</td>
+                            <td width="10">:</td>                     
+                       <td colspan="3"><input  name="fm_order" type="text" id="fm_order" size="25" value="" placeholder="FM" autocomplete="off" style="width:288px"/></td>
+
+                          </tr>
+                            <tr >
+                              <td>&nbsp;</td>
+                              <td>&nbsp;</td>
+                              <td>&nbsp;</td>
+                              <td colspan="3">&nbsp;</td>
+                            </tr>
+
+                      </table>
+
+                    
+
+                    
+
+                  </td>
+
+                    <td valign="top">
+
+                    	<table width="350">
+
+                        	
+
+                            <tr style="background-color:#E9E9E9; height:25px">
+
+                              <td>&nbsp;</td>
+
+                            </tr>
+                             <tr style="height:25px" >
+
+                              <td><input type="submit" name="btn_item_wise_sales_sheet" style="width:440px;" value="Order Sheet" title="Depot/branch,Store/Teritory"/></td>
+
+                            </tr>
+                           <tr >
+
+                              <td>&nbsp;</td>
+
+                          </tr> 
+                            <tr >
+			
+                                <td>&nbsp;</td>
+
+                            </tr>  
+
+                            <tr >
+
+                              <td>&nbsp;</td>
+
+                            </tr>
+                            <tr style="height:25px" >
+
+                              <td></td>
+
+                            </tr>
+                            
+                            <tr >
+
+                              <td>&nbsp;</td>
+
+                            </tr>
+                           
+                            <tr style="height:25px" >
+
+                              <td>&nbsp;</td>
+
+                            </tr>
+                            
+                            <tr >
+
+                              <td>&nbsp;</td>
+
+                            </tr>
+                            <tr >
+
+                              <td><!--<input type="submit" name="btn_item_wise_sale_detail" style="width:440px;" value="Item Wise Sales Detail" title="Depot/branch,Store"/>--></td>
+
+                            </tr>
+                            <tr >
+
+                              <td>&nbsp;</td>
+
+                            </tr>
+                            <tr >
+
+                              <td>&nbsp;</td>
+
+                            </tr>
+                            
+
+                            
+
+                            <tr >
+
+                              <td>&nbsp;</td>
+
+                            </tr>
+
+
+                    </table>
+
+                    
+
+                    </td>                    
+
+                </tr>
+
+                
+
+               </form>
+
+            </table>
+           
+
+                
+
+		  
+
+                
+
+		   </div>
+
+	  </div>
+
+      
+
+      </td>
+
+  </tr>
+
+</table>
+
+<br>
+
+<br>
+
+<br>
+
+<br>
+
+<br>
+
+<br>
+
+<script type="text/javascript">
+
+$(document).ready(function() {
+
+	
+
+	// Test build of multiselect.
+
+	var build = function(select, tr) {
+
+		select.multiselect();
+
+		
+
+		if (select.length === 0) {
+
+			return 'Select not present anymore.';
+
+		}
+
+		
+
+		if (select.css('display') !== 'none') {
+
+			return 'Select still visible (expected <code>display: none;</code>).';
+
+		}
+
+		
+
+		if ($('button.multiselect', tr).length === 0) {
+
+			return 'Multiselect button not present.';
+
+		}
+
+		
+
+		if ($('option', select).length !== 5) {
+
+			return 'Not all options present anymore.';
+
+		}
+
+		
+
+		if ($('ul.multiselect-container', tr).length === 0) {
+
+			return 'Unordered list <code>.multiselect-container</code> not present.';
+
+		}
+
+		
+
+		if ($('ul.multiselect-container li', tr).length !== 5) {
+
+			return 'No list item for each option present.';
+
+		}
+
+		
+
+		if ($('ul.multiselect-container li a', tr).length !== 5) {
+
+			return 'Not all list items come with an anchor inside.';
+
+		}
+
+		
+
+		return false;
+
+	}($('#test-build-select'), $('#test-build-tr'));
+
+	
+
+	if (build) {
+
+		$('#test-build-tr').removeClass('success').addClass('danger');
+
+		$('#test-build-tr td').last().html(build);
+
+	}
+
+	
+
+	// Test build with optgroups.
+
+	var buildOptgroups = function(select, tr) {
+
+		select.multiselect();
+
+		
+
+		if ($('optgroup', select).length !== 2) {
+
+			return 'Optgroups not present anymore (2 expected).';
+
+		}
+
+		
+
+		var first = $('optgroup', select).get(0);
+
+		var second = $('optgroup', select).get(1);
+
+		
+
+		if ($('option', $(first)).length !== 2) {
+
+			return 'First optgroup does not have 2 options.';
+
+		}
+
+		
+
+		if ($('option', $(second)).length !== 3) {
+
+			return 'Second optgroup does not have 3 options.';
+
+		}
+
+		
+
+		// Check the corresponding labels.
+
+		if ($('label.multiselect-group', tr).length !== 2) {
+
+			return 'Expected 2 labels within the unordered list.';
+
+		}
+
+		
+
+		// Check labeling of groups.
+
+		var firstLabel = $('label.multiselect-group', tr).get(0);
+
+		var secondLabel = $('label.multiselect-group', tr).get(1);
+
+		
+
+		if ($(firstLabel).text() !== $(first).prop('label')) {
+
+			return 'First group labeled incorrectly.';
+
+		}
+
+		
+
+		if ($(secondLabel).text() !== $(second).prop('label')) {
+
+			return 'Second group labeled incorrectly.';
+
+		}
+
+		
+
+		return false;
+
+	}($('#test-build-optgroups-select'), $('#test-build-optgroups-tr'));
+
+	
+
+	if (buildOptgroups) {
+
+		$('#test-build-optgroups-tr').removeClass('success').addClass('danger');
+
+		$('#test-build-optgroups-tr td').last().html(build);
+
+	}
+
+	
+
+	var buildSelected = function(select, tr ) {
+
+		select.multiselect();
+
+		
+
+		if ($('option:selected', select).length !== 1) {
+
+			return 'Multiselect did not adopt selected options (1 selected option).';
+
+		}
+
+		
+
+		if ($('ul.multiselect-container li.active', tr).length !== 1) {
+
+			return 'Corresponding list item not set to <code>.active</code>.';
+
+		}
+
+		
+
+		return false;
+
+	}($('#test-build-selected-select'), $('#test-build-selected-tr'));
+
+	
+
+	if (buildSelected) {
+
+		$('#test-build-selected-tr').removeClass('success').addClass('danger');
+
+		$('#test-build-selected-tr td').last().html(buildSelected);
+
+	}
+
+
+
+//-----------	Editing code
+
+	var buildSelectAll = function(select, tr ) {
+
+		var value ="all";
+
+		select.multiselect({
+
+			maxHeight: 150,
+
+			selectedClass: null,
+
+			//buttonWidth:'200px',
+
+			//buttonHeight:'50px',
+
+			includeSelectAllOption: true,
+
+			selectAllValue: value
+
+		});
+
+		
+
+		if ($('.multiselect-container input[value="' + value + '"]', tr).length !== 1) {
+
+			return 'Expected exactly one input with value ' + value + ' as select all option.';
+
+		}
+
+		
+
+		return false;
+
+	}($('.test-build-select-all-select'), $('#test-build-select-all-tr'));
+
+	
+
+	if (buildSelectAll) {
+
+		$('#test-build-select-all-tr').removeClass('success').addClass('');
+
+		$('#test-build-select-all-tr td').last().html(buildSelectAll);
+
+	}
+
+	//------- close editing code
+
+	
+
+	var buildFilter = function(select, tr) {
+
+		select.multiselect({
+
+			enableFiltering: true
+
+		});
+
+		
+
+		if ($('.multiselect-search', tr).length !== 1) {
+
+			return 'No search input present.';
+
+		}
+
+		
+
+	}($('.test-build-filter-select'), $('#test-build-filter-tr'));
+
+	
+
+	if (buildFilter) {
+
+		$('#test-build-filter-tr').removeClass('success').addClass('danger');
+
+		$('#test-build-filter-tr td').last().html(buildFilter);
+
+	}
+
+	
+
+	// Test select.
+
+	var select = function(selectElement, tr) {
+
+		selectElement.multiselect();
+
+		
+
+		// Check for no selected options and no active li's.
+
+		if ($('option:selected', selectElement).length > 0) {
+
+			return 'There are already selected options (0 expected).';
+
+		}
+
+		
+
+		if ($('ul.multiselect-container li.active', tr).length > 0) {
+
+			return 'There are already active list items (0 expected).';
+
+		}
+
+		
+
+		selectElement.multiselect('select', '1');
+
+		
+
+		if ($('option:selected', selectElement).length !== 1) {
+
+			return 'Just selected an option - option not marked selected.';
+
+		}
+
+		
+
+		if ($('ul.multiselect-container li.active', tr).length !== 1) {
+
+			return 'Just selected an option - list item not set active.';
+
+		}
+
+		
+
+		if ($('option:selected', selectElement).first().val() !== '1') {
+
+			return 'Wrong option selected.';
+
+		}
+
+		
+
+		selectElement.multiselect('select', ['2', '3']);
+
+		
+
+		if ($('option:selected', selectElement).length !== 3) {
+
+			return 'Just selected two additional options - options not marked selected.';
+
+		}
+
+		
+
+		if ($('ul.multiselect-container li.active', tr).length !== 3) {
+
+			return 'Just selected two additional options - list items not set active.';
+
+		}
+
+		
+
+		var second = $('option:selected', selectElement).get(1),
+
+			third = $('option:selected', selectElement).get(2);
+
+		
+
+		if (second === undefined || second.length === 0) {
+
+			return 'Could not get second option.';
+
+		}
+
+		
+
+		if (third === undefined || third.length === 0) {
+
+			return 'Could not get third option.';
+
+		}
+
+		
+
+		if ($(second).val() !== '2' || $(third).val() !== '3') {
+
+			return 'Wrong options selected.';
+
+		}
+
+		
+
+		return false;
+
+	}($('#test-select-select'), $('#test-select-tr'));
+
+	
+
+	if (select) {
+
+		$('#test-select-tr').removeClass('success').addClass('danger');
+
+		$('#test-select-tr td').last().html(select);
+
+	}
+
+	
+
+	// Test deselect.
+
+	var deselect = function(select, tr) {
+
+		select.multiselect();
+
+		
+
+		// Check for no selected options and no active li's.
+
+		if ($('option:selected', select).length !== 3) {
+
+			return 'There should be 3 options selected.';
+
+		}
+
+		
+
+		if ($('ul.multiselect-container li.active', tr).length !== 3) {
+
+			return 'There should be 3 list items set to active.';
+
+		}
+
+		
+
+		select.multiselect('deselect', '1');
+
+		
+
+		if ($('option:selected', select).length !== 2) {
+
+			return 'Just deselected an option - option not marked deselected.';
+
+		}
+
+		
+
+		if ($('ul.multiselect-container li.active', tr).length !== 2) {
+
+			return 'Just deselected an option - list item not set inactive.';
+
+		}
+
+		
+
+		if ($('option:selected', select).first().val() !== '2') {
+
+			return 'Wrong option deselected.';
+
+		}
+
+		
+
+		select.multiselect('deselect', ['2', '3']);
+
+		
+
+		if ($('option:selected', select).length > 0) {
+
+			return 'Just deselected two additional options - options not marked deselected.';
+
+		}
+
+		
+
+		if ($('ul.multiselect-container li.active', tr).length > 0) {
+
+			return 'Just deselected two additional options - list items not set unactive.';
+
+		}
+
+		
+
+		return false;
+
+	}($('#test-deselect-select'), $('#test-deselect-tr'));
+
+	
+
+	if (deselect) {
+
+		$('#test-deselect-tr').removeClass('success').addClass('danger');
+
+		$('#test-deselect-tr td').last().html(deselect);
+
+	}
+
+	
+
+	var maxHeight = function(select, tr) {
+
+		
+
+		select.multiselect({
+
+			maxHeight: 100
+
+		});
+
+		
+
+		var height = $('.multiselect-container', tr).css('max-height');
+
+		if (height !== '100px') {
+
+			return 'Max height not set correctly (set: ' + height + ').';
+
+		}
+
+		
+
+		return false;
+
+	}($('#test-max-height-select'), $('#test-max-height-tr'));
+
+	
+
+	if (maxHeight) {
+
+		$('#test-max-height-tr').removeClass('success').addClass('danger');
+
+		$('#test-max-height-tr td').last().html(maxHeight);
+
+	}
+
+});
+
+</script>
+
+</body> 
+

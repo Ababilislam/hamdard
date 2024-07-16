@@ -1,0 +1,274 @@
+{{extend 'layout.html'}}
+
+ 
+
+  <style type="text/css">
+
+ input[type=text], input[type=password],  select {
+    margin: 2px 0px 2px 0px;
+}
+
+div.error {
+    width: 170px;
+}
+
+#sm_promo_product_bonus_status{
+    width: 185px;
+}
+
+ </style>
+
+<script>
+	
+$(function(){
+	/*$("#sm_promo_product_bonus_from_date").attr("readonly",true);
+	$("#sm_promo_product_bonus_to_date").attr("readonly",true);*/
+	$("#sm_promo_product_bonus_product_id").attr("readonly",true);
+	$("#sm_promo_product_bonus_product_name").attr("readonly",true);
+	$("#sm_promo_product_bonus_min_qty").attr("readonly",true);
+	$("#sm_promo_product_bonus_bonus_product_id").attr("readonly",true);	
+	$("#sm_promo_product_bonus_bonus_product_name").attr("readonly",true);
+	$("#sm_promo_product_bonus_bonus_qty").attr("readonly",true);
+	$("#sm_promo_product_bonus_circular_number").attr("readonly",true);	
+	
+});
+	
+</script> 
+
+  <table width="100%"  border="0" cellspacing="0" cellpadding="0" style="background-color:#FFFFFF;" >
+
+  <tr height="30px" >
+
+    <td width="300"><span class="blackCatTitle">Product Bonus-Edit</span></td>
+
+	<form action="{{=URL(c='promotion',f='product_bonus',args=[page])}}" method="post">
+
+	<td width="500" align="right">	
+
+	<input name="" type="submit"  value="Back"/>	</td>
+
+	<td align="left">&nbsp;</td>
+
+	</form>
+
+  </tr>
+
+  <tr  height="1px" style="background-color:#CCCCCC;">	
+
+	<td width="300" align="left">	</td>
+
+	<td colspan="2" align="right">	</td>
+
+  </tr>
+
+  </table>
+
+  
+
+  
+
+  <table width="100%" height="500px"  border="0" cellspacing="0" cellpadding="0" class="page_color"  >
+
+  <tr height="100%"  style="vertical-align:top;">
+
+    <td>
+
+	<table width="100%"  border="0" cellpadding="0" cellspacing="0"  >
+
+      <tr>
+
+        <td width="10px">&nbsp;</td>
+
+        <td>&nbsp;</td>
+
+      </tr>
+
+      <tr>
+
+        <td>&nbsp;</td>
+
+        <td align="left">
+
+          <table width="800">
+
+            <tr>
+
+              <td width="485"><table width="400" class="blackCat">
+
+                {{=form.custom.begin}}
+
+                <tr>
+
+              <td width="130">From-Date</td>
+
+                  <td width="337">{{#=form.custom.widget.from_date}}<input type="text" id="from_date" name="from_date" value="{{=recordRows[0].from_date}}" readonly="readonly"/></td>
+
+                </tr>
+
+            <tr>
+
+              <td>To-Date</td>
+
+              <td>{{=form.custom.widget.to_date}}<!--<input type="text" id="to_date" name="to_date" value="{{#=recordRows[0].to_date}}" readonly="readonly"/>--></td>
+
+            </tr>
+
+            <tr>
+
+              <td>Product ID</td>
+
+              <td>{{=form.custom.widget.product_id}}</td>
+
+            </tr>
+
+            <tr>
+
+              <td>Product Name</td>
+
+              <td>{{=form.custom.widget.product_name}}</td>
+
+            </tr>
+
+            <tr>
+
+              <td>Minimum Qty</td>
+
+              <td>{{=form.custom.widget.min_qty}}</td>
+
+            </tr>
+
+            <tr>
+
+              <td></td>
+
+              <td></td>
+
+            </tr>
+
+            <tr>
+
+              <td></td>
+
+              <td></td>
+
+            </tr>
+
+            <tr>
+
+              <td></td>
+
+              <td></td>
+
+            </tr>
+
+            <tr>
+
+              <td></td>
+
+              <td></td>
+
+            </tr>
+
+              </table></td>
+
+              <td width="303"><table width="400" class="blackCat">
+
+                  <tr>
+
+                    <td>Bonus Product ID</td>
+
+                    <td>{{=form.custom.widget.bonus_product_id}}</td>
+
+                  </tr>
+
+                  <tr>
+
+                    <td>Bonus Product Name</td>
+
+                    <td>{{=form.custom.widget.bonus_product_name}}</td>
+
+                  </tr>
+                  
+                  <tr>
+                    <td>Bonus Qty</td>
+                    <td>{{=form.custom.widget.bonus_qty}}</td>
+                  </tr>
+                  <tr>
+                    <td>Circular Number</td>
+                    <td>{{=form.custom.widget.circular_number}}</td>
+                  </tr>
+                  <tr>
+
+                    <td>Status</td>
+
+                    <td>{{=form.custom.widget.status}}</td>
+
+                  </tr>
+
+                  <tr>
+
+                    <td>Delete</td>
+
+                    <td>{{=form.custom.deletable}}</td>
+
+                  </tr>
+
+                  <tr>
+
+                    <td>&nbsp;</td>
+
+                    <td>{{=form.custom.submit}}</td>
+
+                  </tr>
+
+                  <tr>
+
+                    <td></td>
+
+                    <td></td>
+
+                  </tr>
+
+                  <tr>
+
+                    <td></td>
+
+                    <td></td>
+
+                  </tr>
+
+                  <tr>
+
+                    <td></td>
+
+                    <td></td>
+
+                  </tr>
+
+                  <tr>
+
+                    <td></td>
+
+                    <td></td>
+
+                  </tr>
+
+                {{=form.custom.end}}
+
+              </table></td>
+
+            </tr>
+
+          </table>
+
+		  </td>
+
+      </tr>
+
+		  </table>
+
+	</td>
+
+  </tr>
+
+</table>

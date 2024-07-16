@@ -1,0 +1,120 @@
+{{extend 'layout_salesreport.html'}}
+<style>
+  #sm_search_date_from_dt,#sm_search_date_to_dt{
+    width: 100px;
+    height:30px;
+    padding: 0px 5px;
+  }
+  #btn_filter,#btn_all{
+    
+  }
+
+  .table tr:nth-child(even) {background-color: #d6d8db;}
+</style>
+<div class="table-responsive-sm">
+  <table class="table mb-0" >
+    <tbody>
+      <form action="{{=URL(c='sales_report',f='sales_report_zm_url',vars=dict(cid=cid,rep_id=rep_id,password=password,synccode=synccode,se_market_report=se_market_report,Suplevel_id=Suplevel_id))}}">
+        <input type="hidden" name="cid" value="{{=cid}}">
+        <input type="hidden" name="rep_id" value="{{=rep_id}}">
+        <input type="hidden" name="password" value="{{=password}}">
+        <input type="hidden" name="synccode" value="{{=synccode}}">
+        <input type="hidden" name="se_market_report" value="{{=se_market_report}}">
+        <input type="hidden" name="level_id" value="{{=Suplevel_id}}">
+        <tr class="bg-light">
+         <td style="border:0px solid #fff" class="table-responsive-sm">
+            Order Date </br> 
+            {{if session.from_dt!='' or  session.from_dt!='None'  :}}
+             <input class="date" id="sm_search_date_to_dt_2" name="to_dt_2" type="text" value="{{=session.from_dt}}">
+             {{else:}}
+             {{=search_form.custom.widget.to_dt_2}} </br>
+             {{pass}}
+             
+              {{if session.to_date!='' or  session.to_date!='None'  :}}
+             <input class="date" id="sm_search_date_to_dt_3" name="to_dt_3" type="text" value="{{=session.to_date}}">
+             {{else:}}
+              {{=search_form.custom.widget.to_dt_3}} </br>
+             {{pass}}
+           </td>
+ 
+          <td style="border:0px solid #fff;" class="table-responsive-sm">
+            <div class="form-group" style="margin-bottom:0px">
+            <input type="submit"  class="form-control form-control-sm bg-dark text-light" name="btn_filter" id="btn_filter" value="Filter" id="dateTo" />
+            </div>
+          </td>
+          <td style="border:0px solid #fff;" class="table-responsive-sm">
+            <div class="form-group" style="margin-bottom:0px">
+              <input type="submit"  class="form-control form-control-sm bg-dark text-light " name="btn_all" id="btn_all" value="All" id="dateTo" />
+            </div>
+          </td>
+      </tr>
+      </form>
+    </tbody>  
+  </table>
+
+  <table class="table table-striped table-hover table-bordered table-responsive-sm" > 
+    
+    <thead class="table-dark">
+      <th scope="col">Order Date</th>
+        <th scope="col">Rigion</th>
+        <th scope="col">Visit Count</th>
+        <th scope="col">Order Count</th>
+        <th scope="col" class="text-right">Amount</th>
+        <th scope="col"></th>
+    </thead>
+    <tbody>
+      {{for i in range(len(records_ov)):
+        records_ov_dict=records_ov[i]   
+        order_date=str(records_ov_dict["order_date"])      
+        level1_name=str(records_ov_dict["level1_name"])      
+        level1_id=str(records_ov_dict["level1_id"])      
+        area_name=str(records_ov_dict["area_name"])      
+        area_id=str(records_ov_dict["area_id"])       
+        totalprice=0  
+      }}
+      <tr class="table-primary">
+        <th scope="row" class="text-center">{{=order_date}}</th>
+        <td class="text-center" >{{=level1_name}}|{{=level1_id}}</td>
+        
+
+        {{qset_vc_str="SELECT count(sl) as Vcount FROM sm_order_head WHERE cid =  '"+ str(cid) +"' AND order_date =  '"+ str(order_date) +"'  AND level1_id = '"+str(level1_id)+"' GROUP BY level1_id" 
+        #=qset_vc_str
+        reportRows_count=db.executesql(qset_vc_str,as_dict = True)
+        # return  qset_vc_str
+        visit_count=0
+        for reportRows_count in reportRows_count:
+            visit_count=reportRows_count['Vcount']
+        pass
+
+        qset_oc_str="SELECT count(sl) as Ocount FROM sm_order_head WHERE cid =  '"+ str(cid) +"' AND field1 = 'ORDER' AND order_date =  '"+ str(order_date) +"'  AND level1_id = '"+str(level1_id)+"' GROUP BY level1_id" 
+        reportRows_order_count=db.executesql(qset_oc_str,as_dict = True)
+
+        order_count=0
+        for reportRows_order_count in reportRows_order_count:
+            order_count=reportRows_order_count['Ocount']
+        pass
+
+        qset_tp_str="SELECT SUM((sm_order.price) * ( sm_order.quantity ) ) AS totalprice FROM sm_order WHERE cid =  '"+ str(cid) +"'  AND order_date =  '"+ str(order_date) +"'  AND level1_id = '"+str(level1_id)+"' GROUP BY level1_id" 
+        reportRows_tp_count=db.executesql(qset_tp_str,as_dict = True)
+
+        totalprice=0
+        for reportRows_tp_count in reportRows_tp_count:
+            totalprice=reportRows_tp_count['totalprice']
+        pass
+     
+        }}
+        <td class="text-center">{{=visit_count}}</td>
+        <td class="text-center">{{=order_count}}</td>
+        <td class="text-right">
+        {{#=int(round(totalprice))}}
+        {{=totalprice}}
+      </td>
+        <td class="text-center"><a style="text-decoration: none;font-size: 20px"  href="{{=URL(c='sales_report',f='sales_report_zm_rsm_url', vars=dict(cid=cid,rep_id=rep_id,password=password,synccode=synccode,se_market_report=se_market_report,order_date=order_date,level1_id=level1_id))}}" target="_blank">
+           &raquo; 
+        </a>
+        </td>
+      </tr>
+      {{pass}}
+    </tbody>
+  </table>
+</div>

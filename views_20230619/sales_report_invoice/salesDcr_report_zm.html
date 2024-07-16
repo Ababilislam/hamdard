@@ -1,0 +1,86 @@
+{{extend 'layout_salesreport.html'}}
+<style>
+  #sm_search_date_to_dt_2,#sm_search_date_to_dt{
+    width: 100px;
+    height:30px;
+    padding: 0px 5px;
+  }
+  #btn_filter,#btn_all{
+    
+  }
+  .table tr:nth-child(even) {background-color: #d6d8db;}
+</style>
+<div class="table-responsive-sm">
+  <table class="table mb-0 " >
+    <tbody>
+      <form action="{{=URL(c='sales_report',f='salesDcr_report_zm_url',vars=dict(cid=cid,rep_id=rep_id,password=password,synccode=synccode))}}">
+        <input type="hidden" name="cid" value="{{=cid}}">
+        <input type="hidden" name="rep_id" value="{{=rep_id}}">
+        <input type="hidden" name="password" value="{{=password}}">
+        <input type="hidden" name="synccode" value="{{=synccode}}">
+        <!-- <input type="hidden" name="repArea_id" value="{{#=repArea_id}}"> -->
+        <tr class="bg-light">
+          <td style="border:0px solid #fff" class="table-responsive-sm">
+                  Date From {{=search_form.custom.widget.to_dt_2}}
+                   To {{=search_form.custom.widget.to_dt}}
+          </td>
+
+          <td style="border:0px solid #fff;" class="table-responsive-sm">
+            <div class="form-group" style="margin-bottom:0px">
+            <input type="submit"  class="form-control form-control-sm bg-dark text-light" name="btn_filter" id="btn_filter" value="Filter" id="dateTo" />
+            </div>
+          </td>
+          <td style="border:0px solid #fff;" class="table-responsive-sm">
+            <div class="form-group" style="margin-bottom:0px">
+              <input type="submit"  class="form-control form-control-sm bg-dark text-light " name="btn_all" id="btn_all" value="All" id="dateTo" />
+            </div>
+        </td>
+      </tr>
+      </form>
+    </tbody>  
+  </table>
+
+  <table class="table table-striped table-hover table-bordered table-responsive-sm" style="padding: 0px"> 
+    
+    <thead class="table-dark">
+      
+        <th scope="col">Division</th>
+        <th scope="col">Visit Count</th>
+        <!-- <th scope="col">Successful DCR</th> -->
+        <th scope="col"></th>
+    </thead>
+    <tbody>
+    
+    {{for i,record in enumerate(records):
+        
+        doc_id_c=record[(db.sm_doctor_visit.doc_id.count())]
+        doc_id=record[(db.sm_doctor_visit.rep_id)]+'|'+str(record[(db.sm_doctor_visit.visit_date)])
+        visit_date=record[(db.sm_doctor_visit.visit_date)]
+        route_id=record[(db.sm_doctor_visit.level0_id)]
+        route_name=record[(db.sm_doctor_visit.level0_name)]
+        doc_count=0
+        
+        if [s for s in vChecklist if doc_id in s]:
+            index_element = vChecklist.index(doc_id)           
+            doc_count=vCountList[index_element]
+        pass
+      
+        
+
+      }}
+
+      <tr class="table-primary">
+        <!-- <th scope="row" class="text-center">{{#=visit_date}}</th> -->
+        <td class="text-center" >{{=route_name}}|{{=route_id}}</td>
+        <td class="text-center">{{=doc_id_c}}</td>
+        <!-- <td class="text-center">{{#=doc_count }}</td> -->
+        <td class="text-right">
+          <a style="text-decoration: none;font-size: 20px"  href="{{=URL(c='sales_report',f='salesDcr_report_rsm_url', vars=dict(cid=cid,rep_id=rep_id,password=password,synccode=synccode,visit_date=visit_date,route_id=route_id))}}" >
+          &raquo;
+        </a>
+        </td>
+      </tr>
+      {{pass}}
+    </tbody>
+  </table>
+</div>

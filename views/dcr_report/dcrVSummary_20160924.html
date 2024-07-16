@@ -1,0 +1,187 @@
+{{extend 'layout_sample_report.html'}}
+<html>
+<head>
+<script type="text/javascript">
+function print_page()
+  {
+    window.print()
+  }
+</script>
+
+</head>
+<body>
+<table width="900px" style="border:none; text-align:center; font-weight:bold;" >
+  <tr >
+    <td width="100" >&nbsp;</td>
+    <td align="left" style="font-size:18px" ></td>
+    <td width="100" ><img src="{{=URL('static','images/comp_logo1.png')}}" alt=""  height="30px"/></td>
+  </tr>
+  
+
+</table>
+<div style="background-color:#333; height:1px; font-size:1px"></div>
+<table width="900px" style="border:none;" >
+  <tr >
+    <td >Date Range</td>
+    <td >&nbsp;</td>
+    <td >{{=date_from}} - {{=date_to}}</td>
+    <td >&nbsp;</td>
+    <td >&nbsp;</td>
+    <td width="266" >&nbsp;</td>
+  </tr>
+  <tr >
+    <td width="90" > Depot/Branch</td>
+    <td width="10" >:</td>
+    <td width="438" ><span style="border-right-width:3px;">{{=depot_id}}|{{=depot_name}}</span></td>
+    <td width="65" >MSO</td>
+    <td width="3" >:</td>
+    <td >{{=mso_name}}|{{=mso_id}}</td>
+  </tr>
+  <tr >
+    <td >RSM</td>
+    <td >&nbsp;</td>
+    <td ><span style="border-right-width:3px;">{{=rsm_id}}
+      {{=rsm_name}}</span></td>
+    <td >Product</td>
+    <td >:</td>
+    <td >{{=product_name}}|{{=product_id}}</td>
+  </tr>
+  <tr >
+    <td >FM</td>
+    <td >:</td>
+    <td ><span style="border-right-width:3px;">{{=fm_id}}
+      {{=fm_name}}</span></td>
+    <td >Category</td>
+    <td >:</td>
+    <td >{{=category}}</td>
+  </tr>
+  <tr >
+    <td >RT</td>
+    <td >:</td>
+    <td ><span style="border-right-width:3px;">{{=tr_id}}
+      {{=tr_name}}</span></td>
+    <td >&nbsp;</td>
+    <td >&nbsp;</td>
+    <td >&nbsp;</td>
+  </tr>
+</table>
+<!--<table width="900px;"> <tr><td style="text-align:right"><a href="{{#=URL(c='analysis',f='downloadVisitList',vars=dict(fromDate=fromDate,toDate=toDate,regionValue=regionValue,areaValue=areaValue,territoryValue=territoryValue,marketValue=marketValue,repCM=repCM))}}" >Downlaod</a></td></tr></table>-->
+
+<table width="700px" cellspacing="1" cellpadding="1">
+
+  <tr height="10px"></tr>
+	<tr>
+		<td>
+			<table width="900" border="1" cellpadding="1" cellspacing="1" class="sample_border" >                
+                <tr align="left" class="blackCatHead" height="20px" ;  style="font-size:12px">
+                  <td  rowspan="2"  >VSL</td>
+                  <td rowspan="2"  >Visit Date</td>
+                  <td width="150px" rowspan="2"  >Depot</td>
+                  <td colspan="2" align="center" >Visit By</td>
+                  <td colspan="2" align="center">Doctor</td>
+                  <td align="center">Details</td>
+              </tr>
+                <tr align="left" class="blackCatHead" height="20px" ;  style="font-size:12px">
+                  <td  > ID</td>
+                  <td >Name</td>
+                  <td  >ID</td>
+                  <td   >Name</td>
+                  <td  >&nbsp;</td>
+                </tr>
+                {{for i,record in enumerate(records):}}
+                   
+                     {{ if (i % 2 == 0):}}
+              <tr  align="left" style="vertical-align:middle; font-size:12px; background:#FBFBFB;">
+                {{else:}}
+              <tr  align="left" style="vertical-align:middle; font-size:12px; background:#F5F5F5;">
+                
+				{{pass}}
+                    
+                        <td  >{{=record.sm_doctor_visit.id}}</td>
+                         
+                <td  >{{=record.sm_doctor_visit.visit_dtime}}</td>
+                <td  >{{=record.sm_doctor_visit.depot_id}}<br>
+                          {{=record.sm_doctor_visit.route_id}}<br>
+                  <strong>Desc:</strong>{{=record.sm_level.territory_des}} </td>
+                        <td  >{{=record.sm_doctor_visit.rep_id}}</td>
+                        <td  >{{=record.sm_doctor_visit.rep_name}}<br> 
+                        <strong>Visited With: </strong>{{=record.sm_doctor_visit.note}}</td>
+                        <td  >{{=record.sm_doctor_visit.doc_id}}</td>
+                        <td >{{=record.sm_doctor_visit.doc_name}}</td>
+                        <td >
+                        {{if record.sm_doctor_visit.giftnsample!='':}}                        
+                            {{dataList=str(record.sm_doctor_visit.giftnsample).split('rdsep')}}
+                            {{if len(dataList)==4:}}
+                            	{{propList=str(dataList[0]).split('fdsep')}}
+                            	{{giftList=str(dataList[1]).split('fdsep')}}
+                                {{sampleList=str(dataList[2]).split('fdsep')}}
+                                {{ppmList=str(dataList[3]).split('fdsep')}}
+                            	
+                                {{if str(dataList[0])!='' and len(propList)>0:}}
+                                	<table  border="1" cellpadding="1" cellspacing="1" class="sample_border" >
+                                    <tr  class="blackCat" style="background-color:#F5F5F5"><td width="80"><font color="#0000DD">Proposed:</font> ID</td><td >Name</td></tr>
+                                    {{for m in range(len(propList)):}}
+                                        {{propDataList=str(propList[m]).split(',')}}
+                                    
+                                        {{if len(propDataList)==2:}}<tr style="background-color:#FBFBFB" ><td >{{=propDataList[0]}}</td><td >{{=propDataList[1]}}</td></tr>{{pass}}
+                                        
+                                    {{pass}}
+                                    </table>
+                                {{pass}}
+                                
+                                
+                                {{if str(dataList[1])!='' and len(giftList)>0:}}
+                                	<table  border="1" cellpadding="1" cellspacing="1" class="sample_border" >
+                                    <tr  class="blackCat" style="background-color:#F5F5F5"><td width="80"><font color="#34B6E7">Gift:</font> ID</td><td >Name</td><td width="30">Qty</td></tr>
+                                    {{for n in range(len(giftList)):}}
+                                        {{giftDataList=str(giftList[n]).split(',')}}
+                                    
+                                        {{if len(giftDataList)==3:}}<tr  style="background-color:#FBFBFB" ><td >{{=giftDataList[0]}}</td><td >{{=giftDataList[1]}}</td><td >{{=giftDataList[2]}}</td></tr>{{pass}}
+                                        
+                                    {{pass}}
+                                    </table>
+                                {{pass}}
+                                
+                                
+                                {{if str(dataList[2])!='' and len(sampleList)>0:}}
+                                	<table border="1" cellpadding="1" cellspacing="1" class="sample_border" >
+                                    <tr  class="blackCat" style="background-color:#F5F5F5"><td width="80"><font color="#A40052">Sample:</font> ID</td><td >Name</td><td width="30" >Qty</td></tr>
+                                    {{for p in range(len(sampleList)):}}
+                                        {{sampleDataList=str(sampleList[p]).split(',')}}
+                                    
+                                        {{if len(sampleDataList)==3:}}<tr style="background-color:#FBFBFB" ><td >{{=sampleDataList[0]}}</td><td >{{=sampleDataList[1]}}</td><td >{{=sampleDataList[2]}}</td></tr>{{pass}}
+                                        
+                                    {{pass}}
+                                    </table>
+                                {{pass}}
+                                
+                                
+                                {{if str(dataList[3])!='' and len(ppmList)>0:}}
+                                	<table border="1" cellpadding="1" cellspacing="1" class="sample_border" >
+                                    <tr  class="blackCat" style="background-color:#F5F5F5"><td width="80"><font color="#00954A">PPM:</font> ID</td><td >Name</td><td width="30" >Qty</td></tr>
+                                    {{for q in range(len(ppmList)):}}
+                                        {{ppmDataList=str(ppmList[q]).split(',')}}
+                                    
+                                        {{if len(ppmDataList)==3:}}<tr style="background-color:#FBFBFB"  ><td >{{=ppmDataList[0]}}</td><td >{{=ppmDataList[1]}}</td><td >{{=ppmDataList[2]}}</td></tr>{{pass}}
+                                        
+                                    {{pass}}
+                                    </table>
+                                {{pass}}
+                                
+                                
+                                
+                            {{pass}}
+                        {{pass}}
+                        </td>
+              </tr>
+                    {{pass}}
+          </table>
+		  
+		</td>
+			
+	</tr>
+</table>
+
+
+</body>
+</html>

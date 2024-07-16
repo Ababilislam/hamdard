@@ -1,0 +1,403 @@
+{{extend 'layout_sales_report_land.html'}}
+
+<html>
+
+<head>
+
+<script type="text/javascript">
+
+function print_page()
+
+  {
+
+    window.print()
+
+  }
+
+</script>
+
+
+
+</head>
+
+<body>
+
+
+<table width="1100px;"> <tr><td style="text-align:right"><!--<a href="{{=URL(c='report',f='downloadGoodsReceivedSummary',vars=dict(date_from=date_from,date_to=date_to,depot_id=depot_id,depot_name=depot_name,store_id=store_id,store_name=store_name,customer_id=customer_id,customer_name=customer_name,mso_id=mso_id,mso_name=mso_name))}}" >Downlaod</a>--></td></tr></table>
+<table width="1100px" style="border:none;" >
+  <tr >
+    <td >Date Range</td>
+    <td >&nbsp;</td>
+    <td >{{=date_from}} - {{=date_to}}</td>
+    <td >&nbsp;</td>
+    <td >&nbsp;</td>
+    <td width="266" >&nbsp;</td>
+  </tr>
+  <tr >
+    <td width="90" > Depot/Branch</td>
+    <td width="10" >:</td>
+    <td width="424" ><span >{{=depot_id}}|{{=depot_name}}</span></td>
+    <td width="79" >Customer</td>
+    <td width="3" >:</td>
+    <td ><span >{{=customer_id}}
+      {{=customer_name}}</span></td>
+  </tr>
+  <tr >
+    <td >Store</td>
+    <td >:</td>
+    <td ><span >{{=store_id}}|{{=store_name}}</span></td>
+    <td >MSO</td>
+    <td >:</td>
+    <td ><span >{{=mso_id}}
+      {{=mso_name}}</span></td>
+  </tr>
+</table>
+<table width="900px" style="border:none; text-align:center; font-weight:bold;" >
+  <tr >
+    <td width="100" >&nbsp;</td>
+    <td align="center" ><span style="border-bottom:1px solid #333;">Cause of Return Analysis </span></td>
+    <td width="100" ><img  height="30px" src="{{=URL('static','images/comp_logo1.png')}}"/></td>
+  </tr>
+</table>
+</br>
+			<table width="1100" border="1" cellpadding="1" cellspacing="1" class="sample_border" >                
+
+                <tr align="left" class="blackCatHead" height="20px" ;  style="font-size:12px">
+
+                  
+
+                  
+                  <td   align="center" >InvoiceDate</td>
+                  <td   align="center">Doc/Tp</td>
+                  <td    align="center">Invoice</td>
+                  
+                  <td    align="center">Return</td>
+                  <td   style=" font-size:11px" align="center">NextDay Delivery</td>
+                  <td   style=" font-size:11px" align="center">Cancelled<br>&CashShort</td>
+                  <td   style=" font-size:11px" align="center">Shop Closed</td>
+                  <td   style=" font-size:11px" align="center">Product Short</td>
+                  <td  align="center"  style=" font-size:11px">Not Delivered</td>
+                  <td  align="center"  style=" font-size:11px">Not Ordered</td>
+                  <td  align="center"  style=" font-size:11px">Computer Mistake</td>
+                  <td  align="center"  style=" font-size:11px">Part Sale</td>
+                  <td  align="center"  style=" font-size:11px">Not Mentioned</td>
+              </tr>
+				{{dp_past=''}}
+                
+                {{
+                idCount=0
+                Ttotal_ret_count=0
+                Tret_count_ndd=0
+                Tret_count_cacShop=0
+                Tret_count_sclosed=0
+                Tret_count_pShort=0
+                Tret_count_nd=0
+                Tret_count_no=0
+                Tret_count_cm=0
+                Tret_count_psale=0
+                Tret_count_nm=0
+                
+                Ttotal_amount=0
+                Ttotal_retamn=0
+                Tret_amn_ndd=0
+                Tret_amn_cacShop=0
+                Tret_amn_sclosed=0
+                Tret_amn_pShort=0
+                Tret_amn_nd=0
+                Tret_amn_no=0
+                Tret_amn_cm=0
+                Tret_amn_psale=0
+                Tret_amn_nm=0
+                }}
+                {{for i,record in enumerate(records_inv):}}
+				 {{
+                srt_get=''
+                ret_reason= ''
+                ret_count_sclosed= 0
+                ret_amn_sclosed=0.0
+                ret_count_cacShop= 0
+                ret_amn_cacShop=0.0
+                ret_count_ndd= 0
+                ret_amn_ndd=0.0
+                ret_count_pShort= 0
+                ret_amn_pShort=0.0
+                ret_count_nd= 0
+                ret_amn_nd=0.0
+                ret_count_no= 0
+                ret_amn_no=0.0
+                ret_count_cm= 0
+                ret_amn_cm=0.0
+                ret_count_psale= 0
+                ret_amn_psale=0.0
+                ret_count_nm= 0
+                ret_amn_nm=0.0
+                
+                }}
+                
+              {{invoice_date =str(record[db.sm_invoice_head.invoice_date])
+              	splitstr='<'+str(record[db.sm_invoice_head.d_man_id])+'|'+invoice_date+'>'
+              #=splitstr
+               if ret_str.find(splitstr)!=-1:
+                srt_get1= ret_str.split(splitstr)[1]
+               # =srt_get1
+                srt_get= str(record[db.sm_invoice_head.d_man_id])+'|'+invoice_date+srt_get1.split('<')[0]
+               # =srt_get
+                pass
+                }}
+                
+                
+                {{
+                reason='CANCELLED AND CASH SHORT'
+                if (srt_get.find(reason)!=-1):
+                	reasonStr=srt_get.split(reason)[1]
+                    
+                    ret_count_cacShop= int(reasonStr.split('fdfd')[1])
+                    ret_amn_cacShop= float(reasonStr.split('fdfd')[2])
+                    #=ret_amn_cacShop
+                pass
+
+                }}
+               {{
+                reason='SHOP CLOSED'
+                if (srt_get.find(reason)!=-1):
+                	reasonStr=srt_get.split(reason)[1]
+                    ret_count_sclosed= int(reasonStr.split('fdfd')[1])
+                    ret_amn_sclosed= float(reasonStr.split('fdfd')[2])
+                pass
+                }}
+                {{
+                reason='NEX DAY DELIVERY'
+                if (srt_get.find(reason)!=-1):
+                	reasonStr=srt_get.split(reason)[1]
+                    ret_count_ndd= int(reasonStr.split('fdfd')[1])
+                    ret_amn_ndd= float(reasonStr.split('fdfd')[2])
+                pass
+                }}
+				 {{
+                reason='PRODUCT SHORT'
+                if (srt_get.find(reason)!=-1):
+                	reasonStr=srt_get.split(reason)[1]
+                    ret_count_pShort= int(reasonStr.split('fdfd')[1])
+                    ret_amn_pShort= float(reasonStr.split('fdfd')[2])
+                pass
+                }}
+                 {{
+                reason='NOT DELIVERED'
+                if (srt_get.find(reason)!=-1):
+                	reasonStr=srt_get.split(reason)[1]
+                    ret_count_nd= int(reasonStr.split('fdfd')[1])
+                    ret_amn_nd= float(reasonStr.split('fdfd')[2])
+                pass
+                }}
+                 {{
+                reason='NOT ORDERED'
+                if (srt_get.find(reason)!=-1):
+                	reasonStr=srt_get.split(reason)[1]
+                    ret_count_no= int(reasonStr.split('fdfd')[1])
+                    ret_amn_no= float(reasonStr.split('fdfd')[2])
+                pass
+                }}
+                 {{
+                reason='COMPUTER MISTAKE'
+                if (srt_get.find(reason)!=-1):
+                	reasonStr=srt_get.split(reason)[1]
+                    ret_count_cm= int(reasonStr.split('fdfd')[1])
+                    ret_amn_cm= float(reasonStr.split('fdfd')[2])
+                pass
+                }}
+                 {{
+                reason='PART SALE'
+                if (srt_get.find(reason)!=-1):
+                	reasonStr=srt_get.split(reason)[1]
+                    ret_count_psale= int(reasonStr.split('fdfd')[1])
+                    ret_amn_psale= float(reasonStr.split('fdfd')[2])
+                pass
+                }}
+                 {{
+                reason='NOT MENTIONED'
+                if (srt_get.find(reason)!=-1):
+                	reasonStr=srt_get.split(reason)[1]
+                    ret_count_nm= int(reasonStr.split('fdfd')[1])
+                    ret_amn_nm= float(reasonStr.split('fdfd')[2])
+                pass
+                }}
+				{{total_ret_count=ret_count_cacShop+ret_count_sclosed+ret_count_ndd+ret_count_pShort+ret_count_nd+ret_count_no+ret_count_cm+ret_count_psale+ret_count_nm
+                
+
+  total_retamn=ret_amn_cacShop+ret_amn_sclosed+ret_amn_ndd+ret_amn_pShort+ret_amn_nd+ret_amn_no+ret_amn_cm+ret_amn_psale+ret_amn_nm
+                }}
+
+               
+                {{if ( dp_past!=record[db.sm_invoice_head.d_man_id]):}}
+
+              <tr  align="left" class="blackCat"  style="vertical-align:middle; font-size:11px; background-color:#FFF; font-size:16px">
+                <td colspan="14"  style=" border-left:hidden; border-right:hidden" >Delivery Person: {{=record[db.sm_invoice_head.d_man_id]}}-{{=record[db.sm_invoice_head.d_man_name]}}</td>
+              </tr>
+			  {{pass}}
+               
+               
+           	  <tr  align="left" style="vertical-align:middle; font-size:12px; background:#F5F5F5;">
+                
+				
+                <td rowspan="2"  align="center">{{#=record[db.sm_invoice_head.invoice_date]}}
+     {{import datetime            
+     =record[db.sm_invoice_head.invoice_date].strftime('%d-%b-%Y')           
+	 }}</td>
+               
+                
+                <td  style=" " align="center">Document</td>
+                <td   align="center">{{=record[db.sm_invoice_head.id.count()]}}{{idCount=idCount+record[db.sm_invoice_head.id.count()]}}</td>
+                <td  align="center">{{=total_ret_count}}{{Ttotal_ret_count=Ttotal_ret_count+total_ret_count}}</td>
+                <td  align="center">{{=ret_count_ndd}}{{Tret_count_ndd=Tret_count_ndd+ret_count_ndd}}</td>
+                <td  align="center">{{=ret_count_cacShop}}{{Tret_count_cacShop=Tret_count_cacShop+ret_count_cacShop}}</td>
+                <td  align="center">{{=ret_count_sclosed}}{{Tret_count_sclosed=Tret_count_sclosed+ret_count_sclosed}}</td>
+                <td  align="center">{{=ret_count_pShort}}{{Tret_count_pShort=Tret_count_pShort+ret_count_pShort}} </td>
+                <td  align="center"> {{=ret_count_nd}}{{Tret_count_nd=Tret_count_nd+ret_count_nd}} </td>
+                <td  align="center"> {{=ret_count_no}}{{Tret_count_no=Tret_count_no+ret_count_no}}</td>
+                <td  align="center">{{=ret_count_cm}} {{Tret_count_cm=Tret_count_cm+ret_count_cm}}</td>
+                <td  align="center"> {{=ret_count_psale}} {{Tret_count_psale=Tret_count_psale+ret_count_psale}}</td>
+                <td  align="center">{{=ret_count_nm}}{{Tret_count_nm=Tret_count_nm+ret_count_nm}}</td>
+              </tr>
+              <tr  align="left" style="vertical-align:middle; font-size:12px; background:#F5F5F5;">
+                <td   align="center" >TP</td>
+                <td   align="center">{{='{:20,.2f}'.format(record[db.sm_invoice_head.total_amount.sum()])}}
+                {{Ttotal_amount=Ttotal_amount+record[db.sm_invoice_head.total_amount.sum()]}}</td>
+                <td  align="center">{{='{:20,.2f}'.format(total_retamn)}}
+                {{Ttotal_retamn=Ttotal_retamn+total_retamn}}</td>
+                <td  align="center">{{='{:20,.2f}'.format(ret_amn_ndd)}} 
+                {{Tret_amn_ndd=Tret_amn_ndd+ret_amn_ndd}}</td>
+                <td  align="center"> {{='{:20,.2f}'.format(ret_amn_cacShop)}}
+                {{Tret_amn_cacShop=Tret_amn_cacShop+ret_amn_cacShop}} </td>
+                <td  align="center"> {{='{:20,.2f}'.format(ret_amn_sclosed)}} 
+                {{Tret_amn_sclosed=Tret_amn_sclosed+ret_amn_sclosed}}</td>
+                <td  align="center">{{='{:20,.2f}'.format(ret_amn_pShort)}}		
+                {{Tret_amn_pShort=Tret_amn_pShort+ret_amn_pShort}}	    </td>
+                <td  align="center"> {{='{:20,.2f}'.format(ret_amn_nd)}}	
+                {{Tret_amn_nd=Tret_amn_nd+ret_amn_nd}}		    </td>
+                <td  align="center">{{='{:20,.2f}'.format(ret_amn_no)}} 
+                {{Tret_amn_no=Tret_amn_no+ret_amn_no}}</td>
+                <td  align="center"> {{='{:20,.2f}'.format(ret_amn_cm)}}
+                {{Tret_amn_cm=Tret_amn_cm+ret_amn_cm}} </td>
+                <td  align="center"> {{='{:20,.2f}'.format(ret_amn_psale)}}
+                {{Tret_amn_psale=Tret_amn_psale+ret_amn_psale}} </td>
+                <td  align="center"> {{='{:20,.2f}'.format(ret_amn_nm)}} 
+                {{Tret_amn_nmn=Tret_amn_nm+ret_amn_nm}}</td>
+              </tr>
+              
+				{{dp_past=record[db.sm_invoice_head.d_man_id]}}
+                {{pass}}
+
+             <!-- </table>-->
+              
+              <!--=========================================================================-->
+              
+              <!--<table width="1100" border="1" cellpadding="1" cellspacing="1" class="sample_border" >  -->              
+
+                <tr align="left" class="blackCatHead" height="20px" ;  style="font-size:12px">
+
+                  
+
+                  
+                  
+
+             
+			  
+               
+               
+           	  <tr  align="left" style="vertical-align:middle; font-size:12px; background:#F5F5F5;">
+                
+				
+                <td rowspan="2"  align="center">Summary</td>
+               
+                
+                <td  style=" " align="center">Document</td>
+                <td   align="center">{{=idCount}}</td>
+                <td  align="center">{{=Ttotal_ret_count}}</td>
+                <td  align="center">{{=Tret_count_ndd}}</td>
+                <td  align="center">{{=Tret_count_cacShop}}</td>
+                <td  align="center">{{=Tret_count_sclosed}}</td>
+                <td  align="center">{{=Tret_count_pShort}} </td>
+                <td  align="center"> {{=Tret_count_nd}} </td>
+                <td  align="center"> {{=Tret_count_no}}</td>
+                <td  align="center">{{=Tret_count_cm}} </td>
+                <td  align="center"> {{=Tret_count_psale}} </td>
+                <td  align="center">{{=Tret_count_nm}}</td>
+              </tr>
+              <tr  align="left" style="vertical-align:middle; font-size:12px; background:#F5F5F5;">
+                <td   align="center" >TP</td>
+                <td   align="center">{{='{:20,.2f}'.format(Ttotal_amount)}}</td>
+                <td  align="center">{{='{:20,.2f}'.format(Ttotal_retamn)}}</td>
+                <td  align="center">{{='{:20,.2f}'.format(Tret_amn_ndd)}} </td>
+                <td  align="center"> {{='{:20,.2f}'.format(Tret_amn_cacShop)}} </td>
+                <td  align="center"> {{='{:20,.2f}'.format(Tret_amn_sclosed)}} </td>
+                <td  align="center">{{='{:20,.2f}'.format(Tret_amn_pShort)}}			    </td>
+                <td  align="center"> {{='{:20,.2f}'.format(Tret_amn_nd)}}			    </td>
+                <td  align="center">{{='{:20,.2f}'.format(Tret_amn_no)}} </td>
+                <td  align="center"> {{='{:20,.2f}'.format(Tret_amn_cm)}} </td>
+                <td  align="center"> {{='{:20,.2f}'.format(Tret_amn_psale)}} </td>
+                <td  align="center"> {{='{:20,.2f}'.format(Tret_amn_nm)}} </td>
+              </tr>
+              
+              {{
+              Ttotal_retamnP=0
+              Tret_amn_nddP=0
+              Tret_amn_cacShopP=0
+              Tret_amn_sclosedP=0
+              Tret_amn_pShortP=0
+              Tret_amn_ndP=0
+              Tret_amn_noP=0
+              Tret_amn_cmP=0
+              Tret_amn_psaleP=0
+              Tret_amn_nmP=0
+              
+              Ttotal_retamnP=(Ttotal_retamn/Ttotal_amount)*100
+              Tret_amn_nddP=(Tret_amn_ndd/Ttotal_amount)*100
+              Tret_amn_cacShopP=(Tret_amn_cacShop/Ttotal_amount)*100
+              Tret_amn_sclosedP=(Tret_amn_sclosed/Ttotal_amount)*100
+              Tret_amn_pShortP=(Tret_amn_pShort/Ttotal_amount)*100
+              Tret_amn_ndP=(Tret_amn_nd/Ttotal_amount)*100
+              Tret_amn_noP=(Tret_amn_no/Ttotal_amount)*100
+              Tret_amn_cmP=(Tret_amn_cm/Ttotal_amount)*100
+              Tret_amn_psaleP=(Tret_amn_psale/Ttotal_amount)*100
+              Tret_amn_nmP=(Tret_amn_nm/Ttotal_amount)*100
+
+			 }}
+              <tr  align="left" style="vertical-align:middle; font-size:12px; background:#F5F5F5;">
+                <td  align="center" style="border-left:hidden; border-bottom:hidden; background-color:#FFF">&nbsp;</td>
+                <td   align="center" >Return%</td>
+                <td   align="center">&nbsp;</td>
+                <td  align="center">{{='{:20,.2f}'.format(Ttotal_retamnP)}}%</td>
+                <td  align="center">{{='{:20,.2f}'.format(Tret_amn_nddP)}}%</td>
+                <td  align="center">{{='{:20,.2f}'.format(Tret_amn_cacShopP)}}%</td>
+                <td  align="center">{{='{:20,.2f}'.format(Tret_amn_sclosedP)}}%</td>
+                <td  align="center">{{='{:20,.2f}'.format(Tret_amn_pShortP)}}%</td>
+                <td  align="center">{{='{:20,.2f}'.format(Tret_amn_ndP)}}%</td>
+                <td  align="center">{{='{:20,.2f}'.format(Tret_amn_noP)}}%</td>
+                <td  align="center">{{='{:20,.2f}'.format(Tret_amn_cmP)}}%</td>
+                <td  align="center">{{='{:20,.2f}'.format(Tret_amn_psaleP)}}%</td>
+                <td  align="center">{{='{:20,.2f}'.format(Tret_amn_nmP)}}%</td>
+              </tr>
+              
+				
+
+              </table>
+              <!--====================================================================================-->
+              
+<p>&nbsp;</p>
+			<table width="1100px" >
+			  <tr>
+			    <td width="411" align="center">__________________</td>
+			    <td width="225" align="center">&nbsp;</td>
+			    <td width="248" align="left">________________________________</td>
+		      </tr>
+			  <tr>
+			    <td width="411" align="center"><strong>Printed By</strong></td>
+			    <td width="225" align="right">for</td>
+			    <td width="248" align="left"><strong>{{=session.cName}}</strong></td>
+		      </tr>
+</table>
+<p>&nbsp;</p>
+    </body>
+
+</html>
+

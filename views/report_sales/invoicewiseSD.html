@@ -1,0 +1,226 @@
+{{extend 'layout_sales_report.html'}}
+
+<html>
+
+<head>
+<style>
+ #wrapper{ width:auto;}
+</style> 
+<script type="text/javascript">
+
+function print_page()
+
+  {
+
+    window.print()
+
+  }
+
+</script>
+
+
+
+</head>
+
+<body>
+
+
+
+
+
+
+
+<table width="900px" style="border:none;" >
+		  <tr >
+		    <td >Date Range</td>
+		    <td >&nbsp;</td>
+		    <td >{{=date_from}} - {{=date_to}}</td>
+		    <td >&nbsp;</td>
+		    <td >&nbsp;</td>
+		    <td width="266" >&nbsp;</td>
+	      </tr>
+		  <tr >
+		    <td width="90" > Depot/Branch</td>
+		    <td width="10" >:</td>
+		    <td width="438" ><span >{{=depot_id}}|{{=depot_name}}</span></td>
+		    <td width="65" >Customer</td>
+		    <td width="3" >:</td>
+		    <td ><span >{{=customer_id}}
+		      {{=customer_name}}</span></td>
+	      </tr>
+		  <tr >
+		    <td >Store</td>
+		    <td >:</td>
+		    <td ><span >{{=store_id}}|{{=store_name}}</span></td>
+		    <td >MSO</td>
+		    <td >:</td>
+		    <td ><span >{{=mso_id}}
+		      {{=mso_name}}</span></td>
+	      </tr>
+		  <tr >
+		    <td >Teritory</td>
+		    <td >:</td>
+		    <td ><span >{{=teritory_id}}
+		      {{=teritory_name}}</span></td>
+		    <td >&nbsp;</td>
+		    <td >:</td>
+		    <td ><span >{{#=market_id}}
+		      {{#=market_name}}</span></td>
+	      </tr>
+	    </table>
+		  <table width="900px" style="border:none; text-align:center; font-weight:bold;" >
+		    <tr >
+		      <td width="100" >&nbsp;</td>
+		      <td align="center" ><span style="border-bottom:1px solid #333;">12.4 Invoice Wise Sales Detail  </span></td>
+		      <td width="100" ><img  height="30px" src="{{=URL('static','images/comp_logo1.png')}}"/></td>
+	        </tr>
+        </table>
+        
+        <table width="900" border="1" cellpadding="1" cellspacing="1" class="sample_border" >
+       <thead>   
+          <tr align="left" class="blackCatHead" height="20px" ;  style="font-size:12px">
+                  <td rowspan="2"    >Date InvNumber</td>
+                  <td rowspan="2"   >Depot Market</td>
+                  <td rowspan="2"   >Customer</td>
+                  <td rowspan="2"   >MSO</td>
+                  <td   align="center">Invioce</td>
+                  <td   align="center">Return</td>
+               <td  colspan="5"   align="center">Net</td>
+              </tr>
+                <tr align="left" class="blackCatHead" height="20px" ;  style="font-size:12px">
+                  <td align="right">TradePrice</td>
+                  <td align="right">TradePrice</td>
+                  <td align="right">TP</td>
+                  <td align="right">Disc</td>
+                  <td align="right">SpDiscount</td>
+                  <td align="right">Vat</td>
+                  <td align="right">TradePrice</td>
+                </tr>  
+                
+    </thead>
+    
+				{{p=0}}
+              
+				{{netSoldTotal=0
+                  vatTotal=0
+                  discountTotal=0
+                  netTPTotal=0
+                  invTPTotal=0
+                  retTPTotal=0
+                  spDiscountTotal=0
+                }}
+                
+                {{for i in range(len(records)):
+		    	record=records[i]}}
+            
+				
+                
+               
+         
+                {{ if (i % 2 == 0):}}
+                <tbody>
+                <tr  align="left" style="vertical-align:middle; font-size:12px; background:#F5F5F5;">
+                
+                {{pass}}
+
+                
+                <td  >{{#=record[db.sm_invoice.delivery_date]}}
+                {{import datetime 
+                =record['max(invoice_date)'].strftime('%d-%b-%Y') }} 
+                </br>
+                <font style="color:#954A00">
+                INV{{=record['depot_id']}}-{{=record['sl']}}
+                </font> 
+                
+                </td>
+               
+                
+                <td  >{{=record['depot_id']}}<br>
+                 <font style="color:#954A00">
+                {{=record['max(market_name)']}}-{{=record['max(market_id)']}}
+                </font>
+                </td>
+                <td   >{{=record['max(client_name)']}}-{{=record['max(client_id)']}}
+                <br>
+                 <font style="color:#954A00">
+                {{=record['max(cl_category_name)']}}
+                </font>
+                </td>
+                <td   >{{=record['max(rep_name)']}}-{{=record['max(rep_id)']}}
+                <br>
+                <font style="color:#954A00">
+                {{=record['max(payment_mode)']}}
+                </font>
+                </td>
+                {{
+                sale=(record['actual_tp']+record['vat'])-record['discount']-record['spDiscount']
+                
+                rSale=record['retTP']
+                
+                
+                netSold=(record['actual_tp']-rSale)+record['vat']-record['discount']-record['spDiscount']
+                netSoldTotal=netSoldTotal+netSold
+
+                }}
+                <td  align="right" >{{='{:20,.2f}'.format(record['actual_tp'])}}
+                {{invTPTotal=invTPTotal+record['actual_tp']}}
+                </td>
+                <td    align="right">{{='{:20,.2f}'.format(record['retTP'])}}
+                {{retTPTotal=retTPTotal+record['retTP']}}</td>
+                
+                <td align="right" >{{=record['actual_tp']-record['retTP']}}
+                {{netTPTotal=netTPTotal+(record['actual_tp']-record['retTP'])}}</td>
+                <td   align="right">{{=record['discount']}}
+                {{discountTotal=discountTotal+record['discount']}}</td>
+                <td align="right"   >{{=record['spDiscount']}}
+                {{spDiscountTotal=spDiscountTotal+record['spDiscount']}}</td>
+                <td align="right"   >{{=record['vat']}}{{vatTotal=vatTotal+record['vat']}}</td>
+                <td align="right"   >{{='{:20,.2f}'.format(netSold)}}</td>
+              </tr>
+              </tbody>
+                      {{p=p+1}}
+                       
+                
+                
+                
+                
+                {{pass}}
+                
+                
+                
+                <tr  align="left" style="vertical-align:middle; font-size:14px; color:#900;">
+              
+
+                
+                <td  >
+                </td>
+               
+                
+                <td  ></td>
+                <td   ></td>
+                <td   ></td>
+            
+                <td  align="right" >{{='{:20,.2f}'.format(invTPTotal)}}</td>
+                <td    align="right">{{='{:20,.2f}'.format(retTPTotal)}}</td>
+                
+                <td  align="right" >{{='{:20,.2f}'.format(netTPTotal)}}</td>
+                <td   align="right">{{='{:20,.2f}'.format(discountTotal)}}</td>
+                <td  align="right"   >{{='{:20,.2f}'.format(spDiscountTotal)}}</td>
+                <td  align="right"   >{{='{:20,.2f}'.format(vatTotal)}}</td>
+                <td  align="right"   >{{='{:20,.2f}'.format(netSoldTotal)}}</td>
+              </tr>
+			
+          </table>
+<br/>
+
+
+
+
+<br/>
+
+
+
+</body>
+
+</html>
+

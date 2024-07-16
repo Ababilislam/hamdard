@@ -1,0 +1,684 @@
+{{extend 'layout.html'}}
+
+
+
+  <link rel="stylesheet" href="{{=URL('static', 'js_and_css/ui.theme.css')}}" type="text/css" />
+
+  <link rel="stylesheet" href="{{=URL('static', 'js_and_css/jquery-ui.css')}}" type="text/css" />
+
+  <link rel="stylesheet" href="{{=URL('static', 'js_and_css/style.css')}}" type="text/css" />
+
+   <script src="{{=URL('static','js_and_css/jquery-1.8.2.js')}}"></script>
+
+    <script src="{{=URL('static','js_and_css/jquery-ui.js')}}"></script>
+
+  
+
+  
+
+  <style type="text/css">
+
+	 input[type=text], input[type=password]{
+
+		margin: 2px 0px 2px 0px;
+
+	}
+
+	div.error {
+
+		width: auto;
+
+	}
+
+	
+
+	#sm_rep_rep_id{
+
+		width: 80px;
+
+	}
+
+	#sm_rep_name{
+
+		width: 250px;
+
+	}
+
+	#sm_rep_status{
+
+		width: 120px;
+
+	}
+
+	
+
+	#sm_rep_mobile_no{
+
+		width: 120px;
+
+	}
+
+.page_color,body{
+
+	font-family:Arial, Helvetica, sans-serif;
+
+	font-size:13px;	
+
+	}
+
+#add_btn{
+  width: 33px;
+  height: auto;
+  padding: 5px;
+  color: #352c2f;
+  cursor:pointer;
+}
+#add_btn:hover{
+  color: #fb0
+}
+
+.popup_user {
+    position: fixed;
+    top: 0px;
+    left: 102px;
+    bottom: 250px;
+    right: 0px;
+    margin: auto;
+    width: 30%;
+    height: 250px;
+    font-family: verdana;
+    font-size: 13px;
+    padding: 10px;
+    background-color:#fff;
+    border: 2px solid #c1baba;
+    z-index: 100000000000000000;
+    box-shadow: 9px 13px 30px #c1baba;
+    color: #000;
+    overflow: scroll;
+    
+}
+
+
+.cancel {
+
+    display:relative;
+    cursor:pointer;
+    margin:0;
+    float:right;
+    height:25px;
+    width:25px;
+    padding:0px 0 0px 0;
+    background-color:#d61818;
+    text-align:center;
+    font-weight:bold;
+    color:white;
+    border-radius:50px;
+    z-index:100000000000000000;
+}
+
+.cancel:hover {
+    background:#fff;
+    color: red
+}
+ </style>
+
+ 
+
+
+ <script>
+
+var base_url=location.protocol + "//" + location.hostname + (location.port && ":" + location.port) + "/{{=request.application}}/";
+
+
+function openPopup(id) { 
+ 
+	var note_val=$("#note_val_"+id).val();
+    
+   $('#test').show("slide", { direction: "up"  }, 0 );
+
+	$(".test_note").html(note_val);
+
+   
+
+
+} 
+function closePopup() {
+    $('#test').hide("puff", { }, 0 );
+
+}
+  $(function() {
+
+            $( "#test" ).draggable();
+         
+      
+            $( "#test" ).resizable({
+        
+               create: function( event, ui ) {
+                  $("#resizable-15").text ("I'm Created!!");
+               },
+
+               
+            });
+  });
+
+$(function() {
+	 	 
+	   var valueListStr2="";		
+
+		$('#EMPID').keyup(function(){
+// alert(base_url+'leave_application/get_rep_list');
+			$.ajax({
+				  url: base_url+'leave_application_web/get_rep_list',
+				  success: function(resStr) {
+				  valueListStr2=resStr
+
+				  }
+
+				});
+
+			//-------------------------
+
+			var valueList = valueListStr2.split(',');				
+
+			var searchValue=$("#EMPID").val();
+
+			
+
+			//---------------- auto complete combo list
+
+			var valueList_new=new Array();
+
+			lc=0;
+
+			i =0;
+
+			var valueStr="";				
+
+			while (i < valueList.length)
+
+			{
+
+				valueStr=valueList[i];
+
+				i=i+1;					
+
+				var res=valueStr.toUpperCase().match(searchValue.toUpperCase());
+
+				if (res!=null){
+
+					valueList_new[lc]=valueStr;
+
+					lc=lc+1;
+
+					if (lc==30){
+
+						break;
+
+					};
+
+				}else{
+
+					continue;
+
+				}					
+
+			};
+
+			//alert (ref_list_new);
+
+			
+
+			//-------------- auto complete source
+
+			$( "input#EMPID" ).autocomplete({
+
+				source: valueList_new
+
+			});
+
+	  }); 
+
+	var valueListStr1="";		
+
+		$('#type_l').keyup(function(){
+        // alert(base_url+'leave_application_web/get_leave_type');
+			$.ajax({
+				  url: base_url+'leave_application_web/get_leave_type',
+				  success: function(relStr) {
+				  valueListStr1=relStr
+
+				  }
+
+				});
+
+			//-------------------------
+
+			var valueList = valueListStr1.split(',');				
+
+			var searchValue=$("#type_l").val();
+
+			
+
+			//---------------- auto complete combo list
+
+			var valueList_new=new Array();
+
+			lc=0;
+
+			i =0;
+
+			var valueStr="";				
+
+			while (i < valueList.length)
+
+			{
+
+				valueStr=valueList[i];
+
+				i=i+1;					
+
+				var res=valueStr.toUpperCase().match(searchValue.toUpperCase());
+
+				if (res!=null){
+
+					valueList_new[lc]=valueStr;
+
+					lc=lc+1;
+
+					if (lc==30){
+
+						break;
+
+					};
+
+				}else{
+
+					continue;
+
+				}					
+
+			};
+
+			//-------------- auto complete source
+
+			$( "input#type_l" ).autocomplete({
+
+				source: valueList_new
+
+			});
+
+		
+
+	  }); 
+
+//==============	
+
+
+
+var valueListStr1="";		
+
+$('.ah_status').keyup(function(){
+
+	 valueListStr1="Approved,Rejected";	
+
+	//-------------------------
+
+	var valueList = valueListStr1.split(',');				
+
+	var searchValue=$(".ah_status").val();
+
+	
+
+	//---------------- auto complete combo list
+
+	var valueList_new=new Array();
+
+	lc=0;
+
+	i =0;
+
+	var valueStr="";				
+
+	while (i < valueList.length)
+
+	{
+
+		valueStr=valueList[i];
+
+		i=i+1;					
+
+		var res=valueStr.toUpperCase().match(searchValue.toUpperCase());
+
+		if (res!=null){
+
+			valueList_new[lc]=valueStr;
+
+			lc=lc+1;
+
+			if (lc==30){
+
+				break;
+
+			};
+
+		}else{
+
+			continue;
+
+		}					
+
+	};
+
+	//-------------- auto complete source
+
+	$( "input.ah_status" ).autocomplete({
+
+		source: valueList_new
+
+	});
+
+
+
+});   
+
+}); 
+
+</script>
+
+<body >   
+
+<table width="100%"  border="0" cellspacing="0" cellpadding="0" style="background-color:#FFFFFF;" >
+
+  <tr height="30px" >
+
+    <td width="500"><span class="blackCatTitle">&nbsp;Leave List</span></td>
+
+    <td>&nbsp;</td>
+
+  </tr>
+
+  <tr  height="1px" style="background-color:#CCCCCC;">
+	<td colspan="3" ></td>
+  </tr>
+
+</table>
+
+
+ <table width="1200px" height="500px"  border="0" cellspacing="0" cellpadding="0" class="page_color" id="table_big"  >
+  <tr height="100%"  style="vertical-align:top;">
+    <td width="10px">&nbsp;</td>
+    <td>
+	<table width="100%"  border="0" cellpadding="0" cellspacing="0"  >
+      <tr>
+        <td>&nbsp;</td>
+      </tr>
+      <tr>
+        <td>
+		
+		<table width="1200px" border="1"   >
+          <form id="form1" name="form1" method="post" action="{{=URL(c='leave_application_web',f='leaveList')}}">
+            
+            <tr align="left" class="blackCatHead"  height="40px" ;"vertical-align:middle">
+              
+               <td width="100px">						
+				 {{if session.btn_filter_leave=='' or session.from_date==None:}}				
+					<input class="date"  name="from_date" type="text" id="from_date" size="25" value="" placeholder="From Date" autocomplete="off" style="width:140px"/>
+				{{else:}}
+					<input  name="from_date" type="text" id="from_date" size="25" value="{{=session.from_date}}" placeholder="From Date" autocomplete="off" style="width:140px"/>
+				{{pass}}
+			  </td>
+			
+			  <td width="100px">
+				 {{if session.btn_filter_leave=='' or session.to_date==None:}}				
+					<input class="date"  name="to_date" type="text" id="to_date" size="25" value="" placeholder="To Date" autocomplete="off" style="width:140px"/>
+				 {{else:}}
+					<input  name="to_date" type="text" id="to_date" size="25" value="{{=session.to_date}}" placeholder="To Date" autocomplete="off" style="width:140px"/>
+				 {{pass}}
+			  </td>
+			
+		      <td width="100px">					
+				 {{if session.btn_filter_leave=='' or session.EMPID==None:}}
+					<input  name="EMPID" type="text" id="EMPID" size="25" value="" placeholder="Employee" autocomplete="off" style="width:140px"/>
+				{{else:}}
+					<input  name="EMPID" type="text" id="EMPID" size="25" value="{{=session.EMPID}}" placeholder="Employee" autocomplete="off" style="width:140px"/>
+				{{pass}}
+		      </td>	
+
+
+		      <td width="100px">
+				 {{if session.btn_filter_leave=='' or session.submit_date==None:}}				
+					<input class="date"  name="submit_date" type="text" id="submit_date" size="25" value="" placeholder="Submit Date" autocomplete="off" style="width:140px"/>
+				 {{else:}}
+					<input  name="submit_date" type="text" id="submit_date" size="25" value="{{=session.submit_date}}" placeholder="Submit Date" autocomplete="off" style="width:140px"/>
+				 {{pass}}
+			  </td>			
+
+		      <td width="100px">					
+				 {{if session.btn_filter_leave=='' or session.type_l==None:}}
+					<input  name="type_l" type="text" id="type_l" size="25" value="" placeholder="Type" autocomplete="off" style="width:140px"/>
+				{{else:}}
+					<input  name="type_l" type="text" id="type_l" size="25" value="{{=session.type_l}}" placeholder="Type" autocomplete="off" style="width:140px"/>
+				{{pass}}
+		       </td>
+
+      	
+
+
+      			<td width="100px">					
+				 {{if session.btn_filter_leave=='' or session.ah_status==None:}}
+					<input  name="ah_status" type="text" class="ah_status" size="25" value="" placeholder="Area Head Status" autocomplete="off" style="width:140px"/>
+				{{else:}}
+					<input  name="ah_status" type="text" class="ah_status" size="25" value="{{=session.ah_status}}" placeholder="Area Head Status" autocomplete="off" style="width:140px"/>
+				{{pass}}
+		       </td>
+
+		       <td width="100px">					
+				 
+		       </td>
+
+		        <td width="100px" >              								
+				
+			</td>
+		       
+
+
+		       <td width="100px">					
+				
+		       </td>
+
+
+		       <td width="100px">					
+				 
+		       </td>
+
+		       <td width="100px">					
+				 
+		       </td>
+     
+          <td align="left"  ></td>
+
+          <td align="left"  >
+  		 
+      </td>
+
+          </tr>
+
+
+          <tr align="left" class="blackCatHead"  height="40px" ;"vertical-align:middle">
+              
+               <td width="100px">						
+				 {{if session.btn_filter_leave=='' or session.zh_status==None:}}
+					<input  name="zh_status" type="text" class="ah_status" size="25" value="" placeholder="Zonal Head Status" autocomplete="off" style="width:140px"/>
+				{{else:}}
+					<input  name="zh_status" type="text" class="ah_status" size="25" value="{{=session.zh_status}}" placeholder="Zonal Head Status" autocomplete="off" style="width:140px"/>
+				{{pass}}
+			  </td>
+			
+			  <td width="100px">
+				 {{if session.btn_filter_leave=='' or session.dh_status==None:}}
+					<input  name="dh_status" type="text" class="ah_status" size="25" value="" placeholder="Divisional Head Status" autocomplete="off" style="width:140px"/>
+				{{else:}}
+					<input  name="dh_status" type="text" class="ah_status" size="25" value="{{=session.dh_status}}" placeholder="Divisional Head Status" autocomplete="off" style="width:140px"/>
+				{{pass}}
+			  </td>
+			
+		      <td width="100px">					
+				  {{if session.btn_filter_leave=='' or session.ddm_status==None:}}
+					<input  name="ddm_status" type="text" class="ah_status" size="25" value="" placeholder="DDM Status" autocomplete="off" style="width:140px"/>
+				{{else:}}
+					<input  name="ddm_status" type="text" class="ah_status" size="25" value="{{=session.ddm_status}}" placeholder="DDM Status" autocomplete="off" style="width:140px"/>
+				{{pass}}
+		      </td>	
+
+
+		      <td width="100px">
+				 {{if session.btn_filter_leave=='' or session.dds_status==None:}}
+					<input  name="dds_status" type="text" class="ah_status" size="25" value="" placeholder="DM Status" autocomplete="off" style="width:140px"/>
+				{{else:}}
+					<input  name="dds_status" type="text" class="ah_status" size="25" value="{{=session.dds_status}}" placeholder="DM Status" autocomplete="off" style="width:140px"/>
+				{{pass}}
+			  </td>					
+      		
+      		<td width="200px" >              								
+				<input type="submit" name="btn_filter_leave" id="btn_filter_leave" value="Filter"   class="button_update"/>			  								
+				<input type="submit" name="btn_all_leave" id="btn_all_leave" value="All"   class="button_update"/>	
+				<a href="{{=URL(c='leave_application_web',f='download_leave_list')}}">
+				<input type="button" name="" id="" value="Download"   class="button_update"/>
+			    	</a>			
+			</td>
+	        
+	        <td align="left"  ></td>
+	        <td align="left"  ></td>
+	        <td align="left"  ></td>
+	        <td align="left"  ></td>
+			<td align="left"  ></td>
+			<td align="left"  ></td>
+
+
+          </tr>
+		  </form>
+
+        </table>
+
+          <strong>Total:</strong> {{=totalCount}}<br />
+
+			 <table width="1500px" border="1" cellpadding="1" cellspacing="1" class="sample_border" >
+
+               <tr align="left" class="blackCatHead"  height="20px" ;"vertical-align:middle">
+                 <td width="100px">Employee</td>
+                 <td width="100px">Submit Date</td>
+		         <td width="100px">From Date</td>
+		         <td width="100px">To Date</td>
+		         <td width="100px">Total Leave</td>
+		         <td width="90px">Type </td>
+		         <td width="160px">Area Head|Status</td>		       
+		         <td width="160px">Zonal Head|Status</td>				
+				 <td width="180px">Divisional Head|Status</td>				
+				 <td width="160px">DDM|Status</td>				
+				 <td width="160px">DM|Status</td>
+				 <td></td>      
+               </tr>
+			  
+			   {{for i,record in enumerate(records):}}
+                  {{ if i==items_per_page: break}}
+
+                  <form id="form1" name="form1" method="post" action="{{#=URL(c='representative',f='rep_edit',args=[page,record.id])}}">			
+                    <tr class="table-primary">       
+					    <td  >{{=record.emp_id}}<br>
+					    {{=record.emp_name}}</td>
+					    <td >{{=record.created_on}}</td>
+					    <td >{{=record.from_date}}</td>
+					    <td >{{=record.to_date}}</td>
+					    <td align="center">{{=record.total_leave}}</td>      
+					    <td >{{=record.leave_type}}</td>      
+						<td  >{{=record.ared_head_id}}-{{=record.ared_head_name}}<br>
+							{{if record.area_head_status=='Rejected':}}
+								<span style="color: #eb6969"> {{=record.area_head_status}}</span>
+							{{else:}}
+								<span style="color: #37bb37"> {{=record.area_head_status}}</span>
+						     {{pass}}
+						</td>
+						
+						<td >{{=record.zonal_head_id}}-{{=record.zonal_head_name}}<br>
+
+						{{if record.zonal_head_status=='Rejected':}}
+							<span style="color: #eb6969"> {{=record.zonal_head_status}}</span>
+						{{else:}}
+							<span style="color: #37bb37"> {{=record.zonal_head_status}}</span>
+					     {{pass}}
+						 </td>      
+
+						<td >{{=record.divisional_head_id}}-{{=record.divisional_head_name}}<br>
+						
+						{{if record.divisional_head_status=='Rejected':}}
+							<span style="color: #eb6969"> {{=record.divisional_head_status}}</span>
+						{{else:}}
+							<span style="color: #37bb37"> {{=record.divisional_head_status}}</span>
+					     {{pass}}
+
+
+					</td>
+						<td >{{=record.ddm_id}}-{{=record.ddm_name}}<br>      
+						
+
+						{{if record.ddm_status=='Rejected':}}
+							<span style="color: #eb6969"> {{=record.ddm_status}}</span>
+						{{else:}}
+							<span style="color: #37bb37"> {{=record.ddm_status}}</span>
+					     {{pass}}
+					</td>        
+						<td>{{=record.director_id}}-{{=record.director_name}}<br>
+						
+						{{if record.director_marktng_status=='Rejected':}}
+							<span style="color: #eb6969"> {{=record.director_marktng_status}}</span>
+						{{else:}}
+							<span style="color: #37bb37"> {{=record.director_marktng_status}}</span>
+					     {{pass}}
+
+
+					</td>
+
+					<td>
+						<a onClick="openPopup('{{=record.id}}')" id="add_btn" style=" width:45px;height: 25px;background:#b5afab;color:#0e0e0e; border: 1px solid #b5afab; padding-top: 2px">  Note
+
+						<!-- <input id="add_btn" onClick="openPopup('{{=record.id}}')"  type="submit" value="Note"/> -->
+
+						</a>
+					 
+					<div id="test"  class= "popup_user" style="display:none;"> 
+						<div class="cancel" onclick="closePopup();">
+					    	X
+					  	</div>
+						 <div class="test_note"></div>
+					</div>
+				    </td>
+				    <td style="display: none;">
+				    	<input type="text" value="{{=record.note}}" id="{{='note_val_'+str(record.id)}}">
+				    	<input type="text" value="{{=record.id}}" class="{{='note_val_'+str(record.id)}}">
+				    </td>
+
+
+					  </tr>
+                  </form>
+			  {{pass}}
+		    </table>
+          </td></tr>
+    
+    </table>
+
+
+{{if page:}}
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="{{=URL(args=[page-page])}}">first</a> |  
+&nbsp;&nbsp;<a href="{{=URL(args=[page-1])}}">previous</a> |
+{{pass}}
+
+{{if len(records)>items_per_page:}}
+&nbsp;&nbsp;<a href="{{=URL(args=[page+1])}}">next</a>
+{{pass}}
+	</td>
+  </tr>
+</table>
+
+
+</body>
+

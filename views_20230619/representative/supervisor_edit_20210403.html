@@ -1,0 +1,312 @@
+{{extend 'layout.html'}}
+
+ 
+
+ 
+
+  <link rel="stylesheet" href="{{=URL('static', 'js_and_css/ui.theme.css')}}" type="text/css" />
+
+  <link rel="stylesheet" href="{{=URL('static', 'js_and_css/jquery-ui.css')}}" type="text/css" />
+
+  <link rel="stylesheet" href="{{=URL('static', 'js_and_css/style.css')}}" type="text/css" />
+
+   <script src="{{=URL('static','js_and_css/jquery-1.8.2.js')}}"></script>
+
+    <script src="{{=URL('static','js_and_css/jquery-ui.js')}}"></script>
+
+  
+
+  
+
+  <style type="text/css">
+
+	 input[type=text], input[type=password]{
+
+		margin: 2px 0px 2px 0px;
+
+	}
+
+	div.error {
+
+		width: auto;
+
+	}
+
+	
+
+	
+
+
+
+.page_color,body{
+
+	font-family:Arial, Helvetica, sans-serif;
+
+	font-size:13px;	
+
+	}
+
+ </style>
+
+ 
+
+ <script>
+
+var base_url=location.protocol + "//" + location.hostname + (location.port && ":" + location.port) + "/{{=request.application}}/";
+
+
+
+$(function() {
+
+	 	
+
+	   //==============	 
+
+	   var valueListStr2="";		
+
+		$('#sm_rep_level_id').keyup(function(){
+
+			$.ajax({
+
+				  url: base_url+'default/get_only_level_list',
+
+				  success: function(resStr) {
+
+					  valueListStr2=resStr
+
+				  }
+
+				});
+
+			
+
+			//-------------------------
+
+			var valueList = valueListStr2.split(',');				
+
+			var searchValue=$("#sm_rep_level_id").val();
+
+			
+
+			//---------------- auto complete combo list
+
+			var valueList_new=new Array();
+
+			lc=0;
+
+			i =0;
+
+			var valueStr="";				
+
+			while (i < valueList.length)
+
+			{
+
+				valueStr=valueList[i];
+
+				i=i+1;					
+
+				var res=valueStr.toUpperCase().match(searchValue.toUpperCase());
+
+				if (res!=null){
+
+					valueList_new[lc]=valueStr;
+
+					lc=lc+1;
+
+					if (lc==30){
+
+						break;
+
+					};
+
+				}else{
+
+					continue;
+
+				}					
+
+			};
+
+			//alert (ref_list_new);
+
+			
+
+			//-------------- auto complete source
+
+			$( "input#sm_rep_level_id" ).autocomplete({
+
+				source: valueList_new
+
+			});
+
+		
+
+	  }); 
+
+	   //==============	  
+
+}); 
+
+
+
+</script>
+
+
+
+<table width="100%"  border="0" cellspacing="0" cellpadding="0" style="background-color:#FFFFFF;" >
+
+  <tr height="30px" >
+
+    <td><span class="blackCatTitle">Supervisor-Edit</span></td>
+
+	<form action="{{=URL(c='representative',f='supervisor_create',args=[page])}}" method="post">
+
+	<td width="69%" align="left">	
+
+	<input name="" type="submit"  value="Back"/>	
+
+	</td>
+
+	</form>
+
+  </tr>
+
+  <tr  height="1px" style="background-color:#CCCCCC;">	
+
+	<td width="31%" align="left">	</td>
+
+	<td width="69%" align="left">	</td>
+
+  </tr>
+
+  </table>
+
+  
+
+  
+
+  <table width="100%" height="500px"  border="0" cellspacing="0" cellpadding="0" class="page_color"  >
+
+  <tr height="100%"  style="vertical-align:top;">
+
+    <td>
+
+	<table width="100%"  border="0" cellpadding="0" cellspacing="0"  >
+
+      <tr>
+
+        <td width="10">&nbsp;</td>
+
+        <td>&nbsp;</td>
+
+      </tr>
+
+      <tr>
+
+        <td width="10">&nbsp;</td>
+
+        <td>{{=form.custom.begin}}
+
+          <table class="blackCat">
+
+            <tr>
+
+              <td width="100"> Sup ID </td>
+
+              <td>&nbsp;{{=rep_id}}</td>
+
+              <td>&nbsp;</td>
+
+              </tr>
+
+            <tr>
+
+              <td width="100">Name</td>
+
+              <td>&nbsp;{{=form.custom.widget.name}}</td>
+
+              <td>&nbsp;</td>
+
+              </tr>
+
+            <tr>
+
+              <td width="100">Mobile</td>
+
+              <td>&nbsp;{{=form.custom.widget.mobile_no}} 
+
+			  <input type="hidden" name="current_sup" value="{{=rep_id}}"/></td>
+
+			  <td>&nbsp;</td>
+
+              </tr>
+
+            
+
+            <tr>
+              
+              <td width="100">Status</td>
+              
+              <td>&nbsp;{{=form.custom.widget.status}}</td>
+              
+              <td>&nbsp;</td>
+              
+            </tr>
+
+            <tr>
+              
+              <td width="100">Delete</td>
+              
+              <td> &nbsp;{{=form.custom.deletable}}</td>
+              
+              <td>&nbsp;</td>
+              
+            </tr>
+
+            <tr>
+
+              <td width="100">&nbsp;</td>
+
+              <td>&nbsp;</td>
+
+              <td>&nbsp;</td>
+
+            </tr>
+
+            <tr>
+
+              <td width="100">&nbsp;</td>
+
+              <td>&nbsp;{{=form.custom.submit}}</td>
+
+              <td>&nbsp;&nbsp;</td>
+
+              </tr>
+
+            <tr>
+
+              <td width="100"></td>
+
+              <td></td>
+
+              <td></td>
+
+              </tr>
+
+          </table>
+
+          {{=form.custom.end}}</td>
+
+      </tr>
+
+    </table>
+
+	</td>
+
+  </tr>
+
+</table>
+
+
+

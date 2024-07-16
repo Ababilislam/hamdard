@@ -1,0 +1,299 @@
+
+{{extend 'layout.html'}}
+  <link rel="stylesheet" href="{{=URL('static', 'js_and_css/ui.theme.css')}}" type="text/css" />
+  <link rel="stylesheet" href="{{=URL('static', 'js_and_css/jquery-ui.css')}}" type="text/css" />
+  <link rel="stylesheet" href="{{=URL('static', 'js_and_css/style.css')}}" type="text/css" />
+  <script src="{{=URL('static','js_and_css/jquery-1.8.2.js')}}"></script>
+  <script src="{{=URL('static','js_and_css/jquery-ui.js')}}"></script>
+  
+  <style type="text/css">
+	 input[type=text], input[type=password]{
+		margin: 2px 0px 2px 0px;
+		width: 200px;
+	}
+	select{
+		margin: 2px 0px 2px 0px;
+		width: 215px;
+	}
+		
+	div.error {
+		width: 200px;
+	}
+	
+	
+	.page_color,body{
+		font-family:Arial, Helvetica, sans-serif;
+		font-size:13px;	
+		}
+ </style>
+ 
+ <script>
+var base_url=location.protocol + "//" + location.hostname + (location.port && ":" + location.port) + "/{{=request.application}}/";
+
+$(function() {
+	 	var valueListStr="";
+		
+		$('#search_type').blur(function(){
+			if ($('#search_type').val()=='ItemID'){
+				//alert(base_url+'default/get_route_list');
+				$.ajax({
+					  url: base_url+'default/get_item_list',
+					  success: function(resStr) {
+						  valueListStr=resStr
+					  }
+					});
+			}else if ($('#search_type').val()=='Catagory'){
+				$.ajax({
+					  url: base_url+'default/get_item_category',
+					  success: function(resStr) {
+						  valueListStr=resStr
+					  }
+					});
+			
+			}else if ($('#search_type').val()=='Unit'){
+				$.ajax({
+					  url: base_url+'default/get_item_unit_type',
+					  success: function(resStr) {
+						  valueListStr=resStr
+					  }
+					});
+			
+			};
+			
+	 	});
+	 
+		$('#search_value').keyup(function(){
+			//-------------------------
+			var valueList = valueListStr.split(',');				
+			var searchValue=$("#search_value").val();
+			
+			//---------------- auto complete combo list
+			var valueList_new=new Array();
+			lc=0;
+			i =0;
+			var valueStr="";				
+			while (i < valueList.length)
+			{
+				valueStr=valueList[i];
+				i=i+1;					
+				var res=valueStr.toUpperCase().match(searchValue.toUpperCase());
+				if (res!=null){
+					valueList_new[lc]=valueStr;
+					lc=lc+1;
+					if (lc==30){
+						break;
+					};
+				}else{
+					continue;
+				}					
+			};
+			//alert (ref_list_new);
+			
+			//-------------- auto complete source
+			$( "input#search_value" ).autocomplete({
+				source: valueList_new
+			});
+		
+	  }); 
+	   //==============	   
+}); 
+
+</script>
+ 
+<table width="100%"  border="0" cellspacing="0" cellpadding="0" style="background-color:#FFFFFF;" >
+  <tr height="30px" >
+    <td><span class="blackCatTitle">Item
+      
+    </span></td>
+    <td align="right"><span class="blackCatTitle">
+   {{if session.rm_item_cat_unit_manage=="True" or session.rm_item_cat_unit_view=="True":}}
+   	
+     <a href="{{=URL(c='item',f='unit')}}"><input type="button" name="" value="Unit Type"/></a>&nbsp;
+     <a href="{{=URL(c='item',f='catagory')}}"><input type="button" name="" value="Group/Category"/></a>&nbsp;
+     {{ pass }}
+    </span></td>
+    <td align="right" width="100"><a href="{{=URL(c='item',f='temp_item')}}"><input type="button" name="" value="Item Change Schedule"/></a></td>
+    <td align="right" width="20px">&nbsp;</td>
+  </tr>
+  <tr  height="1px" style="background-color:#CCCCCC;">
+	    <td ></td><td ></td>
+	    <td width="100" ></td>
+	    <td ></td>
+  </tr>
+  </table>
+  
+  
+  <table width="100%" height="500px"  border="0" cellspacing="0" cellpadding="0" class="page_color"  >
+  <tr height="100%"  style="vertical-align:top;">
+    <td>
+	<table width="100%"  border="0" cellpadding="0" cellspacing="0"  >
+
+      <tr>
+        <td width="10">&nbsp;</td>
+        <td valign="top">
+		
+		<br />
+	
+		{{if access_permission==True:}} 
+		<table width="800">
+			<tr>
+				<td width="400">
+          <table width="400" class="blackCat">
+		  {{=form.custom.begin}}
+              <tr>
+                <td width="140"> ItemID </td>
+                <td>{{=form.custom.widget.item_id}}</td>
+                </tr>
+              <tr>
+                <td width="140">Name</td>
+                <td>{{=form.custom.widget.name}}</td>
+                </tr>
+              <tr>
+                <td width="140">Description</td>
+                <td>{{=form.custom.widget.des}}</td>
+                </tr>
+              <tr>
+                <td width="140">Group</td>
+                <td>{{=form.custom.widget.category_id}}</td>
+                </tr>
+              <tr>
+                <td width="140">Base Group</td>
+                <td>{{=form.custom.widget.category_id_sp}}</td>
+              </tr>
+              <tr>
+                <td width="140">Unit Type </td>
+                <td>{{=form.custom.widget.unit_type}}</td>
+                </tr>              
+            </table>
+			</td>
+			
+			<td width="400" valign="top">
+            
+              <table width="400" class="blackCat">			 
+              <tr>
+                <td>Manufacturer</td>
+                <td>{{=form.custom.widget.manufacturer}}</td>
+              </tr>
+              <tr>
+                <td>TP Amount</td>
+                <td>{{=form.custom.widget.price}}</td>
+              </tr>
+              <tr>
+                <td>VAT Amount</td>
+                <td>{{=form.custom.widget.vat_amt}}</td>
+              </tr>
+              <tr>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+              </tr>
+              <tr>
+                <td>&nbsp;</td>
+                <td>{{=form.custom.submit}}</td>
+              </tr>
+              
+                  {{=form.custom.end}}
+                  </table>
+                </td>
+			</tr>
+			</table>
+            <br />
+         {{pass}} 
+		 
+         <table width="900" border="1" cellpadding="1" cellspacing="1" class="sample_border" >
+		   
+		   <form id="form1" name="form1" method="post" action="{{=URL(c='item',f='item')}}">
+            <tr align="left" class="blackCatHead"  height="20px" ;"vertical-align:middle">
+              <td width="100" >
+                <select name="search_type" id="search_type" style="width:150px" >
+                  <option value="" selected="selected">Select a type</option>
+                    {{if session.search_type_item=='ItemID':}}<option value="ItemID" selected="selected">Item ID/Name</option>{{else:}}<option value="ItemID" >Item ID/Name</option>{{pass}}
+                    {{if session.search_type_item=='Catagory':}}<option value="Catagory" selected="selected">Group</option>{{else:}}<option value="Catagory" >Group</option>{{pass}}
+                    {{if session.search_type_item=='Unit':}}<option value="Unit" selected="selected">Unit Type</option>{{else:}}<option value="Unit" >Unit Type</option>{{pass}}
+                </select>
+              </td>
+              <td width="166" >
+              {{if session.search_value_item=='' or session.search_value_item==None:}}
+              	<input  name="search_value" type="text" id="search_value" size="25" value="" placeholder="Select a value" autocomplete="off" style="width:300px"/>
+              {{else:}}
+              	<input  name="search_value" type="text" id="search_value" size="25" value="{{=session.search_value_item}}" placeholder="Select a value" autocomplete="off" style="width:300px"/>
+              {{pass}}
+              
+              </td>
+              <td width="100" ><input type="submit" name="btn_filter_item" id="btn_filter_item" value="Filter"   class="button_update"/>
+			  <input type="submit" name="btn_all" id="btn_all" value="All"   class="button_update"/>		
+		  	   </td>
+				
+              <td align="right" >
+			  <a href="{{=URL(c='item',f='download_item')}}">
+				 	<input type="button" name="" id="" value="Download"   class="button_update"/>
+			    	</a>
+			{{if access_permission==True:}} 
+			  <a href="{{=URL(c='item',f='item_batch_upload')}}">
+			  <input type="button" name="" id="" value="Batch Upload"   class="button_update"/>
+			  </a>
+			  {{pass}}
+			  </td>
+            </tr>
+		      </form>
+          </table>
+		 <strong>Total:</strong> {{=totalCount}}<br />
+		 
+			 <table width="900" border="1" cellpadding="1" cellspacing="1" class="sample_border" >
+                <tr align="left" class="blackCatHead"  height="20px" ;"vertical-align:middle">
+                  <td width="50" >ItemID</td>
+                  <td width="250" >Name</td>
+                  <td >Description</td>
+                  <td width="50" align="center" >Group</td>
+                  <td width="50" align="center" >Base Group</td>
+                  <td width="80" align="center" >Unit <br />
+                  Type</td>
+                  <td width="60" align="right"  >TP Amount</td>
+                  <td width="60" align="right"  >VAT Amount</td>
+                  <td width="60" align="right"  >Total Amount</td>
+                  <td align="right"  ></td>
+                </tr>
+			    {{ p=0}} 		  
+			    {{for i,record in enumerate(records):}}
+			    {{ if i==items_per_page: break}}
+  <form id="form1" name="form1" method="post" action="{{=URL(c='item',f='item_edit',args=[page,record.id])}}">
+    <!--<form id="form1" method="post" action="">-->
+    {{ p=p%2 }}
+    
+    <tr  align="left" class="blackCat"  style=" font-size:13px"> 
+      <td width="50" ><input  name="record_id" type="hidden" id="record_id" size="25" value="{{=record.id}}" title="" />
+        {{=record.item_id}}</td>
+      <td width="250" >{{=record.name}}</td>
+      <td >{{=record.des}}</td>
+      <td width="50" align="center" >{{=record.category_id}}</td>
+      <td width="50" align="center" >{{if record.category_id_sp!=None:}}{{=record.category_id_sp}}{{pass}}</td>
+      <td width="80" align="center"  >{{=record.unit_type}}</td>
+      <td width="60" align="right"  >{{=record.price}}</td>
+      <td width="60" align="right"  >{{=record.vat_amt}}</td>
+      <td width="60" align="right"  >{{=record.total_amt}}</td>
+      <td width="38" align="right"  >
+	  {{if access_permission==True:}} 
+	    <input type="submit" name="btn_go" id="btn_go" value="&gt;&gt;"   class="button_update"/>        
+	  
+	  {{pass}}
+	  </td>
+    </tr>
+  </form>
+			    {{ p=p+1 }} 
+			    {{pass}}
+		    </table>
+			  <p>&nbsp;</p>
+        </td></tr>
+    </table>
+    
+{{if page:}}
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="{{=URL(args=[page-page])}}">first</a> |  
+&nbsp;&nbsp;<a href="{{=URL(args=[page-1])}}">previous</a> |
+{{pass}}
+
+{{if len(records)>items_per_page:}}
+&nbsp;&nbsp;<a href="{{=URL(args=[page+1])}}">next</a>
+{{pass}}
+	</td>
+  </tr>
+</table>
+

@@ -1,0 +1,164 @@
+{{extend 'layout.html'}}
+
+	
+
+<link rel="stylesheet" href="{{=URL('static', 'js_and_css/ui.theme.css')}}" type="text/css" />
+
+<link rel="stylesheet" href="{{=URL('static', 'js_and_css/jquery-ui.css')}}" type="text/css" />
+
+<link rel="stylesheet" href="{{=URL('static', 'js_and_css/style.css')}}" type="text/css" />
+
+<script src="{{=URL('static','js_and_css/jquery-1.8.2.js')}}"></script>
+
+<script src="{{=URL('static','js_and_css/jquery-ui.js')}}"></script>
+
+
+<style type="text/css">
+
+ input[type=text], input[type=password],  select {
+
+    margin: 2px 0px 2px 0px;
+
+	width:150px;
+
+}
+
+div.error {
+
+    padding: 0px;
+
+	width: 200px;
+
+	margin-left:0px;
+
+}
+
+.page_color,body{
+
+	font-family:Arial, Helvetica, sans-serif;
+
+	font-size:13px;	
+
+	}
+
+	
+
+ </style>
+
+ 
+
+
+
+ 
+
+
+
+<body >  
+
+<!--Form Title -->
+
+<table width="100%" border="0" cellspacing="0" cellpadding="0" style="background-color:#FFFFFF;">
+
+  <tr height="30px">
+
+    <td width="500"><div class="blackCatTitle">Transfer Doc Area</div></td>
+
+    
+
+	<form action="{{#=URL(c='report',f#='reports_home')}}" method="post">
+
+	<td width="200" align="right"><!--<input name="" type="submit"  value="  Back  "/>--></td>
+
+	</form>
+
+	
+
+    <td>&nbsp;</td>
+
+  </tr>
+
+  <tr>
+
+    <td height="1px" colspan="3" style="background-color:#CCCCCC;"></td>
+
+  </tr>
+
+</table>
+
+
+
+<!--Form Content -->
+
+
+
+      
+      <table width="500" align="left" cellpadding="2"  style="background-color:#EEEEEE">
+  </tr>
+   <tr>
+    <td height="22" align="center" valign="middle">&nbsp;</td>
+  </tr>
+ 
+<table width="100%" border="0" cellspacing="0" cellpadding="0" class="page_color" id="table_details">
+
+
+
+  <form action="{{=URL(c='transfer_doc_area',f='transfer_doc_area')}}" method="post"  name="form1" id="form1"  >
+          <tr style="background-color:#DBDBDB; font-weight:bold" >
+            <td align="left" >&nbsp;</td>
+            <td colspan="2" align="left" title="">Doctor</td>
+            <td width="11" align="left" >&nbsp;</td>
+          </tr>
+          <tr >
+          <td>&nbsp;</td>
+          <td>&nbsp;</td>
+          
+          </tr >
+          <tr >
+            <td width="13" align="left" >&nbsp;</td>
+            <td width="100" align="left" >Old Area</td>
+            <td align="left" ><input  type="text" name="old_area_id" id="old_area_id" size="15" placeholder="Old Area" autocomplete="off"/></td>
+            <td align="left" >&nbsp;</td>
+          </tr>
+          <tr>
+            <td align="center" >&nbsp;</td>
+            <td width="100" align="left" >New Area</td>
+            <td align="left" ><input  type="text" name="new_area_id" id="new_area_id" size="15"  placeholder="New Area" autocomplete="off"/></td>
+            <td align="center" >&nbsp;</td>
+          </tr>
+          <tr>
+            <td align="center" >&nbsp;</td>
+            <td align="left" >New Depot</td>
+            <td align="left" ><input  type="text" name="new_depot_id" id="new_depot_id" size="15"  placeholder="New Depot" autocomplete="off"/></td>
+            <td align="center" >&nbsp;</td>
+          </tr>
+          
+          
+          <tr>
+            <td align="center" >&nbsp;</td>
+
+          <td align="left" ><input type="checkbox" name="checkbox" value="checkbox" /></td>
+          <td align="left" ><input  type="text" name="confirm_d" id="confirm_d" size="15"  placeholder="" autocomplete="off"/></td>
+          </tr>
+           
+            <tr>
+            <td  align="center" >&nbsp;</td>
+          
+            
+            <td align="left" >&nbsp;</td>
+            <td align="left" ><input type="submit" name="btn_transfer_doc" id="btn_transfer_doc" value="Submit" /></td>
+            
+          </tr>
+            </tr>
+   <tr>
+    <td height="22" align="center" valign="middle">&nbsp;</td>
+  </tr>
+      
+        </form> 
+
+</table>
+
+
+
+
+</body>
+

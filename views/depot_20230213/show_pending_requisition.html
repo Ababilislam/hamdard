@@ -1,0 +1,311 @@
+{{extend 'layout.html'}}
+
+<link rel="stylesheet" href="{{=URL('static', 'js_and_css/ui.theme.css')}}" type="text/css" />
+
+<link rel="stylesheet" href="{{=URL('static', 'js_and_css/jquery-ui.css')}}" type="text/css" />
+
+<link rel="stylesheet" href="{{=URL('static', 'js_and_css/style.css')}}" type="text/css" />
+
+<script src="{{=URL('static','js_and_css/jquery-1.8.2.js')}}"></script>
+
+<script src="{{=URL('static','js_and_css/jquery-ui.js')}}"></script>
+
+  
+
+  <style type="text/css">
+
+ input[type=text], input[type=password],  select {
+
+    margin: 2px 0px 2px 0px;
+
+	width:100px;
+
+}
+
+div.error {
+
+    padding: 0px;
+
+	width:inherit;
+
+	margin-left:0px;
+
+}
+
+.page_color,body{
+
+	font-family:Arial, Helvetica, sans-serif;
+
+	font-size:13px;	
+
+	}
+
+	
+
+ </style>
+
+<script>
+
+var base_url=location.protocol + "//" + location.hostname + (location.port && ":" + location.port) + "/{{=request.application}}/";
+
+
+
+$(function() {
+
+	 	var valueListStr="";		
+
+		$('#depot_id_value').keyup(function(){
+
+			$.ajax({
+
+				  url: base_url+'default/get_depot_list_all',
+
+				  success: function(resStr) {
+
+					  valueListStr=resStr
+
+				  }
+
+				});
+
+			
+
+			//-------------------------
+
+			var valueList = valueListStr.split(',');				
+
+			var searchValue=$("#depot_id_value").val();
+
+			
+
+			//---------------- auto complete combo list
+
+			var valueList_new=new Array();
+
+			lc=0;
+
+			i =0;
+
+			var valueStr="";				
+
+			while (i < valueList.length)
+
+			{
+
+				valueStr=valueList[i];
+
+				i=i+1;					
+
+				var res=valueStr.toUpperCase().match(searchValue.toUpperCase());
+
+				if (res!=null){
+
+					valueList_new[lc]=valueStr;
+
+					lc=lc+1;
+
+					if (lc==30){
+
+						break;
+
+					};
+
+				}else{
+
+					continue;
+
+				}					
+
+			};
+
+			//alert (ref_list_new);
+
+			
+
+			//-------------- auto complete source
+
+			$( "input#depot_id_value" ).autocomplete({
+
+				source: valueList_new
+
+			});
+
+		
+
+	  }); 
+
+	   //==============	   
+
+	   	   
+
+}); 
+
+</script>
+
+<table width="100%"  border="0" cellspacing="0" cellpadding="0" style="background-color:#FFFFFF;" >
+
+  <tr height="30px" >
+
+    <td width="800"><span class="blackCatTitle">Pending Requisition </span></td>
+	<form id="form1" name="form1" method="post" action="{{=URL(c='depot',f='depot_stock_issue_list',vars=dict(req_sl=0))}}">
+    <td width="150px" align="left"><input type="submit" name="btn_back" id="btn_back" value="Back"  class="button_update"/></td>
+    </form>
+    <td ></td>
+  </tr>
+
+  <tr  height="1px" style="background-color:#CCCCCC;">
+
+	    <td colspan="3" ></td>
+
+  </tr>
+
+</table>
+
+  
+
+  
+
+  <table width="100%" height="500px"  border="0" cellspacing="0" cellpadding="0" class="page_color"  >
+
+  <tr height="100%"  style="vertical-align:top;">
+
+    <td>
+
+	<!--start-->
+
+	<table width="100%"  border="0" cellpadding="0" cellspacing="0"  >
+
+      <tr>
+
+        <td>&nbsp;</td>
+
+        <td>&nbsp;</td>
+
+      </tr>
+
+      <tr>
+
+        <td>&nbsp;</td>
+
+        <td>
+        	
+            <table width="900" border="1" cellpadding="1" cellspacing="1" class="sample_border" >
+            <form id="form1" name="form1" method="post" action="{{=URL(c='depot',f='show_pending_requisition',vars=dict(depotId=session.depot_id))}}">
+              <tr align="left" class="blackCatHead"  height="20px" ;"vertical-align:middle">
+                <td >
+                	{{if session.date_from!='None':}}
+                    <input  name="date_from" type="text" id="date_from" style="width:100px" class="date" value="{{=session.date_from}}" placeholder="Date From" autocomplete="off"/>
+                    {{else:}}
+                    	<input  name="date_from" type="text" id="date_from" style="width:100px" class="date" value="" placeholder="Date From" autocomplete="off"/>
+                    {{pass}}
+                	{{if session.date_to!='None':}}
+                     <input  name="date_to" type="text" id="date_to" style="width:100px" class="date" value="{{=session.date_to}}" placeholder="Date To" autocomplete="off"/>
+                     {{else:}}
+                     <input  name="date_to" type="text" id="date_to" style="width:100px" class="date" value="" placeholder="Date To" autocomplete="off"/>                
+                	{{pass}}
+                    {{if session.depot_id_value!='None':}}
+                    <input  name="depot_id_value" type="text" id="depot_id_value" style="width:200px" value="{{=session.depot_id_value}}" placeholder="From Depot" autocomplete="off"/>
+                    {{else:}}
+                    <input  name="depot_id_value" type="text" id="depot_id_value" style="width:200px" value="" placeholder="From Depot" autocomplete="off"/>
+                    {{pass}}
+                    
+                    &nbsp;&nbsp;
+                    <input type="submit" name="btn_filter" id="btn_filter" value="Filter"  class="button_update" title=""/>&nbsp;&nbsp;&nbsp;<input type="submit" name="btn_all" id="btn_all" value="All"  class="button_update"/>
+                </td>
+
+                </tr>
+                 </form>
+            </table>
+           
+            <br/>
+           
+          <table width="900" height="78" border="0" cellpadding="0" cellspacing="0">
+            <tr>
+
+              <td width="100%" colspan="2">              
+              <table width="900" border="1" cellpadding="1" cellspacing="1" class="sample_border" >
+
+				  <tr align="left" class="blackCatHead"  height="20px" ;"vertical-align:middle">                    
+
+                    <td width="200" >Requisition To</td>
+
+					<td >Requisition From</td>
+
+                    <td width="80" align="right"  >Sl</td>
+
+                    <td align="right"  >Date </td>
+
+                    </tr>
+
+
+
+                  {{ p=0}} 		
+
+			   {{for record in (records):}}
+
+			{{ p=p%2 }}   
+
+			<tr  align="left" class="blackCat"  style="vertical-align:middle"> 			  
+
+			  <td >{{=record.requisition_to}}|{{=record.depot_to_name}}</td>
+
+			  <td >{{=record.depot_id}}|{{=record.depot_name}}</td>
+
+			  <td align="right" >{{=record.sl}}</td>
+
+			  <td align="right" >{{=record.req_date}}</td>
+
+			</tr>
+
+
+
+			   {{ p=p+1 }} 
+
+			   {{pass}}
+
+
+
+              </table>			  </td>
+
+              </tr>
+
+          </table>          </td>
+
+      </tr>
+
+      <tr>
+
+        <td>&nbsp;</td>
+
+        <td>&nbsp;</td>
+
+      </tr>
+
+
+
+	  <tr>
+
+        <td>&nbsp;</td>
+
+       
+
+        <td>
+
+		</td>    </tr>
+
+
+
+    </table>
+
+
+
+
+
+<!--end-->
+
+	</td>
+
+  </tr>
+
+</table>
+

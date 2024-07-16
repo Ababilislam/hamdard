@@ -1,0 +1,163 @@
+{{extend 'layout_invoice.html'}}
+
+<html>
+
+<head>
+
+
+
+</head>
+
+<body>
+		
+<table width="900" border="0" cellspacing="1" cellpadding="1" >          
+
+		<tr style="font-size:15px; font-weight:bold">
+		  <th colspan="8" align="center" ><!--SKSH--><span style="font-size:25px; font-weight:bold;border-bottom:solid; border-bottom-color:#999">Internal Transfer</span><span style="float:right">#2.02.2</span></th>
+		  </tr>
+		<tr >
+	      <td colspan="3" valign="top" >&nbsp;</td>
+	      <td rowspan="3" align="center" valign="middle" ><img src="{{=URL('static','images/comp_logo1.png')}}"/></td>
+	      <td valign="top" >&nbsp;</td>
+	      <td colspan="3" valign="top" >&nbsp;</td>
+	      </tr>
+		  <tr >
+		    <td width="120" valign="top" >&nbsp;</td>
+		    <td width="1" valign="top" >&nbsp;</td>
+		    <td width="240" valign="top" ></td>
+		    <td width="5" valign="top" >&nbsp;</td>
+		    <td width="100" align="center" valign="top" >&nbsp;</td>
+		    <td align="center" valign="top" >&nbsp;</td>
+		    <td align="left" valign="top" ><strong style="font-size:20px">{{=depotName}}</strong></td>
+	      </tr>
+		  <tr >
+		    <td width="120" valign="top" >Transaction Date</td>
+		    <td width="1" valign="top" ><strong>:</strong></td>
+		    <td valign="top" >{{if damage_date!=None:}}{{=damage_date.strftime('%d-%b-%Y')}}{{pass}}</td>
+		    <td valign="top" >&nbsp;</td>
+		    <td width="100" align="right" valign="top" >Doc No</td>
+		    <td width="1" valign="top" ><b>:</b></td>
+		    <td width="180" valign="top" ><strong style="font-size:20px">{{=session.prefix_invoice}}TR{{=depot_id}}-{{=type_sl}}</strong></td>
+	      </tr>
+		  <tr >
+		    <td width="120" valign="top" >&nbsp;</td>
+		    <td width="1" valign="top" >&nbsp;</td>
+		    <td colspan="3" valign="top" >&nbsp;</td>
+		    <td width="100" valign="top" >&nbsp;</td>
+		    <td width="1" valign="top" >&nbsp;</td>
+		    <td width="180" valign="top" >&nbsp;</td>
+	      </tr>
+    </table>
+		
+    <table width="600"  class="sample_border" style="border: solid 1px #C4C4C4">
+      <tr class="blackCatHead" style="vertical-align:middle; background-color:#E6E6E6">
+        <td width="120" align="left"><strong>Transec.Type</strong></td>
+        <td width="50" align="left"><strong>Status</strong></td>
+        <td align="left"><strong>Cause</strong></td>
+        <td align="left"><strong>Description</strong></td>
+      </tr>
+      <tr class="blackCat" style="vertical-align:middle; background-color:#FBFBFB">
+        <td width="120" align="left"> Internal Transfer</td>
+        <td width="50" align="left">{{=status}}</td>
+        <td align="left">{{=cause}}</td>
+        <td align="left">{{=note}}</td>
+      </tr>
+    </table>
+	<br>
+  <table width="900" border="1" cellpadding="1" cellspacing="1" class="sample_border" style="border: solid 1px #C4C4C4">
+
+  <tr align="left" class="blackCatHead"  height="20px" style="vertical-align:middle; background-color:#E6E6E6">
+    <td colspan="2" align="center" >ITEM</td>
+    <td width="60" rowspan="2" align="center" >UOM</td>
+    <td colspan="2" align="center" >LOCATION</td>
+    <td colspan="4" align="center"  >QUANTITY</td>
+    <td width="60" rowspan="2" align="right"  >TP Rate</td>
+    <td width="80" rowspan="2" align="right"  >TP Amount </td>
+  </tr>
+  <tr align="left" class="blackCatHead"  height="20px" style="vertical-align:middle; background-color:#E6E6E6">
+
+    <td width="60" >ID</td>
+    <td > Name</td>
+    <td width="120" >From</td>
+    <td width="80" >To</td>
+
+    <td width="50" align="right"  >Qty</td>
+    <td width="60" align="center"  >M.Carton</td>
+    <td width="50" align="left"  >Batch No</td>
+    <td width="100" align="center"  >Expiry Date</td>
+    </tr>
+
+	{{total_qty=0}}
+    {{total_tp=0}}
+    {{mCartonTotal=0}}
+    {{for row in detailRecords:}}
+
+    	{{qty=0;rate=0;mCarton=0}}
+
+          <tr  align="left" class="blackCat"  style="vertical-align:middle; background-color:#FBFBFB">
+        
+            <td width="60" >{{=row.item_id}}</td>
+            <td >{{=row.item_name}}</td>
+            <td width="60" >{{=row.item_unit}}</td>
+            <td width="120" >{{=row.store_name}}</td>
+            <td width="80" >{{=row.store_name_to}}</td>
+        
+            <td width="50" align="right" >{{qty=int(row.quantity)}}{{=qty}} {{total_qty+=qty}}</td>
+            <td width="60" align="center" >{{cartonQty=row.item_carton}}{{try:}}{{mCarton=round(float(qty)/cartonQty,2)}}{{except:}}{{pass}} {{=mCarton}}{{mCartonTotal+=mCarton}}</td>
+            <td width="50" align="left" >{{=row.batch_id}}</td>
+            <td width="100" align="center" >{{try:}}{{=row.expiary_date.strftime('%d-%b-%Y')}}{{except:}}-{{pass}}</td>
+            <td width="60" align="right" >{{rate=row.dist_rate}}{{=rate}}</td>
+        
+            <td width="80" align="right" >{{amt=qty*rate}}{{=easy_format(amt)}}{{total_tp+=amt}}</td>
+        
+          </tr>
+
+    {{pass}}
+
+{{total_tp=round(total_tp,2)}}
+
+  <tr  align="left" class="blackCat"  style="background-color:#FBFBFB">
+    <td align="left" style="border-bottom-style:none; border-left:none; border-top:none">&nbsp;</td>
+    <td align="left" style="border-bottom-style:none; border-left:none; border-top:none">&nbsp;</td>
+    <td align="right" style="border-bottom-style:none; border-left:none; border-top:none">&nbsp;</td>
+    <td width="120" align="right" style="border-bottom-style:none; border-left:none; border-top:none">&nbsp;</td>
+    <td width="80" align="right" style="border-bottom-style:none; border-left:none; border-top:none"><strong>Total</strong></td>
+    <td width="50" align="right" style="border-bottom-style:none; border-left:none; border-top:none"><strong>{{=total_qty}}</strong></td>
+    <td align="center" style="border-bottom-style:none; border-left:none; border-top:none"><strong>{{=mCartonTotal}}</strong></td>
+    <td width="50" align="left" style="border-bottom-style:none; border-left:none; border-top:none">&nbsp;</td>
+    <td width="100" align="center" style="border-bottom-style:none; border-left:none; border-top:none">&nbsp;</td>
+    <td align="right" style="border-bottom-style:none; border-left:none; border-top:none">&nbsp;</td>
+    <td width="80" align="right" ><strong>{{=easy_format(total_tp)}}</strong></td>
+  </tr>
+  
+</table>
+<table width="900" >
+    <tr>
+      <td width="100" align="left"><strong>Comments:</strong></td>
+      <td align="left"><strong><!--Transcom Distribution Co. Ltd.-->
+      </strong></td>
+    </tr>
+</table>
+<br>
+<br/>
+<table width="900" >
+	<tr>
+	  <td >{{=updatedBy}}</td>
+	  <td >&nbsp;</td>
+	  <td >&nbsp;</td>
+  </tr>
+ <tr style="height:2px;">
+	  <td align="center" style="height:2px;">____________________</td>
+	  <td align="center" style="height:2px;">&nbsp;</td>
+	  <td width="150" align="right" style="height:2px;">_______________</td>
+  </tr>
+	<tr>
+	  <td width="150" align="left"><strong>Prepared By</strong></td>
+	  <td align="center">&nbsp;</td>
+	  <td width="150" align="right"><strong>Authorised By</strong></td>
+  </tr>
+</table>
+
+</body>
+</html>
+

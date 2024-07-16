@@ -1,0 +1,534 @@
+{{extend 'layout_wap.html'}}
+
+<link rel="stylesheet" href="{{=URL('static', 'js_and_css/ui.theme.css')}}" type="text/css" />
+  <link rel="stylesheet" href="{{=URL('static', 'js_and_css/jquery-ui.css')}}" type="text/css" />
+  <link rel="stylesheet" href="{{=URL('static', 'js_and_css/style.css')}}" type="text/css" />
+  
+  <script src="{{=URL('static','js_and_css/jquery-1.8.2.js')}}"></script>
+  <script src="{{=URL('static','js_and_css/jquery-ui.js')}}"></script>
+  
+  <style type="text/css">
+	 input[type=text], input[type=password],  select {
+    margin: 2px 0px 2px 0px;
+	}
+	
+	#sm_client_status,#sm_client_category_id{
+	width:auto;
+	}
+	#sm_client_client_id,#sm_client_area_id{
+	width:70px;
+	}
+	
+	#sm_client_op_balance,#sm_client_balance,#sm_client_credit_limit{
+	width:60px;
+	text-align:right;
+	}
+	
+	div.error {
+		color: white;
+		padding: 0px;
+		width: auto; 
+		margin-left:0px;
+	}
+	.page_color,body{
+		font-family:Arial, Helvetica, sans-serif;
+		font-size:13px;	
+		}
+ </style>
+ 
+<script>
+function tour() {
+	var base_url=location.protocol + "//" + location.hostname + (location.port && ":" + location.port) + "/{{=request.application}}/";
+
+	var days_month={{=session.days_month}}
+	
+	var m_Count=$("#m_Count").val();
+	
+	
+	var submitStrMorning=''
+	var submitStrEvening=''
+	for (var i=0; i < days_month; i++){
+
+         for (var m=0; m < m_Count; m++){
+             var inputId='m_'+i+'_'+m
+            // var checkId=i+'n'+m+"_"+marketId
+			 check = $("#"+inputId).prop("checked");
+ 		     
+			 
+             if(check) {
+				var checkVal = $("#"+inputId).val().split('|')[0];
+				
+				submitStrMorning=submitStrMorning+checkVal+'<fd>'
+				//alert (checkVal)
+			 }
+			  
+		 }
+		  for (var e=0; e < m_Count; e++){
+             var inputId='e_'+i+'_'+e
+           
+			 check = $("#"+inputId).prop("checked");
+ 		     
+			 
+             if(check) {
+				var checkVal = $("#"+inputId).val().split('|')[0];
+				submitStrEvening=submitStrEvening+checkVal+'<fd>'
+			 }
+		  }
+		var iShow=parseInt(i+1)
+		if (iShow < 10) {
+                  iShow='0'+iShow  }
+		var inputIdLeave= 'l_'+iShow
+		var inputIdHoly= 'h_'+iShow
+		//alert (inputIdLeave)
+		checkLeave = $("#"+inputIdLeave).prop("checked");
+		checkHoly = $("#"+inputIdHoly).prop("checked");
+		//alert (checkLeave)
+		if(checkLeave) {
+			//alert ('asdad')
+			var checkVal = $("#"+inputIdLeave).val().split('|')[0];
+			//alert (checkVal)
+			submitStrMorning=submitStrMorning+checkVal+'<fd>'
+		}
+		if(checkHoly) {
+			var checkVal = $("#"+inputIdHoly).val().split('|')[0];
+			submitStrMorning=submitStrMorning+checkVal+'<fd>'
+		}
+		//submitStrMorning=submitStrMorning+checkVal_leave+'<fd>'+inputIdHoly+'<fd>'
+	 	
+	 	 submitStrMorning=submitStrMorning+'<rd>'
+		 submitStrEvening=submitStrEvening+'<rd>'
+	
+}
+				$("#sResultButton").hide();
+				$("#sResultButton1").hide();
+				$("#wait_image").show();
+				
+	
+	//alert (base_url+'tour_web/tourSubmit?submitStrMorning='+submitStrMorning+'&submitStrEvening='+submitStrEvening+'&days_month='+days_month)
+	$.ajax(base_url+'tour_web/tourSubmit?submitStrMorning='+submitStrMorning+'&submitStrEvening='+submitStrEvening+'&days_month='+days_month,{
+
+		type: 'POST',
+		timeout: 30000,
+		error: function(xhr) {
+		//alert ('Error: ' + xhr.status + ' ' + xhr.statusText);
+		$("#sResult").html('Please try again');
+				$("#sResultButton").show();
+				$("#sResultButton1").show();
+							},
+		success:function(data, status,xhr){	
+			if (data=='Success'){
+				$("#sResult").html('Submitted Successfully');
+				//alert ('Submitted Successfully');
+				$("#sResultButton").hide();
+				$("#sResultButton1").hide();
+				$("#wait_image").hide();
+				}
+			if (data=='Incomplete'){
+				$("#sResult").html('Please Complete Full month');
+				//alert ('Please Complete Full month');
+				$("#sResultButton").show();
+				$("#sResultButton1").show();
+				$("#wait_image").hide();
+				}
+				
+		
+		}
+		
+	});//end ajax
+	
+	
+	
+	
+	
+	
+	
+	
+}; 
+
+
+//Save=================
+function tourSave() {
+	var base_url=location.protocol + "//" + location.hostname + (location.port && ":" + location.port) + "/{{=request.application}}/";
+
+	var days_month={{=session.days_month}}
+	
+	var m_Count=$("#m_Count").val();
+	
+	
+	var submitStrMorning=''
+	var submitStrEvening=''
+	for (var i=0; i < days_month; i++){
+
+         for (var m=0; m < m_Count; m++){
+             var inputId='m_'+i+'_'+m
+            // var checkId=i+'n'+m+"_"+marketId
+			 check = $("#"+inputId).prop("checked");
+ 		     
+			 
+             if(check) {
+				var checkVal = $("#"+inputId).val().split('|')[0];
+				
+				submitStrMorning=submitStrMorning+checkVal+'<fd>'
+				//alert (checkVal)
+			 }
+			  
+		 }
+		  for (var e=0; e < m_Count; e++){
+             var inputId='e_'+i+'_'+e
+           
+			 check = $("#"+inputId).prop("checked");
+ 		     
+			 
+             if(check) {
+				var checkVal = $("#"+inputId).val().split('|')[0];
+				submitStrEvening=submitStrEvening+checkVal+'<fd>'
+			 }
+		  }
+		var iShow=parseInt(i+1)
+		if (iShow < 10) {
+                  iShow='0'+iShow  }
+		var inputIdLeave= 'l_'+iShow
+		var inputIdHoly= 'h_'+iShow
+		//alert (inputIdLeave)
+		checkLeave = $("#"+inputIdLeave).prop("checked");
+		checkHoly = $("#"+inputIdHoly).prop("checked");
+		//alert (checkLeave)
+		if(checkLeave) {
+			//alert ('asdad')
+			var checkVal = $("#"+inputIdLeave).val().split('|')[0];
+			//alert (checkVal)
+			submitStrMorning=submitStrMorning+checkVal+'<fd>'
+		}
+		if(checkHoly) {
+			var checkVal = $("#"+inputIdHoly).val().split('|')[0];
+			submitStrMorning=submitStrMorning+checkVal+'<fd>'
+		}
+		//submitStrMorning=submitStrMorning+checkVal_leave+'<fd>'+inputIdHoly+'<fd>'
+	 	
+	 	 submitStrMorning=submitStrMorning+'<rd>'
+		 submitStrEvening=submitStrEvening+'<rd>'
+	
+}
+				$("#sResultButton").hide();
+				$("#sResultButton1").hide();
+				$("#wait_image").show();
+	
+	//alert (submitStrMorning)
+	//alert (base_url+'tour_web/tourSave?submitStrMorning='+submitStrMorning+'&submitStrEvening='+submitStrEvening)
+	$.ajax(base_url+'tour_web/tourSave?submitStrMorning='+submitStrMorning+'&submitStrEvening='+submitStrEvening,{
+
+		type: 'POST',
+		timeout: 30000,
+		error: function(xhr) {
+		//alert ('Error: ' + xhr.status + ' ' + xhr.statusText);
+		$("#sResult").html('Please try again');
+		$("#sResultButton").show();
+		$("#sResultButton1").show();
+		$("#wait_image").hide();
+							},
+		success:function(data, status,xhr){	
+		$("#sResult").html('Submitted Successfully');
+		
+		$("#sResultButton").show();
+		$("#sResultButton1").show();
+		$("#wait_image").hide();
+		}
+		
+	});//end ajax
+	
+	
+	
+	
+	
+	
+	
+	
+}; 
+
+function uncheckAll(divid) {
+	 var LH=divid.split('_')[0]
+	 var iShow=parseInt(divid.split('_')[1])
+	  if (iShow < 10) {iShow='0'+iShow  }
+
+	 if (LH=='l'){
+	 	var inputID='l_'+iShow
+	 }
+	 else{
+		 var inputID= 'h_'+iShow
+		 }
+	 
+	 
+	 check = $("#"+inputID).prop("checked");
+	 
+	 if (check){
+		 var divIDShow='d_'+iShow
+		 var divIDShow_e='de_'+iShow
+		 $('#'+divIDShow).find('input[type=checkbox]:checked').attr("checked", false);
+		 $('#'+divIDShow_e).find('input[type=checkbox]:checked').attr("checked", false);
+		 
+		 $('#'+inputID).prop('checked', true);
+	 }
+
+}
+
+function checkAll(divid) {
+	 var iShow=divid
+	 
+	 if (iShow < 10) {iShow='0'+iShow  }
+
+	
+	var inputIDL='l_'+iShow
+	
+	var inputIDH= 'h_'+iShow
+	 
+	 var divIDShow='d_'+iShow
+	 var divIDShow_e='de_'+iShow
+	 
+	
+	 checkLeave = $("#"+inputIDL).prop("checked");
+	 checkHoly = $("#"+inputIDH).prop("checked");
+	 
+	
+	 
+	 
+	 if (checkLeave){
+		 	
+			checkLeave = $("#"+inputIDL).prop("checked");
+			$('#'+divIDShow).find('input[type=checkbox]:checked').attr("checked", false);
+			$('#'+divIDShow_e).find('input[type=checkbox]:checked').attr("checked", false);
+			
+			$('#'+inputIDL).prop('checked', true);
+		 
+	 }
+	 if (checkHoly){
+			checkLeave = $("#"+inputIDH).prop("checked");
+			$('#'+divIDShow).find('input[type=checkbox]:checked').attr("checked", false);
+			$('#'+divIDShow_e).find('input[type=checkbox]:checked').attr("checked", false);
+			//alert (inputIDH)
+			$('#'+inputIDH).prop('checked', true);
+		 
+	 
+	 }
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	
+	 
+
+}
+</script>
+
+
+<table width="100%"  border="0" cellspacing="0" cellpadding="0" style="background-color:#FFFFFF;" >
+  <tr height="30px" >
+    <td width="500"><span class="blackCatTitle">&nbsp;&nbsp;Tour</span></td>
+    <td width="500" align="right">&nbsp;</td>
+    <td align="right">&nbsp;</td>
+  </tr>
+  <tr  height="1px" style="background-color:#CCCCCC;">
+	    <td width="300" ></td><td ></td><td ></td>
+  </tr>
+  </table>
+  
+  
+  <table width="100%" height="500px"  border="0" cellspacing="0" cellpadding="0" class="page_color"  >
+  <tr height="100%"  style="vertical-align:top;">
+    <td>
+     <!--<form id="form1" name="form1" method="post" action="{{=URL(c='tour_web',f='tourSubmit')}}">-->
+    
+	<table width="100%"  border="0" cellpadding="0" cellspacing="0" bgcolor="#E6FFFF"  >
+      <tr>
+        <td width="5">&nbsp;</td>
+        <td style="font-size:16px; color:#30F">Date: 
+          <input name="amndDate" id="amndDate"  type="date" placeholder="Date" value="">	
+          aaa<br />
+			 <br /></td>
+             <td style="font-size:16px; color:#30F"><br />
+			 <br /></td>
+      </tr>
+      </table>
+      
+			 <table width="100%" border="1" cellpadding="0" cellspacing="0" class="sample_border" bgcolor="#F0FFFF" >
+               <tr align="left" class="blackCatHead"  height="20px" ;"vertical-align:middle">
+                 <td width="45%" >Morning</td>
+                 <td width="45%" >Evening</td>
+                 
+               </tr>
+			   			   ewrer
+			   	{{i=0
+                while i < 1:
+                  
+                  iShow=i+1
+                  if (iShow < 10) :
+                  iShow='0'+str(iShow)
+                  pass
+
+                  crrDate=str(current_date).split('-')[2]
+                  import calendar
+                  #setDate=str(setDateG).split('-')[0]+'-'+str(setDateG).split('-')[1]+'-'+str(iShow)
+                  setDate=str(setDateG)+'-'+str(iShow)
+                  year = int(setDate.split('-')[0])
+                  month = int(setDate.split('-')[1])
+                  day = int(setDate.split('-')[2])
+                  
+                  ans =calendar.weekday(year,month,day)
+                    
+                   
+                }}  
+			   	
+  					
+                    
+                      <tr  align="left" class="blackCat"  style="font-size:13px"> 
+                      <td width="45%" >
+                      
+                       <div id="d_{{=iShow}}">
+                      {{mCount=0}}
+                      {{for m,record in enumerate(marketTourRows):}}
+                      
+                      {{if (session.monthPass=='This' and i >= int(crrDate)) or session.monthPass=='Next':}}
+                         
+                         {{searchStr='<'+setDate+'>'+record.level_name}}
+                      		 {{if (session.userType=='sup'):}}
+                             
+                                 {{if (status=='Draft'):}}
+                                 
+                                 {{#=strValueMorning.find(searchStr)}}
+                                         {{if (strValueMorning.find(searchStr)!=-1):}}
+                                  <input id="m_{{=str(i)+'_'+str(m)}}" type="checkbox" value="{{=record.level_id}}|{{=record.level_name}}"  onclick="checkAll({{=str(iShow)}})" checked />
+                                        {{else:}}
+                                        <input id="m_{{=str(i)+'_'+str(m)}}" type="checkbox" value="{{=record.level_id}}|{{=record.level_name}}"  onclick="checkAll({{=str(iShow)}})"  />
+                                          {{pass}}
+                                      
+                          		
+                                {{pass}}
+                      		
+                            
+                            
+                            {{ pass}}
+                           
+                           {{if (session.userType=='rep'):}}
+                           {{searchStr='<'+setDate+'>'+record.microunion_name}}
+                           
+                           
+                          
+                     <input id="m_{{=str(i)+'_'+str(m)}}" type="checkbox" value="{{=record.microunion_id}}|{{=record.microunion_name}}"  onclick="checkAll({{=str(iShow)}})" />
+                     		
+                            
+                            
+                     			
+                            {{pass}}
+                      {{pass}}
+                      
+                       
+                      {{if (session.userType=='rep'):
+                      		searchStr='<'+setDate+'>'+record.microunion_name
+                      		
+                            
+                            =record.microunion_name}}<br>
+                           
+                            
+                            
+                       {{ pass}}
+                      {{mCount=mCount+1}}
+                      {{ pass
+                      
+                      }}
+                    
+                    
+                     {{searchStr='<'+setDate+'>LEAVE'}}
+                         
+                      
+                      
+                          
+                            LEAVE<br>
+                           
+                      
+                      
+                      
+                      
+                      <input id="h_{{=str(iShow)}}" type="checkbox" value="HOLYDAY|HOLYDAY" onclick="uncheckAll('h_'+{{=str(iShow)}})"  />
+                     
+                     
+                      
+                      
+                      HOLYDAY<br>
+                      
+                      
+                      </div>
+                      </td>
+                      <td width="45%" >
+                       <div id="de_{{=iShow}}">
+                      {{for e,record in enumerate(marketTourRows):}}
+                       {{if (session.monthPass=='This' and i >= int(crrDate)) or session.monthPass=='Next':}}
+                       {{if (session.userType=='rep'):}}
+      
+                      <input id="e_{{=str(i)+'_'+str(e)}}" type="checkbox" value="{{=record.microunion_id}}|{{=record.microunion_name}}" onclick="checkAll({{=str(iShow)}})" />
+                      
+                      
+                     	{{pass}}
+                     {{if (session.userType=='sup'):}}
+
+                      <input id="e_{{=str(i)+'_'+str(e)}}" type="checkbox" value="{{=record.level_id}}|{{=record.level_name}}" onclick="checkAll({{=str(iShow)}})"  />
+
+                      {{pass}}
+                      {{pass}}
+                     {{if (session.userType=='sup'):
+                     		searchStrE='<'+setDate+'>'+record.level_name
+                     		
+                            
+                       			=record.level_name}}<br>
+                           
+                            
+                        {{pass}}
+                      {{if (session.userType=='rep'):
+                      		searchStrE='<'+setDate+'>'+record.microunion_name
+                      		
+                          
+                          =record.microunion_name}}<br>
+                          
+                       {{ pass
+                       }}
+                      {{pass}}
+                      </div>
+                      </td>
+                       
+                     <input type="hidden" name="m_Count" id="m_Count" value="{{=mCount}}"   />
+  
+			   {{
+               i=i+1
+               pass}}
+               </tr>
+               
+               <tr  align="left" class="blackCat"  style="font-size:13px">
+                        <td colspan="2" >
+                        <div id="sResult" style="font-size:16px; color:#00C"></div>
+                        <div id="wait_image" style="visibility:hidden"><img  style="" width="50px;" src="loading.gif" alt=""></div>
+                        <div id="sResultButton" style="font-size:16px; color:#00C">
+                          <input  type="submit" onclick="tourSave()" name="input" id="input" style="width:100%; height:30px" value="         Save         "   class="button_update" title=""/>
+                          </div>
+                          <br><br>
+                        </td>
+                      </tr>
+                      <tr  align="left" class="blackCat"  style="font-size:13px">
+                        <td colspan="2" >
+                        <div id="sResultButton1" style="font-size:16px; color:#00C">
+                          <input  type="submit" onclick="tour()" name="input" id="input" style="width:100%; height:30px" value="         Submit         "   class="button_update" title=""/></div>
+                        </td>
+                      </tr>
+</table>
+			
+
+
+
+	      </td>
+        </tr>
+    </table>
+    <br><br><br><br><br><br>
+
+
+

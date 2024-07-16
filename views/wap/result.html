@@ -1,0 +1,28 @@
+{{extend 'layout_wap.html'}}
+    
+
+
+    <table align="left" cellpadding="2"  cellspacing="0"width="100%" border="0" >
+	  <tr style="background-color:#DDDDDD" >
+		<td  align="left" valign="top">Result	  </td>
+	  </tr>
+ 
+    
+    <tr >
+      <td  align="left" >
+	  {{if (submit_type=='delivery'):}}
+	  Your Delivery Submitted Successfully. Sl number is-
+	  {{elif (submit_type=='order'):}}
+	  Your Order Submitted Successfully. Sl number is-
+	  {{pass}}
+	  
+	  {{=sl}}</td>
+      </tr>
+    <tr >
+      <td  align="left" >&nbsp;</td>
+    </tr>
+    <tr >
+      <td  align="left" ><a href="{{=URL(c='wap',f='menu')}}">Menu</a></td>
+    </tr>
+</table>   
+

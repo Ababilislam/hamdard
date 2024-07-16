@@ -1,0 +1,149 @@
+{{extend 'layout_sales_report.html'}}
+
+<html>
+
+<head>
+
+<script type="text/javascript">
+
+function print_page()
+
+  {
+
+    window.print()
+
+  }
+
+</script>
+
+
+
+</head>
+
+<body>
+
+<table width="900px;"> <tr><td style="text-align:right"><!--<a href="{{=URL(c='report',f='downloadGoodsReceivedSummary',vars=dict(date_from=date_from,date_to=date_to,depot_id=depot_id,depot_name=depot_name,store_id=store_id,store_name=store_name,customer_id=customer_id,customer_name=customer_name,mso_id=mso_id,mso_name=mso_name))}}" >Downlaod</a>--></td></tr></table>
+
+
+
+<table width="1724" cellspacing="1" cellpadding="1">
+
+	<tr>
+
+		<td width="1718"><table width="546" style="border:none;" >
+		  <tr >
+		    <td >Date Range</td>
+		    <td >&nbsp;</td>
+		    <td >{{=date_from}} - {{=date_to}}</td>
+	      </tr>
+		  <tr >
+		    <td width="90" > Depot/Branch</td>
+		    <td width="10" >:</td>
+		    <td width="424" ><span style="">{{=depot_id}}|{{=depot_name}}</span></td>
+	      </tr>
+		  <tr >
+		    <td >Store</td>
+		    <td >:</td>
+		    <td ><span style="">{{=store_id}}|{{=store_name}}</span></td>
+	      </tr>
+		  </table>
+          
+          <table width="900px" style="border:none; text-align:center; font-weight:bold;" >
+            <tr >
+              <td width="100" >&nbsp;</td>
+              <td align="center" ><span style="border-bottom:1px solid #333;">Item Wise Sales Statement Detail </span></td>
+              <td width="100" ><img  height="30px" src="{{=URL('static','images/comp_logo1.png')}}"/></td>
+            </tr>
+          </table>
+          <table width="900px" border="1" cellpadding="1" cellspacing="1" class="sample_border" >
+	        <tr align="left" class="blackCatHead" height="20px" ;  style="font-size:12px">
+		        <td colspan="2" align="left"  style=" border-top:hidden" >&nbsp;</td>
+		        <td colspan="3" align="center"  style="">Sales</td>
+		        <td colspan="4" align="center"  style="">Stock</td>
+	          </tr>
+		      <tr align="left" class="blackCatHead" height="20px" ;  style="font-size:12px">
+		        <td width="80"  align="left" >Item</td>
+		        <td width="150"  align="left">ItemName</td>
+		        <td width="69"  align="right">TP</td>
+		        <td width="69"  align="right">S.Qty after Return</td>
+		        <td width="68"  align="right">TP*S.Qty</td>
+		        <td width="76" align="right"  style="">Closing stock Qty</td>
+		        <td width="44" align="right"  style="">TP</td>
+		        <td width="44" align="right"  style="">TP*Closing stock Qty</td>
+	          </tr>
+              {{#totalSaleTP=0.00
+              totalSaleTP=0.00
+              	
+              }}
+		      {{for i,records_inv in enumerate(records_inv):}}
+		       {{item_id =records_inv[db.sm_invoice.item_id]}}
+                {{
+                itemQty=0
+                itemS=0
+                }}
+                {{ if [s for s in itemList if item_id in s]:
+                  index_element = itemList.index(item_id)
+                      
+                  itemQty=itemQtyList[index_element]
+                  itemTP=itemTPList[index_element]
+                  stTP=stTPList[index_element]
+
+        
+                  pass
+                }}
+		      
+		      {{ if (i % 2 == 0):}}
+              <tr  align="left" style="vertical-align:middle; font-size:12px; background:#FBFBFB;">
+               {{else:}}
+              <tr  align="left" style="vertical-align:middle; font-size:12px; background:#F5F5F5;">
+              {{pass}}
+              <td  style="">{{=records_inv[db.sm_invoice.item_id]}}</td>
+              <td  style="">{{=records_inv[db.sm_invoice.item_name]}}</td>
+                
+				
+
+    <td  align="right">{{=records_inv[db.sm_invoice.actual_tp]}}</td>
+    <td  align="right">{{=records_inv[((db.sm_invoice.quantity+db.sm_invoice.bonus_qty)-(db.sm_invoice.return_qty+db.sm_invoice.return_bonus_qty)).sum()]}}</td>
+    <td  align="right">{{=records_inv[((db.sm_invoice.quantity+db.sm_invoice.bonus_qty)-(db.sm_invoice.return_qty+db.sm_invoice.return_bonus_qty)).sum()] * records_inv[db.sm_invoice.actual_tp]}}
+    {{totalSaleTP=totalSaleTP+records_inv[((db.sm_invoice.quantity+db.sm_invoice.bonus_qty)-(db.sm_invoice.return_qty+db.sm_invoice.return_bonus_qty)).sum()] * records_inv[db.sm_invoice.actual_tp]}}
+    </td>
+    <td  align="right">{{=itemQty}}</td>
+    <td  align="right">{{=itemTP}}</td>
+  
+    <td  align="right">{{=stTP}}</td>
+  </tr>
+		      {{pass}}
+	       
+            <tr style="background-color:#F0FAFF">
+              <td  >&nbsp;</td>
+              <td align="right">&nbsp;</td>
+              <td align="right">&nbsp;</td>
+               <td  align="right">&nbsp;</td>
+              <td  align="right">{{='{:20,.2f}'.format(totalSaleTP)}}</td>
+              <td  align="right">&nbsp;</td>
+              <td  align="right">&nbsp;</td>
+              <td  align="right">{{='{:20,.2f}'.format(totalSTP)}}</td>
+            </tr>
+          </table>
+
+</br></br>
+
+
+
+<table width="900px" >
+  <tr>
+    <td width="411" align="center">__________________</td>
+    <td width="225" align="center">&nbsp;</td>
+    <td width="248" align="left">________________________________</td>
+  </tr>
+  <tr>
+    <td width="411" align="center"><strong>Printed By</strong></td>
+    <td width="225" align="right">for</td>
+    <td width="248" align="left"><strong>{{=session.cName}}</strong></td>
+  </tr>
+</table>
+<p>&nbsp;</p>
+</body>
+
+</html>
+

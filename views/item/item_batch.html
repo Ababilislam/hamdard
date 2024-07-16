@@ -1,0 +1,556 @@
+
+
+{{extend 'layout.html'}}
+
+  <link rel="stylesheet" href="{{=URL('static', 'js_and_css/ui.theme.css')}}" type="text/css" />
+
+  <link rel="stylesheet" href="{{=URL('static', 'js_and_css/jquery-ui.css')}}" type="text/css" />
+
+  <link rel="stylesheet" href="{{=URL('static', 'js_and_css/style.css')}}" type="text/css" />
+
+   <script src="{{=URL('static','js_and_css/jquery-1.8.2.js')}}"></script>
+
+    <script src="{{=URL('static','js_and_css/jquery-ui.js')}}"></script>
+
+  
+
+  
+
+  <style type="text/css">
+
+	 input[type=text], input[type=password],  select {
+
+		margin: 2px 0px 2px 0px;
+
+		width: 200px;
+
+	}
+
+	div.error {
+
+		width: 200px;
+
+	}
+
+	
+
+	#sm_item_category_id,#sm_item_unit_type{
+
+		width: 200px;
+
+	}
+
+.page_color,body{
+
+	font-family:Arial, Helvetica, sans-serif;
+
+	font-size:13px;	
+
+	}
+
+ </style>
+
+ 
+
+<script>
+var base_url=location.protocol + "//" + location.hostname + (location.port && ":" + location.port) + "/{{=request.application}}/";
+
+
+$(function() {		
+		$('#sm_item_batch_item_id').attr('placeholder','Select Item');
+		
+		var valueListStr=localStorage.itemDataStr;		
+		$.ajax({
+			  url: base_url+'default/get_item_list',
+			  success: function(resStr) {
+				  valueListStr=resStr
+			  }
+		});
+		
+		$('#sm_item_batch_item_id').keyup(function(){
+
+			//-------------------------
+			
+			var valueList = valueListStr.split(',');				
+
+			var searchValue=$("#sm_item_batch_item_id").val();
+			
+			//---------------- auto complete combo list
+			
+			var valueList_new=new Array();
+			
+			lc=0;
+			i =0;
+			var valueStr="";				
+			
+			while (i < valueList.length)
+
+			{
+
+				valueStr=valueList[i];
+
+				i=i+1;					
+
+				var res=valueStr.toUpperCase().match(searchValue.toUpperCase());
+
+				if (res!=null){
+					
+					valueList_new[lc]=valueStr;
+
+					lc=lc+1;
+
+					if (lc==30){
+
+						break;
+
+					};
+
+				}else{
+
+					continue;
+
+				}					
+
+			};
+
+			//alert (ref_list_new);
+
+			//-------------- auto complete source
+
+			$( "input#sm_item_batch_item_id" ).autocomplete({
+
+				source: valueList_new
+
+			});
+
+	  }); 
+		
+	   //==============
+	   $('#sm_item_batch_item_id').blur(function(){
+
+		   var my_array=new Array();
+			
+			my_array=$("#sm_item_batch_item_id").val().split('|');
+			
+			if (my_array.length == 2){
+				$('#sm_item_batch_item_id').val(my_array[0]);
+				
+				/*document.getElementById('item_name').value=my_array[0];				
+				document.getElementById('item_id').value=my_array[1];				
+				document.getElementById('dist_rate').value=my_array[3];				
+				document.getElementById('name_value').innerHTML = my_array[0];				
+				document.getElementById('id_value').innerHTML = my_array[1];				
+				document.getElementById('price_value').innerHTML = my_array[3];	*/
+
+			};
+		});
+	   
+	   valueListStrFtr=''
+	   //========================================	Filter
+		$('#search_type').blur(function(){
+			
+			if ($('#search_type').val()=='ItemID'){
+				
+				$.ajax({
+
+					  url: base_url+'default/get_item_list',
+
+					  success: function(resStr) {
+
+						  valueListStrFtr=resStr
+
+					  }
+
+					});
+
+			}else if ($('#search_type').val()=='Catagory'){
+
+				$.ajax({
+
+					  url: base_url+'default/get_item_category',
+
+					  success: function(resStr) {
+
+						  valueListStrFtr=resStr
+
+					  }
+
+					});
+
+			
+
+			}else if ($('#search_type').val()=='Unit'){
+
+				$.ajax({
+
+					  url: base_url+'default/get_item_unit_type',
+
+					  success: function(resStr) {
+
+						  valueListStrFtr=resStr
+
+					  }
+
+					});
+			};
+
+	 	});
+
+	 
+
+		$('#search_value').keyup(function(){
+
+			//-------------------------
+
+			var valueList = valueListStrFtr.split(',');				
+
+			var searchValue=$("#search_value").val();
+
+			
+
+			//---------------- auto complete combo list
+
+			var valueList_new=new Array();
+
+			lc=0;
+
+			i =0;
+
+			var valueStr="";				
+
+			while (i < valueList.length)
+
+			{
+
+				valueStr=valueList[i];
+
+				i=i+1;					
+
+				var res=valueStr.toUpperCase().match(searchValue.toUpperCase());
+
+				if (res!=null){
+
+					valueList_new[lc]=valueStr;
+
+					lc=lc+1;
+
+					if (lc==30){
+
+						break;
+
+					};
+
+				}else{
+
+					continue;
+
+				}					
+
+			};
+
+			//alert (ref_list_new);
+
+			
+
+			//-------------- auto complete source
+
+			$( "input#search_value" ).autocomplete({
+
+				source: valueList_new
+
+			});
+
+	  }); 
+
+	   //==============	
+		
+}); 
+
+</script>
+
+ 
+{{today=datetime.datetime.strptime(current_date,'%Y-%m-%d')}}
+
+<table width="100%"  border="0" cellspacing="0" cellpadding="0" style="background-color:#FFFFFF;" >
+
+  <tr height="30px" >
+
+    <td><span class="blackCatTitle">Item
+
+      
+
+    Batch</span></td>
+
+    <td align="right">&nbsp;</td>
+
+    <td align="right" width="20px">&nbsp;</td>
+
+  </tr>
+
+  <tr  height="1px" style="background-color:#CCCCCC;">
+
+	    <td ></td><td ></td><td ></td>
+
+  </tr>
+
+  </table>
+
+  
+
+  
+
+  <table width="100%" height="500px"  border="0" cellspacing="0" cellpadding="0" class="page_color"  >
+
+  <tr height="100%"  style="vertical-align:top;">
+
+    <td>
+
+	<table width="100%"  border="0" cellpadding="0" cellspacing="0"  >
+
+
+
+      <tr>
+
+        <td width="10">&nbsp;</td>
+
+        <td>
+
+		
+
+		<br />
+
+		{{if access_permission==True:}} 
+
+		<table width="800">
+
+			<tr>
+
+				<td width="478">
+
+          <table width="475" class="blackCat">
+
+		  {{=form.custom.begin}}
+
+              <tr>
+
+                <td width="95"> ItemID </td>
+
+                <td width="368">                				
+				{{=form.custom.widget.item_id}}
+					<!--
+                    <input type="text" name="item_id" id="item_id" />	
+                    <input type="hidden" name="item_name" id="item_name" />
+					<input type="hidden" name="dist_rate" id="dist_rate" />	
+					<input type="text" name="item_details" id="item_details" style="width:300px;" value="" placeholder="Select Item" autocomplete="off" />
+-->
+                </td>
+
+              </tr>
+
+              <tr>
+
+                <td>BatchID</td>
+
+                <td>{{=form.custom.widget.batch_id}}</td>
+
+              </tr>
+
+              <tr>
+
+                <td>Expiry Date</td>
+
+                <td>{{=form.custom.widget.expiary_date}}</td>
+
+                </tr>
+
+              <tr>
+
+                <td>&nbsp;</td>
+
+                <td>{{=form.custom.submit}}</td>
+
+                </tr>
+
+               {{=form.custom.end}}
+
+            </table>
+
+			</td>
+
+			
+
+			<td width="310">&nbsp;</td>
+
+			</tr>
+
+			</table>
+
+            <br />
+
+         {{pass}} 
+
+		 
+
+         <table width="900" border="1" cellpadding="1" cellspacing="1" class="sample_border" >
+			
+		   <form id="form1" name="form1" method="post" action="{{=URL(c='item',f='item_batch')}}">
+           
+            <tr align="left" class="blackCatHead"  height="20px" ;"vertical-align:middle">
+              <td width="100" >
+                <select name="search_type" id="search_type" style="width:150px" >
+                  <option value="" selected="selected">Select a type</option>
+                    {{if session.search_type_item=='ItemID':}}<option value="ItemID" selected="selected">Item ID</option>{{else:}}<option value="ItemID" >Item ID</option>{{pass}}
+					{{if session.search_type_item=='BatchID':}}<option value="BatchID" selected="selected">BatchID</option>{{else:}}<option value="BatchID" >BatchID</option>{{pass}}
+					{{if session.search_type_item=='ExpiaryDate':}}<option value="ExpiaryDate" selected="selected">Expiry Date</option>{{else:}}<option value="ExpiaryDate" >Expiry Date</option>{{pass}}
+				</select>
+              </td>
+
+              <td width="166" >
+
+              {{if session.search_value_item=='' or session.search_value_item==None:}}
+
+              	<input  name="search_value" type="text" id="search_value" size="25" value="" placeholder="Select item" autocomplete="off" style="width:300px"/>
+
+              {{else:}}
+
+              	<input  name="search_value" type="text" id="search_value" size="25" value="{{=session.search_value_item}}" placeholder="Select a value" autocomplete="off" style="width:300px"/>
+
+              {{pass}}
+
+              
+
+              </td>
+
+              <td width="100" ><input type="submit" name="btn_filter_item" id="btn_filter_item" value="Filter"   class="button_update"/>
+
+			  <input type="submit" name="btn_all" id="btn_all" value="All"   class="button_update"/>		
+
+		  	   </td>
+
+				
+
+              <td align="right" >
+
+			  <a href="{{=URL(c='item',f='download_item_batch')}}">
+
+				 	<input type="button" name="" id="" value="Download"   class="button_update"/>
+
+			    	</a>
+
+			{{if access_permission==True:}} 
+
+			  <a href="{{=URL(c='item',f='itembatch_batch_upload')}}">
+
+			  <input type="button" name="" id="" value="Batch Upload"   class="button_update"/>
+
+			  </a>
+
+			  {{pass}}
+
+			  </td>
+
+            </tr>
+
+		      </form>
+
+          </table>
+
+		 <strong>Total:</strong> {{=totalCount}}<br />
+
+		 
+
+			 <table width="900" border="1" cellpadding="1" cellspacing="1" class="sample_border" >
+
+                <tr align="left" class="blackCatHead"  height="20px" ;"vertical-align:middle">
+
+                  <td width="60" >ItemID</td>
+
+                  <td >Name</td>
+
+                  <td width="150" >BatchID</td>
+
+                  <td width="100" >Expiry Date</td>
+                  <td width="60"  ></td>
+
+                </tr>
+
+			    {{ p=0}} 		  
+
+			    {{for i,record in enumerate(records):}}
+
+			    {{ if i==items_per_page: break}}
+					
+                    
+                    
+                    
+  
+    <!--<form id="form1" method="post" action="">-->
+	
+    {{expiaryDate=datetime.datetime.strptime(str(record.expiary_date),'%Y-%m-%d')}}
+	{{rowStyle='font-size:13px;'}}
+    {{if expiaryDate < today:}}
+    	{{rowStyle='font-size:13px; background-color:#FFFFC1'}}
+    {{pass}}
+	
+    <tr  align="left" class="blackCat" style="{{=rowStyle}}">    
+      <td width="60" >{{=record.item_id}}</td>		
+      <td >{{=record.name}}</td>
+      <td width="150" >{{=record.batch_id}}</td>		
+      <td width="100" >{{=record.expiary_date}}</td>
+      
+      <form id="form1" name="form1" method="post" action="{{=URL(c='item',f='item_batch',args=[page,record.id])}}">
+
+      <td width="60" align="right"  >
+        {{if access_permission==True:}}
+        
+            {{if session.user_type=='Admin' or record.created_by==session.user_id:}}
+                <input type="checkbox" name="check_delete" value="YES" title="Checked confirmation"/>
+                &nbsp;
+        <input type="submit" name="btn_delete" id="btn_delete" value="X"   class="button_update"/>
+            {{pass}}
+        {{pass}}
+        
+      </td>
+</form>
+    </tr>
+
+  
+
+			  
+
+			    {{pass}}
+
+		    </table>
+
+			  <p>&nbsp;</p>
+
+	      </td></tr>
+
+    </table>
+
+    
+
+{{if page:}}
+
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="{{=URL(args=[page-page])}}">first</a> |  
+
+&nbsp;&nbsp;<a href="{{=URL(args=[page-1])}}">previous</a> |
+
+{{pass}}
+
+
+
+{{if len(records)>items_per_page:}}
+
+&nbsp;&nbsp;<a href="{{=URL(args=[page+1])}}">next</a>
+
+{{pass}}
+
+	</td>
+
+  </tr>
+
+</table>
+
+
+

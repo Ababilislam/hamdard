@@ -1,0 +1,267 @@
+{{extend 'layout_dcr_report.html'}}
+
+<html>
+
+<head>
+
+<script type="text/javascript">
+
+function print_page()
+
+  {
+
+    window.print()
+
+  }
+
+</script></head>
+
+<body>
+<table width="900px" style="border:none; text-align:center; font-weight:bold;" >
+  <tr >
+    <td width="100" >&nbsp;</td>
+    <td align="left" style="font-size:18px" >DCR</td>
+    <td width="100" ><img src="{{=URL('static','images/comp_logo1.png')}}" alt=""  height="30px"/></td>
+  </tr>
+</table>
+<div style="background-color:#333; height:1px; font-size:1px"></div>
+<br/> 
+
+
+
+<table width="900" border="0" cellspacing="1" cellpadding="1"  class="table_row2">          
+
+
+
+
+
+          <tr >
+
+            <td width="100" valign="top" ><b>Doctor</b></td>            
+
+            <td valign="top" ><b>:</b>&nbsp;{{=docname}} | {{=docID}}</td>
+
+  </tr>
+
+          <tr >
+
+            <td valign="top" ><b>Field Force </b></td>
+
+            <td valign="top" ><strong>: </strong>{{=repname}} | {{=repID}}</td>
+
+          </tr>
+
+          <tr >
+
+            <td valign="top" ><b>Visit Date</b></td>
+
+            <td valign="top" ><b>:</b> {{=vsitdate}}</td>
+
+          </tr>
+
+          <tr >
+
+            <td valign="top" ><b>Depot-Route</b></td>
+
+            <td valign="top" ><b>:</b> {{=depot}} | {{=route}}</td>
+
+          </tr>
+
+          <tr >
+
+            <td valign="top" ><strong>Feedback</strong></td>
+
+            <td valign="top" ><b>:</b> {{=feedback}}</td>
+
+          </tr>     
+
+          <tr >
+
+            <td valign="top" >&nbsp;</td>
+
+            <td valign="top" >&nbsp;</td>
+
+          </tr>     
+
+           {{pass}}
+
+</table>
+
+
+
+{{if len(proposedList)>0:}}
+
+  <table width="900" border="1" cellpadding="1" cellspacing="1" class="sample_border" >
+
+  <tr align="left" class="blackCatHead"  height="20px" ; style="vertical-align:middle; background-color:#E6E6E6">
+
+    <td >Proposed Item</td>
+
+    <td width="180" > ID</td>
+
+    </tr>	
+
+    {{for i in sorted(range(len(proposedList))):}}
+
+	{{itemData=proposedList[i]}}	
+
+  <tr  align="left" class="blackCat"  style="vertical-align:middle; background-color:#FBFBFB">
+
+    <td >{{=itemData['itemName']}}</td>
+
+    <td width="180" >{{=itemData['itemID']}}</td>
+
+    </tr>
+
+    {{pass}}
+
+    <tr  align="left" class="blackCat"  style="vertical-align:middle; background-color:#FBFBFB">
+
+    <td colspan="2" >&nbsp;</td>
+
+    </tr>    
+
+</table>
+
+{{pass}}
+
+
+
+{{#=len(giftList)}}
+
+{{if len(giftList)>0:}}
+
+<table width="900" border="1" cellpadding="1" cellspacing="1" class="sample_border" >
+
+  <tr align="left" class="blackCatHead"  height="20px" ; style="vertical-align:middle; background-color:#E6E6E6">
+
+    <td >Gift </td>
+
+    <td width="100" >ID</td>
+
+    <td width="80" align="right"  >Qty</td>
+
+    </tr>	
+
+    {{for i in sorted(range(len(giftList))):}}
+
+	{{gftData=giftList[i]}}	
+
+  <tr  align="left" class="blackCat"  style="vertical-align:middle; background-color:#FBFBFB">
+
+    <td >{{=gftData['gftName']}}</td>
+
+    <td width="100" >{{=gftData['gftID']}}</td>
+
+    <td width="80" align="right" >{{=gftData['gftQty']}}</td>
+
+   </tr>
+
+    {{pass}}
+
+    <tr  align="left" class="blackCat"  style="vertical-align:middle; background-color:#FBFBFB">
+
+    <td colspan="3" >&nbsp;</td>
+
+    </tr> 
+
+</table>
+
+{{pass}}
+
+
+
+{{#=len(ppmList)}}
+
+
+
+{{if len(ppmList)>0:}}
+
+<table width="900" border="1" cellpadding="1" cellspacing="1" class="sample_border" >
+
+  <tr align="left" class="blackCatHead"  height="20px" ; style="vertical-align:middle; background-color:#E6E6E6">
+
+    <td >PPM </td>
+
+    <td width="100" >ID</td>
+
+    <td width="80" align="right"  >Qty</td>
+
+    </tr>	
+
+    {{for i in sorted(range(len(ppmList))):}}
+
+	{{ppmData=ppmList[i]}}	
+
+  <tr  align="left" class="blackCat"  style="vertical-align:middle; background-color:#FBFBFB">
+
+    <td >{{=ppmData['ppmName']}}</td>
+
+    <td width="100" >{{=ppmData['ppmID']}}</td>
+
+    <td width="80" align="right" >{{=ppmData['ppmQty']}}</td>
+
+   </tr>
+
+    {{pass}}
+
+    <tr  align="left" class="blackCat"  style="vertical-align:middle; background-color:#FBFBFB">
+
+    <td colspan="3" >&nbsp;</td>
+
+    </tr> 
+
+</table>
+
+{{pass}}
+
+
+
+
+
+
+
+{{if len(sampleList)>0:}}
+
+<table width="900" border="1" cellpadding="1" cellspacing="1" class="sample_border" >
+
+  <tr align="left" class="blackCatHead"  height="20px" ; style="vertical-align:middle; background-color:#E6E6E6">
+
+    <td >Sample </td>
+
+    <td width="100" >ID</td>
+
+    <td width="80" align="right"  >Qty</td>
+
+  </tr>	
+
+    {{for i in sorted(range(len(sampleList))):}}
+
+	{{smpData=sampleList[i]}}	
+
+  <tr  align="left" class="blackCat"  style="vertical-align:middle; background-color:#FBFBFB">
+
+    <td >{{=smpData['smpName']}}</td>
+
+    <td width="100" >{{=smpData['smpID']}}</td>
+
+    <td width="80" align="right" >{{=smpData['smpQty']}}</td>
+
+  </tr>
+
+    {{pass}}
+
+     
+
+</table>
+
+{{pass}}
+
+	
+
+    <br/>
+
+</body>
+
+</html>
+

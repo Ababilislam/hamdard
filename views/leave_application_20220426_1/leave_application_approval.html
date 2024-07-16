@@ -1,0 +1,290 @@
+{{extend 'layout_change_pass.html'}}
+
+<link rel="stylesheet" href="{{=URL('static', 'js_and_css/ui.theme.css')}}" type="text/css" />
+<link rel="stylesheet" href="{{=URL('static', 'js_and_css/jquery-ui.css')}}" type="text/css" />
+<link rel="stylesheet" href="{{=URL('static', 'js_and_css/style.css')}}" type="text/css" />
+<script src="{{=URL('static','js_and_css/jquery-1.8.2.js')}}"></script>
+<script src="{{=URL('static','js_and_css/jquery-ui.js')}}"></script>
+<style type="text/css">
+.rounded_corner{
+background-color:#CCCCCC;
+font:Arial, Helvetica, sans-serif;
+color:#666666;
+font-size:14px;
+
+display: block;
+display: block;
+-moz-border-radius: 10px;
+-webkit-border-radius: 10px;
+}
+#sm_search_date_from_dt_2,#sm_search_date_to_dt_2{
+  width: 90px;
+  padding: 6px 7px
+}
+
+
+
+table {
+
+font-size:14px;
+}
+</style>
+
+
+
+<script>
+var base_url=location.protocol + "//" + location.hostname + (location.port && ":" + location.port) + "/{{=request.application}}/";
+
+
+$(function() {
+//$('#leave_cause').blur(function(){
+//  var note=$("#leave_cause").val();
+ // alert (RegExp(note))
+//});
+
+
+
+  $('#leave_type').blur(function(){
+
+    var leaveType=$('#leave_type').val();
+    var repId=$('#repId').val();
+    var cId=$('#cId').val();
+    // alert(repId)
+    
+    if(leaveType!=''){
+      var leaveArray=leaveType.split("|");
+      
+      var leaveType_id=leaveArray[0];
+      // alert (base_url+'leave_application/get_available_leave?leaveType_id='+leaveType_id+'&repId='+repId+'&cId='+cId)
+      $.ajax({
+        url: base_url+'leave_application/get_available_leave?leaveType_id='+leaveType_id+'&repId='+repId+'&cId='+cId,
+        success: function(retStr) {
+          storeListStr=retStr;
+        
+        $("#available_leaveVal").val(storeListStr);  
+
+        }
+      });
+      
+    }   
+  });
+
+
+});
+
+
+$(document).on('blur','#to_dt_2', function(){
+
+  var from_dt_2= $("#from_dt_2").val();
+  var to_dt_2=$("#to_dt_2").val();
+
+  var str1= from_dt_2.split('-');
+  var str2= to_dt_2.split('-');
+  var t1 = new Date(str1[0], str1[1]-1, str1[2]);
+  var t2 = new Date(str2[0], str2[1]-1, str2[2]);
+  
+  var diffMS = (t2 - t1);
+ 
+ // var fr=new Date(from_dt_2) 
+ // var ed=new Date(to_dt_2)  
+ // var tt=ed.getTime()-fr.getTime()
+
+  
+  var leaveDay_diff =(diffMS / (24*3600*1000));//+1;
+  // alert (leaveDay)
+  var leaveDay=leaveDay_diff+1
+  // alert (leaveDay)
+  if (parseInt(leaveDay)<1){
+    $("#leaveDayVal").val('Invalid Date Range');
+    
+  }
+  else{
+   $("#leaveDayVal").val(leaveDay);
+  }
+   $("#fromDayVal").val(from_dt_2);
+   $("#toDayVal").val(to_dt_2);
+   $("#t_leaveVal").val(leaveDay);
+   $("#tLeaveVal").val(leaveDay);
+   
+
+});
+
+
+</script>
+
+{{currYear=str(date_fixed)[0:4]}}
+{{currMonth=str(date_fixed)[5:7]}}
+<header style="border-bottom: 0px;background:#53777f">
+    <table width="100%">
+    <tr>          
+      <td colspan='3'  align="center" style="  width:300px; height:auto;"><h3 id="sfs" style=" color:#fbfbfb;margin:5px">Leave Application Approval</h3></td>
+    </tr>
+  </table>
+</header>
+<div class="view" id="change_pw">
+   <div class="pages" style="background-color:#fff">
+      <div class="panel" id="change_pwView" style="background: #fff;">     
+        <div  style=" width: 100%; height:auto;background:  #f6f4f4;touch-action: pan-y"> 
+          <table width="100%" height="auto"  border="0" cellspacing="0" cellpadding="0" align="center" class=""  >
+            <tr height="100%"  style="vertical-align:top;">
+              <td align="center">
+                <div class="formBody"> 
+           
+               <form id="form1" name="form1" method="post" action="{{=URL(c='leave_application',f='leave_application_confirm',vars=dict(cid=cid,uid=uid,u_pass=u_pass,rep_id=rep_id,rep_name=rep_name,depth=session.depthNo_user,record_id=record_id,leaveType=leaveType))}}"> 
+                  <table width="80%" border="0">                    
+                    
+                    <tr>
+                      <td colspan='2'  align="center" style="  width:300px; height:auto;"><h2 id="sfs" style=" color:#000;margin: 10px"></h2></td>
+                     </tr>
+                
+
+
+                    <tr class="leave_date">
+                      <td style="width:20%">&nbsp;</td>                      
+                      <td style="width:80% ;font-size: 15px;">
+                        <span style="vertical-align:middle;">Employee ID:&nbsp;&nbsp;{{=emp_id}}
+
+                        </span>  
+                      </td>                       
+                    </tr>
+
+                     <tr>
+                      <td >&nbsp;</td>
+                    </tr> 
+                   
+                    <tr class="leave_date">
+                      <td style="width:20%">&nbsp;</td>                      
+                      <td style="width:80% ;font-size: 15px;">
+                        <span style="vertical-align:middle;">Name:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{=emp_name}}</span>  
+                      </td>                       
+                    </tr>
+                    <tr>
+                      <td>&nbsp; </td> 
+                    </tr>
+       
+                    
+                    <tr class="leave_date">
+                      <td style="width:20%">&nbsp;</td>                      
+                      <td style="width:80% ;font-size: 15px;">
+                        <span style="vertical-align:middle;">Note/Cause:&nbsp;&nbsp;&nbsp;{{=leave_req_reason}}
+
+                        </span>  
+                      </td>                       
+                    </tr>
+                    <tr>
+                      <td>&nbsp; </td> 
+                    </tr>
+
+                    <tr>
+                      <td >&nbsp;</td> 
+                        <td >                        
+                        <div>                       
+                            <table>                              
+                              <tr>
+                                <td>
+                                     From Date:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <input type="date" id="from_dt_2"  name="from_dt_2" value="{{=from_date}}" >
+                                </td> 
+                              </tr>
+
+                             <tr>
+                                <td>&nbsp; </td> 
+                              </tr>
+
+                             <tr>
+                                <td>
+                                     To Date:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="date" id="to_dt_2"  name="to_dt_2" value="{{=to_date}}" >  
+                                </td> 
+                              </tr>
+
+                              <tr>
+                                <td>&nbsp; </td> 
+                              </tr>
+                              
+
+                              <tr>
+                                <td>
+                                    Day Count: &nbsp; &nbsp;&nbsp; <input type="text" id="leaveDayVal"  name="leaveDayVal" style="border: none; width: 90px; background-color: #f6f4f4;" readonly="" value="{{=total_leave}}"> 
+                                </td> 
+                              </tr>
+                              
+                              <tr>
+                                <td>&nbsp; </td> 
+                              </tr>
+
+                              <tr>
+                                <td >
+                                  <span style="vertical-align:middle;">Leave Type:&nbsp;&nbsp;&nbsp;&nbsp;
+                                   
+                                    <select id="leave_type" name="leave_type" style="width:100px;padding:6px 5px" data-native-menu="false" >
+                                      <option value="">{{=leaveType}}</option> 
+                                    {{for record in leave_type:}}
+                                      <option value="{{=record.leave_type}}" >{{=record.leave_type}}</option>                                     
+                                   {{pass}} 
+                                  
+                                  </select>
+                                  </span>
+
+                                  <input type="hidden" id="cId" name="cId" value="{{=cid}}"> 
+                                  <input type="hidden" id="repId" name="repId" value="{{=rep_id}}">   
+                                </td>                       
+                            </tr>
+                            
+                            <tr>
+                          
+                              <td >
+                                Available: &nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <input type="text" id="available_leaveVal"  name="available_leaveVal" style="border: none; width: 90px; background-color: #f6f4f4;" readonly=""value="{{#=available_leaveVal}}"> &nbsp;&nbsp;
+                              </td>                       
+                        </tr>
+                            
+                           
+                          </table>
+                    
+                    <br>
+
+                        <table  >
+
+                          <div id="btn_id">
+                            <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                              <tr>
+                                <td align="left">                                              
+                                  <input type="submit" id="btn_approve_application" name="btn_approve_application" style="width:80%; height:40px; background:#807e7e;color: #FFF; font-size:16px;  border: 1px solid #807e7e;" value=" Recommended "  /> 
+                                </td>
+                                
+                                <td >
+                                  
+                                </td>
+                               
+
+                                <td align="left">
+                                  <input type="submit" id="btn_reject_application" name="btn_reject_application" style="width:80%; height:40px; background:#807e7e;color: #FFF; font-size:16px;  border: 1px solid #807e7e;" value="       Reject      "  /> 
+                                </td>
+                               
+                              </tr>
+                            </table>    
+                          </br></br>
+                          </div>
+                        </table>          
+                
+
+                </form>
+              </table>                                 
+            </div>                 
+          </td>
+        </tr>
+       
+
+          </table>         
+   
+    </div>
+  </div>
+</div> 
+</div>
+
+
+    <footer style="border-bottom: 0px;background:#53777f;height: 45px">
+            <table width="100%">
+            <tr>          
+              <td colspan='3'  align="center" style="  width:300px; height:auto;"><h3 id="sfs" style=" color:#fbfbfb;margin:5px"> </h3></td>
+            </tr>
+          </table>
+        </footer>

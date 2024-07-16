@@ -1,0 +1,270 @@
+{{extend 'layout_report.html'}}
+
+<html>
+
+<head>
+<link rel="stylesheet" href="{{=URL('static', 'js_and_css/jquery-ui.css')}}" type="text/css" />
+
+<script src="{{=URL('static','js_and_css/jquery-1.8.2.js')}}"></script>
+<script src="{{=URL('static','js_and_css/jquery-ui.js')}}"></script>
+
+ <style type="text/css">
+
+.page_color,body{
+	font-family:Arial, Helvetica, sans-serif;
+	font-size:13px;	
+}
+
+</style>
+
+<script type="text/javascript">
+
+function print_page()
+
+  {
+
+    window.print()
+
+  }
+
+</script>
+
+
+
+<script>
+
+var base_url=location.protocol + "//" + location.hostname + (location.port && ":" + location.port) + "/{{=request.application}}/";
+
+$(function() {
+	//==============	
+
+	   var valueListStr2="";		
+
+		$('#client_details').keyup(function(){
+			
+			var depotValue='{{=myAccountValue[4:]}}';
+			
+			$.ajax({
+				  url: base_url+'default/get_depot_client_list?depot='+depotValue,
+				  success: function(resStr){
+					  valueListStr2=resStr
+				  }
+				});
+			
+			//-------------------------
+			var valueList = valueListStr2.split(',');				
+
+			var searchValue=$("#client_details").val();
+
+			
+
+			//---------------- auto complete combo list
+
+			var valueList_new=new Array();
+
+			lc=0;
+
+			i =0;
+
+			var valueStr="";				
+
+			while (i < valueList.length)
+
+			{
+
+				valueStr=valueList[i];
+
+				i=i+1;					
+
+				var res=valueStr.toUpperCase().match(searchValue.toUpperCase());
+
+				if (res!=null){
+
+					valueList_new[lc]=valueStr;
+
+					lc=lc+1;
+
+					if (lc==30){
+
+						break;
+
+					};
+
+				}else{
+
+					continue;
+
+				}
+
+			};
+
+
+			//-------------- auto complete source
+
+			$( "input#client_details" ).autocomplete({
+
+				source: valueList_new
+
+			});
+
+	  });
+
+		//==============
+	}); 
+
+</script>
+
+
+</head>
+
+<body>
+
+<div class="blackCatTitle">Present Balance With Others </div>
+
+<br>
+
+
+
+<table width="900" border="0" cellspacing="0" cellpadding="0">
+
+  <tr>
+
+    <td width="51" style=" padding-left:0px;"><b>Account</b></td>
+
+    <td width="5"><b>:</b></td>
+
+    <td align="left"><font size="3px;">{{=myAccountValue}}</font></td>
+	
+    <form id="form1" name="form1" method="post" action="{{=URL(c='utility',f='present_balance_with_others',vars=dict(page=0,myAccountValue=myAccountValue))}}">
+	<td width="300"><input type="text" name="client_details" id="client_details" style="width:300px;" value="{{=clientIdName}}" placeholder="Select Client/Customer" autocomplete="off" /></td>
+	<td width="30"><input type="submit" name="search" value="Search"/></td>
+	</form>
+    
+    <td width="100" align="right"><a href="{{=URL(c='utility',f='download_present_balance_with_others',vars=dict(myAccountValue=myAccountValue))}}">Download</a></td>
+
+  </tr>
+
+</table>
+
+<br/>
+
+<table width="900" border="1" cellspacing="1" cellpadding="1"  class="sample_border">
+
+  <tr class="table_title">
+
+    <td width="120" >Ref. Account </td>
+
+    <td width="60" align="left" >SalesType </td>
+
+    <td width="120" align="left" >Date</td>
+
+    <td align="left" >Last Description</td>
+
+    <td width="100" align="right" >Opening</td>
+
+    <td width="100" align="right" >Transaction</td>
+
+    <td width="120" align="right" >Closing</td>
+
+    <td width="50" align="right" >Dr/Cr</td>
+
+  </tr>
+
+
+
+  {{gross_total=float(pageOpening)}}
+
+    
+
+  	{{ p=0}}
+
+	{{ c=''}}
+
+				
+
+  {{for i,record in enumerate(txRecords):}}  
+
+  		{{if i==items_per_page: break}}
+
+  	
+
+	{{amount=0.0}}
+
+	
+
+  {{ if p==0:}} {{c ='table_row1'}}{{ p=1}} {{ else:}} {{c ='table_row2'}}{{ p=0}} {{ pass}}
+
+  <tr class="{{=c}}" >
+
+    <td width="120" valign="top" >
+
+	
+
+	<a href="{{=URL(c ='utility',f ='transaction_details',vars=dict(page=0,myAccountValue=myAccountValue,opposite_account=record.opposite_account))}}" title="Detail Transaction" target="_blank">{{=record.opposite_account}}</a></td>
+
+    <td width="60" align="left">{{if record.sales_type=='P':}}Primary{{elif record.sales_type=='S':}}Secondary{{else:}}-{{pass}}</td>
+
+    <td width="120" align="left">{{=str(record.tx_date)[0:19]}}</td>
+
+    <td align="left">{{=record.tx_des}}</td>
+
+    <td width="100" align="right" >{{=record.tx_op_balance}}</td>
+
+    <td width="100" align="right" >{{=record.tx_amount}}</td>
+
+    <td width="120" align="right" >{{amount=record.tx_closing_balance}}{{gross_total+=amount}}{{=amount}}</td>
+
+    <td width="50" align="right" >{{if amount < 0:}}Cr{{elif amount > 0:}}Dr{{else:}}-{{pass}}</td>
+
+  </tr>
+
+  {{pass}}
+
+  
+
+  <tr class="table_row2">
+
+    <td colspan="6" align="right">Total</td>
+
+    <td width="120" align="right"><b>{{=gross_total}}</b></td>
+
+    <td width="50" align="right">{{if gross_total < 0 :}}Cr{{elif gross_total > 0 :}}Dr{{else:}}-{{pass}}</td>
+
+  </tr>
+
+</table>
+
+<br/>
+
+
+
+	{{if page:}}
+
+{{ =A('first', _href =URL(c ='utility',f ='present_balance_with_others',vars=dict(page=(page-page),myAccountValue=myAccountValue)))}} |
+
+
+
+<!--{{# =A('previous', _href =URL(c ='utility',f ='present_balance_with_others',vars=dict(page=(page-1),myAccountValue=myAccountValue)))}} |-->
+
+{{pass}}
+
+
+
+{{if len(txRecords)>items_per_page:}}
+
+{{ =A('next', _href =URL(c ='utility',f ='present_balance_with_others',vars=dict(page=(page+1),myAccountValue=myAccountValue,pageOpening=gross_total)))}}
+
+{{pass}}
+
+	<table width="900" border="0">
+
+          <tr><td align="right" class="report_body"><a href="" onClick="print_page()" style="text-decoration:none">Print</a></td></tr>
+
+</table>
+
+
+
+</body>
+
+</html>
+

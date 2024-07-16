@@ -1,0 +1,174 @@
+{{extend 'layout.html'}}
+<link rel="stylesheet" href="{{=URL('static', 'js_and_css/ui.theme.css')}}" type="text/css" />
+  <link rel="stylesheet" href="{{=URL('static', 'js_and_css/jquery-ui.css')}}" type="text/css" />
+  <link rel="stylesheet" href="{{=URL('static', 'js_and_css/style.css')}}" type="text/css" />
+  <script src="{{=URL('static','js_and_css/jquery-1.8.2.js')}}"></script>
+  <script src="{{=URL('static','js_and_css/jquery-ui.js')}}"></script>
+    
+<style type="text/css">
+ input[type=text], input[type=password]{
+    margin: 2px 0px 2px 0px;
+	width:200px;
+}
+select {
+    margin: 2px 0px 2px 0px;
+	width:212px;
+}
+.page_color,body{
+	font-family:Arial, Helvetica, sans-serif;
+	font-size:13px;	
+	}
+	
+</style>
+ 
+<script>
+var base_url=location.protocol + "//" + location.hostname + (location.port && ":" + location.port) + "/{{=request.application}}/";
+
+$(function() {
+	 	var valueListStr="";
+		
+		$('#search_type').blur(function(){
+			if ($('#search_type').val()=='UserID'){
+				//alert(base_url+'default/get_route_list');
+				$.ajax({
+					  url: base_url+'default/get_device_user_list',
+					  success: function(resStr) {
+						  valueListStr=resStr
+					  }
+					});
+			}else if ($('#search_type').val()=='DeviceName'){
+				$.ajax({
+					  url: base_url+'default/get_device_name_list',
+					  success: function(resStr) {
+						  valueListStr=resStr
+					  }
+					});
+			
+			}else if ($('#search_type').val()=='Status'){
+				valueListStr='Submitted,Activated,Blocked';					  
+			};			
+	 	});
+	 
+		$('#search_value').keyup(function(){
+			//-------------------------
+			var valueList = valueListStr.split(',');				
+			var searchValue=$("#search_value").val();
+			
+			//---------------- auto complete combo list
+			var valueList_new=new Array();
+			lc=0;
+			i =0;
+			var valueStr="";				
+			while (i < valueList.length)
+			{
+				valueStr=valueList[i];
+				i=i+1;					
+				var res=valueStr.toUpperCase().match(searchValue.toUpperCase());
+				if (res!=null){
+					valueList_new[lc]=valueStr;
+					lc=lc+1;
+					if (lc==30){
+						break;
+					};
+				}else{
+					continue;
+				}					
+			};
+			
+			//-------------- auto complete source
+			$( "input#search_value" ).autocomplete({
+				source: valueList_new
+			});
+		
+	  }); 
+	   //==============	   
+}); 
+
+</script>
+ 
+<table width="100%"  border="0" cellspacing="0" cellpadding="0" style="background-color:#FFFFFF;" >
+  <tr height="30px" >
+    <td><span class="blackCatTitle">User Log</span></td>
+  </tr>
+  <tr  height="1px" style="background-color:#CCCCCC;">
+	    <td ></td>
+  </tr>
+  </table>
+  
+  <table width="100%" height="500px"  border="0" cellspacing="0" cellpadding="0" class="page_color"  >
+  	<tr height="100%"  style="vertical-align:top;">
+        <td>
+     
+     <table width="100%"  border="0" cellpadding="0" cellspacing="0">
+      <tr>
+        <td>&nbsp;</td>
+        <td>
+			<br />
+			
+            <table width="900" border="1" cellpadding="1" cellspacing="1" class="sample_border" >
+			<form id="form1" name="form1" method="post" action="{{=URL(c='utility',f='user_log')}}">
+              <tr align="left" class="blackCatHead"  height="20px" ;"vertical-align:middle">
+                <td width="120" >
+                <select name="search_type" id="search_type" style="width:150px" >
+                  <option selected="selected" value="">Select a Type</option>
+                  {{if session.search_type_userlog=='UserID':}}<option value="UserID" selected="selected">User ID</option>{{else:}}<option value="UserID" >User ID</option>{{pass}}
+                  {{if session.search_type_userlog=='DeviceName':}}<option value="DeviceName" selected="selected">Device Name</option>{{else:}}<option value="DeviceName" >Device Name</option>{{pass}}
+                </select>
+                
+                </td>
+                <td width="342" >
+                	{{if session.search_value_userlog=='' or session.search_value_userlog==None:}}
+                        <input  name="search_value" type="text" id="search_value" size="25" value="" placeholder="Select a value" autocomplete="off" style="width:300px"/>
+                    {{else:}}
+                        <input  name="search_value" type="text" id="search_value" size="25" value="{{=session.search_value_userlog}}" placeholder="Select a value" autocomplete="off" style="width:300px"/>
+                    {{pass}}
+                	
+                </td>
+                <td align="right"  ><input type="submit" name="btn_filter" id="btn_filter" value="Filter"   class="button_update"/>
+                  <input type="submit" name="btn_all" id="btn_all" value="All"   class="button_update"/></td>
+                <td width="200" align="right"  >&nbsp;</td>
+              </tr>
+			  </form>
+            </table>
+            <br />
+			 <table width="900" border="1" cellpadding="1" cellspacing="1" class="sample_border" >
+               <tr align="left" class="blackCatHead" height="20px" ;"vertical-align:middle">
+                 <td width="100"  >User ID</td>
+                 <td width="130"  >Device Name</td>
+                 <td  >Access Point</td>
+                 <td width="120" align="left"  >IP</td>
+                 <td width="100" align="left"  >Login</td>
+                 <td width="100" align="left"  >Logout</td>
+               </tr>
+			   {{ p=0}} 		  
+			   {{for i,record in enumerate(records):}}
+			    {{ if i==items_per_page: break}}
+
+				<tr  align="left" class="blackCat"  style="font-size:13px"> 
+				  <td width="100" >{{=record.user_id}}</td>
+				  <td width="130" >{{=record.device_name}}</td>
+				  <td >{{=record.user_agent}}</td>
+				  <td width="120" align="left" >{{=record.request_ip}}</td>
+				  <td width="100" align="left" >{{=record.login_time.strftime('%Y-%m-%d %I:%M %p')}}</td>
+				  <td width="100" align="left" >{{if record.logout_time==None:}}&nbsp;{{else:}}{{=record.logout_time.strftime('%Y-%m-%d %I:%M %p')}}{{pass}}</td>
+				</tr>
+  			   {{pass}}
+		    </table>
+
+	      </td></tr>
+    </table>
+      
+{{if page:}}
+&nbsp;&nbsp;<a href="{{=URL(args=[page-page])}}">first</a> |
+&nbsp;&nbsp;<a href="{{=URL(args=[page-1])}}">previous</a> |
+{{pass}}
+
+{{if len(records)>items_per_page:}}
+&nbsp;&nbsp;<a href="{{=URL(args=[page+1])}}">next</a>
+{{pass}}
+	</td>
+  </tr>
+</table>
+
+<br />
+<br />

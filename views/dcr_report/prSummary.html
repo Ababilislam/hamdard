@@ -1,0 +1,130 @@
+{{extend 'layout_sample_report.html'}}
+<html>
+<head>
+<script type="text/javascript">
+function print_page()
+  {
+    window.print()
+  }
+</script>
+
+</head>
+<body>
+<table width="900px" style="border:none; text-align:center; font-weight:bold;" >
+  <tr >
+    <td width="100" >&nbsp;</td>
+    <td align="left" style="font-size:18px" ></td>
+    <td width="100" ><img src="{{=URL('static','images/comp_logo1.png')}}" alt=""  height="30px"/></td>
+  </tr>
+  
+
+</table>
+<div style="background-color:#333; height:1px; font-size:1px"></div>
+<table width="900px" style="border:none;" >
+  <tr >
+    <td >Date Range</td>
+    <td >:</td>
+    <td >{{=date_from}} - {{=date_to}}</td>
+    <td >&nbsp;</td>
+    <td >&nbsp;</td>
+    <td width="266" >&nbsp;</td>
+  </tr>
+  <tr >
+    <td width="90" >RSM</td>
+    <td width="10" >:</td>
+    <td width="438" ><span style="border-right-width:3px;">{{=rsm_id}}
+    {{=rsm_name}}</span></td>
+    <td width="65" >MSO</td>
+    <td width="3" >:</td>
+    <td >{{=mso_name}}|{{=mso_id}}</td>
+  </tr>
+  <tr >
+    <td >FM</td>
+    <td >:</td>
+    <td ><span style="border-right-width:3px;">{{=fm_id}}
+    {{=fm_name}}</span></td>
+    <td >Product</td>
+    <td >:</td>
+    <td >{{=product_name}}|{{=product_id}}</td>
+  </tr>
+  <tr >
+    <td >TR</td>
+    <td >:</td>
+    <td ><span style="border-right-width:3px;">{{=tr_id}}
+    {{=tr_name}}</span></td>
+    <td >Doctor</td>
+    <td >:</td>
+    <td >{{=doc}}|{{=doc_name}}</td>
+  </tr>
+  <tr >
+    <td >&nbsp;</td>
+    <td >:</td>
+    <td >&nbsp;</td>
+    <td >&nbsp;</td>
+    <td >&nbsp;</td>
+    <td >&nbsp;</td>
+  </tr>
+</table>
+<!--<table width="900px;"> <tr><td style="text-align:right"><a href="{{#=URL(c='analysis',f='downloadVisitList',vars=dict(fromDate=fromDate,toDate=toDate,regionValue=regionValue,areaValue=areaValue,territoryValue=territoryValue,marketValue=marketValue,repCM=repCM))}}" >Downlaod</a></td></tr></table>-->
+
+<table width="700px" cellspacing="1" cellpadding="1">
+
+  <tr height="10px"></tr>
+	<tr>
+		<td><table width="900px" border="1" cellpadding="1" cellspacing="1" class="sample_border" >
+		  <tr align="left" class="blackCatHead"  height="20px" ;>
+		    <td width="70" >RSM</td>
+		    <td width="70" >FM</td>
+		    <td width="70" >TR</td>
+		    <td  width="80" >Submitted by ID</td>
+		    <td  width="80" >Submitted by Name</td>
+		    <td  width="80" >Prescriptiom Count</td>
+		    <td  width="80" >OwnBrand</td>
+              <td  width="80" >OtherBrand</td>
+              <td width="109">Others</td>
+            
+	      </tr>
+		  {{ p=0}} 		  
+		  
+		  {{for i,record in enumerate(records):}}
+          {{selfCount=0}}
+          {{otherCount=0}}
+          {{unknownCount=0}}
+          {{submit_by_id=record[db.sm_prescription_head.submit_by_id]}}
+          {{ if [s for s in selfSbmittedByList if submit_by_id in s]:
+                    index_element = selfSbmittedByList.index(submit_by_id)           
+                    selfCount=selfSbmittedByCountList[index_element]
+             pass       
+                }}
+          
+          {{ if [s for s in otherSbmittedByList if submit_by_id in s]:
+                    index_element = otherSbmittedByList.index(submit_by_id)           
+                    otherCount=otherSbmittedByCountList[index_element]
+             pass       
+                }}
+            {{ if [s for s in unknownSbmittedByList if submit_by_id in s]:
+                    index_element = unknownSbmittedByList.index(submit_by_id)           
+                    unknownCount=unknownSbmittedByCountList[index_element]
+             pass       
+                }}
+  <tr  align="left" class="blackCat"  style="vertical-align:middle; font-size:10px;">
+    <td width="50" >{{=record[db.sm_prescription_head.reg_id]}}</td>
+    <td width="50" >{{=record[db.sm_prescription_head.tl_id]}}</td>
+    <td width="50" >{{=record[db.sm_prescription_head.area_id]}}</td>
+    <td width="50" >{{=record[db.sm_prescription_head.submit_by_id]}}</td>
+    <td  >{{=record[db.sm_prescription_head.submit_by_name]}}</td>
+    <td width="50" align="center" >{{=record[db.sm_prescription_head.sl.count()]}}</td>
+    <td width="50" align="center" >{{=selfCount}}</td>
+    <td width="50" align="center" >{{=otherCount}}</td>
+    <td width="50" align="center" >{{=unknownCount}}</td>
+    
+  </tr>
+		  {{pass}}
+	    </table></td>
+			
+	</tr>
+</table>
+
+
+</body>
+</html>

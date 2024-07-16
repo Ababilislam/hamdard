@@ -1,0 +1,415 @@
+{{extend 'layout.html'}}
+
+  <link rel="stylesheet" href="{{=URL('static', 'js_and_css/ui.theme.css')}}" type="text/css" />
+  <link rel="stylesheet" href="{{=URL('static', 'js_and_css/jquery-ui.css')}}" type="text/css" />
+  <link rel="stylesheet" href="{{=URL('static', 'js_and_css/style.css')}}" type="text/css" />
+   <script src="{{=URL('static','js_and_css/jquery-1.8.2.js')}}"></script>
+    <script src="{{=URL('static','js_and_css/jquery-ui.js')}}"></script>
+  
+  
+  <style type="text/css">
+	 input[type=text], input[type=password],  select {
+    margin: 2px 0px 2px 0px;
+	}
+	
+	#sm_client_status,#sm_client_category_id{
+	width:auto;
+	}
+	#sm_client_client_id,#sm_client_area_id{
+	width:70px;
+	}
+	
+	#sm_client_op_balance,#sm_client_balance,#sm_client_credit_limit{
+	width:60px;
+	text-align:right;
+	}
+	
+	div.error {
+		color: white;
+		padding: 0px;
+		width: auto; 
+		margin-left:0px;
+	}
+	.page_color,body{
+		font-family:Arial, Helvetica, sans-serif;
+		font-size:13px;	
+		}
+ </style>
+ 
+<script>
+var base_url=location.protocol + "//" + location.hostname + (location.port && ":" + location.port) + "/{{=request.application}}/";
+
+$(function() {	 	
+		//--------------------
+		var approveSpoListStr=''
+		
+		$('#spo_idname').keyup(function(){
+			//---------------------------;
+			$.ajax({
+				  url: base_url+'default/get_rep_list',
+				  success: function(resStr) {
+					  approveSpoListStr=resStr
+				  }
+				});
+			
+			//-------------------------
+			var approveSpoList = approveSpoListStr.split(',');				
+			var searchValue1=$("#spo_idname").val();
+			
+			//---------------- auto complete combo list
+			var approveSpoList_new=new Array();
+			lc=0;
+			i =0;
+			var valueStr1="";				
+			while (i < approveSpoList.length)
+			{
+				valueStr1=approveSpoList[i];
+				i=i+1;					
+				var res1=valueStr1.toUpperCase().match(searchValue1.toUpperCase());
+				if (res1!=null){
+					approveSpoList_new[lc]=valueStr1;
+					lc=lc+1;
+					if (lc==30){
+						break;
+					};
+				}else{
+					continue;
+				}					
+			};
+			
+			//-------------- auto complete source
+			$( "input#spo_idname" ).autocomplete({
+				source: approveSpoList_new
+			});
+	  }); 
+	  
+		
+		
+		
+		
+		
+		//---------------------
+		var valueListStr="";
+		
+		$('#search_type').blur(function(){
+			if ($('#search_type').val()=='DoctorID'){
+				//alert(base_url+'default/get_route_list');
+				$.ajax({
+					  url: base_url+'default/get_doctor_list',
+					  success: function(resStr) {
+						  valueListStr=resStr
+					  }
+					});
+			}else if ($('#search_type').val()=='RepID'){
+				//alert(base_url+'default/get_route_list');
+				$.ajax({
+					  url: base_url+'default/get_rep_list',
+					  success: function(resStr) {
+						  valueListStr=resStr
+					  }
+					});
+			}else if ($('#search_type').val()=='AreaID'){
+				$.ajax({
+					  url: base_url+'default/get_area_list',
+					  success: function(resStr) {
+						  valueListStr=resStr
+					  }
+					});				
+			}else if ($('#search_type').val()=='Status'){
+				valueListStr='Submitted,Visited,Approved,Cancelled'
+				
+			}else if ($('#search_type').val()=='DepotID'){
+				$.ajax({
+					  url: base_url+'default/get_depot_list',
+					  success: function(resStr) {
+						  valueListStr=resStr
+					  }
+					});
+			
+			};
+			
+	 	});
+	 
+	 
+		$('#search_value').keyup(function(){
+			//-------------------------
+			var valueList = valueListStr.split(',');				
+			var searchValue=$("#search_value").val();
+			
+			//---------------- auto complete combo list
+			var valueList_new=new Array();
+			lc=0;
+			i =0;
+			var valueStr="";				
+			while (i < valueList.length)
+			{
+				valueStr=valueList[i];
+				i=i+1;					
+				var res=valueStr.toUpperCase().match(searchValue.toUpperCase());
+				if (res!=null){
+					valueList_new[lc]=valueStr;
+					lc=lc+1;
+					if (lc==30){
+						break;
+					};
+				}else{
+					continue;
+				}					
+			};
+			//alert (ref_list_new);
+			
+			//-------------- auto complete source
+			$( "input#search_value" ).autocomplete({
+				source: valueList_new
+			});
+		
+	  }); 
+	    
+}); 
+
+</script>
+
+{{currYear=str(date_fixed)[0:4]}}
+{{currMonth=str(date_fixed)[5:7]}}
+
+<table width="100%"  border="0" cellspacing="0" cellpadding="0" style="background-color:#FFFFFF;" >
+  <tr height="30px" >
+    <td width="600"><span class="blackCatTitle">Doctor Visit Plan Approve/Cancel</span></td>
+    <form action="{{=URL(c='doctor_visit',f='doctor_visit_plan')}}" method="post">
+    <td width="400" style="text-align:right"><input name="" type="submit"  value="Back"/></td>
+	</form>
+    
+    <td>&nbsp;</td>
+  </tr>
+  <tr  height="1px" style="background-color:#CCCCCC;">
+	    <td colspan="3" ></td>
+  </tr>
+  </table>
+  
+  
+  <table width="100%" height="528"  border="0" cellspacing="0" cellpadding="0" class="page_color"  >
+  <tr height="100%"  style="vertical-align:top;">
+    <td height="528">
+	<table width="100%"  border="0" cellpadding="0" cellspacing="0"  >
+      <tr>
+        <td>&nbsp;</td>
+        <td width="80"><strong>Year-Month</strong></td>
+        <td><strong>:</strong> {{=yearMonth}}</td>
+      </tr>
+      <tr>
+        <td width="5">&nbsp;</td>
+        <td width="80"><strong>Rep</strong></td>
+        <td><strong>:</strong> {{if not(session.spo_id=='' or session.spo_id==None):}}{{=session.spo_idname}}{{pass}}</td>
+      </tr>
+      <tr>
+        <td width="5">&nbsp;</td>
+        <td colspan="2"><br />
+               <table width="1000" border="1" cellpadding="1" cellspacing="1" class="sample_border" >
+               
+			   <form id="form1" name="form1" method="post" action="{{=URL(c='doctor_visit',f='doctor_visit_plan_approve')}}">
+                 <tr align="left" class="blackCatHead"  height="20px" ;"vertical-align:middle">
+                   <td width="180" ><select id="yearValue" name="yearValue" style="width:80px;" >
+                     <option value="">Year</option>
+                     
+                    {{if session.yearValue=='2014':}}
+                     <option value="2014" selected>2014</option>
+                     {{else:}}
+                     <option value="2014">2014</option>
+                     {{pass}}
+                    {{if session.yearValue=='2015':}}
+                     <option value="2015" selected>2015</option>
+                     {{else:}}
+                     <option value="2015">2015</option>
+                     {{pass}}
+                    {{if session.yearValue=='2016':}}
+                     <option value="2016" selected>2016</option>
+                     {{else:}}
+                     <option value="2016">2016</option>
+                     {{pass}}
+                    {{if session.yearValue=='2017':}}
+                     <option value="2017" selected>2017</option>
+                     {{else:}}
+                     <option value="2017">2017</option>
+                     {{pass}}
+                    {{if session.yearValue=='2018':}}
+                     <option value="2018" selected>2018</option>
+                     {{else:}}
+                     <option value="2016">2018</option>
+                     {{pass}}
+                    				
+                  
+                   </select>
+-
+<select id="monthValue" name="monthValue" style="width:80px;" >
+  <option value="">Month</option>
+  
+                        {{if session.monthValue=='01':}}
+  <option value="01" selected>Jan</option>
+  {{else:}}
+  <option value="01">Jan</option>
+  {{pass}}
+                        {{if session.monthValue=='02':}}
+  <option value="02" selected>Feb</option>
+  {{else:}}
+  <option value="02">Feb</option>
+  {{pass}}
+                        {{if session.monthValue=='03':}}
+  <option value="03" selected>Mar</option>
+  {{else:}}
+  <option value="03">Mar</option>
+  {{pass}}
+                        {{if session.monthValue=='04':}}
+  <option value="04" selected>Apr</option>
+  {{else:}}
+  <option value="04">Apr</option>
+  {{pass}}
+                        {{if session.monthValue=='05':}}
+  <option value="05" selected>May</option>
+  {{else:}}
+  <option value="05">May</option>
+  {{pass}}
+                        {{if session.monthValue=='06':}}
+  <option value="06" selected>Jun</option>
+  {{else:}}
+  <option value="06">Jun</option>
+  {{pass}}
+                        {{if session.monthValue=='07':}}
+  <option value="07" selected>Jul</option>
+  {{else:}}
+  <option value="07">Jul</option>
+  {{pass}}
+                        {{if session.monthValue=='08':}}
+  <option value="08" selected>Aug</option>
+  {{else:}}
+  <option value="08">Aug</option>
+  {{pass}}
+                        {{if session.monthValue=='09':}}
+  <option value="09" selected>Sep</option>
+  {{else:}}
+  <option value="09">Sep</option>
+  {{pass}}
+                        {{if session.monthValue=='10':}}
+  <option value="10" selected>Oct</option>
+  {{else:}}
+  <option value="10">Oct</option>
+  {{pass}}
+                        {{if session.monthValue=='11':}}
+  <option value="11" selected>Nov</option>
+  {{else:}}
+  <option value="11">Nov</option>
+  {{pass}}
+                        {{if session.monthValue=='12':}}
+  <option value="12" selected>Dec</option>
+  {{else:}}
+  <option value="12">Dec</option>
+  {{pass}}
+                    
+</select></td>
+                   <td width="400" >{{if session.spo_id=='' or session.spo_id==None:}}
+                     <input  name="spo_idname" type="text" id="spo_idname" size="25" value="" placeholder="Select Rep" autocomplete="off" style="width:350px"/>
+{{else:}}
+<input  name="spo_idname" type="text" id="spo_idname" size="25" value="{{=session.spo_idname}}" placeholder="Select SPO" autocomplete="off" style="width:350px"/>
+{{pass}} </td>
+                   <td width="100" align="right"  ><input type="submit" name="btn_approved_filter" id="btn_approved_filter" value="Filter"   class="button_update"/>
+                   <input type="submit" name="btn_all" id="btn_all" value="All"   class="button_update"/></td>
+                   <td width="80" align="right"  >&nbsp;</td>
+                   
+                   {{if access_permission==True:}}
+                   <td align="right"  >&nbsp;</td>
+                   {{pass}}
+                   
+                  </tr>
+			     </form>
+            </table>
+				<br />
+			 <table width="1000" border="1" cellpadding="1" cellspacing="1" class="sample_border" >
+               <tr align="left" class="blackCatHead"  height="20px" ;"vertical-align:middle">
+                 <td width="30" >&nbsp;</td>
+                 <td width="100" >Date</td>
+                 <td width="250" >Doctor</td>
+                 <td >Market</td>
+                 <td width="250" >Depot</td>
+                 <td width="50" align="center" >Status </td>                 
+               </tr>
+			   	
+                {{submittedFlag=0}}
+                {{checkboxCount=len(records)}}
+                
+				<form method="post" action="{{=URL(c='doctor_visit',f='doctor_visit_plan_approve')}}" name="tablesForm" id="tablesForm">
+               
+			   {{for i,record in enumerate(records):}}
+                    <tr  align="left" class="blackCat"  style="font-size:12px">
+                      <td width="30" >{{if record.status=='Submitted':}}<input type="checkbox" name="vslList" id="vslfield_{{=i}}" value="{{=record.id}}" style="width:18px; height:18px;">{{submittedFlag=1}}{{pass}}</td> 
+                      <td width="100" >{{=record.schedule_date}}</td>
+                      <td width="250" >{{=record.doc_id}}-{{=record.doc_name}}</td>
+                      <td >{{=record.route_id}}-{{=record.route_name}}</td>
+                      <td width="250" >{{=record.depot_id}}-{{=record.depot_name}}</td>
+                      <td width="50" align="center"  >{{=record.status}}</td>                      
+                    </tr>
+			   {{pass}}
+               
+               {{if submittedFlag==1:}}
+               <tr  align="left" class="blackCat"  style="font-size:12px">
+                    <td colspan="3" >
+                      <input type="hidden" name="vslList" id="vslfield" value="0">
+                      <img src="{{=URL('static','images/arrow_ltr.png')}}" width="38" height="22" alt="^" />
+    
+                      <a href="" onClick="if (markAllRows({{=checkboxCount}})) return false;">Check All</a>&nbsp;/&nbsp;
+                      <a href="" onClick="if (unMarkAllRows({{=checkboxCount}})) return false;">Uncheck All</a>
+                    </td>
+                    <td >&nbsp;</td>
+                    <td width="250" >&nbsp;</td>
+                    <td align="center"  >&nbsp;</td>
+                  </tr>
+               <tr  align="left" class="blackCat"  style="font-size:12px">
+                 <td colspan="2" ><input type="submit" name="btn_approved"  value="Approve Checked" title="Approve checked visit plan"/></td>
+                 <td ><input type="submit" name="btn_delete"  value="Cancel Checked" title="Approve checked visit plan"/></td>
+                 <td >&nbsp;</td>
+                 <td width="250" >&nbsp;</td>
+                 <td align="center"  >&nbsp;</td>
+               </tr>
+               {{pass}}
+               </form>
+               
+    </table>
+    
+	      </td>
+         </tr>
+    </table>
+
+<br />
+</td>
+  </tr>
+</table>
+
+<script>
+	/*checked all*/
+	function markAllRows(checkboxCount) {
+		
+		var checkbox;	
+		for ( var i = 0; i < checkboxCount; i++ ) {		
+			checkbox = document.getElementById('vslfield_'+i);
+			if ( checkbox && checkbox.type == 'checkbox' ) {
+				if ( checkbox.disabled == false ) {
+					checkbox.checked = true;                
+				}
+			}
+		}
+	
+		return true;
+	}
+	
+	/*unchecked all*/
+	function unMarkAllRows(checkboxCount) {
+		var checkbox;
+		for ( var i = 0; i < checkboxCount; i++ ) {
+			checkbox = document.getElementById('vslfield_'+i);
+			if ( checkbox && checkbox.type == 'checkbox' ) {
+				checkbox.checked = false;
+			}
+		}
+	
+		return true;
+	}
+   
+</script>

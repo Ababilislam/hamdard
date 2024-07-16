@@ -1,0 +1,492 @@
+{{extend 'layout.html'}}
+
+  <link rel="stylesheet" href="{{=URL('static', 'js_and_css/ui.theme.css')}}" type="text/css" />
+
+  <link rel="stylesheet" href="{{=URL('static', 'js_and_css/jquery-ui.css')}}" type="text/css" />
+
+  <link rel="stylesheet" href="{{=URL('static', 'js_and_css/style.css')}}" type="text/css" />
+
+   <script src="{{=URL('static','js_and_css/jquery-1.8.2.js')}}"></script>
+
+   <script src="{{=URL('static','js_and_css/jquery-ui.js')}}"></script>
+
+    
+
+ <style type="text/css">
+
+	input[type=text], input[type=password],  select {
+
+		margin: 2px 0px 2px 0px;
+
+		width:120px;
+
+	}
+
+	div.error {
+
+		margin-left:0px;
+
+		width:auto;
+
+	}
+
+	#sm_doctor_doc_id{
+
+	width:80px;
+
+	}
+
+	#sm_doctor_doc_name{
+
+	width:200px;
+
+	}
+
+	#sm_doctor_specialty{
+
+	width:120px;
+
+	}
+
+	
+
+	#sm_doctor_status{
+
+	width:auto;
+
+	}
+
+	
+
+	textarea{
+
+	width:200px;
+
+	height:30px;
+
+	}
+
+	
+
+	.page_color,body{
+
+		font-family:Arial, Helvetica, sans-serif;
+
+		font-size:13px;	
+
+		}
+
+	
+
+ </style>
+
+ 
+
+ 
+
+ <script>
+
+var base_url=location.protocol + "//" + location.hostname + (location.port && ":" + location.port) + "/{{=request.application}}/";
+
+
+
+$(function() {
+
+	 	var valueListStr="";
+
+		
+
+		$('#search_type').blur(function(){
+
+			if ($('#search_type').val()=='DocID'){
+
+				
+
+				$.ajax({
+
+					  url: base_url+'default/get_doctor_list',
+
+					  success: function(resStr) {
+
+						  valueListStr=resStr
+
+					  }
+
+					});
+
+			}else if ($('#search_type').val()=='Status'){
+
+				valueListStr='ACTIVE,INACTIVE'
+
+				
+
+			}else if ($('#search_type').val()=='Specialty'){
+
+				$.ajax({
+
+					  url: base_url+'default/get_doctor_specialty',
+
+					  success: function(resStr) {
+
+						  valueListStr=resStr
+
+					  }
+
+					});
+
+			
+
+			};
+
+			
+
+	 	});
+
+	 
+
+		$('#search_value').keyup(function(){
+
+			//-------------------------
+
+			var valueList = valueListStr.split(',');				
+
+			var searchValue=$("#search_value").val();
+
+			
+
+			//---------------- auto complete combo list
+
+			var valueList_new=new Array();
+
+			lc=0;
+
+			i =0;
+
+			var valueStr="";				
+
+			while (i < valueList.length)
+
+			{
+
+				valueStr=valueList[i];
+
+				i=i+1;					
+
+				var res=valueStr.toUpperCase().match(searchValue.toUpperCase());
+
+				if (res!=null){
+
+					valueList_new[lc]=valueStr;
+
+					lc=lc+1;
+
+					if (lc==30){
+
+						break;
+
+					};
+
+				}else{
+
+					continue;
+
+				}					
+
+			};
+
+			//alert (ref_list_new);
+
+			
+
+			//-------------- auto complete source
+
+			$( "input#search_value" ).autocomplete({
+
+				source: valueList_new
+
+			});
+
+		
+
+	  }); 
+
+	  
+
+}); 
+
+
+
+</script>
+
+
+
+ 
+
+ 
+
+ 
+
+<body class="claro">   
+
+<table width="100%"  border="0" cellspacing="0" cellpadding="0" style="background-color:#FFFFFF;" >
+
+  <tr height="30px" >
+
+    <td width="700"><span class="blackCatTitle">Doctor List</span></td>
+
+    
+
+	
+
+	<td width="210" align="right">&nbsp;</td>
+
+	
+
+	
+
+	
+
+    <td>&nbsp;</td>
+
+  </tr>
+
+  <tr  height="1px" style="background-color:#CCCCCC;">
+
+	    <td colspan="3" ></td>
+
+  </tr>
+
+</table>
+
+  
+
+  <table width="100%" height="500px"  border="0" cellspacing="0" cellpadding="0" class="page_color" id="table_big"  >
+
+  <tr height="100%"  style="vertical-align:top;">
+
+    <td width="10px">&nbsp;</td>
+
+    <td>
+
+	<table width="100%"  border="0" cellpadding="0" cellspacing="0"  >
+
+      <tr>
+
+        <td width="900">&nbsp;</td>
+
+        <form action="{{=URL(c='doctor',f='doctor_add')}}" method="post">
+
+        <td width="100" align="right"><input name="btn_add" type="submit"  value="New"/></td>
+
+        </form>
+
+        
+
+        <td>&nbsp;</td>
+
+      </tr>
+
+      <tr>
+
+        <td colspan="3">
+
+		
+
+		<table width="1000" border="1"  class="sample_border" >
+
+          <form id="form1" name="form1" method="post" action="{{=URL(c='doctor',f='doctor_list')}}">
+
+            <tr align="left" class="blackCatHead"  height="20px" ;"vertical-align:middle">
+
+              <td width="100" height="28" >
+
+                <select name="search_type" id="search_type" style="width:200px" >
+
+                  <option selected="selected" value="">Select a Type</option>
+
+                  {{if session.searchType_doctor=='DocID':}}<option value="DocID" selected="selected">Doctor ID/Name/Mobile</option>{{else:}}<option value="DocID" >Doctor ID/Name/Mobile</option>{{pass}}
+
+                  {{if session.searchType_doctor=='Specialty':}}<option value="Specialty" selected="selected">Specialty</option>{{else:}}<option value="Specialty" >Specialty</option>{{pass}}
+
+                  {{if session.searchType_doctor=='Status':}}<option value="Status" selected="selected">Status</option>{{else:}}<option value="Status" >Status</option>{{pass}}
+
+                  {{if session.searchType_doctor=='UpdatedBy':}}<option value="UpdatedBy" selected="selected">Updated By</option>{{else:}}<option value="UpdatedBy" >Updated By</option>{{pass}}
+
+				</select>
+
+              </td>
+
+              <td width="120" >
+
+                {{if session.searchValue_doctor=='' or session.searchValue_doctor==None:}}
+
+                    <input  name="search_value" type="text" id="search_value" size="25" value="" placeholder="Select value" autocomplete="off" style="width:300px"/>
+
+                {{else:}}
+
+                    <input  name="search_value" type="text" id="search_value" size="25" value="{{=session.searchValue_doctor}}" placeholder="Select value" autocomplete="off" style="width:300px"/>
+
+                {{pass}}
+
+              
+
+              </td>
+
+              <td align="left"  ><input type="submit" name="btn_filter" id="btn_filter" value="Filter"   class="button_update"/>
+
+                &nbsp;
+
+                <input type="submit" name="btn_filter_all" id="btn_filter_all" value="All"   class="button_update"/>
+
+                &nbsp;&nbsp;</td>
+
+              <td width="200" align="right"  >
+
+               {{if access_permission==True:}}
+
+               
+
+               	{{if session.user_type=='Admin':}}
+
+                  <a href="{{=URL(c='doctor',f='download_doctor')}}">
+
+                    <input type="button" name="Input2" id="Input2" value="Download"   class="button_update"/>
+
+                  </a>
+
+			 	{{pass}}
+
+                
+
+			  <a href="{{=URL(c='doctor',f='batch_upload_doctor')}}">
+
+            <input type="button" name="Input" id="Input" value="Batch Upload"   class="button_update"/>
+
+              </a>
+
+		  {{pass}}
+
+		  </td>
+
+              </tr>
+
+		  </form>
+
+        </table>
+
+		Total: {{=recordCount}}<br />
+
+			 <table width="1000" border="1" cellpadding="1" cellspacing="1" class="sample_border" >
+
+               <tr align="left" class="blackCatHead"  height="20px" ;"vertical-align:middle">
+
+                 <td width="80" >Doctor ID </td>
+
+                 <td width="200" >Name</td>
+
+                 <td >Specialty </td>
+                 <td >Degree</td>
+
+                 <td >Doctors Category</td>
+
+                 <td width="80" align="center" >Status</td>
+
+                 <td width="80" align="center" >UpdatedBy</td>
+
+                 <td width="30" align="right" ></td>
+
+                 <td width="50" align="right" ></td>
+
+               </tr>
+
+			   
+
+               
+
+	   {{ p=0}} 		  
+
+	   {{for i,record in enumerate(records):}}
+
+	   {{ if i==items_per_page: break}}
+
+  
+
+		  <tr  align="left" class="blackCat"  style="vertical-align:middle; font-size:12px"> 
+
+		  <td width="80" >{{=record.doc_id}}</td>
+
+		  <td width="300" >{{=record.doc_name}}</td>
+
+		  <td width="150" >{{=record.specialty}} </td>
+		  <td width="150" >{{=record.degree}}</td>
+
+		  <td >{{=record.doctors_category}}</td>
+
+		  <td width="80" align="center" >{{=record.status}}</td>
+
+		  <td width="80" align="center" >{{=record.updated_by}}</td>
+
+		  <form id="form1" name="form1" method="post" action="{{=URL(c='doctor',f='doctor_edit',args=[page,record.id,record.doc_id])}}">
+
+          <td width="30" align="right"  >
+
+          	{{if access_permission==True:}}
+
+			  <input type="submit" name="btn_go" id="btn_go" value="&gt;&gt;"   class="button_update"/>
+
+             {{pass}}
+
+		  </td>
+
+          </form>
+
+          
+
+          <form id="form1" name="form1" method="post" action="{{=URL(c='doctor_route',f='doctor_route_add',args=[page],vars=dict(search_type='DocID',search_value=record.doc_id))}}" target="_blank">
+
+		    <td width="50" align="right"  ><input type="submit" name="btn_filter" id="btn_filter" value="Chamber"   class="button_update"/></td>
+
+		  </form>
+
+		</tr>
+
+			   {{pass}}
+
+		    </table>
+
+		  <p>&nbsp;</p>
+
+		  </td>
+
+		</tr>
+
+    </table>
+
+   
+
+{{if page:}}
+
+<a href="{{=URL(args=[page-page])}}">first</a> |   
+
+<a href="{{=URL(args=[page-1])}}">previous</a> |
+
+{{pass}}
+
+
+
+{{if len(records)>items_per_page:}}
+
+<a href="{{=URL(args=[page+1])}}">next</a>
+
+{{pass}}
+
+
+
+</td>
+
+  </tr>
+
+</table>
+
+</body>
+

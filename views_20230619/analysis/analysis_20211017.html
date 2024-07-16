@@ -1,0 +1,1252 @@
+{{extend 'layout.html'}}
+
+<head>
+<!--<link rel="stylesheet" href="{{=URL('static', 'jchart/styles/jchartfx.css')}}" type="text/css" />
+<script src="{{=URL('static','jchart/js/jchartfx.system.js')}}"></script>
+<script src="{{=URL('static','jchart/js/jchartfx.coreVector.js')}}"></script>
+<script src="{{=URL('static','jchart/js/jchartfx.advanced.js')}}"></script>-->
+
+<link rel="stylesheet" href="{{=URL('static', 'js_and_css/ui.theme.css')}}" type="text/css" />
+<link rel="stylesheet" href="{{=URL('static', 'js_and_css/jquery-ui.css')}}" type="text/css" />
+<link rel="stylesheet" href="{{=URL('static', 'js_and_css/style.css')}}" type="text/css" />
+
+<script src="{{=URL('static','js_and_css/jquery-1.8.2.js')}}"></script>
+<script src="{{=URL('static','js_and_css/jquery-ui.js')}}"></script>
+
+<style type="text/css">	
+	<!--color-->
+	
+	input[type=submit] {
+		margin: 2px 0px 2px 0px;
+		padding: 0px 0px 2px 0px;
+		width:200px;
+	}
+	
+	input[type=text] {
+		width:120px;
+	}
+	
+	.checkbox{
+	padding-left:0px;
+	}
+	
+	.multiselect{ 
+			text-align:left;
+			height:28px;
+	}
+	
+	.page_color,body{
+			font-family:Arial, Helvetica, sans-serif;
+			font-size:13px;	
+			}
+
+</style>
+
+
+<script>
+ $(function() { 
+		
+	$( "#accordionReport" ).accordion({
+	  active:0,
+      heightStyle: "content",
+	  collapsible: true
+    });
+	
+  });
+  </script>
+  
+   
+<script>
+var base_url=location.protocol + "//" + location.hostname + (location.port && ":" + location.port) + "/{{=request.application}}/";
+
+$(function() {
+	 	
+		//========================== Area
+		var areaListStr="";
+		$('#areaValue').keyup(function(){
+			
+			var regionCode=$('#regionValue').val().split('|')[0];
+			var areaValue=$('#areaValue').val();
+			
+			if (areaValue!=''){				
+				$.ajax({
+					  url: base_url+'default/get_region_area_list?regionCode='+regionCode,
+					  success: function(resStr) {
+						  areaListStr=resStr;						  
+					  }
+				});
+				
+				//-------------------------
+				var valueList = areaListStr.split(',');				
+				var searchValue=areaValue;
+				
+				//---------------- auto complete combo list
+				var valueList_new=new Array();
+				lc=0;
+				i =0;
+				var valueStr="";				
+				while (i < valueList.length)
+				{
+					valueStr=valueList[i];
+					i=i+1;		
+					var res=valueStr.toUpperCase().match(searchValue.toUpperCase());
+					if (res!=null){
+						valueList_new[lc]=valueStr;
+						lc=lc+1;
+						if (lc==30){
+							break;
+						};
+					}else{
+						continue;
+					}					
+				};
+				
+				//-------------- auto complete source
+				$( "input#areaValue" ).autocomplete({
+					source: valueList_new
+				});
+				
+			}		
+	 	});
+	 //========================== Territory
+	 var territoryListStr="";
+		$('#territoryValue').keyup(function(){
+			var regionCode=$('#regionValue').val().split('-')[0];
+			var areaCode=$('#areaValue').val().split('-')[0];
+			
+			var territoryValue=$('#territoryValue').val();
+			
+			if (territoryValue!=''){				
+				$.ajax({
+					  url: base_url+'default/get_region_area_territory_list?regionCode='+regionCode+'&areaCode='+areaCode,
+					  success: function(resStr) {
+						  territoryListStr=resStr;
+					  }
+				});
+				
+				//-------------------------
+				var valueList = territoryListStr.split(',');				
+				var searchValue=territoryValue;
+				
+				//---------------- auto complete combo list
+				var valueList_new=new Array();
+				lc=0;
+				i =0;
+				var valueStr="";				
+				while (i < valueList.length)
+				{
+					valueStr=valueList[i];
+					i=i+1;		
+					var res=valueStr.toUpperCase().match(searchValue.toUpperCase());
+					if (res!=null){
+						valueList_new[lc]=valueStr;
+						lc=lc+1;
+						if (lc==30){
+							break;
+						};
+					}else{
+						continue;
+					}					
+				};
+				
+				//-------------- auto complete source
+				$( "input#territoryValue" ).autocomplete({
+					source: valueList_new
+				});
+				
+			}		
+	 	});
+	
+	//========================== Market
+	 	var marketListStr="";
+		$('#marketValue').keyup(function(){
+			var regionCode=$('#regionValue').val().split('-')[0];
+			var areaCode=$('#areaValue').val().split('-')[0];
+			var territoryCode=$('#territoryValue').val().split('-')[0];
+			
+			var marketValue=$('#marketValue').val();
+			
+			if (marketValue!=''){				
+				$.ajax({
+					  url: base_url+'default/get_reg_area_terr_market_list?regionCode='+regionCode+'&areaCode='+areaCode+'&territoryCode='+territoryCode,
+					  success: function(resStr) {
+						  marketListStr=resStr;
+					  }
+				});
+				
+				//-------------------------
+				var valueList = marketListStr.split(',');				
+				var searchValue=marketValue;
+				
+				//---------------- auto complete combo list
+				var valueList_new=new Array();
+				lc=0;
+				i =0;
+				var valueStr="";				
+				while (i < valueList.length)
+				{
+					valueStr=valueList[i];
+					i=i+1;		
+					var res=valueStr.toUpperCase().match(searchValue.toUpperCase());
+					if (res!=null){
+						valueList_new[lc]=valueStr;
+						lc=lc+1;
+						if (lc==30){
+							break;
+						};
+					}else{
+						continue;
+					}					
+				};
+				
+				//-------------- auto complete source
+				$( "input#marketValue" ).autocomplete({
+					source: valueList_new
+				});
+				
+			}		
+	 	});
+		
+		//========================== Rep/Supervisor
+	 	var repCMListStr="";
+		$('#repCM').keyup(function(){
+			//alert(base_url+'default/get_all_ff_list')
+			var repCM=$('#repCM').val();
+			if (repCM!=''){				
+				$.ajax({
+					  url: base_url+'default/get_all_ff_list',
+					  success: function(resStr) {
+						  repCMListStr=resStr;
+					  }
+				});
+				
+				//-------------------------
+				var valueList = repCMListStr.split(',');				
+				var searchValue=repCM;
+				
+				//---------------- auto complete combo list
+				var valueList_new=new Array();
+				lc=0;
+				i =0;
+				var valueStr="";				
+				while (i < valueList.length)
+				{
+					valueStr=valueList[i];
+					i=i+1;		
+					var res=valueStr.toUpperCase().match(searchValue.toUpperCase());
+					if (res!=null){
+						valueList_new[lc]=valueStr;
+						lc=lc+1;
+						if (lc==30){
+							break;
+						};
+					}else{
+						continue;
+					}
+				};
+				
+				//-------------- auto complete source
+				$( "input#repCM" ).autocomplete({
+					source: valueList_new
+				});
+			}
+	 	});
+});
+</script>
+
+
+<style>
+	.rptlist{font-size:15px; height:auto; }
+	.rptlist:hover{ height:auto;}
+	.rptul{color:#0076AE; background-color:#F0F0F0;}
+	.rptdiv{  font-size:16px; color:#0076AE; background-color:#F0F0F0;}
+	
+	#accordionReport ul{	list-style-type:none;margin:0; font-size:15px; }
+	#accordionReport li{ margin:1px; border-radius:5px; border-bottom:1px solid #CCCCCC; font-size:15px; background-color:#F7F7F7; height:20px; padding:5px 2px 2px 15px;}/*:#F7F7F7*/
+	
+	#accordionReport li:hover{ height:21px;background-color:#F5F5F5; font-size:15px;}
+</style>
+
+</head>
+<body id="htmlbody">
+<!--<input type="hidden" value="{{#=salesTrendList}}" id="chartDataSalesTrend"/>-->
+
+{{currYear=str(date_fixed)[0:4]}}
+{{currMonth=str(date_fixed)[5:7]}}
+
+<!--Form Title -->
+<table width="100%" border="0" cellspacing="0" cellpadding="0" style="background-color:#FFFFFF;">
+  <tr height="30px">
+    <td><div class="blackCatTitle">Analysis</div></td>
+  </tr>
+  <tr >
+    <td height="1px" style="background-color:#CCCCCC;"></td>
+  </tr>
+</table>
+<!--Form Content -->
+<table width="100%" border="0" cellspacing="0" cellpadding="0" class="page_color">
+  
+  <tr height="20px">
+  	<td width="10px"></td>
+  	<td> </td>	
+  </tr>
+  
+  <tr >
+    <td width="10px"></td>
+	<td valign="top">					
+		 <div id="accordionReport"  style="width:90%">
+		 	
+            <div  class="rptdiv">
+                <ul class="rptul">
+                    <li class="rptlist">Periodical Report</li>
+                </ul>
+		   </div>
+		   <div >  
+           
+           <table width="900" border="0" cellpadding="0" cellspacing="0">
+				<form name="form2" id="form2" action="{{=URL(c='analysis',f='analysis')}}" target="_blank">
+                <tr>
+                	<td valign="top">
+                   	  <table width="550" height="98%;" style="background-color:#F8F8F8;">
+                        	
+                          <tr style="background-color:#E9E9E9; height:25px">
+                              <td width="10">&nbsp;</td>
+                              <td>&nbsp;</td>
+                              <td>&nbsp;</td>
+                              <td width="400">&nbsp;</td>
+                          </tr>
+                          <tr >
+                              <td width="10">&nbsp;</td>
+                              <td width="150">Date Range </td>
+                              <td width="2">:</td>
+                              <td width="400" style="vertical-align:middle;">{{=search_form.custom.widget.from_dt}}&nbsp;To&nbsp;{{=search_form.custom.widget.to_dt}}</td>
+                          </tr>
+                
+                            <tr >
+            
+                              <td width="10">&nbsp;</td>
+                              <td>{{=session.level0Name}}</td>
+                              <td>:</td>
+                              <td width="400">
+                              {{if session.user_type=='Supervisor' and str(session.depthNo)=='0':}}
+                              	<select id="regionValue" name="regionValue" style="width:300px; background-color:#EBEBEB">
+                              {{else:}}
+                              	<select id="regionValue" name="regionValue" style="width:300px;" >
+                              {{pass}}
+                              	
+                                {{if session.user_type!='Supervisor':}}
+                                	<option value="">Select Value</option>
+                                {{pass}}
+                                
+                     			{{for regionRow in regionRows:}}
+                                	<option value="{{=regionRow.level_id}}" >{{=regionRow.level_id}}|{{=regionRow.level_name}}</option>
+                                {{pass}}                 
+                  
+                              </select>
+                             </td>
+                          </tr>
+                          <tr >
+                              <td width="10">&nbsp;</td>
+                              <td>{{=session.level1Name}}</td>
+                              <td>:</td>
+                              <td width="400">
+                              
+                              {{if session.user_type=='Supervisor' and str(session.depthNo)=='1':}}
+                              	<input  name="areaValue" type="text" id="areaValue" size="25" value="{{=session.level_id}}" placeholder="Select Value" autocomplete="off" style="width:288px" readonly/>
+                              {{else:}}
+                              	<input  name="areaValue" type="text" id="areaValue" size="25" value="" placeholder="Select Value" autocomplete="off" style="width:288px"/>
+                              {{pass}}
+                              
+                              </td>
+                          </tr>
+                          <tr >
+                              <td width="10">&nbsp;</td>
+                              <td>Visit By</td>
+                              <td>:</td>
+                              <td width="400"><input  name="repCM" type="text" id="repCM" size="25" value="" placeholder="Select Rep/Supervisor" autocomplete="off" style="width:288px"/></td>
+                          </tr>
+                            <tr >
+                              <td width="10">&nbsp;</td>
+                              <td>&nbsp;</td>
+                              <td>&nbsp;</td>
+                              <td width="400">&nbsp;</td>
+                          </tr>
+                            <tr >
+                              <td width="10">&nbsp;</td>
+                              <td>&nbsp;</td>
+                              <td>&nbsp;</td>
+                              <td width="400">&nbsp;</td>
+                          </tr>
+                            <tr >
+                              <td width="10">&nbsp;</td>
+                              <td>&nbsp;</td>
+                              <td>&nbsp;</td>
+                              <td width="400">&nbsp;</td>
+                          </tr>
+                            <tr >
+                              <td>&nbsp;</td>
+                              <td>&nbsp;</td>
+                              <td>&nbsp;</td>
+                              <td>&nbsp;</td>
+                            </tr>
+                            <tr >
+                              <td>&nbsp;</td>
+                              <td>&nbsp;</td>
+                              <td>&nbsp;</td>
+                              <td>&nbsp;</td>
+                            </tr>
+                            <tr >
+                              <td>&nbsp;</td>
+                              <td>&nbsp;</td>
+                              <td>&nbsp;</td>
+                              <td>&nbsp;</td>
+                            </tr>
+                            <tr >
+                              <td>&nbsp;</td>
+                              <td>&nbsp;</td>
+                              <td>&nbsp;</td>
+                              <td>&nbsp;</td>
+                            </tr>
+                            <tr >
+                              <td>&nbsp;</td>
+                              <td>&nbsp;</td>
+                              <td>&nbsp;</td>
+                              <td>&nbsp;</td>
+                            </tr>
+                            <tr >
+                              <td>&nbsp;</td>
+                              <td>&nbsp;</td>
+                              <td>&nbsp;</td>
+                              <td>&nbsp;</td>
+                            </tr>
+                            <tr >
+                              <td>&nbsp;</td>
+                              <td>&nbsp;</td>
+                              <td>&nbsp;</td>
+                              <td>&nbsp;</td>
+                            </tr>
+                            <tr >
+                              <td>&nbsp;</td>
+                              <td>&nbsp;</td>
+                              <td>&nbsp;</td>
+                              <td>&nbsp;</td>
+                            </tr>
+                            <tr >
+                              <td>&nbsp;</td>
+                              <td>&nbsp;</td>
+                              <td>&nbsp;</td>
+                              <td>&nbsp;</td>
+                            </tr>
+                            <tr >
+                              <td>&nbsp;</td>
+                              <td>&nbsp;</td>
+                              <td>&nbsp;</td>
+                              <td>&nbsp;</td>
+                            </tr>
+                            <tr >
+                              <td>&nbsp;</td>
+                              <td>&nbsp;</td>
+                              <td>&nbsp;</td>
+                              <td>&nbsp;</td>
+                            </tr>
+                            <tr >
+                              <td>&nbsp;</td>
+                              <td>&nbsp;</td>
+                              <td>&nbsp;</td>
+                              <td>&nbsp;</td>
+                            </tr>
+                            <tr >
+                              <td>&nbsp;</td>
+                              <td>&nbsp;</td>
+                              <td>&nbsp;</td>
+                              <td>&nbsp;</td>
+                            </tr>
+                            <tr >
+                              <td>&nbsp;</td>
+                              <td>&nbsp;</td>
+                              <td>&nbsp;</td>
+                              <td>&nbsp;</td>
+                            </tr>
+                            <tr >
+                              <td>&nbsp;</td>
+                              <td>&nbsp;</td>
+                              <td>&nbsp;</td>
+                              <td>&nbsp;</td>
+                            </tr>
+                            <tr >
+                              <td>&nbsp;</td>
+                              <td>&nbsp;</td>
+                              <td>&nbsp;</td>
+                              <td>&nbsp;</td>
+                            </tr>
+                            <tr >
+                              <td>&nbsp;</td>
+                              <td>&nbsp;</td>
+                              <td>&nbsp;</td>
+                              <td>&nbsp;</td>
+                            </tr>
+                            <tr >
+                              <td>&nbsp;</td>
+                              <td>&nbsp;</td>
+                              <td>&nbsp;</td>
+                              <td>&nbsp;</td>
+                            </tr>
+                            <tr >
+                              <td>&nbsp;</td>
+                              <td>&nbsp;</td>
+                              <td>&nbsp;</td>
+                              <td>&nbsp;</td>
+                            </tr>
+                            <tr >
+                              <td>&nbsp;</td>
+                              <td>&nbsp;</td>
+                              <td>&nbsp;</td>
+                              <td>&nbsp;</td>
+                            </tr>
+                            <tr >
+                              <td>&nbsp;</td>
+                              <td>&nbsp;</td>
+                              <td>&nbsp;</td>
+                              <td>&nbsp;</td>
+                            </tr>
+                            <tr >
+                              <td>&nbsp;</td>
+                              <td>&nbsp;</td>
+                              <td>&nbsp;</td>
+                              <td>&nbsp;</td>
+                            </tr>
+                            <tr >
+                              <td>&nbsp;</td>
+                              <td>&nbsp;</td>
+                              <td>&nbsp;</td>
+                              <td>&nbsp;</td>
+                            </tr> 
+                            <tr >
+                              <td>&nbsp;</td>
+                              <td>&nbsp;</td>
+                              <td>&nbsp;</td>
+                              <td>&nbsp;</td>
+                            </tr> 
+                            <tr >
+                              <td>&nbsp;</td>
+                              <td>&nbsp;</td>
+                              <td>&nbsp;</td>
+                              <td>&nbsp;</td>
+                            </tr>
+							<tr >
+                              <td>&nbsp;</td>
+                              <td>&nbsp;</td>
+                              <td>&nbsp;</td>
+                              <td>&nbsp;</td>
+                            </tr> 
+                            <!--<tr >
+                              <td>&nbsp;</td>
+                              <td>&nbsp;</td>
+                              <td>&nbsp;</td>
+                              <td>&nbsp;</td>
+                            </tr> 
+							<tr >
+                              <td>&nbsp;</td>
+                              <td>&nbsp;</td>
+                              <td>&nbsp;</td>
+                              <td>&nbsp;</td>
+                            </tr> 
+                            <tr >
+                              <td>&nbsp;</td>
+                              <td>&nbsp;</td>
+                              <td>&nbsp;</td>
+                              <td>&nbsp;</td>
+                            </tr>
+							<tr >
+                              <td>&nbsp;</td>
+                              <td>&nbsp;</td>
+                              <td>&nbsp;</td>
+                              <td>&nbsp;</td>
+                            </tr>-->
+                            <tr >
+                              <td width="10">&nbsp;</td>
+                              <td></td>
+                              <td></td>
+                              <td width="400">
+                              	Year:
+                                    <select id="rpt_year" name="rpt_year" style="width:80px;"> 
+                                        <option value="">Year</option>
+                                        {{for i in range(2020,2031):}}
+                                        <option value="{{=i}}">{{=i}}</option>
+                                        {{pass}}
+                                    </select>
+                                    
+                                    Month:
+                                    <select id="rpt_month" name="rpt_month" style="width:80px;"> 
+                                        <option value="">Month</option>
+                                        <option value="01-Jan">Jan</option>
+                                        <option value="02-Feb">Feb</option>
+                                        <option value="03-Mar">Mar</option>
+                                        <option value="04-Apr">Apr</option>
+                                        <option value="05-May">May</option>
+                                        <option value="06-Jun">Jun</option>
+                                        <option value="07-Jul">Jul</option>
+                                        <option value="08-Aug">Aug</option>
+                                        <option value="09-Sep">Sep</option>
+                                        <option value="10-Oct">Oct</option>
+                                        <option value="11-Nov">Nov</option>
+                                        <option value="12-Dec">Dec</option>
+                                    </select>
+                              </td>
+                          </tr>
+                            <tr >
+                              <td>&nbsp;</td>
+                              <td></td>
+                              <td></td>
+                              <td>&nbsp;</td>
+                            </tr>
+                            
+                      </table>
+                    
+                    
+                  </td>
+                    <td valign="top">
+                    	<table width="350">
+                        	
+                            <tr style="background-color:#E9E9E9; height:25px">
+                              <td colspan="3">&nbsp;</td>
+							  <td  style='width:20px;'>&nbsp;</td>
+                            </tr>							
+							<!--<tr >
+                                <td colspan="3"><input type="submit" style="width:98%" name="btn_dashboard" value="Dashboard" title="Date Range"/></td>
+								<td >&nbsp;</td>
+                            </tr>-->
+							<tr >
+                              <td colspan="3">&nbsp;</td>
+							  <td >&nbsp;</td>
+                            </tr>
+							<tr >
+                              <td colspan="4" style="text-align:center; font-weight:bold; color:#666; background-color:#E9E9E9">Order</td>
+								<td >&nbsp;</td>
+							</tr>
+                            <tr >
+                                <td colspan="3"><input type="submit" style="width:98%" name="btn_sr_wise_visit" value="SR Wise Order" title="Date Range"/></td>
+								<td ><input type="submit" style="width:98%" name="btn_sr_wise_visit_d" value="D" title="Date Range"/></td>
+                            </tr>
+							<tr >
+                                <td colspan="3"><input type="submit" style="width:98%" name="btn_customer_order" value="Customer Order" title="Date Range"/></td>
+								<td ><input type="submit" style="width:98%" name="btn_customer_order_d" value="D" title="Date Range"/></td>
+							</tr> 
+							<tr >
+                                <td colspan="3"><input type="submit" style="width:98%" name="btn_product_performance" value="Product Performance" title="Date Range"/></td>
+								<!-- <td ><input type="submit" style="width:98%" name="btn_product_performance_d" value="D" title="Date Range"/></td> -->
+							</tr>
+
+
+							<tr >
+                                <td colspan="3"><input type="submit" style="width:98%" name="btn_outlet_coverage" value="Outlet Coverage" title="Date Range"/></td>
+								<!-- <td ><input type="submit" style="width:98%" name="btn_outlet_coverage_d" value="D" title="Date Range"/></td> -->
+							</tr>                             
+							<tr >
+                              <td colspan="3">&nbsp;</td>
+							  <td >&nbsp;</td>
+                            </tr>
+							<tr >
+                              <td colspan="4" style="text-align:center; font-weight:bold; color:#666; background-color:#E9E9E9">Sales</td>
+								<td >&nbsp;</td>
+							</tr>
+							<!--<tr >
+                                <td colspan="3"><input type="submit" style="width:98%" name="btn_zero_sales_outlet" value="Zero Sales Outlet" title="Date Range"/></td>
+								<td >&nbsp;</td>
+							</tr>
+                            <tr >
+                                <td colspan="3"><input type="submit" style="width:98%" name="btn_missed_outlet" value="Missed Outlet" title="Date Range"/></td>
+								<td >&nbsp;</td>
+							</tr>-->
+                            <tr >
+                                <td colspan="3"><input type="submit" style="width:98%" name="btn_sr_wise_sales" value="SR Wise Sales" title="Date Range"/></td>
+								<td ><input type="submit" style="width:98%" name="btn_sr_wise_sales_d" value="D" title="Date Range"/></td>
+                            </tr> 
+                            <tr >
+                                <td colspan="3"><input type="submit" style="width:98%" name="btn_customer_sales" value="Cusotmer Sales" title="Date Range"/></td>
+								<td ><input type="submit" style="width:98%" name="btn_customer_sales_d" value="D" title="Date Range"/></td>
+							</tr>
+							<tr >
+                                <td colspan="3"><input type="submit" style="width:98%" name="btn_daily_sales_item_wise" value="Daily Sales Item Wise" title="Single Date"/></td>
+								<td >&nbsp;</td>
+							</tr>
+							<tr >
+                              <td colspan="3">&nbsp;</td>
+							  <td >&nbsp;</td>
+                            </tr>
+							<tr >
+                              <td colspan="4" style="text-align:center; font-weight:bold; color:#666; background-color:#E9E9E9">Others</td>
+								<td >&nbsp;</td>
+							</tr>
+							
+							<tr >
+                                <td colspan="3"><input type="submit" style="width:98%" name="btn_coverage" value="Tour & Coverage" title="Date Range"/></td>
+								<td >&nbsp;</td>
+							</tr>
+                            <tr >
+                                <td colspan="3"><input type="submit" style="width:98%" name="btn_productivity" value="Productivity" title="Date Range"/></td>
+								<td >&nbsp;</td>
+							</tr> 
+							<tr >
+                                <td colspan="3"><input type="submit" style="width:98%" name="btn_sr_attendance" value="SR Attendance" title="Date Range"/></td>
+								<td >&nbsp;</td>
+                            </tr>
+                            <tr >
+                                <td colspan="3"><input type="submit" style="width:98%" name="btn_inactive_user" value="Inactive User" title="Date Range"/></td>
+								<td >&nbsp;</td>
+                            </tr>
+							<tr >
+                                <td colspan="3"><input type="submit" style="width:98%" name="btn_new_client" value="New Client List" title="Date Range"/></td>
+								<td ><input type="submit" style="width:98%" name="btn_new_client_d" value="D" title="Date Range"/></td>
+                            </tr>
+                            <tr >
+                                <td colspan="3"><input type="submit" style="width:98%" name="btn_new_client_summary" value="New Client Summary" title="Date Range"/></td>
+								<td ><input type="submit" style="width:98%" name="btn_new_client_summary_d" value="D" title="Date Range"/></td>
+							</tr>                                                      
+                            <tr >
+                              <td colspan="3">&nbsp;</td>
+							  <td >&nbsp;</td>
+                            </tr>                             
+                                                        
+                            <tr >
+                              <td colspan="3">&nbsp;</td>
+							  <td >&nbsp;</td>
+                            </tr>
+                            
+                            <tr >
+                                <td colspan="3"><input type="submit" style="width:98%" name="btn_visit_list" value="Visit List" title="Filtered by Any"/></td>
+								<td >&nbsp;</td>
+							</tr>  
+                            <tr >
+                              <td colspan="3"><input type="submit" name="visit_list_summary" style="width:98%;" value="Visit Summary" title="Any"/></td>
+								<td >&nbsp;</td>
+							</tr>
+                            
+                            <tr >
+                              <td colspan="3">&nbsp;</td>
+							  <td >&nbsp;</td>
+                            </tr>
+                            
+                            <tr >
+                              <td colspan="3" style="text-align:center; font-weight:bold; color:#666; background-color:#E9E9E9">Order Summary</td>
+								<td >&nbsp;</td>
+							</tr>
+                            
+                            <tr >
+                              <td align="left"><input type="submit" style="width:98%" name="btn_market_research_level0" value="{{=session.level0Name}} wise" title="Filtered by Date Range, {{=session.level0Name}} and {{=session.level1Name}}"/></td>
+                              <td align="center"><input type="submit" style="width:98%" name="btn_market_research_level1" value="{{=session.level1Name}} wise" title="Filtered by Date Range, {{=session.level0Name}} and {{=session.level1Name}}"/></td>
+                              <td align="right"><input type="submit" style="width:98%" name="btn_market_research_rep" value="SR wise" title="Filtered by Date Range, {{=session.level0Name}} and {{=session.level1Name}}"/></td>
+								<td >&nbsp;</td>
+							</tr>
+                            <tr >
+                              <td colspan="3">&nbsp;</td>
+							  <td >&nbsp;</td>
+                            </tr>
+                                                   
+                            <!--<tr >
+                              <td colspan="3" style="text-align:center; font-weight:bold; color:#666; background-color:#E9E9E9">Order Details</td>
+								<td >&nbsp;</td>
+							</tr>
+                            <tr >
+                              <td align="left"><input type="submit" style="width:98%" name="btn_order_details_itemwise" value="Item wise" title="Filtered by Any"/></td>
+                              <td align="center"><input type="submit" style="width:98%" name="btn_order_details_repwise" value="Rep/Sup wise" title="Filtered by Any"/></td>
+                              <td align="right"><input type="submit" style="width:98%" name="btn_order_details_depotwise" value="Depot wise" title="Filtered by Any"/></td>
+								<td >&nbsp;</td>
+							</tr>-->
+                           
+
+                            {{if session.secondary_sales == 1:}}
+                            <tr >
+                              <td colspan="3">&nbsp;</td>
+							  <td >&nbsp;</td>
+                            </tr>
+                            <tr >
+                              <td colspan="3"><input type="submit" style="width:98%" name="btn_sales_summary_itemwise" value="Sales Summary (Item wise) Draft" title="Filtered by Any"/></td>
+								<td >&nbsp;</td>
+							</tr>
+                            <tr >
+                              <td colspan="3"><input type="submit" style="width:98%" name="btn_sales_summary_repwise" value="Sales Summary (Rep/Sup wise) Draft" title="Filtered by Any"/></td>
+								<td >&nbsp;</td>
+							</tr>
+                            <tr >
+                                <td colspan="3"><input type="submit" style="width:98%" name="btn_sales_summary_depotwise" value="Sales Summary (Depot wise) Draft" title="Filtered by Any"/></td>
+								<td >&nbsp;</td>
+							</tr>
+                            {{pass}}
+                            
+                            <tr >
+                                <td colspan="3" valign="top">&nbsp;</td>
+								<td >&nbsp;</td>
+                            </tr>
+                            
+                            
+                            <!--<tr >
+                                <td colspan="3"><input type="submit" name="btn_doctor_visit_summary" style="width:98%;" value="Doctor Visit Summary" title="Date Range, {{=session.level0Name}} and Visited By"/></td>
+                            </tr>
+                            
+                            <tr >
+                                <td colspan="3"><input type="submit" name="btn_doctor_visit" style="width:98%;" value="Doctor Visit" title="Date Range, {{=session.level0Name}} and Visited By"/></td>
+                            </tr>
+                            
+                            <tr >
+                              <td colspan="3"><input type="submit" name="btn_doctor_visit_individual" style="width:98%;" value="Doctor Visit Count (Individual)" title="Doctor Visit Count (Individual)"/></td>
+                            </tr>-->
+                            <tr >
+                                <td colspan="3">&nbsp;</td>
+								<td >&nbsp;</td>
+                            </tr>
+                            
+                            <!--<tr >
+                                <td colspan="3" style="text-align:center; font-weight:bold; color:#666; background-color:#E9E9E9">Prescription Survey Summary</td>
+                                
+                            </tr>
+                            <tr >
+                              <td align="left"><input type="submit" style="width:115px" name="btn_market_research_level0_pres" value="{{=session.level0Name}} wise" title="Filtered by Date Range, {{=session.level0Name}}"/></td>
+                              <td align="center"><input type="submit" style="width:110px" name="btn_market_research_level1_pres" value="{{=session.level1Name}} wise" title="Filtered by Date Range, {{=session.level0Name}} and {{=session.level1Name}}"/></td>
+                              <td align="right"><input type="submit" style="width:115px" name="btn_market_research_rep_pres" value="Territory wise" title="Filtered by Date Range, {{=session.level0Name}} and {{=session.level1Name}}"/></td>
+                            </tr>
+                            <tr>
+                                <td colspan="3"><input type="submit" name="btn_pres_survey_visit" style="width:98%;" value="Prescription List" title="Date Range, Visited By"/></td>
+                            </tr>-->
+                           <tr >
+                                <td colspan="3"><input type="submit" style="width:98%" name="btn_target_vs_ach" value="Target Vs Achievement" title="Year, Month"/></td>
+								<td >&nbsp;</td>
+							</tr>
+                            <tr >
+                                <td colspan="3"><input type="submit" style="width:98%" name="btn_target_vs_ach_route_item" value="Target Vs Achievement Details" title="Year, Month"/></td>
+								<td >&nbsp;</td>
+							</tr>                          
+                            
+                          <tr >
+                                <td colspan="3" valign="top">&nbsp;</td>
+								<td >&nbsp;</td>
+                          </tr> 
+                                                  
+                    </table>
+                    
+                    </td>                    
+                </tr>
+                
+               </form>
+            </table>
+                
+		   </div>
+           
+           <div  class="rptdiv">
+                <ul class="rptul">
+                    <li class="rptlist">Others</li>
+                </ul>
+		   </div>
+		   <div >           
+			 <table width="900" border="0" cellpadding="0" cellspacing="0">
+				<form name="form2" id="form2" action="{{=URL(c='analysis',f='analysis')}}" target="_blank">
+                <tr>
+                	<td valign="top">
+                    	<table height="100px;" style="background-color:#F8F8F8;">
+                        	
+                            <tr style="background-color:#E9E9E9;height:25px">
+                              <td width="0">&nbsp;</td>
+                              <td width="150">&nbsp;</td>
+                              <td width="2">&nbsp;</td>
+                              <td width="400">&nbsp;</td>
+                            </tr>
+                            <tr >
+                              <td width="0">&nbsp;</td>
+                              <td>&nbsp;</td>
+                              <td>&nbsp;</td>
+                              <td width="400">&nbsp;</td>
+                            </tr>
+                            <tr >
+                              <td width="0">&nbsp;</td>
+                              <td>{{=session.level0Name}}</td>
+                              <td>:</td>
+                              <td width="400">
+                              
+                              {{if session.user_type=='Supervisor' and str(session.depthNo)=='0':}}
+                              	<select id="regionValue2" name="regionValue2" style="width:300px; background-color:#EBEBEB">
+                              {{else:}}
+                              	<select id="regionValue2" name="regionValue2" style="width:300px;" >
+                              {{pass}}
+                              	
+                                {{if session.user_type!='Supervisor':}}
+                                	<option value="">Select Value</option>
+                                {{pass}}
+                              	                    
+                                 {{for regionRow in regionRows:}}
+                                	<option value="{{=regionRow.level_id}}" >{{=regionRow.level_id}}-{{=regionRow.level_name}}</option>
+                                 {{pass}}                 
+                              
+                              </select>
+                              </td>
+                            </tr>
+                            <tr >
+                              <td width="0">&nbsp;</td>
+                              <td>&nbsp;</td>
+                              <td>&nbsp;</td>
+                              <td width="400">&nbsp;</td>
+                            </tr>
+                        </table>
+                    
+                    
+                    </td>
+                    <td width="350" valign="top">
+                    	<table width="350" height="100px;">
+                        	
+                            <tr style="background-color:#E9E9E9;height:25px">
+                              <td></td>
+                            </tr>
+                            <tr >
+                                <td><input type="submit" style="width:98%;" name="btn_retailer_distribution" value="Retailer Distribution" title="Filter Optional"/></td>
+                            </tr> 
+                            <tr >
+                                <td valign="top"><input type="submit" style="width:98%;" name="btn_spo_distribution" value="Rep Distribution" title="Filter Optional"/></td>
+                            </tr>
+                            
+                            
+                            <tr >
+                                <td>&nbsp;</td>
+                            </tr>
+                            
+                            <tr >
+                                <td><input type="hidden" style="width:300px;" name="btn_process_report" value="Process Report" title="Filter Optional"/></td>
+                            </tr>
+                      </table>
+                    
+                    </td>                    
+                </tr>
+                
+               </form>
+            </table>
+			<br><br>
+            
+            {{if session.user_type!='Supervisor':}}
+            <table width="900" border="0" cellpadding="0" cellspacing="0">				
+                <tr>
+                	<td valign="top">
+                    	<table width="900" height="100px;" style="background-color:#F8F8F8;">
+                        	
+                            <tr style="background-color:#E9E9E9;height:25px">
+                              <td colspan="5">Processed Tabulation Sheet</td>
+                            </tr>
+                            <tr >
+                              <td width="10">&nbsp;</td>
+                              <td width="50">&nbsp;</td>
+                              <td width="2">&nbsp;</td>
+                              <td>&nbsp;</td>
+                              <td width="100">&nbsp;</td>
+                            </tr>
+                            <tr >
+                              <td width="10">&nbsp;</td>
+                              <td width="50">Date</td>
+                              <td>:</td>
+                              <td>
+                              &nbsp;{{if processRow:}}{{=processRow[0].created_date}}{{else:}}Process not available{{pass}} </td>
+                              <td width="100">{{if processRow:}}<a href="{{=URL(c='utility',f='process_report_show')}}" style="text-decoration:none;" target="_blank"><input type="button" name="btn_show_process" id="btn_show_process" value=" Show "   class="button_update"/></a>{{pass}}</td>
+                            </tr>
+                            <tr >
+                              <td width="10">&nbsp;</td>
+                              <td width="50">&nbsp;</td>
+                              <td>&nbsp;</td>
+                              <td>&nbsp;</td>
+                              <td width="100">&nbsp;</td>
+                            </tr>
+                        </table>
+                    
+                    
+                  </td>
+                </tr>
+                
+            </table>
+            {{pass}}
+            <br><br><br>
+			             
+		   </div>
+           
+           
+           
+           
+		   <br>
+	  </div>
+      
+      </td>
+  </tr>
+</table>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<script type="text/javascript">
+$(document).ready(function() {
+	
+	// Test build of multiselect.
+	var build = function(select, tr) {
+		select.multiselect();
+		
+		if (select.length === 0) {
+			return 'Select not present anymore.';
+		}
+		
+		if (select.css('display') !== 'none') {
+			return 'Select still visible (expected <code>display: none;</code>).';
+		}
+		
+		if ($('button.multiselect', tr).length === 0) {
+			return 'Multiselect button not present.';
+		}
+		
+		if ($('option', select).length !== 5) {
+			return 'Not all options present anymore.';
+		}
+		
+		if ($('ul.multiselect-container', tr).length === 0) {
+			return 'Unordered list <code>.multiselect-container</code> not present.';
+		}
+		
+		if ($('ul.multiselect-container li', tr).length !== 5) {
+			return 'No list item for each option present.';
+		}
+		
+		if ($('ul.multiselect-container li a', tr).length !== 5) {
+			return 'Not all list items come with an anchor inside.';
+		}
+		
+		return false;
+	}($('#test-build-select'), $('#test-build-tr'));
+	
+	if (build) {
+		$('#test-build-tr').removeClass('success').addClass('danger');
+		$('#test-build-tr td').last().html(build);
+	}
+	
+	// Test build with optgroups.
+	var buildOptgroups = function(select, tr) {
+		select.multiselect();
+		
+		if ($('optgroup', select).length !== 2) {
+			return 'Optgroups not present anymore (2 expected).';
+		}
+		
+		var first = $('optgroup', select).get(0);
+		var second = $('optgroup', select).get(1);
+		
+		if ($('option', $(first)).length !== 2) {
+			return 'First optgroup does not have 2 options.';
+		}
+		
+		if ($('option', $(second)).length !== 3) {
+			return 'Second optgroup does not have 3 options.';
+		}
+		
+		// Check the corresponding labels.
+		if ($('label.multiselect-group', tr).length !== 2) {
+			return 'Expected 2 labels within the unordered list.';
+		}
+		
+		// Check labeling of groups.
+		var firstLabel = $('label.multiselect-group', tr).get(0);
+		var secondLabel = $('label.multiselect-group', tr).get(1);
+		
+		if ($(firstLabel).text() !== $(first).prop('label')) {
+			return 'First group labeled incorrectly.';
+		}
+		
+		if ($(secondLabel).text() !== $(second).prop('label')) {
+			return 'Second group labeled incorrectly.';
+		}
+		
+		return false;
+	}($('#test-build-optgroups-select'), $('#test-build-optgroups-tr'));
+	
+	if (buildOptgroups) {
+		$('#test-build-optgroups-tr').removeClass('success').addClass('danger');
+		$('#test-build-optgroups-tr td').last().html(build);
+	}
+	
+	var buildSelected = function(select, tr ) {
+		select.multiselect();
+		
+		if ($('option:selected', select).length !== 1) {
+			return 'Multiselect did not adopt selected options (1 selected option).';
+		}
+		
+		if ($('ul.multiselect-container li.active', tr).length !== 1) {
+			return 'Corresponding list item not set to <code>.active</code>.';
+		}
+		
+		return false;
+	}($('#test-build-selected-select'), $('#test-build-selected-tr'));
+	
+	if (buildSelected) {
+		$('#test-build-selected-tr').removeClass('success').addClass('danger');
+		$('#test-build-selected-tr td').last().html(buildSelected);
+	}
+
+//-----------	Editing code
+	var buildSelectAll = function(select, tr ) {
+		var value ="all";
+		select.multiselect({
+			maxHeight: 150,
+			selectedClass: null,
+			//buttonWidth:'200px',
+			//buttonHeight:'50px',
+			includeSelectAllOption: true,
+			selectAllValue: value
+		});
+		
+		if ($('.multiselect-container input[value="' + value + '"]', tr).length !== 1) {
+			return 'Expected exactly one input with value ' + value + ' as select all option.';
+		}
+		
+		return false;
+	}($('.test-build-select-all-select'), $('#test-build-select-all-tr'));
+	
+	if (buildSelectAll) {
+		$('#test-build-select-all-tr').removeClass('success').addClass('');
+		$('#test-build-select-all-tr td').last().html(buildSelectAll);
+	}
+	//------- close editing code
+	
+	var buildFilter = function(select, tr) {
+		select.multiselect({
+			enableFiltering: true
+		});
+		
+		if ($('.multiselect-search', tr).length !== 1) {
+			return 'No search input present.';
+		}
+		
+	}($('.test-build-filter-select'), $('#test-build-filter-tr'));
+	
+	if (buildFilter) {
+		$('#test-build-filter-tr').removeClass('success').addClass('danger');
+		$('#test-build-filter-tr td').last().html(buildFilter);
+	}
+	
+	// Test select.
+	var select = function(selectElement, tr) {
+		selectElement.multiselect();
+		
+		// Check for no selected options and no active li's.
+		if ($('option:selected', selectElement).length > 0) {
+			return 'There are already selected options (0 expected).';
+		}
+		
+		if ($('ul.multiselect-container li.active', tr).length > 0) {
+			return 'There are already active list items (0 expected).';
+		}
+		
+		selectElement.multiselect('select', '1');
+		
+		if ($('option:selected', selectElement).length !== 1) {
+			return 'Just selected an option - option not marked selected.';
+		}
+		
+		if ($('ul.multiselect-container li.active', tr).length !== 1) {
+			return 'Just selected an option - list item not set active.';
+		}
+		
+		if ($('option:selected', selectElement).first().val() !== '1') {
+			return 'Wrong option selected.';
+		}
+		
+		selectElement.multiselect('select', ['2', '3']);
+		
+		if ($('option:selected', selectElement).length !== 3) {
+			return 'Just selected two additional options - options not marked selected.';
+		}
+		
+		if ($('ul.multiselect-container li.active', tr).length !== 3) {
+			return 'Just selected two additional options - list items not set active.';
+		}
+		
+		var second = $('option:selected', selectElement).get(1),
+			third = $('option:selected', selectElement).get(2);
+		
+		if (second === undefined || second.length === 0) {
+			return 'Could not get second option.';
+		}
+		
+		if (third === undefined || third.length === 0) {
+			return 'Could not get third option.';
+		}
+		
+		if ($(second).val() !== '2' || $(third).val() !== '3') {
+			return 'Wrong options selected.';
+		}
+		
+		return false;
+	}($('#test-select-select'), $('#test-select-tr'));
+	
+	if (select) {
+		$('#test-select-tr').removeClass('success').addClass('danger');
+		$('#test-select-tr td').last().html(select);
+	}
+	
+	// Test deselect.
+	var deselect = function(select, tr) {
+		select.multiselect();
+		
+		// Check for no selected options and no active li's.
+		if ($('option:selected', select).length !== 3) {
+			return 'There should be 3 options selected.';
+		}
+		
+		if ($('ul.multiselect-container li.active', tr).length !== 3) {
+			return 'There should be 3 list items set to active.';
+		}
+		
+		select.multiselect('deselect', '1');
+		
+		if ($('option:selected', select).length !== 2) {
+			return 'Just deselected an option - option not marked deselected.';
+		}
+		
+		if ($('ul.multiselect-container li.active', tr).length !== 2) {
+			return 'Just deselected an option - list item not set inactive.';
+		}
+		
+		if ($('option:selected', select).first().val() !== '2') {
+			return 'Wrong option deselected.';
+		}
+		
+		select.multiselect('deselect', ['2', '3']);
+		
+		if ($('option:selected', select).length > 0) {
+			return 'Just deselected two additional options - options not marked deselected.';
+		}
+		
+		if ($('ul.multiselect-container li.active', tr).length > 0) {
+			return 'Just deselected two additional options - list items not set unactive.';
+		}
+		
+		return false;
+	}($('#test-deselect-select'), $('#test-deselect-tr'));
+	
+	if (deselect) {
+		$('#test-deselect-tr').removeClass('success').addClass('danger');
+		$('#test-deselect-tr td').last().html(deselect);
+	}
+	
+	var maxHeight = function(select, tr) {
+		
+		select.multiselect({
+			maxHeight: 100
+		});
+		
+		var height = $('.multiselect-container', tr).css('max-height');
+		if (height !== '100px') {
+			return 'Max height not set correctly (set: ' + height + ').';
+		}
+		
+		return false;
+	}($('#test-max-height-select'), $('#test-max-height-tr'));
+	
+	if (maxHeight) {
+		$('#test-max-height-tr').removeClass('success').addClass('danger');
+		$('#test-max-height-tr td').last().html(maxHeight);
+	}
+});
+</script>
+</body> 

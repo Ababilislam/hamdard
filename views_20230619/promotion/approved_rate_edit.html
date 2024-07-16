@@ -1,0 +1,295 @@
+{{extend 'layout.html'}}
+
+ 
+
+  <style type="text/css">
+
+ input[type=text], input[type=password],  select {
+
+    margin: 2px 0px 2px 0px;
+
+}
+
+div.error {
+
+    width: 170px;
+
+}
+
+
+
+#bonus_type,#sm_promo_approved_rate_status{
+	width: 185px;
+}
+
+
+
+ </style>
+<script>
+
+	$(function() {
+		$("#sm_promo_approved_rate_client_id").attr("readonly",true);	
+		$("#sm_promo_approved_rate_client_name").attr("readonly",true);	
+		/*$("#sm_promo_approved_rate_from_date").attr("readonly",true);	
+		$("#sm_promo_approved_rate_to_date").attr("readonly",true);	*/
+		$("#sm_promo_approved_rate_product_id").attr("readonly",true);
+		$("#sm_promo_approved_rate_product_name").attr("readonly",true);
+		//$("#bonus_type").attr("readonly",true);
+		$("#sm_promo_approved_rate_fixed_percent_rate").attr("readonly",true);	
+		
+	});
+
+</script>
+ 
+
+  <table width="100%"  border="0" cellspacing="0" cellpadding="0" style="background-color:#FFFFFF;" >
+
+  <tr height="30px" >
+
+    <td width="300"><span class="blackCatTitle">Approved Rate-Edit</span></td>
+
+	<form action="{{=URL(c='promotion',f='approved_rate',args=[page])}}" method="post">
+
+	<td width="500" align="right">	
+
+	<input name="" type="submit"  value="Back"/>	</td>
+
+	<td align="left">&nbsp;</td>
+
+	</form>
+
+  </tr>
+
+  <tr  height="1px" style="background-color:#CCCCCC;">	
+
+	<td width="300" align="left">	</td>
+
+	<td colspan="2" align="right">	</td>
+
+  </tr>
+
+  </table>
+
+    {{bonusTypeReadonly=''}}
+    {{bonusTypeReadonly='readonly="readonly"'}}  
+
+  <table width="100%" height="500px"  border="0" cellspacing="0" cellpadding="0" class="page_color"  >
+
+  <tr height="100%"  style="vertical-align:top;">
+
+    <td>
+
+	<table width="100%"  border="0" cellpadding="0" cellspacing="0"  >
+
+      <tr>
+
+        <td width="10px">&nbsp;</td>
+
+        <td>&nbsp;</td>
+
+      </tr>
+
+      <tr>
+
+        <td>&nbsp;</td>
+
+        <td align="left">
+
+          <table width="800">
+
+            <tr>
+
+              <td width="485"><table width="400" class="blackCat">
+
+                {{=form.custom.begin}}
+
+                <tr>
+
+              <td width="150"> Customer ID</td>
+
+                  <td width="337">{{=form.custom.widget.client_id}}</td>
+
+                </tr>
+
+            <tr>
+
+              <td width="150">Customer Name</td>
+
+              <td>{{=form.custom.widget.client_name}}</td>
+
+            </tr>
+
+            <tr>
+
+              <td width="150">From-Date</td>
+
+              <td>{{#=form.custom.widget.from_date}}<input type="text" id="from_date" name="from_date" value="{{=recordRows[0].from_date}}" readonly="readonly"/></td>
+
+            </tr>
+
+            <tr>
+
+              <td width="150">To-Date</td>
+
+              <td>{{#=form.custom.widget.to_date}}<input type="text" id="to_date" name="to_date" value="{{=recordRows[0].to_date}}" readonly="readonly"/></td>
+
+            </tr>
+
+            <tr>
+
+              <td width="150">Product ID</td>
+
+              <td>{{=form.custom.widget.product_id}}</td>
+
+            </tr>
+
+            <tr>
+
+              <td width="150"></td>
+
+              <td></td>
+
+            </tr>
+
+            <tr>
+
+              <td width="150"></td>
+
+              <td></td>
+
+            </tr>
+
+            <tr>
+
+              <td width="150"></td>
+
+              <td></td>
+
+            </tr>
+
+            <tr>
+
+              <td width="150"></td>
+
+              <td></td>
+
+            </tr>
+
+              </table></td>
+
+              <td width="303"><table width="450" class="blackCat">
+
+                  <tr>
+
+                    <td width="200">Product Name</td>
+
+                    <td>{{=form.custom.widget.product_name}}</td>
+
+                  </tr>
+
+                  <tr>
+                
+               
+                    <td width="200">BonusType </td>
+
+                    <td>{{#=form.custom.widget.bonus_type}}
+                    <select id="bonus_type" name="bonus_type" {{=bonusTypeReadonly}} >
+                  {{for record in recordRows:}}
+                  {{if (record.bonus_type=='Fixed'):}}	
+                    <option selected="selected" value="Fixed" >Fixed</option>                           
+                  {{else:}}
+                    <option selected="selected" value="Percentage" >Percentage</option>	
+                    
+                  {{pass}} 
+                  {{pass}}         
+                    </select>
+                    
+                    
+                    
+                    </td>
+
+                  </tr>
+
+                  <tr>
+
+                    <td width="200">Fixed/Percent Rate(TP)</td>
+
+                    <td>{{=form.custom.widget.fixed_percent_rate}}</td>
+
+                  </tr>
+                  
+                  <tr>
+
+                    <td width="200">Status </td>
+
+                    <td>{{=form.custom.widget.status}}</td>
+
+                  </tr>
+
+                  <tr>
+
+                    <td width="200">Delete</td>
+
+                    <td>{{=form.custom.deletable}}</td>
+
+                  </tr>
+
+                  <tr>
+
+                    <td width="200">&nbsp;</td>
+
+                    <td>{{=form.custom.submit}}</td>
+
+                  </tr>
+
+                  <tr>
+
+                    <td width="200"></td>
+
+                    <td></td>
+
+                  </tr>
+
+                  <tr>
+
+                    <td width="200"></td>
+
+                    <td></td>
+
+                  </tr>
+
+                  <tr>
+
+                    <td width="200"></td>
+
+                    <td></td>
+
+                  </tr>
+
+                  <tr>
+
+                    <td width="200"></td>
+
+                    <td></td>
+
+                  </tr>
+
+                {{=form.custom.end}}
+
+              </table></td>
+
+            </tr>
+
+          </table>
+
+		  </td>
+
+      </tr>
+
+		  </table>
+
+	</td>
+
+  </tr>
+
+</table>

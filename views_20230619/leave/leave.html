@@ -1,0 +1,226 @@
+
+{{extend 'layout.html'}}
+  <link rel="stylesheet" href="{{=URL('static', 'js_and_css/ui.theme.css')}}" type="text/css" />
+  <link rel="stylesheet" href="{{=URL('static', 'js_and_css/jquery-ui.css')}}" type="text/css" />
+  <link rel="stylesheet" href="{{=URL('static', 'js_and_css/style.css')}}" type="text/css" />
+  <script src="{{=URL('static','js_and_css/jquery-1.8.2.js')}}"></script>
+  <script src="{{=URL('static','js_and_css/jquery-ui.js')}}"></script>
+  
+  <style type="text/css">
+	 input[type=text], input[type=password]{
+		margin: 2px 0px 2px 0px;
+		width: 200px;
+	}
+	select{
+		margin: 2px 0px 2px 0px;
+		width: 215px;
+	}
+		
+	div.error {
+		width: 200px;
+	}
+	
+	
+	.page_color,body{
+		font-family:Arial, Helvetica, sans-serif;
+		font-size:13px;	
+		}
+ </style>
+ 
+ <script>
+var base_url=location.protocol + "//" + location.hostname + (location.port && ":" + location.port) + "/{{=request.application}}/";
+
+$(function() {
+	 	var valueListStr="";
+		
+		$('#search_type').blur(function(){
+			if ($('#search_type').val()=='ItemID'){
+				//alert(base_url+'default/get_route_list');
+				$.ajax({
+					  url: base_url+'default/get_item_list',
+					  success: function(resStr) {
+						  valueListStr=resStr
+					  }
+					});
+			}else if ($('#search_type').val()=='Catagory'){
+				$.ajax({
+					  url: base_url+'default/get_item_category',
+					  success: function(resStr) {
+						  valueListStr=resStr
+					  }
+					});
+			
+			}else if ($('#search_type').val()=='Unit'){
+				$.ajax({
+					  url: base_url+'default/get_item_unit_type',
+					  success: function(resStr) {
+						  valueListStr=resStr
+					  }
+					});
+			
+			};
+			
+	 	});
+	 
+		$('#search_value').keyup(function(){
+			//-------------------------
+			var valueList = valueListStr.split(',');				
+			var searchValue=$("#search_value").val();
+			
+			//---------------- auto complete combo list
+			var valueList_new=new Array();
+			lc=0;
+			i =0;
+			var valueStr="";				
+			while (i < valueList.length)
+			{
+				valueStr=valueList[i];
+				i=i+1;					
+				var res=valueStr.toUpperCase().match(searchValue.toUpperCase());
+				if (res!=null){
+					valueList_new[lc]=valueStr;
+					lc=lc+1;
+					if (lc==30){
+						break;
+					};
+				}else{
+					continue;
+				}					
+			};
+			//alert (ref_list_new);
+			
+			//-------------- auto complete source
+			$( "input#search_value" ).autocomplete({
+				source: valueList_new
+			});
+		
+	  }); 
+	   //==============	   
+}); 
+
+</script>
+ 
+<table width="100%"  border="0" cellspacing="0" cellpadding="0" style="background-color:#FFFFFF;" >
+  <tr height="30px" >
+    <td><span class="blackCatTitle">Leave
+      
+    </span></td>
+    <td align="right"><span class="blackCatTitle">
+   {{if session.rm_item_cat_unit_manage=="True" or session.rm_item_cat_unit_view=="True":}}
+   	
+     <a href="{{=URL(c='leave',f='leave')}}"><input type="button" name="" value="Unit Type"/></a>&nbsp;
+     <a href="{{=URL(c='leave',f='leave')}}"><input type="button" name="" value="Group/Category"/></a>&nbsp;
+     {{ pass }}
+    </span></td>
+    <td align="right" width="100">{{if access_permission==True:}}<a href="{{=URL(c='leave',f='leave')}}"><input type="button" name="" value="Item Change Schedule"/></a>{{pass}}</td>
+    <td align="right" width="20px">&nbsp;</td>
+  </tr>
+  <tr  height="1px" style="background-color:#CCCCCC;">
+	    <td ></td><td ></td>
+	    <td width="100" ></td>
+	    <td ></td>
+  </tr>
+  </table>
+  
+  
+  <table width="100%" height="500px"  border="0" cellspacing="0" cellpadding="0" class="page_color"  >
+  <tr height="100%"  style="vertical-align:top;">
+    <td>
+	<table width="100%"  border="0" cellpadding="0" cellspacing="0"  >
+
+      <tr>
+        <td width="10">&nbsp;</td>
+        <td valign="top">
+		
+		<br />
+	
+		{{if access_permission==True:}} 
+		<table width="800">
+			<tr>
+				<td width="400">
+          <table width="400" class="blackCat">
+		  {{=form.custom.begin}}
+              <tr>
+                <td width="140"> Leave Type </td>
+                <td>{{=form.custom.widget.leave_type}}</td>
+                </tr>
+              <tr>
+                <td width="140"> Total Leave </td>
+                <td>{{=form.custom.widget.total_leave}}</td>
+                </tr>
+                     
+            </table>
+			</td>
+			<tr>
+			      <td width="400" align="left" valign="top">
+            
+              <table width="400" class="blackCat">			 
+              
+              <tr>
+                <td width="140" align="left">&nbsp;</td>
+                <td>{{=form.custom.submit}}</td>
+              </tr>
+              
+                  {{=form.custom.end}}
+                  </table>
+                
+            </td>
+      </tr>
+			</tr>
+			</table>
+            <br />
+         {{pass}} 
+		 
+         
+		 
+			 <table width="300" border="1" cellpadding="1" cellspacing="1" class="sample_border" >
+                <tr align="left" class="blackCatHead"  height="20px" ;"vertical-align:middle">
+                  <td width="250" >Leave Type</td>
+                  <td width="250" >Total Leave</td>
+                  
+                  <td align="right"  ></td>
+                </tr>
+			    {{ p=0}} 		  
+			    {{for i,record in enumerate(records):}}
+			    {{ if i==items_per_page: break}}
+  <form id="form1" name="form1" method="post" action="{{=URL(c='leave',f='leave',args=[page,record.id])}}">
+    <!--<form id="form1" method="post" action="">-->
+    {{ p=p%2 }}
+    
+    <tr  align="left" class="blackCat"  style=" font-size:13px"> 
+      <td width="50" ><!-- <input  name="record_id" type="hidden" id="record_id" size="25" value="{{=record.id}}" title="" /> -->
+        {{=record.leave_type}}</td>
+      <td width="250" >{{=record.total_leave}}</td>
+      
+      <td width="38" align="right"  >
+        <input  name="record_id" type="hidden" id="record_id" size="25" value="{{=record.id}}" title="" />
+{{#=record.id}}
+
+
+<input type="submit" name="btn_delete" id="btn_delete" value=" X "   class="button_update"/> 
+
+	  {{if access_permission==True:}} 
+	    
+	  {{pass}}
+	  </td>
+    </tr>
+  </form>
+			    {{ p=p+1 }} 
+			    {{pass}}
+		    </table>
+			  <p>&nbsp;</p>
+        </td></tr>
+    </table>
+    
+{{if page:}}
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="{{=URL(args=[page-page])}}">first</a> |  
+&nbsp;&nbsp;<a href="{{=URL(args=[page-1])}}">previous</a> |
+{{pass}}
+
+{{if len(records)>items_per_page:}}
+&nbsp;&nbsp;<a href="{{=URL(args=[page+1])}}">next</a>
+{{pass}}
+	</td>
+  </tr>
+</table>
+

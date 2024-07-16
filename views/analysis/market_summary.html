@@ -1,0 +1,121 @@
+{{extend 'layout_report.html'}}
+<html>
+<head>
+<script type="text/javascript">
+function print_page()
+  {
+    window.print()
+  }
+</script>
+
+
+<style type="text/css">
+
+input[type=submit] {
+    margin: 2px 0px 2px 0px;
+	padding: 0px 0px 2px 0px;
+	width:250px;
+}
+input[type=text] {
+	width:120px;
+}
+
+.checkbox{
+padding-left:0px;
+}
+.multiselect{ 
+		text-align:left;
+		height:28px;
+}
+
+
+</style>
+
+
+</head>
+
+<body id="htmlbody">
+
+
+<div class="blackCatTitle">&nbsp;Market Summary</div>
+<br/>
+
+
+
+<table width="700px" cellspacing="1" cellpadding="1">
+	<tr>
+		<td>
+			<table width="900" class="sample_border" >
+                <tr style="background-color:#E6E6E6;">
+                  <td width="150" >Year-Month</td>
+                  <td >Region</td>
+                </tr>
+                <tr style="background-color:#F0FAFF">
+                  <td width="150" align="left" valign="top">{{=str(year)}}-{{=str(monthName)}}</td>
+                    <td align="left" valign="top">{{if regionValueShow=='':}}
+                        All
+                    {{else:}}
+                        {{if str(regionValueShow)[:3]=='all':}}
+                            {{=str(regionValueShow)[4:]}} 
+                        {{else:}} 
+                            {{=str(regionValueShow)}} 
+                        {{pass}}
+                    {{pass}} </td>
+                </tr>
+		  </table>
+	  </td>
+	</tr>
+	<tr height="10px"></tr>
+	<tr>
+		<td>
+			<table width="900" border="1" cellpadding="1" cellspacing="1" class="sample_border" >                
+                <tr align="left" class="blackCatHead" height="20px" ;  style="font-size:12px">
+                  <td width="150"  style="border-right-width:3px;">Region</td>
+                  <td width="150"  style="border-right-width:3px;">Territory</td>
+                  <td width="150"  style="border-right-width:3px;">BP</td>
+                  <td width="100" align="right"  style="border-right-width:3px;">Number Of Retailer</td>
+                  <td width="100" align="right"  style="border-right-width:3px;">Out of Stock Retailer</td>
+                  <td width="100" align="right"  style="border-right-width:3px;">Monthly Avg. Sales Volume</td>
+                  <td width="100" align="right"  style="border-right-width:3px;">Yearly Avg. Sales Volume</td>
+                  </tr>
+                
+                {{total=0}}
+                {{for i in range(len(recordShowList)):}}
+                	{{recDate=recordShowList[i]}}
+                	
+                  <tr  align="left" class="blackCat"  style="vertical-align:middle; font-size:11px;">
+                    <td width="150" style="border-right-width:3px;">{{=recDate['RegionName']}}-{{=recDate['RegionId']}}</td>
+                    <td width="150" style="border-right-width:3px;"><a href="{{=URL(c='analysis',f='out_of_stock_retailer',vars=dict(year=year,monthNo=monthNo,monthName=monthName,regionId=recDate['RegionId'],regionName=recDate['RegionName'],territoryId=recDate['TerritoryId'],territoryName=recDate['TerritoryName'],numberOfRet=recDate['NumberOfRet']))}}" target="_blank">{{=recDate['TerritoryName']}}-{{=recDate['TerritoryId']}}</a></td>
+                    <td width="150" style="border-right-width:3px;">{{=recDate['BPId']}}-{{=recDate['BPName']}}</td>
+                    <td width="100" align="right" style="border-right-width:3px;">{{=recDate['NumberOfRet']}}{{total+=recDate['NumberOfRet']}}</td>
+                    <td width="100" align="right" style="border-right-width:3px;">&nbsp;</td>
+                    <td width="100" align="right" style="border-right-width:3px;">&nbsp;</td>
+                    <td width="100" align="right" style="border-right-width:3px;">&nbsp;</td>
+                  </tr>
+                {{pass}}
+               
+               
+               <tr  align="left" class="blackCat"  style="vertical-align:middle; font-size:11px;">
+                <td width="150" style="border-right-width:3px;"><strong>Total</strong></td>
+                <td width="150" style="border-right-width:3px;">&nbsp;</td>
+                <td width="150" style="border-right-width:3px;">&nbsp;</td>
+                <td width="100" align="right" style="border-right-width:3px;"><strong>{{=total}}</strong></td>
+                <td width="100" align="right" style="border-right-width:3px;">&nbsp;</td>
+                <td width="100" align="right" style="border-right-width:3px;">&nbsp;</td>
+                <td width="100" align="right" style="border-right-width:3px;">&nbsp;</td>
+              </tr>
+                
+              </table>
+		  
+		</td>
+			
+	</tr>
+</table>
+<br/>
+
+<br/>
+<br/>
+
+
+</body>
+</html>

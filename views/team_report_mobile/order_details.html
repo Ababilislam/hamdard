@@ -1,0 +1,568 @@
+{{#extend 'layout.html'}}
+
+
+
+<link rel="stylesheet" href="{{=URL('static', 'js_and_css/ui.theme.css')}}" type="text/css" />
+
+<link rel="stylesheet" href="{{=URL('static', 'js_and_css/jquery-ui.css')}}" type="text/css" />
+
+<link rel="stylesheet" href="{{=URL('static', 'js_and_css/style.css')}}" type="text/css" />
+
+<script src="{{=URL('static','js_and_css/jquery-1.8.2.js')}}"></script>
+
+<script src="{{=URL('static','js_and_css/jquery-ui.js')}}"></script>
+
+
+
+
+
+ <style type="text/css">
+
+ input[type=text], input[type=password],  select {
+
+    margin: 2px 0px 2px 0px;
+
+
+
+}
+
+div.error {
+
+    margin-left:0px;
+
+	width:auto;
+
+}
+
+
+
+#depot_id,#sl,#status{
+
+ background-color:#F7F7F7;
+
+  }
+
+
+
+ #sm_order_item_id{
+
+ width:80px;
+
+ 
+
+ }
+
+ #sm_order_quantity{
+
+ width:80px;
+
+ text-align:right;
+
+ }
+
+ #sm_order_item_name{
+
+ width:200px;
+
+ }
+
+ 
+
+#sl,#status{
+
+ background-color:#F7F7F7;
+
+}
+
+
+
+.page_color,body{
+
+	font-family:Arial, Helvetica, sans-serif;
+
+	font-size:13px;	
+
+}
+
+ </style>
+
+
+
+
+
+
+
+<script>
+
+var base_url=location.protocol + "//" + location.hostname + (location.port && ":" + location.port) + "/{{=request.application}}/";
+
+
+
+
+
+
+</script>
+
+    
+
+<body > 
+
+<table width="100%"  border="0" cellspacing="0" cellpadding="0" style="background-color:#FFFFFF;" >
+
+  <tr height="30px" >
+
+    <td width="500"><span class="blackCatTitle">Order-Review</span></td>
+    
+    
+    <form action="{{=URL(c='z_test',f='order',vars=dict(cid=session.cid,rep_id=session.uid,rep_pass=session.password))}}" method="post">
+
+	<td align="left">	
+
+	<input name="" type="submit"  value="Back"/>	
+
+	</td>
+
+	</form>
+    
+    
+    
+
+  </tr>
+
+  <tr  height="1px" style="background-color:#CCCCCC;">
+
+	    <td colspan="3" ></td>
+
+  </tr>
+
+</table>
+
+
+
+<table width="100%" height="500px"  border="0" cellspacing="0" cellpadding="0" class="page_color"  >
+
+  <tr height="100%"  style="vertical-align:top;">
+
+    <td>
+
+	<!--start-->
+
+	<table width="100%"  border="0" cellpadding="0" cellspacing="0"  >
+
+      <tr>
+
+        <td width="4">&nbsp;</td>
+
+        <td colspan="2"><strong>VSL: {{=visit_sl}}</strong></td>
+
+      </tr>
+
+      <tr>
+
+        <td>&nbsp;</td>
+
+        <td colspan="2">
+
+          <table  height="385" border="0" cellpadding="0" cellspacing="0">
+
+            <tr>
+
+              <td height="164"><table class="blackCat">			  
+
+       {{=form.custom.begin}}
+
+				
+
+                <tr>
+
+        <td width="150"> Depot</td>
+
+                  <td>:
+
+                  {{#if depot_id=='' or depot_id==None:}}
+
+                    <!--<input type="text" name="depot_id" id="depot_id" size="25" value="" placeholder="Select Depot" autocomplete="off" style="width:210px"/>-->
+
+                {{#else:}}
+
+                    <input type="text" name="depot_id" id="depot_id" size="25" value="{{=session.depot_id}}|{{=session.depot_name}}" placeholder="Select Depot" autocomplete="off" style="width:210px;background-color:#F7F7F7;" readonly/>
+
+                {{#pass}}
+
+                  
+
+                  </td>
+
+                  </tr>
+
+      <tr>
+
+        <td width="120">SL</td>
+
+        <td>:&nbsp;<input type="text" name="sl" id="sl" value="{{=sl}}" style="width:210px" readonly/></td>
+
+        </tr>
+
+      <tr>
+
+        <td width="120">Client</td>
+
+        <td>:    
+
+        {{if client_id=='' or client_id==None:}}
+
+            <input type="text" name="client_id" id="client_id" size="25" value="" placeholder="Select Client" autocomplete="off" style="width:210px"/>
+
+        {{else:}}
+
+            <input type="text" name="client_id" id="client_id" size="25" value="{{=client_id}}|{{=client_name}}" placeholder="Select Client" autocomplete="off" style="width:210px;background-color:#F7F7F7;" readonly/>
+
+        {{pass}}
+
+        </td>
+
+        </tr>
+
+
+
+      <tr>
+
+        <td width="120">Rep/Sup </td>
+
+        <td>:
+
+        	{{if rep_id=='' or rep_id==None:}}
+
+                <input type="text" name="rep_id" id="rep_id" size="25" value="" placeholder="Select Rep" autocomplete="off" style="width:210px"/>
+
+            {{else:}}
+
+                <input type="text" name="rep_id" id="rep_id" size="25" value="{{=rep_id}}|{{=rep_name}}" placeholder="Select Rep" autocomplete="off" style="width:210px;background-color:#F7F7F7;" readonly/>
+
+            {{pass}}
+
+        
+
+        </td>
+
+      </tr>
+
+   <tr>
+
+        <td width="120">Visit Date</td>
+
+        <td>:&nbsp;<input name="order_datetime" type="Text" id="order_datetime" value="{{=order_datetime}}" style="background-color:#F7F7F7;width:210px;" readonly  />
+
+
+       </td>
+
+        </tr>
+
+      <tr>
+
+        <td width="120">&nbsp;</td>
+
+        <td>&nbsp;</td>
+
+        </tr>
+
+
+
+              </table></td>
+
+              <td align="right" valign="top"><table class="blackCat" >
+
+      <!--<tr>
+
+        <td width="120">Status</td>
+
+        <td width="210px">:&nbsp;<input type="text" name="status" id="status" value="{{#=status}}" readonly/></td>
+
+        </tr>-->
+
+      
+
+      <tr>
+		
+
+        </tr>
+
+	<tr>
+    	<td>Payment Mode</td>
+        <td width="120">:
+        {{=payment_mode}}</td>
+
+       <!-- <td width="300">&nbsp;</td>-->
+        </tr>
+        
+        	<!--Nazma Azam 2018-09-08 start-->
+        
+      <!--<tr>
+
+        <td width="120">&nbsp;</td>
+
+        <td width="300">
+
+		{{#if ((status=='Submitted') or (status=='Invoiced') or (status=='Cancelled') or (status=='Blocked') or (sl==0) ):}}
+
+		&nbsp;
+
+		{{#else:}}
+
+		&nbsp;<input type="submit" name="btn_update" id="btn_update" value="Update"/>
+
+		  {{#pass}}		</td>
+
+        </tr>-->
+
+      <!--<tr>
+		<td></td>
+        <td colspan="2">
+        {{#if invoice_ref>0:}}<a href="{{#=URL(c ='print_manager',f ='invoice_list_preview',vars=dict(depotId=depot_id,vslList=invoice_ref))}}" title="Preview" target="_blank">Invoice:{{=invoice_ref}}</a>{{pass}}
+		</td>
+
+        </tr>
+
+      <tr>-->
+      
+      <!--Nazma Azam 2018-09-08 end-->
+
+        <td width="120">{{=session.level0Name}}</td>
+
+        <td width="300" align="left">:{{=level0_name}}</td>
+
+      </tr>
+      <tr>
+        <td width="120">{{=session.level1Name}}</td>
+        <td align="left">:{{=level1_name}}</td>
+      </tr>
+      <tr>
+        <td width="120">{{=session.level2Name}}</td>
+        <td align="left">:{{=level2_name}}</td>
+      </tr>
+      <tr>
+        <td width="120">{{=session.level3Name}}</td>
+        <td align="left">:{{=level3_name}}</td>
+      </tr> 
+
+              </table></td>
+
+            </tr>
+
+            <tr>
+
+              <td colspan="2"><table width="100%" border="1" cellpadding="0" cellspacing="0" class="sample_border" >
+
+              {{if not(status=='Submitted' or status=='Invoiced' or status=='Cancelled' or status=='Blocked'):}}
+
+				{{#if (access_permission==True):}} 
+				      <tr align="left" class="blackCatHead"  height="20px" ;"vertical-align:middle">
+
+				        <td colspan="6" align="left" style="font-size:9px;"><strong>Name:</strong> <span id="name_value"></span>,&nbsp;<strong>ID:</strong> <span id="id_value"></span>,&nbsp;<strong>Category:</strong> <span id="category_value"></span>,&nbsp;<strong>Price:</strong> <span id="price_value"></span></td>
+				        <td align="right"  >&nbsp;</td>
+
+				        
+
+						
+
+			        </tr>
+
+			        <tr align="left" class="blackCatHead"  height="20px" ;"vertical-align:middle">
+
+                    <td colspan="2" align="left" >
+
+					<input type="hidden" name="item_id" id="item_id" />					
+
+					<input type="hidden" name="item_name" id="item_name" />
+
+					<input type="hidden" name="category_id" id="category_id" />
+
+					<input type="hidden" name="price" id="price" />
+
+					<!--<input type="text" name="item_details" id="item_details" style="width:300px;" value="" placeholder="Select Item" autocomplete="off" />-->
+					
+					</td>
+
+                    <td width="80" align="center"  >&nbsp;</td>
+
+                    <td width="50" align="right"  >{{=form.custom.widget.quantity}} </td>
+
+                    <td width="80" align="right"  >&nbsp;</td>
+                    <td width="60" align="right"  >&nbsp;</td>
+                    <td width="100" align="right"  >&nbsp;</td>
+
+                   
+
+                    
+                  </tr>
+
+				  {{#pass}}
+
+				  {{pass}}
+
+				  {{=form.custom.end}}
+
+					<!--Nazma Azam 2018-09-09 start-->
+
+				  <tr align="left" class="blackCatHead"  height="20px" ;"vertical-align:middle" style="background-color:#B1D8D8;font-size:18px">                    
+					
+                    <!--Nazma Azam 2018-09-09 end-->
+                    
+                    <td width="40%" align="left" ><!--<strong>-->Item<!--</strong>--></td>
+
+					<!--<td width="60" align="left" >Item ID </td>-->
+
+                    <td width="10%" align="center"  >Cat</td>
+
+                    <td width="10%" align="right"  >Qty</td>
+
+                    <td width="10%" align="right"   >TP</td>
+                    <td width="10%" align="right"  >Vat</td>
+                    <td width="10%" align="right"   >Total</td>
+
+                    <td width="10%" align="right"  >Item Total </td>
+
+                   
+
+                  </tr>
+
+
+
+                  {{ p=0}} 		  
+
+				  {{gross_total=0.0}}
+				{{#=records}}
+			   {{for record in (records):}}
+
+		  
+
+			{{ p=p%2 }}   
+				<!--Nazma Azam 2018-09-09 start-->
+			<tr  align="left" class="blackCat"  style="vertical-align:middle ; background-color:#F1F1F1 ; font-size:16px"> 			  
+				
+                <!--Nazma Azam 2018-09-09 end-->
+                
+                
+			  <td align="left" >{{=record.item_name}}&nbsp;[{{=record.item_id}}]</td>
+
+			 <!-- <td width="60" align="left" >{{#=record.item_id}}</td>-->
+
+			  <td width="10" align="center" >{{=record.category_id}}</td>
+
+			  <td width="10" align="right" >{{=record.quantity}}</td>
+
+			  <td  align="right" >{{=record.price}}</td>
+			  <td  align="right" >{{=record.item_vat}}</td>
+			  <td  align="right" >{{rateNvat=record.price+record.item_vat}}{{=rateNvat}}</td>
+
+			  <td  align="right" >
+
+			  {{item_total=((record.quantity) * (rateNvat))}}
+
+			  {{=item_total}}
+
+			  {{gross_total+=item_total}}			  </td>
+
+			 
+
+			</tr>
+
+
+
+			   {{ p=p+1 }} 
+
+			   {{pass}}
+
+			   <tr  align="left" class="blackCat"  style="vertical-align:middle">
+
+			  <td align="left" >&nbsp;</td>
+
+			  <td  align="left" >&nbsp;</td>
+
+			  <td width="80" align="center" >&nbsp;</td>
+
+			  <td align="right" >&nbsp;</td>
+
+			  <td  align="right" >&nbsp;</td>
+              
+              <!--Nazma Azam 2018-09-09 start-->
+			  <td  align="right"style="color:#F66" >Net Total</td>
+			  <td align="right" style="color:#F66" >{{=gross_total}}</td>
+				<!--Nazma Azam 2018-09-09 end-->
+			  
+
+			  
+
+			  </tr>
+
+
+
+              </table>			  </td>
+
+              </tr>
+
+          </table>          </td>
+
+      </tr>
+
+        <tr >
+          <td>&nbsp;</td>
+          {{if session.msg!=None  : }}
+            <td style="color:#C60000">{{=session.msg}}</td>
+            
+            {{else:}}
+            
+            {{pass}}
+        </tr>
+
+	  <tr>
+
+       <!-- <td>&nbsp;</td>-->
+				
+                 <!--style="width:100%; height:50px; background-color:#09C; color:#FFF; font-size:20px" value="    Confirm Location     " --> 
+                
+                
+		<td colspan="3" style="height:60px">
+        <br><br><br><br><br><br><br><br><br><br><br><br>
+		<form id="form3" name="form3" method="post" action="{{=URL(c ='z_test',f ='post_approved_order',args=[depot_id,sl,order_date])}}" style="text-decoration:none">
+		
+        
+		{{if (status=='Submitted' ):}}
+
+			<input type="submit" name="btn_approved" id="btn_approved"  style="width:85%; height:60px;  background-color:#DA052B; color:#FFF; font-size:25px; font-family:'Times New Roman', Times, serif" value="    Approve     "/></a>
+			{{else:}}
+            
+            {{pass}}
+            
+            </form>
+            
+		</td>
+
+		
+
+      </tr>
+
+	  
+
+    </table>
+
+
+
+
+
+<!--end-->
+
+	</td>
+
+  </tr>
+
+</table>
+
+</body>
+
+<br>
+
+
+
+
+	

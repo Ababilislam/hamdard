@@ -1,0 +1,58 @@
+{{extend 'layout_salesreport.html'}}
+<style>
+  #sm_search_date_from_dt,#sm_search_date_to_dt{
+    height:30px;
+    padding: 0px 5px;
+  }
+  #btn_filter,#btn_all{
+    
+  }
+  .tbl tr:nth-child(even) {background-color: #d6d8db;}
+</style>
+
+<div class="table-responsive-sm">
+
+  <table class="table  bg-light  " > 
+
+    <tr class="table-secondary">
+      <td >Order Date: &nbsp;{{=order_date}}</td>
+    </tr>
+    <tr class="table-success">
+      <td >Territory: &nbsp;{{=area_id}}</td>
+    </tr>
+  </table>
+
+  <table class="table table-striped table-hover table-bordered tbl " > 
+    
+    <thead class="table-dark">
+      <th scope="col">VSL</th>
+        <th scope="col">Client</th>
+        <th scope="col" class="text-right">Amount</th>
+        <th scope="col"></th>
+    </thead>
+    <tbody>
+      {{for i in range(len(records_ov)):
+        records_ov_dict=records_ov[i]  
+        vsl=str(records_ov_dict["vsl"]) 
+        client_id=str(records_ov_dict["client_id"]) 
+        client_name=str(records_ov_dict["client_name"]) 
+
+        totalprice=records_ov_dict["totalprice"]
+      }}
+      <tr class="table-primary">
+        <th scope="row" class="text-center">{{=vsl}}</th>
+        <td class="text-center">{{=client_name}}|{{=client_id}}</td>
+        <td class="text-right">
+        {{#=int(round(totalprice))}}
+        {{=totalprice}}
+        </td>
+        <td align="center"><a style="text-decoration: none;font-size: 18px"  href="{{=URL(c='sales_report',f='sales_report_slWise_url', vars=dict(cid=cid,rep_id=rep_id,password=password,synccode=synccode,vsl=vsl,order_date=order_date,area_id=area_id,client_id=client_id))}}" target="_blank">
+          &raquo;
+        </a>
+          <!-- <input type="submit" name="btn_rep" id="btn_rep" value="Report"   class="button_update"/> -->
+        </td>
+      </tr>
+      {{pass}}
+    </tbody>
+  </table>
+</div>

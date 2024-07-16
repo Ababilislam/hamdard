@@ -1,0 +1,65 @@
+{{extend 'layout_salesreport.html'}}
+<style>
+  #sm_search_date_from_dt,#sm_search_date_to_dt{
+    height:30px;
+    padding: 0px 5px;
+  }
+  #btn_filter,#btn_all{
+    
+  }
+  .tbl tr:nth-child(even) {background-color: #d6d8db;}
+  .tbl_head tr:nth-child(even) {background-color: #d6d8db;}
+</style>
+
+<table class="table tbl_head  bg-light" > 
+
+  <tr class="table-secondary">
+    <td >Date: &nbsp;{{=dlvry_date}}</td>
+    <td >Order SL: &nbsp;{{=vsl}}</td>
+  </tr>
+  <tr class="table-success">
+    <td >Territory: &nbsp;{{=area_id}}</td>
+    <td >Customer: &nbsp;{{=client_id}}  {{#client_name}}</td>
+  </tr>
+  <tr class="table-success">
+    <td >Submitted by: &nbsp;{{=rep_id}}  {{#rep_name}}</td>
+    <td ></td>
+  </tr>
+</table>
+<table class="table table-striped table-hover border-primary table-bordered tbl" > 
+  
+  <thead class="table-dark">
+    <th scope="col">SL</th>
+      <th scope="col">Item</th>
+      <th scope="col">Qty</th>
+      <th scope="col" class="text-right">Amount</th>
+  </thead>
+  <tbody>
+    {{for i in range(len(records_ov)):
+      records_ov_dict=records_ov[i]  
+      vsl=str(records_ov_dict["vsl"]) 
+      item_id=str(records_ov_dict["item_id"]) 
+      item_name=str(records_ov_dict["item_name"]) 
+
+      qty=str(records_ov_dict["qty"])   
+      amount=str(records_ov_dict["amnt"])   
+
+      item_qty=str(records_ov_dict["item_qty"]) 
+      totalprice=str(records_ov_dict["totalprice"]) 
+
+  
+    }}
+    <tr class="table-primary">
+      <th scope="row" class="text-center">{{=vsl}}</th>
+      <td class="text-center">{{=item_name}}|{{=item_id}}</td>
+      <td class="text-center">{{=qty}}</td>
+      <td class="text-right">{{=amount}}</td>
+     
+    </tr> 
+    {{pass}}
+    <tr class="table-warning fw-bold">
+      <td colspan="3" class="text-right">Total Price</td>
+      <td class="text-right">{{=totalprice}}</td>
+    </tr>
+  </tbody>
+</table>

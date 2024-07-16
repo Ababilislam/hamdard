@@ -1,0 +1,151 @@
+{{extend 'layout.html'}}
+
+
+<table width="100%"  border="0" cellspacing="0" cellpadding="0" style="background-color:#FFFFFF;" >
+    <tr height="30px" >
+        <td width="300"><span class="blackCatTitle">Batch_id Update</span></td>
+        <td align="right">&nbsp;</td>
+    </tr>
+        <tr  height="1px" style="background-color:#CCCCCC;">
+        <td width="300" ></td><td width="100" ></td><td ></td>
+    </tr>
+</table>
+
+
+<table width="100%" height="500px"  border="0" cellspacing="0" cellpadding="0" class="page_color"  >
+    <tr height="100%"  style="vertical-align:top;">
+        <td>
+            <table width="100%"  border="0" cellpadding="0" cellspacing="0"  >
+                <tr>
+                    <td width="10">&nbsp;</td>
+                    <td valign="top">
+                        <br />
+
+          <!--=====INPUT VALUES===========-->
+                        <form action="{{=URL(c='batch_id_update',f='batch_update')}}" method="post">
+                          <table width="700">
+                            <tr>
+                              <td width="400">
+                                <table width="320" class="blackCat">
+                                    <tr>
+                                        <td width="180" style="font-weight: 500;">Invoice Sl&nbsp;</td>
+                                    
+                                        
+                                    </tr>
+                                    <tr>
+                                        
+                                        <td>
+                                          {{if session.inv_sl != '' and session.inv_sl != None:}}
+                                          <input required style= "width: 180px;"type="text" name="inv_sl" id= "inv_sl" value="{{=session.inv_sl}}">
+                                          {{else:}}
+                                          <input required style= "width: 180px;"type="text" name="inv_sl" id= "inv_sl" value="">
+                                          {{pass}}
+                                        </td>
+                                        <td>&nbsp;</td>
+                                        <td align="left" style="margin-left: 5px;" >
+                                            <div align="left">
+                                              <input align="left" type="submit" name="submit" id="submit" value='Save' style="vertical-align:middle;height:30px ;border-radius:4px;"/>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    
+                                    </tr>
+                          
+                                </table>
+                              </td>
+                            </tr>
+                          </table>
+                        </form>
+                        <!--========END=========-->
+                        
+                        <strong>Total:</strong> {{=len(check_sl)}}<br />
+                        <br/>
+                       
+
+
+                        <!--=========SHOW TABLE========-->
+                        <table width="80%" border="1" cellpadding="1" cellspacing="1" class="sample_border" >
+                            <tr align="left" class="blackCatHead"  height="20px" ;"vertical-align:middle" >
+                              <td width="150px" >Name</td>
+                              <td width="150px">Item ID</td>
+                              <td width="100px">Batch ID</td>
+                              <td width="100px">Qty</td>
+                              <td width="100px">Stock Qty</td>
+                              <td width="70px"></td>
+                            </tr>
+                            {{
+                              sl = 0
+                              quantity = 0
+                              stock_qty = 0
+                            }}
+                            {{for j in range(len(check_sl)):
+                                records=check_sl[j]
+                                row_id=str(records["id"])
+                                sl=str(records["sl"])
+                                item_name =str(records["item_name"])
+                                item_id =str(records["item_id"])
+                                batch_id =str(records["batch_id"])
+                                quantity =str(records["quantity"])
+                            }}
+                            <tr  align="left" class="blackCat"  style=" font-size:13px"> 
+                              <td width="" readonly>{{=item_name}}</td>
+                              <td width="" readonly>{{=item_id}}</td>
+                              
+                              <td width="" >
+                                {{if batch_id=='1001':}}
+                                <input type="text" name="batch_id" value="{{=batch_id}}" style="width: 50px;" readonly>
+                                {{else:}}
+                                <input type="text" name="batch_id" value="{{=batch_id}}" style="width: 50px;">
+                                {{pass}}
+                              </td>
+                              <td width=""><input type="text" value="{{=quantity}}" readonly style="width: 50px;"></td>
+                                {{
+                                    stock_qty=''
+                                    c_id=session.cid
+                                    depot_id = session.depot_id
+                                    check_stock_qty_sql="select * from sm_depot_stock_balance where cid='"+str(c_id)+"' and depot_id='"+str(depot_id)+"' and item_id='"+str(item_id)+"' and store_name ='Commercial' group by depot_id,item_id limit 1;"
+                                    check_stock_qty = db.executesql(check_stock_qty_sql, as_dict=True)
+                                    for j in range(len(check_stock_qty)):
+                                    records=check_stock_qty[j]
+                                    row_id=str(records["id"])
+                                    stock_qty =str(records["quantity"])
+                                    
+                                  }}
+                                  {{pass}}
+                                  
+                                  <td><input type="text" value="{{=stock_qty}}" readonly style="width: 50px;"></td>
+                                  
+                              <form name="form1" action="{{=URL(c='batch_id_update',f='batch_update',args=[sl,item_id, quantity, stock_qty])}}" method="post">
+                                <td align="right"  >
+                                      <input type="submit" name="update_btn" value="Update" style="height: 30px; background-color: #44c5f7; color: black;">
+                                  </td>
+                              
+                            </form>
+
+                              </tr>
+                            
+                            {{pass}}
+                            <tr align="right" class="blackCat"  style=" font-size:13px">
+                              <input type="hidden" name="sl" value="{{=sl}}">
+                              <form name="form2" action="{{=URL(c='batch_id_update',f='batch_update',args=[sl])}}" method="post">
+                                <td width="20" align="left"  >
+                                      <input type="submit" name="all_update_btn" value="All Update" onclick="if (!confirm('Do you really want to All Update?')) { return false }" style="height: 30px; background-color: #4dbcea; color: black;">
+                                  </td>
+                            </form>
+                            <td></td>
+                              <td></td>
+                              <td></td>
+                              <td></td>
+                              <td></td>
+                            </tr>
+                        </table>
+
+                    </td>
+                </tr>
+            </table>
+
+        </td>
+    </tr>
+</table>
+
+                            

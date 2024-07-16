@@ -1,0 +1,397 @@
+{{extend 'layout.html'}}
+
+
+
+<link rel="stylesheet" href="{{=URL('static', 'js_and_css/ui.theme.css')}}" type="text/css" />
+
+<link rel="stylesheet" href="{{=URL('static', 'js_and_css/jquery-ui.css')}}" type="text/css" />
+
+<link rel="stylesheet" href="{{=URL('static', 'js_and_css/style.css')}}" type="text/css" />
+
+<script src="{{=URL('static','js_and_css/jquery-1.8.2.js')}}"></script>
+
+<script src="{{=URL('static','js_and_css/jquery-ui.js')}}"></script>
+
+  
+
+  <style type="text/css">
+
+ input[type=text], input[type=password],  select {
+
+    margin: 2px 0px 2px 0px;
+
+	width:100px;
+
+}
+
+div.error {
+
+    padding: 0px;
+
+	width:inherit;
+
+	margin-left:0px;
+
+}
+
+.page_color,body{
+
+	font-family:Arial, Helvetica, sans-serif;
+
+	font-size:13px;	
+
+	}
+
+	
+
+ </style>
+
+ 
+
+ 
+
+ <script>
+
+var base_url=location.protocol + "//" + location.hostname + (location.port && ":" + location.port) + "/{{=request.application}}/";
+
+
+
+$(function() {
+
+	 	var valueListStr="";		
+
+		$('#depot_id_value').keyup(function(){
+
+			$.ajax({
+
+				  url: base_url+'default/get_depot_list',
+
+				  success: function(resStr) {
+
+					  valueListStr=resStr
+
+				  }
+
+				});
+
+			
+
+			//-------------------------
+
+			var valueList = valueListStr.split(',');				
+
+			var searchValue=$("#depot_id_value").val();
+
+			
+
+			//---------------- auto complete combo list
+
+			var valueList_new=new Array();
+
+			lc=0;
+
+			i =0;
+
+			var valueStr="";				
+
+			while (i < valueList.length)
+
+			{
+
+				valueStr=valueList[i];
+
+				i=i+1;					
+
+				var res=valueStr.toUpperCase().match(searchValue.toUpperCase());
+
+				if (res!=null){
+
+					valueList_new[lc]=valueStr;
+
+					lc=lc+1;
+
+					if (lc==30){
+
+						break;
+
+					};
+
+				}else{
+
+					continue;
+
+				}					
+
+			};
+
+			//alert (ref_list_new);
+
+			
+
+			//-------------- auto complete source
+
+			$( "input#depot_id_value" ).autocomplete({
+
+				source: valueList_new
+
+			});
+
+		
+
+	  }); 
+
+	   //==============	   
+
+	   	   
+
+}); 
+
+</script>
+
+
+
+<table width="100%"  border="0" cellspacing="0" cellpadding="0" style="background-color:#FFFFFF;" >
+
+  <tr height="30px">
+
+    <td width="650"><span class="blackCatTitle">Internal Adjustment List (Stock)</span></td>
+    <td width="365" align="right">{{if session.user_type=="Admin":}}<a href="{{=URL(c='depot',f='damage_reference')}}"><input type="button" name="" value="Cause"/></a>{{pass}}</td>
+    <td>&nbsp;</td>
+
+  </tr>
+
+  <tr  height="1px" style="background-color:#CCCCCC;">
+
+	    <td colspan="3" ></td>
+
+  </tr>
+
+</table>
+
+  
+
+  <table width="100%" height="500px"  border="0" cellspacing="0" cellpadding="0" class="page_color"  >
+
+  <tr height="100%"  style="vertical-align:top;">
+
+    <td>
+
+		<table width="100%"  border="0" cellpadding="0" cellspacing="0"  >
+
+		  <tr>
+
+			<td width="10">&nbsp;</td>
+
+			<td align="left"><table width="1000" border="0" cellpadding="0" cellspacing="0" >
+
+	
+
+	  <tr  align="left" class="blackCat"  style="vertical-align:middle">
+
+		<td width="819" align="right" >&nbsp;</td>
+
+		<form id="form1" name="form1" method="post" action="{{=URL(c='depot',f='depot_stock_damage',vars=dict(req_sl=0))}}">
+
+		  <td width="68" align="right"  >{{if access_permission==True:}}
+
+		    <input type="submit" name="btn_new" id="btn_new" value="New"  class="button_update"/>
+
+		    {{pass}}      </td>
+
+		</form>
+
+	  </tr>
+
+	  
+
+	  			</table>
+
+                </td>
+
+      </tr>
+
+      <tr>
+
+        <td width="10">&nbsp;</td>
+
+        <td><br />
+
+
+
+          <table width="720" height="78" border="0" cellpadding="0" cellspacing="0">            
+
+            <tr>
+
+              <td width="100%" colspan="2">
+
+				  <table width="1000" border="1" cellpadding="1" cellspacing="1" class="sample_border" >
+
+			   		
+
+			   		<form id="form1" name="form1" method="post" action="{{=URL(c='depot',f='depot_stock_damage_list')}}">
+
+					  <tr align="left" class="blackCatHead" height="20px" ;"vertical-align:middle">
+
+						<td width="150" >
+
+						  {{if session.user_type!='Depot':}}
+
+						  {{if session.depot_id_value_dam=='' or session.depot_id_value_dam==None:}}
+
+						  <input  name="depot_id_value" type="text" id="depot_id_value" style="width:250px" value="" placeholder="Selet Depot" autocomplete="off"/>
+
+						  {{else:}}
+
+						  <input  name="depot_id_value" type="text" id="depot_id_value" style="width:250px" value="{{=session.depot_id_value_dam}}" placeholder="Enter value" autocomplete="off"/>
+
+						  {{pass}}
+
+						  
+
+						  {{else:}}
+
+						  <input  name="" type="text" id="" style="width:250px; background-color:#F8F8F8" value="{{=session.depot_id}}|{{=session.user_depot_name}}" disabled="disabled" title="Depot ID" />
+
+						  {{pass}}
+
+						  
+
+					    </td>
+
+						<td width="140"  title="Date">
+
+						  <select name="search_type" id="search_type" style="width:140px" >
+
+							  <option value="" selected="selected">Select a Type</option>
+
+                              {{if session.search_type_dam=='SL':}}<option value="SL" selected="selected">SL</option>{{else:}}<option value="SL" >SL</option>{{pass}}
+
+                              {{if session.search_type_dam=='DATE':}}<option value="DATE" selected="selected">DATE(YYYY-MM-DD)</option>{{else:}}<option value="DATE" >DATE(YYYY-MM-DD)</option>{{pass}}
+
+                              {{if session.search_type_dam=='STATUS':}}<option value="STATUS" selected="selected">Status</option>{{else:}}<option value="STATUS" >Status</option>{{pass}}
+							{{if session.search_type_dam=='UserID':}}<option value="UserID" selected="selected">User ID</option>{{else:}}<option value="UserID" >User ID</option>{{pass}}
+						  </select>
+
+                        </td>
+
+						<td width="220"  >
+
+                        	{{if session.search_value_dam=='' or session.search_value_dam==None:}}
+
+                                <input  name="search_value" type="text" id="search_value" size="25" value="" placeholder="Enter value" autocomplete="off" style="width:300px"/>
+
+                            {{else:}}
+
+                                <input  name="search_value" type="text" id="search_value" size="25" value="{{=session.search_value_dam}}" placeholder="Enter value" autocomplete="off" style="width:300px"/>
+
+                            {{pass}}
+
+                        </td>
+
+						<td width="100" ><input type="submit" name="btn_filter" id="btn_filter" value="Filter"  class="button_update" title=""/></td>
+
+						<td ><input type="submit" name="btn_all" id="btn_all" value="All"  class="button_update"/></td>
+
+					  </tr>
+
+				  </form>
+
+			  </table>
+
+			
+
+            	<br />
+
+			  <table width="1000" border="1" cellpadding="1" cellspacing="1" class="sample_border" >
+
+                  <tr align="left" class="blackCatHead"  height="20px" ;"vertical-align:middle">
+
+                    <td width="160" >Branch</td>
+                    <td width="200" >Store</td>
+                    <td width="50" >SL</td>
+
+                    <td width="100"  >Date</td>
+
+                    <td width="200"  >Cause</td>
+                    <td  >Note</td>
+                    <td width="80" align="center"  >Status</td>
+                    <td width="150" align="center"  >LastUpdated By&amp;Time</td>
+
+                    <td width="50"  >&nbsp;</td>
+
+                  </tr>
+
+
+			   {{for i,record in enumerate(records):}}
+
+                {{ if i==items_per_page: break}}
+
+                <tr  align="left" class="blackCat"  style="vertical-align:middle;font-size:12px"> 
+
+                  <td width="160" >{{=record.depot_id}}|{{=record.depot_name}}</td>
+                  <td width="200" >{{=record.store_id}}|{{=record.store_name}}</td>
+                  <td width="50" >{{=record.type_sl}}</td>
+
+                  <td width="100" >{{=record.damage_date.strftime('%d-%m-%Y')}}</td>
+
+                  <td width="200" >{{=record.adjustment_reference}}</td>
+                  <td  >{{=record.note}}</td>
+                  <td width="80" align="center"  >{{=record.status}}</td>
+                  <td width="150" align="center" style="font-size:9px" >{{=record.updated_by}}, {{=record.updated_on.strftime("%d-%b-'%y %I:%M%p")}}</td>
+					
+                  <form id="form1" name="form1" method="post" action="{{=URL(c='depot',f='depot_stock_damage',vars=dict(req_sl=record.sl,depotid=record.depot_id))}}">
+
+                  <td width="50" align="right"  >
+
+                  	<input type="submit" name="btn_detail" id="btn_detail" value="details"  class="button_update"/>
+
+                  </td>
+
+                  </form>
+
+                </tr>
+
+               {{pass}}
+
+               
+
+              </table>
+
+              </td>
+
+              </tr>
+
+          </table>
+
+		  
+
+		  </td>
+
+      </tr>
+
+    </table>
+
+      
+
+{{if page:}}
+
+&nbsp;&nbsp;<a href="{{=URL(args=[page-page])}}">first</a> |
+
+&nbsp;&nbsp;<a href="{{=URL(args=[page-1])}}">previous</a> |
+
+{{pass}}
+
+
+
+{{if len(records)>items_per_page:}}
+
+&nbsp;&nbsp;<a href="{{=URL(args=[page+1])}}">next</a>
+
+{{pass}}	</td>
+
+  </tr>
+
+</table>
+
+
+

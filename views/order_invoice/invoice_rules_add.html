@@ -1,0 +1,220 @@
+{{extend 'layout.html'}}
+  <style type="text/css">
+ input[type=text], input[type=password],  select {
+    margin: 2px 0px 2px 0px;
+	width:150px;
+}
+div.error {
+    margin-left:0px;
+	width:auto;
+}
+ </style>
+ 
+<table width="100%"  border="0" cellspacing="0" cellpadding="0" style="background-color:#FFFFFF;" >
+  <tr height="30px" >
+    <td><span class="blackCatTitle">Invoice Rules Add</span></td>
+  </tr>
+  <tr  height="1px" style="background-color:#CCCCCC;">
+	    <td ></td>
+  </tr>
+  </table>
+  
+  
+  <table width="100%" height="500px"  border="0" cellspacing="0" cellpadding="0" class="page_color"  >
+  <tr height="100%"  style="vertical-align:top;">
+    <td>
+	<table width="100%"  border="0" cellpadding="0" cellspacing="0"  >
+      <tr>
+        <td width="10px">&nbsp;</td>
+        <td>&nbsp;</td>
+      </tr>
+      <tr>
+        <td>&nbsp;</td>
+        <td align="left" valign="top">
+          <table width="600" class="blackCat">
+		  <form id="form1" name="form1" method="post" action="{{=URL(c='order_invoice',f='invoice_rules_add')}}">
+            <tr>
+              <td>TP ID </td>
+              <td><input type="text" name="TPID" id="TPID" value=""/></td>
+              <td>&nbsp;</td>
+            </tr>
+            <tr>
+              <td width="220"> Client Category </td>
+              <td>
+			    <select name="CLIENT_CATEGORY" id="CLIENT_CATEGORY" >
+                        
+					{{for rec in categoryRecords:}}					 
+			      <option value="{{=rec.cat_type_id}}">{{=rec.cat_type_id}}</option>			      
+					 {{pass}}				 
+			      </select>	
+				  </td>
+              <td>&nbsp;</td>
+              </tr>
+            <tr>
+              <td width="220" height="21">Date From</td>
+              <td ><input type="text" name="DATE_FROM" id="DATE_FROM" value=""/></td>
+              <td>&nbsp;</td>
+              </tr>
+            
+            <tr style="height:10px">
+              <td width="220"></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td width="220" height="21">Date To</td>
+              <td ><input type="text" name="DATE_TO" id="DATE_TO" value=""/></td>
+              <td>&nbsp;</td>
+              </tr>
+            
+            <tr>
+              <td width="220">Status</td>
+              <td >
+                <select name="STATUS" id="STATUS" >
+                  <option value="ACTIVE">ACTIVE</option>
+                  <option value="INACTIVE">INACTIVE</option>
+                </select></td>
+              <td>&nbsp;</td>
+              </tr>
+            <tr>
+              <td width="220">For Item </td>
+              <td ><input type="text" name="FOR_ITEM" id="FOR_ITEM" value=""/></td>
+              <td>&nbsp;</td>
+            </tr>
+            <tr style="height:10px">
+              <td width="220"></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td width="220">Limit From </td>
+              <td ><input type="text" name="LIMIT_FROM" id="LIMIT_FROM" value=""/></td>
+              <td>&nbsp;</td>
+            </tr>
+            <tr style="height:10px">
+              <td width="220"></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td width="220">Limit To </td>
+              <td><input type="text" name="LIMIT_TO" id="LIMIT_TO" value=""/></td>
+              <td>&nbsp;</td>
+            </tr>
+            <tr>
+              <td>Bonus Type </td>
+              <td >
+                <select name="BONUS_TYPE" id="BONUS_TYPE" >
+                  <option value="Item">Item</option>
+				  <option value="DiscAmt">DiscAmt</option>
+				  <option value="DiscPercent">DiscPercent</option>                  	
+                </select>
+				
+				</td>
+              <td>&nbsp;</td>
+            </tr>
+            <tr>
+              <td>Bonus Item </td>
+              <td ><input type="text" name="BONUS_ITEM" id="BONUS_ITEM" value=""/></td>
+              <td>&nbsp;</td>
+            </tr>
+            <tr>
+              <td width="220">Bonus Disc/Qty/Amt/Percent </td>
+              <td ><input type="text" name="BONUS_DIC_QTY_AMT_PER" id="BONUS_DIC_QTY_AMT_PER" value=""/></td>
+              <td>&nbsp;</td>
+            </tr>
+            
+            
+            <tr>
+              <td width="220">&nbsp;</td>
+              <td><input type="submit" name="btn_data_submit" id="btn_data_submit" value="Save"/></td>
+              <td>&nbsp;</td>
+            </tr>
+            <tr>
+              <td width="220">&nbsp;</td>
+              <td>&nbsp;</td>
+              <td>&nbsp;</td>
+            </tr>
+</form>
+          </table>
+
+			 <table width="1000" border="1" cellpadding="1" cellspacing="1" class="sample_border" >
+			 <form id="form1" name="form1" method="post" action="{{=URL(c='order_invoice',f='invoice_rules_add')}}">
+               <tr align="left" height="20px" ;"vertical-align:middle">
+                 <td width="150"  ><select name="client_category_value" id="client_category_value" style="width:100px" title="Client Category">
+					 <option value=""></option>
+					 {{for rec in categoryRecords:}}
+					 <option value="{{=rec.cat_type_id}}">{{=rec.cat_type_id}}</option>
+					 {{pass}}
+				 </select>				 </td>
+                 <td width="80"  >&nbsp;</td>
+                 <td width="60"  >&nbsp;</td>
+                 <td width="80"  >&nbsp;</td>
+                 <td width="80"  >&nbsp;</td>
+                 <td width="80"  >&nbsp;</td>
+                 <td align="right"  >&nbsp;</td>
+                 <td align="right"  >&nbsp;</td>
+                 <td align="right"  >&nbsp;</td>
+                 <td align="right"  >&nbsp;</td>
+                 <td align="right"  >&nbsp;</td>
+                 <td colspan="2" align="right"  ><input type="submit" name="btn_filter" id="btn_filter" value="Filter"   class="button_update"/>
+			       <input type="submit" name="btn_all" id="btn_all" value="All"   class="button_update"/></td>
+                </tr>
+			   </form>
+			   
+               <tr align="left" class="blackCatHead" height="20px" ;"vertical-align:middle">
+                 <td width="150"  >ID</td>
+                 <td width="80"  >TP ID </td>
+                 <td width="60"  >ClientCategory </td>
+                 <td width="80"  >DateFrom </td>
+                 <td width="80"  >DateTo </td>
+                 <td width="80"  >ForItem </td>
+                 <td width="80"  >LimitFrom </td>
+                 <td width="80"  >LimitTo </td>
+                 <td width="80"  >BonusType </td>
+                 <td width="80"  >BonusItem </td>
+                 <td  >BonusDisc/Qty/Amt/Percent </td>
+                 <td width="80" align="center" s="s" >Status</td>
+                 <td width="30" s="s" ></td>
+               </tr>
+			   
+			   {{ p=0}} 		  
+			   {{for i in range(len(recordList)):}}
+			   {{dictDate=recordList[i]}}
+  <form id="form1" name="form1" method="post" action="{{=URL(c='order_invoice',f='invoice_rules_settings_edit',args=[page,dictDate['pk']])}}">
+    {{ p=p%2 }}   
+    <tr  align="left" class="blackCat"  style="vertical-align:middle; font-size:11px;"> 
+      <td width="150" >{{=dictDate['pk']}}</td>
+      <td width="80" >{{=dictDate['TPID']}}</td>
+      <td width="60" >{{=dictDate['CLIENT_CATEGORY']}}</td>
+      <td width="80" >{{=dictDate['DATE_FROM']}}</td>
+      <td width="80" >{{=dictDate['DATE_TO']}}</td>
+      <td width="80" >{{=dictDate['FOR_ITEM']}}</td>
+      <td width="80" >{{=dictDate['LIMIT_FROM']}}</td>
+      <td width="80" >{{=dictDate['LIMIT_TO']}}</td>
+      <td width="80" >{{=dictDate['BONUS_TYPE']}}</td>
+      <td width="80" >{{=dictDate['BONUS_ITEM']}}</td>
+      <td >{{=dictDate['BONUS_DIC_QTY_AMT_PER']}}</td>
+      <td width="80" align="center"  >{{=dictDate['STATUS']}}</td>
+      <td width="30" align="right"  ><input type="submit" name="btn_go" id="btn_go" value="&gt;&gt;"  class="button_update"/>        </td>
+    </tr>
+  </form>
+			   {{ p=p+1 }} 
+			   {{pass}}
+		    </table>
+
+	      </td></tr>
+    </table>
+      
+{{if page:}}
+&nbsp;&nbsp;<a href="{{=URL(args=[page-page])}}">first</a> |
+&nbsp;&nbsp;<a href="{{=URL(args=[page-1])}}">previous</a> |
+{{pass}}
+
+{{if len(recordList)>items_per_page:}}
+&nbsp;&nbsp;<a href="{{=URL(args=[page+1])}}">next</a>
+{{pass}}
+	</td>
+  </tr>
+</table>
+

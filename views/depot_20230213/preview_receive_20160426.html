@@ -1,0 +1,143 @@
+{{extend 'layout_report.html'}}
+
+<html>
+
+<head>
+
+<script type="text/javascript">
+
+function print_page()
+
+  {
+
+    window.print()
+
+  }
+
+</script>
+
+
+
+</head>
+
+<body>
+
+<div class="blackCatTitle">GR Note(Receive)</div>
+
+<br/> 
+
+
+
+<table width="800" border="0" cellspacing="1" cellpadding="1"  class="table_row2">          
+
+
+
+          <tr >
+
+            <td width="100" valign="top" >
+
+                <b>Receive To</b><br/>
+				<b>Store To</b><br/>
+				<b>SL</b><br/>
+
+				<b>Reference</b><br/>
+
+                <b>Date</b><br/>
+
+                <b>Description</b><br/>            
+
+            </p></td>            
+
+            <td valign="top" >
+
+			<b>:</b> {{=depot_id}} | {{=depotName}}<br>
+			<b>:</b> {{=store_id}} | {{=store_name}}<br>
+            
+			<b>:</b> {{=sl}}<br>
+
+			<b>:</b> {{=ref_sl}}<br>
+
+            <b>:</b> {{if receive_date!=None:}}{{=receive_date}}{{pass}}<br>
+
+            <b>:</b> {{=note}}<br>
+
+			</td>
+
+            <td width="100" valign="top" >
+
+			<b>Receive From </b><br>
+
+			<b>Status</b><br>
+
+            <b>Process Status</b>
+
+			</td>
+
+            <td width="200" valign="top" >
+
+			<b>:</b> {{=receive_from}} | {{=depotNameFrom}}<br/>
+
+			<b>:</b> {{=status}}<br/>
+
+            <b>:</b> {{=receive_process_status}}</td>
+
+  </tr>
+
+           
+
+</table>
+
+  <table width="800" border="1" cellpadding="1" cellspacing="1" class="sample_border" >
+
+
+
+  <tr align="left" class="blackCatHead"  height="20px" ; style="vertical-align:middle; background-color:#E6E6E6">
+
+    <td >Name</td>
+
+    <td width="100" >Item ID</td>
+    <td width="60"   >Batch ID</td>
+
+    <td width="60" align="right"  >Qty</td>
+
+    </tr>
+
+    {{total_qty=0}}
+    {{for row in detailRecords:}}
+
+    {{qty=0;rate=0}}
+
+  <tr  align="left" class="blackCat"  style="vertical-align:middle; background-color:#FBFBFB">
+    <td >{{=row.item_name}}</td>
+    <td width="100" >{{=row.item_id}}</td>
+    <td width="60"  >{{=row.batch_id}}</td>
+    <td width="60" align="right" >{{qty=int(row.quantity)}}{{=qty}}{{total_qty+=qty}}</td>
+    </tr>
+    {{pass}}
+</table>
+
+	<table width="800px" border="0">
+          <tr>
+
+            <td align="right" class="report_body">&nbsp;</td>
+
+          </tr>
+
+          <tr>
+
+            <td align="right" class="report_body"></td>
+
+          </tr>
+
+          <tr><td align="right" class="report_body"><a href="" onClick="print_page()" style="text-decoration:none">Print</a></td></tr>
+
+</table>
+
+
+
+    <br/>
+
+</body>
+
+</html>
+

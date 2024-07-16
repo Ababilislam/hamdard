@@ -1,0 +1,192 @@
+{{extend 'layout_invoice.html'}}
+
+<html>
+
+<head>
+
+
+
+</head>
+
+<body>
+
+		<!--<img src="{{#=URL('static','images/SKFLogo.png')}}"/> style="background:url({{#=URL('static','images/SKFLogo.png')}}); background-repeat:no-repeat; background-position:center"-->
+        
+        
+		<table width="900" border="0" cellspacing="1" cellpadding="1" >          
+
+		<tr style="font-size:15px; font-weight:bold">
+		  <th colspan="3" align="left" ><br><img src="{{=URL('static','images/comp_logo1.png')}}"/></th>
+		  <th colspan="2" align="center" ><!--SKSH-->&nbsp;&nbsp;<span style="font-size:25px; font-weight:bold">Goods Received Note</span><br>
+	      <strong>{{=session.prefix_invoice}}RC{{=depot_id}}-{{=sl}}</strong></th>
+		  <th align="left" >&nbsp;</th>
+		  <th align="left" ><br>
+	      {{=depotName}}</th>
+		  </tr>
+		<tr >
+		  <th colspan="4" align="left" >Supplier Information &amp; GRR Description:</th>
+	      <td colspan="3" valign="top" ><strong>Goods Received Information -Date &amp; Branch:</strong></td>
+	      </tr>
+		  <tr >
+		    <td valign="top" >Supplier No.</td>
+		    <td valign="top" ><strong>:</strong></td>
+		    <td colspan="2" valign="top" >{{=receive_from}}</td>
+		    <td width="120" valign="top" >Purchase Order No.</td>
+		    <td valign="top" ><b>:</b></td>
+		    <td valign="top" >&nbsp;</td>
+	      </tr>
+		  <tr >
+		    <td width="120" valign="top" >Supplier Name</td>
+		    <td width="1" valign="top" ><strong>:</strong></td>
+		    <td width="240" colspan="2" valign="top" >{{=depotNameFrom}}</td>
+		    <td width="120" valign="top" >Receipt Date</td>
+		    <td width="1" valign="top" ><b>:</b></td>
+		    <td width="180" valign="top" >{{if receive_date!=None:}}{{=receive_date.strftime('%d-%b-%y')}}{{pass}}</td>
+	      </tr>
+		  <tr >
+		    <td valign="top" >Supplier Address</td>
+		    <td valign="top" ><strong>:</strong></td>
+		    <td colspan="2" valign="top" >{{=depotAddressFrom}}</td>
+		    <td width="120" valign="top" >Receipt Address</td>
+		    <td valign="top" ><b>:</b></td>
+		    <td valign="top" >{{=depotAddress}}</td>
+	      </tr>
+		  <tr >
+		    <td width="120" valign="top" >Contact Person</td>
+		    <td width="1" valign="top" ><strong>:</strong></td>
+		    <td colspan="2" valign="top" >&nbsp;</td>
+		    <td width="120" valign="top" >Reference</td>
+		    <td width="1" valign="top" ><b>:</b></td>
+		    <td width="180" valign="top" >{{=ref_sl}}</td>
+	      </tr>
+		  <tr >
+		    <td width="120" valign="top" >Description</td>
+		    <td width="1" valign="top" ><strong>:</strong></td>
+		    <td colspan="2" valign="top" >{{=note}}</td>
+		    <td width="120" valign="top" >Status</td>
+		    <td width="1" valign="top" ><b>:</b></td>
+		    <td width="180" valign="top" >{{=status}}</td>
+	      </tr>
+    </table>
+  <table width="900" border="1" cellpadding="1" cellspacing="1" class="sample_border" style="border: solid 1px #C4C4C4">
+
+  <tr align="left" class="blackCatHead"  height="20px" style="vertical-align:middle; background-color:#E6E6E6">
+
+    <td width="60" >Item ID</td>
+    <td >Item Name</td>
+    <td width="60" >UOM</td>
+    <td width="60" align="right" >Qty. Ordered</td>
+    <td width="60" align="right" >Qty. Received</td>
+
+    <td width="50" align="center"  >Short</td>
+    <td width="50" align="center"  >Excess</td>
+    <td width="60" align="right"  >TP Rate</td>
+    <td width="60" align="center"  >M. Carton</td>
+    <td width="50" align="left"  >Batch No</td>
+    <td width="80" align="center"  >Expiry Date</td>
+    <td width="100" align="right"  > Amount </td>
+
+    </tr>
+
+	{{total_qty=0}}
+    {{total_tp=0}}
+    {{mCartonTotal=0}}
+    {{for row in detailRecords:}}
+		
+        {{orderedQty=0}}
+        {{shortExcessQty=0}}
+        
+        {{for i in range(len(disputeList)):}}
+        	{{dictDate=disputeList[i]}}
+        	
+            {{if (row.sm_receive.item_id==dictDate['item_id'] and row.sm_receive.batch_id==dictDate['batch_id']):}}
+        		{{shortExcessQty=dictDate['quantity'];break;}}
+            {{pass}}
+        {{pass}}
+        
+    	{{shortQty=0}}
+        {{excessQty=0}}        
+        {{if shortExcessQty < 0:}}{{shortQty=shortExcessQty}}{{pass}}
+        {{if shortExcessQty > 0:}}{{excessQty=shortExcessQty}}{{pass}}
+        
+        {{orderedQty=int(row.sm_receive.quantity)-shortExcessQty}}
+        
+        
+        
+        
+        {{qty=0;rate=0;mCarton=0}}
+
+          <tr  align="left" class="blackCat"  style="vertical-align:middle; background-color:#FBFBFB">
+        
+            <td width="60" >{{=row.sm_receive.item_id}}</td>
+            <td >{{=row.sm_receive.item_name}}</td>
+            <td width="60" >{{=row.sm_item.unit_type}}</td>
+            <td width="60" align="right" >{{=orderedQty}}</td>
+            <td width="60" align="right" >{{qty=int(row.sm_receive.quantity)}} {{=qty}}{{total_qty+=qty}}</td>        
+            <td width="50" align="center" >{{=shortQty}}</td>
+            <td width="50" align="center" >{{=excessQty}}</td>
+            <td width="60" align="right" >{{rate=row.sm_receive.dist_rate}}{{=rate}}</td>
+            <td width="60" align="center" >{{cartonQty=row.sm_item.item_carton}} {{try:}}{{mCarton=round(float(qty)/cartonQty,2)}}{{except:}}{{pass}} {{=mCarton}}{{mCartonTotal+=mCarton}}</td>
+            <td width="50" align="left" >{{=row.sm_receive.batch_id}}</td>
+            <td width="80" align="center" >{{=row.sm_item_batch.expiary_date.strftime('%d-%b-%Y')}}</td>
+            <td width="100" align="right" >{{amt=qty*rate}}{{=easy_format(amt)}}{{total_tp+=amt}}</td>
+        
+          </tr>
+
+    {{pass}}
+
+{{total_tp=round(total_tp,2)}}
+
+  <tr  align="left" class="blackCat"  style="background-color:#FBFBFB">
+    <td align="left" style="border-bottom-style:none; border-left:none; border-top:none">&nbsp;</td>
+    <td align="left" style="border-bottom-style:none; border-left:none; border-top:none">&nbsp;</td>
+    <td align="right" style="border-bottom-style:none; border-left:none; border-top:none">&nbsp;</td>
+    <td align="right" style="border-bottom-style:none; border-left:none; border-top:none">&nbsp;</td>
+    <td width="60" align="right" style="border-bottom-style:none; border-left:none; border-top:none">{{=easy_format(total_qty)}}</td>
+    <td width="50" align="center" style="border-bottom-style:none; border-left:none; border-top:none">&nbsp;</td>
+    <td width="50" align="center" style="border-bottom-style:none; border-left:none; border-top:none">&nbsp;</td>
+    <td align="right" style="border-bottom-style:none; border-left:none; border-top:none">&nbsp;</td>
+    <td align="center" style="border-bottom-style:none; border-left:none; border-top:none">&nbsp;</td>
+    <td width="50" align="left" style="border-bottom-style:none; border-left:none; border-top:none">&nbsp;</td>
+    <td width="80" align="right" style="border-bottom-style:none; border-left:none; border-top:none"><strong>Total TP</strong></td>
+    <td align="right" ><strong>{{=easy_format(total_tp)}}</strong></td>
+  </tr>
+  
+</table>
+<table width="900" >
+    <tr>
+      <td width="110" align="left"><strong>M. Carton Total</strong></td>
+      <td align="left"><strong>: {{=mCartonTotal}}</strong></td>
+    </tr>
+</table>
+<br>
+<br>
+<table width="900" >
+  <tr>
+    <td width="100" align="left"><strong>Comments</strong></td>
+    <td align="left"><strong>:
+      <!--Transcom Distribution Co. Ltd.-->
+    </strong></td>
+  </tr>
+  <tr>
+    <td align="left"><strong>Prepared By</strong></td>
+    <td align="left"><strong>:</strong>{{=updatedBy}}</td>
+  </tr>
+</table>
+<br/>
+<table width="900" >
+  <tr style="height:2px;">
+	  <td width="300" align="center" style="height:2px;">_________________________________</td>
+	  <td align="right" style="height:2px;">&nbsp;</td>
+	  <td width="300" align="center" style="height:2px;">_________________________</td>
+  </tr>
+	<tr>
+	  <td width="300" align="center"><strong>Department Operation in-charge</strong></td>
+	  <td align="right">&nbsp;</td>
+	  <td width="300" align="center"><strong>Store in-charge</strong></td>
+  </tr>
+</table>
+
+</body>
+</html>
+

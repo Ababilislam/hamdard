@@ -1,0 +1,313 @@
+{{extend 'layout.html'}}
+ 
+ 
+ <style type="text/css">
+	.page_color,body{
+	font-family:Arial, Helvetica, sans-serif;
+	font-size:13px;
+	}
+ </style>
+
+<link rel="stylesheet" href="{{=URL('static', 'jchart/styles/jchartfx.css')}}" type="text/css" />
+<script src="{{=URL('static','jchart/js/jchartfx.system.js')}}"></script>
+<script src="{{=URL('static','jchart/js/jchartfx.coreVector.js')}}"></script>
+<script src="{{=URL('static','jchart/js/jchartfx.advanced.js')}}"></script>
+
+
+<style type="text/css">
+.jchartfx .Title {
+     font-size:12pt;
+     font-weight: bold;
+	 color:#000000;
+}
+
+input[type=submit] {
+    margin: 2px 0px 2px 0px;
+	padding: 0px 0px 2px 0px;
+	width:250px;
+}
+input[type=text] {
+	width:120px;
+}
+
+.checkbox{
+padding-left:0px;
+}
+.multiselect{ 
+		text-align:left;
+		height:28px;
+}
+
+<!--Chart color-->
+.jchartfx .Attribute3{
+     fill:#C44000;
+}
+.jchartfx .Attribute0{
+     fill:#4F81BD; 
+}
+.jchartfx .Attribute1{
+     fill:#C0504D;
+}
+
+  .jchartfx .Attribute0Line{
+     stroke:#C0504D;
+	 stroke-width:2;
+}
+ .jchartfx .Attribute1Line{
+     stroke:#4F81BD;
+	 stroke-width:2;	
+}
+<!--color-->
+
+
+</style>
+<font color="#0054A8"></font>
+
+<script type="text/javascript" language="javascript">   
+	var chart1;
+	var chart2;
+	var chart3;
+    function loadChart()
+      {
+		//------------------------Brand wise
+		chart2 = new cfx.Chart();
+		chart2.setGallery(cfx.Gallery.Bar);
+		chart2.getData().setSeries(2);
+		
+		var dataPtype= new Array();
+		dataPtype=eval($('#brandWiseSummary').val());
+		
+		//----- Set series fields order
+		var fields = chart2.getDataSourceSettings().getFields();
+		var field1 = new cfx.FieldMap();
+		var field2 = new cfx.FieldMap();
+		var field3 = new cfx.FieldMap();
+		
+		field1.setName("Brand");		
+		field1.setUsage(cfx.FieldUsage.Label);		
+		fields.add(field1);
+		
+		field2.setName("Target");
+		field2.setUsage(cfx.FieldUsage.Value);
+		fields.add(field2);
+		
+		field3.setName("Achievement");
+		field3.setUsage(cfx.FieldUsage.Value);
+		fields.add(field3);
+		
+		//----
+		
+		chart2.setDataSource(dataPtype);
+		chart2.getAllSeries().getPointLabels().setVisible(true);
+		chart2.getLegendBox().setVisible(false);		
+		chart2.getAxisX().setLabelAngle(60);
+		
+		
+		
+		
+		var title = new cfx.TitleDockable();
+		title.setText("Brand Wise Tar Vs. Ach");
+		title.setAlignment(cfx.StringAlignment.Center);		
+		chart2.getTitles().add(title);
+		//chart2.getDataGrid().setVisible(true);
+		
+		
+
+		var divHolder2 = document.getElementById('ChartDivBrandWiseSummary');
+		chart2.create(divHolder2); 
+		
+		//------------------------ Region wise
+		chart1 = new cfx.Chart();
+		chart1.getData().setSeries(1);
+		var series1 = chart1.getSeries().getItem(0);		
+		chart1.setGallery(cfx.Gallery.bar);
+		
+		var title1 = new cfx.TitleDockable();
+		title1.setText("Region Wise Tar Vs. Ach");
+		title1.setAlignment(cfx.StringAlignment.Center);		
+		chart1.getTitles().add(title1);
+		//chart1.getDataGrid().setVisible(true);
+		
+		var dataPtype= new Array();
+		dataPtype=eval($('#regWiseSummary').val());
+		
+		chart1.setDataSource(dataPtype);
+		chart1.getAllSeries().getPointLabels().setVisible(true);
+		chart1.getLegendBox().setVisible(false);
+		
+		var divHolder1 = document.getElementById('ChartDivRegWiseSummary');
+		chart1.create(divHolder1); 
+		//---------------------------------------------------------
+		
+		chart3 = new cfx.Chart();
+		chart3.getData().setSeries(1);
+		
+		
+		var series3 = chart3.getSeries().getItem(0);
+		chart3.setGallery(cfx.Gallery.Lines);
+		
+		var title3 = new cfx.TitleDockable();
+		title3.setText("Cement Sales Trend-({{=currentMonth}})");
+		title3.setAlignment(cfx.StringAlignment.Center);		
+		chart3.getTitles().add(title3);
+		//chart3.getDataGrid().setVisible(true);
+		
+		chart3.getSeries().getItem(0).setColor("#FF0000");
+		chart3.getSeries().getItem(0).setColor("#FFFF00");
+		
+		var regAttend= new Array();
+		regAttend=eval($('#chartDataSalesTrend').val());		
+		chart3.setDataSource(regAttend);
+		
+		chart3.getAllSeries().getPointLabels().setVisible(true);
+		chart3.getLegendBox().setVisible(true);
+		
+		var divHolder3 = document.getElementById('ChartDivSalesTrend');
+		chart3.create(divHolder3);
+		
+		//-----------
+		
+		
+	}
+</script>
+<script>
+ $(function() { 
+	
+	$("#ChartDivBrandWiseSummary").empty();	
+	$("#ChartDivRegWiseSummary").empty();	
+	$("#ChartDivSalesTrend").empty();
+	 loadChart();
+   
+  });
+  </script>
+
+</head>
+
+<body id="htmlbody">
+<input type="hidden" value="{{=brandRecordList}}" id="brandWiseSummary"/>
+<input type="hidden" value="{{=regionRecordList}}" id="regWiseSummary"/>
+<input type="hidden" value="{{=salesTrendList}}" id="chartDataSalesTrend"/>
+
+<table width="100%"  border="0" cellspacing="0" cellpadding="0" style="background-color:#FFFFFF;" >
+  <tr height="30px" >
+    <td><span class="blackCatTitle">{{=currentMonth}}</span></td>
+  </tr>
+  <tr  height="1px" style="background-color:#CCCCCC;">
+	    <td ></td>
+  </tr>
+  </table>
+  
+  <table width="100%" height="500px"  border="0" cellspacing="0" cellpadding="0" class="page_color"  >
+  <tr height="100%"  style="vertical-align:top;">
+    <td>
+	<table width="100%"  border="0" cellpadding="0" cellspacing="0"  >
+      <tr>
+        <td>&nbsp;</td>
+        <td><strong>{{=showLevelName}}</strong></td>
+      </tr>
+      <tr>
+        <td>&nbsp;</td>
+        <td>
+			 <table width="1050" height="1019" border="1" cellspacing="0" cellpadding="0" class="sample_border">
+               <tr valign="top">
+                 <td width="250" height="500" align="left" class="sample2" style="text-align:left; vertical-align:top; font-size:18px"  >
+                 <div id="ChartDivBrandWiseSummary" style="width:300px;height:300px;"></div>				
+                 <font size="3">Target Vs. Achievement</font>
+                   <table width="250" border="1" cellpadding="1" cellspacing="1" class="sample_border" >
+                    <tr align="left" class="blackCatHead" height="20px"  style="font-size:12px;">
+                      <td >Brand</td>
+                      <td width="60" align="right"  >Target(Qty)</td>
+                      <td width="60" align="right"  >Achievement</td>
+                    </tr>
+                                        		  
+                    {{for row in brandWiseTARows:}}                    
+                    <tr  align="left" class="blackCat"  style="font-size:11px;">
+                      <td  >{{=row.target_vs_achievement.item_name}}</td>
+                      <td width="60" align="right"  >{{=row[db.target_vs_achievement.target_qty.sum()]}}</td>
+                      <td width="60" align="right"  >{{=row[db.target_vs_achievement.achievement_qty.sum()]}}</td>
+                    </tr>          
+                    {{pass}}
+                  </table>
+                 
+                  
+                  <br>
+				<font size="3">Retail Market Share(Visited Outlet)</font>
+				<table width="250" border="1" cellpadding="1" cellspacing="1" class="sample_border" >
+                    <tr align="left" class="blackCatHead" height="20px"  style="font-size:12px;">
+                      <td >Brand</td>
+                      <td width="60" align="right"  >Retailer  Stock %</td>
+                      <td width="60" align="right"  >Monthly  Sales %</td>
+                    </tr>
+                                        		  
+                    {{for j in range(len(visitMarketRecordList)):}}  
+                    	{{marketData=visitMarketRecordList[j]}}                  
+                        <tr  align="left" class="blackCat"  style="font-size:11px;">
+                          <td  >{{=marketData['BrandName']}}</td>
+                          <td width="60" align="right"  >{{=marketData['Stock']}}</td>
+                          <td width="60" align="right"  >{{=marketData['MonthlySales']}}</td>
+                        </tr>
+                    {{pass}}
+                  </table>
+                 
+                 </td>
+                 <td class="sample2" style="text-align:center; vertical-align:top; font-size:18px"  >
+                 <img src="{{=URL('static','images/dashboardmap.png')}}" width="500" height="500" alt=""/>
+                 <br>
+					{{if depth<2: }}       
+                 	<table width="250" border="1" cellpadding="1" cellspacing="1" class="sample_border" >
+                    <tr align="left" class="blackCatHead" height="20px"  style="font-size:12px;">
+                      <td >{{=levelName}}</td>
+                    </tr>                                        		  
+                    {{for levelRow in levelRows:}}                    
+                    <tr  align="left" class="blackCat"  style="font-size:11px;">
+                      <form id="form1" name="form1" method="post" action="{{=URL(c='default',f='home',vars=dict(levelId=levelRow.level_id))}}">
+                      <td  ><input type="submit" name="btn_click" value="{{=levelRow.level_name}}"/></td>
+                      </form>
+                      </tr>          
+                    {{pass}}
+                  </table>
+                 {{pass}}
+                 
+                 </td>
+                 <td width="250" class="sample2" style="text-align:center; vertical-align:top; font-size:18px"  >
+                 <div id="ChartDivRegWiseSummary" style="width:300px;height:300px;"></div>
+                 				
+				<table width="250" border="1" cellpadding="1" cellspacing="1" class="sample_border" >
+                    <tr align="left" class="blackCatHead" height="20px"  style="font-size:12px;">
+                      <td >{{=levelName}}</td>
+                      <td width="60" align="left" valign="top"  >Supervisor</td>
+                      <td width="60" align="right"  >Target(Qty)</td>
+                      <td width="60" align="right"  >Achievement</td>
+                    </tr>
+                                        		  
+                    {{for i in range(len(regionRecordShowList)):}}  
+                    	{{regData=regionRecordShowList[i]}}                  
+                        <tr  align="left" class="blackCat"  style="font-size:11px;">
+                          <td  >{{=regData[levelName]}}</td>
+                          <td width="80" align="left" valign="top" >{{=regData['Supervisor']}}</td>
+                          <td width="60" align="right"  >{{=regData['Target']}}</td>
+                          <td width="60" align="right"  >{{=regData['Achievement']}}</td>
+                        </tr>
+                    {{pass}}
+                  </table>
+                 
+                </td>
+               </tr>
+               <tr>
+                 <td height="300" colspan="3" class="sample2" style="text-align:center; vertical-align:top; font-size:18px"  ><br>
+				<br>
+				
+                <div id="ChartDivSalesTrend" style="width:1000px;height:400px"></div>
+                
+                
+				</td>
+               </tr>
+             </table>
+			 <br />
+			
+	      </td></tr>
+    </table>
+</td>
+  </tr>
+</table>
+</body>

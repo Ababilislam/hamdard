@@ -1,0 +1,263 @@
+{{extend 'layout.html'}}
+
+ <link rel="stylesheet" href="{{=URL('static', 'js_and_css/ui.theme.css')}}" type="text/css" />
+  <link rel="stylesheet" href="{{=URL('static', 'js_and_css/jquery-ui.css')}}" type="text/css" />
+  <link rel="stylesheet" href="{{=URL('static', 'js_and_css/style.css')}}" type="text/css" />
+  <script src="{{=URL('static','js_and_css/jquery-1.8.2.js')}}"></script>
+  <script src="{{=URL('static','js_and_css/jquery-ui.js')}}"></script>
+<style>
+body {
+  font-family: "Lato", sans-serif;
+}
+
+
+
+#main {
+  transition: margin-left .5s;
+  padding: 16px;
+}
+
+@media screen and (max-height: 450px) {
+  .sidenav {padding-top: 15px;}
+  .sidenav a {font-size: 18px;}
+}
+</style>
+ 
+  <style type="text/css">
+ input[type=text], input[type=password],  select {
+    margin: 2px 0px 2px 0px;
+	width:250px;
+}
+
+select{ width:265px; margin:2px 0px 2px 0px;}
+
+textarea{
+    width:250px;
+	height:50px;
+	margin:2px 0px 2px 0px;
+}
+
+div.error {
+    margin-left:0px;
+	width:265px;
+}
+.page_color,body{
+	font-family:Arial, Helvetica, sans-serif;
+	font-size:13px;
+	}
+	
+#uni_middle_str4{
+width:100px;
+}
+
+ </style>
+
+ <script>
+
+
+   var base_url=location.protocol + "//" + location.hostname + (location.port && ":" + location.port) + "/{{=request.application}}/";
+
+$(function() {
+ 
+ var employeeListStr="";  
+   
+    $.ajax({
+      url: base_url+'settings/user_list',
+      success: function(retStr) {
+        // alert (retStr)
+        employeeListStr=retStr 
+      }
+    }); 
+// alert (employeeListStr)
+
+// =================================
+$('#searchValue_OpName').keyup(function(){
+      // alert('ok')
+      //-------------------------
+      var ref_list = employeeListStr.split(',');  
+      var ref_name=$("#searchValue_OpName").val();
+      // alert(ref_name)
+      
+      //---------------- auto complete combo list
+      var ref_list_new=new Array();
+      lc=0;
+      i =0;
+      var refStr="";        
+      while (i < ref_list.length)
+      {
+        refStr=ref_list[i];
+        i=i+1;          
+        var res=refStr.toUpperCase().match(ref_name.toUpperCase());
+        if (res!=null){
+          ref_list_new[lc]=refStr;
+          lc=lc+1;
+          if (lc==30){
+            break;
+          };
+        }else{
+          continue;
+        }         
+      };
+      
+      //-------------- auto complete source
+      $( "input#searchValue_OpName" ).autocomplete({
+        source: ref_list_new
+      });
+    
+    }); 
+// =======================
+ 
+// -----------------------------------
+});
+
+
+</script> 
+
+
+<table width="100%"   border="0" cellspacing="0" cellpadding="0" style="background-color:#F5F5F5;" >
+ 
+  <tr  height="1px" >
+  <td colspan="3" ></td>
+  </tr>
+
+  <tr>
+    <td>
+      
+ 
+
+<table width="100%" align="center" border="0" cellspacing="0" cellpadding="0" style="margin-left:auto;margin-right:auto;" >
+  <tr height="30px" >
+    <td width="100%"><span class="blackCatTitle">&nbsp;Base Mobile</span></td>
+  <td width="500" align="right">&nbsp;</td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr  height="1px" style="background-color:#CCCCCC;">
+  <td colspan="3" ></td>
+  </tr>
+</table>
+
+<table width="100%" height="100%" border="0"  cellpadding="0" cellspacing="0" style="margin-left:auto;margin-right:auto;" >
+  
+  <tr>
+    <td height="80%" align="center" valign="middle">
+
+      <form  name="form1" action="{{=URL(c='settings',f='base_mobile2')}}" method="post"  >
+
+        <table width="100%" align="left" cellpadding="2" class="rounded_corner">
+
+                    <!-- INSERT ADMIN / OPERATOR -->
+         
+            <tr >
+              <td width="10" align="left" >&nbsp;</td>
+              
+            </tr>
+            <tr >
+              <td width="10" >&nbsp;</td>
+              <td width="120" style="vertical-align: middle;">Base&nbsp;ID&nbsp;</td>
+              <td  ><input  type="text" name="base_id" id="base_id" size="10" style="width:150px" /></td>
+            </tr>
+
+            <tr >
+              <td width="10" align="left" >&nbsp;</td>
+              <td width="120" style="vertical-align: middle;">Mobile Number</td>
+              <td ><input  type="Number" name="mobile_number" id="mobile_number" size="10"style="width:150px" /></td>
+            </tr>
+
+            <tr>
+              <td align="left" >&nbsp;</td>
+            </tr>
+            
+            <tr>
+                <td width="10" align="center" >&nbsp;</td>
+                <td align="center" >&nbsp;</td>
+                <td align="center" >
+                  <div align="left">
+                    <input align="left" type="submit" name="submit" id="submit" value=" ADD " style="vertical-align:middle;height:25px ;" />
+                  </div>
+                </td>
+            </tr>
+            <tr>
+              <td align="left" >&nbsp;</td>
+            </tr>
+
+          
+      </table>
+                        <!-- FILTERING BY USER TYPE -->
+
+    <table align="left" width="51%" border="1" class="sample_border" style="vertical-align:middle;">
+      
+           <tr align="left" height="20px"; class="filterRow" style="background:#eee"><!--row change class here--->
+            <td width="15%" align="left" class="tdDecoratoin">                                 
+             {{if session.searchValue_OpName=='' or session.searchValue_OpName==None:}}
+             <input type="text" class="text" name="searchValue_OpName" id="searchValue_OpName" value="" placeholder="Select a value" autocomplete="on" style="width:150px"/>
+             {{else:}}
+              <input type="text" name="searchValue_OpName" id="searchValue_OpName" value="{{=session.searchValue_OpName}}" autocomplete="on" />
+             {{pass}}
+             
+           </td> 
+            <td align="left" class="tdDecoratoin inputSubmitStyle">
+             <input type="submit" name="btn_filter" id="btn_filter" value="Filter" style="vertical-align:middle;height:25px ;" class="button_update" title=""/>
+             <input type="submit" name="btn_all" id="btn_all" value="All" style="vertical-align:middle;height:25px ;"  class="button_update"/>
+             </td>
+           
+           <td align="center">
+             <a href="{{=URL(c='settings',f='base_mobile_batch_upload')}}"style="text-align:right">
+              <input type="button" name="btn_filter2" id="btn_filter2" value="Batch Upload"   class="button_update"/></a>
+           </td>
+           <td align="center">
+                  <a href="{{=URL(c='settings',f='abc')}}">
+                  <input type="button" name="base_mobile_download" id="base_mobile_download" value="Download"/>
+                </a> 
+              </td>
+  
+           </tr>
+         
+       
+      
+    </table>
+      </form>                      <!-- SHOW ALL USER  -->
+
+
+      <table align="left" width="51%" border="1" cellpadding="1" cellspacing="1" class="sample_border" >
+               <tr align="left" class="blackCatHead" height="20px" vertical-align:middle>
+                 <td width="50%"  >&nbsp;Base ID</td>
+                 <td width="50%"  >Mobile Number</td>
+                 <td> &nbsp;</td>  
+                 <!-- <td   ></td>  -->
+               </tr>
+               {{
+                i=0
+                for i in range(len(userRows)):
+                  records_ov_dict=userRows[i]   
+                  #row_id=str(records_ov_dict["id"])  
+                  base_id=str(records_ov_dict["base_id"])      
+                  mobile_number=str(records_ov_dict["mobile_number"])    
+                  #=row_id                                    
+                }}
+                {{#=URL(c='settings',f='base_mobile_delete',args=[base_id])}}
+        <form action="{{=URL(c='settings',f='base_mobile_delete',args=[base_id])}}" method="post"  name="form1" id="form2"  >
+
+               <tr  align="left"  style="vertical-align:middle; font-size:12px;"> 
+                <td>&nbsp;&nbsp;{{=base_id}}</td>
+                <td >{{=mobile_number}}</td>
+                <td>
+
+                   <input type="submit" name="btn_delete" id="btn_delete" value=" X "  class="button_update"/>
+        
+                 </td>
+              
+              </tr>
+</form>
+              {{pass}}
+      </table>
+      
+      
+
+  </td>
+  </tr>
+ 
+</table>
+   </td>
+
+</tr>
+</table>

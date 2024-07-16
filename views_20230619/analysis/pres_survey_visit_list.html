@@ -1,0 +1,93 @@
+{{extend 'layout_report.html'}}
+<html>
+<head>
+<script type="text/javascript">
+function print_page()
+  {
+    window.print()
+  }
+</script>
+
+</head>
+<body>
+<div class="blackCatTitle">&nbsp;Prescription List</div>
+<br/>
+<table width="900px;"> <tr><td style="text-align:right"><!--<a href="{{#=URL(c='analysis',f='downloadVisitList',vars=dict(fromDate=fromDate,toDate=toDate,regionValue=regionValue,areaValue=areaValue,territoryValue=territoryValue,marketValue=marketValue,repCM=repCM))}}" >Downlaod</a>--></td></tr></table>
+
+<table width="700px" cellspacing="1" cellpadding="1">
+	<tr>
+		<td>
+			<table width="900" class="sample_border" >
+                <tr style="background-color:#E6E6E6;">
+                  <td width="150" >Date Range</td>
+                  <td width="150" >Visit By</td>
+                </tr>
+                <tr style="background-color:#F0FAFF">
+                    <td width="150" >							
+                    {{=datetime.datetime.strptime(fromDate,'%Y-%m-%d').strftime('%d-%m-%Y ')}} <b> To</b> {{=datetime.datetime.strptime(toDate,'%Y-%m-%d').strftime('%d-%m-%Y ')}}</td>
+                    <td width="150" align="left" valign="top">{{if repCM=='':}}
+                        All
+                    {{else:}}
+                    {{=repCM}}{{pass}}</td>
+                </tr>
+		  </table>
+	  </td>
+	</tr>
+	<tr height="10px"></tr>
+	<tr>
+		<td>
+			<table width="900" border="1" cellpadding="1" cellspacing="1" class="sample_border" >                
+                <tr align="left" class="blackCatHead" height="20px" ;  style="font-size:12px">
+                  <td width="80"  style="border-right-width:3px;">Date</td>                  
+                  <td colspan="2" align="center"  style="border-right-width:3px;">Visit By</td>
+                  <td width="150" align="center"  style="border-right-width:3px;">Doctor</td>
+                  <td width="300" align="center"  style="border-right-width:3px;">Details</td>
+                  </tr>
+                
+                {{for i,record in enumerate(records):}}
+                    {{ if i==items_per_page: break}}
+                      <tr  align="left" class="blackCat"  style="vertical-align:middle; font-size:11px;">
+                        <td width="80" style="border-right-width:3px;">{{=record.submit_date}}</td>
+                        <td width="50" >{{=record.submit_by_id}}</td>
+                        <td width="150" >{{=record.submit_by_name}}</td>
+                        <td width="150" style="border-right-width:3px;">{{=record.doctor_name}}</td>
+                        <td width="300" style="border-right-width:3px;">
+                        	{{presDetailsRow=db(db.sm_prescription_details.sl==record.sl).select(db.sm_prescription_details.medicine_id,db.sm_prescription_details.medicine_name,db.sm_prescription_details.med_type,orderby=db.sm_prescription_details.med_type) }}                                               
+                            
+                            {{if presDetailsRow:}}
+                                <table width="100%" border="1" cellpadding="1" cellspacing="1" class="sample_border" >
+                                    <tr  class="blackCat" style="background-color:#CAE4FF"><td width="100">Type</td><td >Name</td></tr>
+                                    {{for medRow in presDetailsRow:}}
+                                    	{{med_type=medRow.med_type}}
+                                    		{{if med_type=='OTHERS':}}
+                                            	<tr  class="blackCat" style="background-color:#E8F4F9" ><td width="100" >{{=medRow.med_type}}</td><td >{{=medRow.medicine_name}}</td></tr>
+                                            {{else:}}
+                                            	<tr  class="blackCat" ><td width="100" >{{=medRow.med_type}}</td><td >{{=medRow.medicine_name}}</td></tr>
+                                            {{pass}}
+                                    {{pass}}
+                                </table>
+                            {{pass}}                            
+                        {{pass}}
+                        </td>
+                      </tr>
+                    {{pass}}
+              </table>
+		  
+		</td>
+			
+	</tr>
+</table>
+<br/>
+{{ if page: }}
+<a href="{{=URL(args=[page-page],vars=dict(fromDate=fromDate,toDate=toDate,repCM=repCM))}}">first</a> | 
+<a href="{{=URL(args=[page-1],vars=dict(fromDate=fromDate,toDate=toDate,repCM=repCM))}}">previous</a> |
+{{pass}}
+
+{{if len(records)>items_per_page:}}
+<a href="{{=URL(args=[page+1],vars=dict(fromDate=fromDate,toDate=toDate,repCM=repCM))}}">next</a>
+{{pass}}
+
+<br/>
+
+</body>
+</html>

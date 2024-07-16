@@ -1,0 +1,249 @@
+{{extend 'layout.html'}}
+
+ 
+
+  <style type="text/css">
+
+ input[type=text], input[type=password],  select {
+
+    margin: 2px 0px 2px 0px;
+
+}
+
+div.error {
+
+    width: 170px;
+
+}
+
+
+
+#sm_promo_approved_rate_bonus_type,#sm_promo_approved_rate_status{
+	width: 185px;
+}
+
+
+
+ </style>
+<script>
+
+	$(function() {
+		//$("#sm_cp_approved_approved_date").attr("readonly",true);
+		$("#sm_cp_approved_client_id").attr("readonly",true);	
+		//$("#sm_cp_approved_credit_amount").attr("readonly",true);	
+	});
+
+</script>
+ 
+
+  <table width="100%"  border="0" cellspacing="0" cellpadding="0" style="background-color:#FFFFFF;" >
+
+  <tr height="30px" >
+
+    <td width="300"><span class="blackCatTitle">Approved Credit-Edit</span></td>
+
+	<form action="{{=URL(c='credit_policy',f='approved_credit',args=[page])}}" method="post">
+
+	<td width="500" align="right">	
+
+	<input name="" type="submit"  value="Back"/>	</td>
+
+	<td align="left">&nbsp;</td>
+
+	</form>
+
+  </tr>
+
+  <tr  height="1px" style="background-color:#CCCCCC;">	
+
+	<td width="300" align="left">	</td>
+
+	<td colspan="2" align="right">	</td>
+
+  </tr>
+
+  </table>
+
+  
+
+  
+
+  <table width="100%" height="500px"  border="0" cellspacing="0" cellpadding="0" class="page_color"  >
+
+  <tr height="100%"  style="vertical-align:top;">
+
+    <td>
+
+	<table width="100%"  border="0" cellpadding="0" cellspacing="0"  >
+
+      <tr>
+
+        <td width="10px">&nbsp;</td>
+
+        <td>&nbsp;</td>
+
+      </tr>
+
+      <tr>
+
+        <td>&nbsp;</td>
+
+        <td align="left">
+
+          <table width="800">
+
+            <tr>
+
+              <td width="485"><table width="400" class="blackCat">
+
+                {{=form.custom.begin}}
+
+                <tr>
+
+              <td width="130">Approval Date</td>
+
+                  <td width="337">{{#=form.custom.widget.approved_date}}<input type="text" id="approved_date" name="approved_date" value="{{=recordRows[0].approved_date}}" readonly="readonly"/></td>
+
+                </tr>
+
+            <tr>
+
+              <td>Customer ID</td>
+
+              <td>{{=form.custom.widget.client_id}}</td>
+
+            </tr>
+
+            <tr>
+
+              <td>Credit Amount</td>
+
+              <td>{{=form.custom.widget.credit_amount}}</td>
+
+            </tr>
+
+            <tr>
+              
+              <td></td>
+              
+              <td></td>
+              
+            </tr>
+
+            <tr>
+
+              <td></td>
+
+              <td></td>
+
+            </tr>
+
+            <tr>
+
+              <td></td>
+
+              <td></td>
+
+            </tr>
+
+            <tr>
+
+              <td></td>
+
+              <td></td>
+
+            </tr>
+
+              </table></td>
+
+              <td width="303"><table width="400" class="blackCat">
+                  
+                  <tr>
+                    
+                    <td>Status </td>
+                    
+                    <td>{{=form.custom.widget.status}}</td>
+                    
+                  </tr>
+
+                  <tr>
+
+                    <td>Delete</td>
+
+                    <td>{{=form.custom.deletable}}</td>
+
+                  </tr>
+
+                  <tr>
+
+                    <td>&nbsp;</td>
+
+                    <td>{{=form.custom.submit}}</td>
+
+                  </tr>
+
+                  <tr>
+
+                    <td></td>
+
+                    <td></td>
+
+                  </tr>
+
+                  <tr>
+
+                    <td></td>
+
+                    <td></td>
+
+                  </tr>
+
+                  <tr>
+
+                    <td></td>
+
+                    <td></td>
+
+                  </tr>
+
+                  <tr>
+
+                    <td></td>
+
+                    <td></td>
+
+                  </tr>
+
+                {{=form.custom.end}}
+
+              </table></td>
+
+            </tr>
+            <tr>
+              <td>&nbsp;</td>
+              <td>&nbsp;</td>
+            </tr>
+            <tr>
+              <td>&nbsp;</td>
+              <td>&nbsp;</td>
+            </tr>
+            <tr>
+              <td colspan="2"><strong>Last Updated By:</strong> {{=recordRows[0].updated_by}}</td>
+              </tr>
+            <tr>
+              <td colspan="2"><strong>Last Updated On:</strong> {{=recordRows[0].updated_on}}</td>
+              </tr>
+
+          </table>
+
+		  </td>
+
+      </tr>
+
+		  </table>
+
+	</td>
+
+  </tr>
+
+</table>

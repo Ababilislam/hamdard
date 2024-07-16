@@ -1,0 +1,103 @@
+{{extend 'layout_login.html'}}
+
+<style type="text/css">
+.rounded_corner{
+background-color:#CCCCCC;
+font:Arial, Helvetica, sans-serif;
+color:#666666;
+font-size:14px;
+
+display: block;
+display: block;
+-moz-border-radius: 10px;
+-webkit-border-radius: 10px;
+}
+</style>
+
+
+<table width="900" height="520" border="0"  cellpadding="0" cellspacing="0" >
+  <tr>
+    <td width="318" rowspan="3" align="center" valign="middle">&nbsp;</td>
+    <td width="343" height="116" align="center" valign="middle">&nbsp;  </td>
+    <td width="239" rowspan="3" align="center" valign="middle">&nbsp;</td>
+  </tr>
+  <tr>
+    <td height="132" align="center" valign="middle">
+	<div id="login">
+	<table width="350" align="left" cellpadding="2" class="rounded_corner" style="background-color:#CCCCCC">  
+  <form  name="form1" id="form1" method="post" action="{{=URL(c='utility',f='device')}}"  >
+    
+    <tr >
+      <td width="10" align="left" >&nbsp;</td>
+      <td align="left" >&nbsp;</td>
+      <td align="left" >&nbsp;</td>
+      <td align="left" >&nbsp;</td>
+    </tr>
+    <tr >
+      <td width="10" align="left" >&nbsp;</td>
+      <td align="left" >CID</td>
+      <td align="left" ><input  type="text" name="c_id" id="c_id" size="15" /></td>
+      <td align="left" >&nbsp;</td>
+    </tr>
+    <tr >
+      <td width="10" align="left" >&nbsp;</td>
+      <td align="left" >User ID </td>
+      <td align="left" ><input  type="text" name="user_id" id="user_id" size="15" /></td>
+      <td align="left" >&nbsp;</td>
+    </tr>
+    <tr >
+      <td width="10" align="left" >&nbsp;</td>
+      <td align="left" >Password</td>
+      <td align="left" ><input  type="password" name="password" id="password" size="15" /></td>
+      <td align="left" >&nbsp;</td>
+    </tr>
+    <tr >
+      <td width="10" align="left" >&nbsp;</td>
+      <td align="left" >Device Name </td>
+      <td align="left" ><input  type="text" name="device_name" id="device_name" size="15" /></td>
+      <td align="left" >&nbsp;</td>
+    </tr>
+    <tr>
+      <td width="10" align="center" >&nbsp;</td>
+      <td align="center" >&nbsp;</td>
+      <td align="center" ><div align="left">
+        &nbsp;<input type="submit" name="btn_device_settings" id="btn_device_settings" value="Submit" />
+      </div></td>
+      <td align="center" >&nbsp;</td>
+    </tr>
+    <tr>
+      <td width="10" align="center" >&nbsp;</td>
+      <td align="center" >&nbsp;</td>
+      <td align="center" >&nbsp;</td>
+      <td align="center" >&nbsp;</td>
+    </tr>
+    <tr>
+      <td colspan="4" align="center" ><input type="hidden" style="width:250px" name="uploadkey" id="uploadkey" size="80"/></td>
+      </tr>
+	</form>
+</table>
+	</div>
+	</td>
+  </tr>
+  <tr>
+    <td height="264" align="center" valign="middle">&nbsp;</td>
+  </tr>
+</table>
+
+<script type="text/javascript">
+function uploadkey(key)
+{	
+	document.form1.uploadkey.value = key;	
+	
+}
+function device()
+{
+	var a=document.form1.uploadkey.value.length;
+	
+	if ( a == 0 ){
+	alert ("Authentication error");
+	}
+}
+</script>
+  
+  <applet code="macaddverification.MacAddVerification.class" name="Login manager" alt="aa" width="10" height="10" archive="{{=URL('static','applet/MACAddVerification.jar')}}" class="bodylink5" title="aa" />

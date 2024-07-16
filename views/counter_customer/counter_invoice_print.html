@@ -1,0 +1,308 @@
+{{extend 'layout_invoice.html'}}
+
+
+ <link rel="stylesheet" href="{{=URL('static', 'js_and_css/ui.theme.css')}}" type="text/css" />
+  <link rel="stylesheet" href="{{=URL('static', 'js_and_css/jquery-ui.css')}}" type="text/css" />
+  <link rel="stylesheet" href="{{=URL('static', 'js_and_css/style.css')}}" type="text/css" />
+  <script src="{{=URL('static','js_and_css/jquery-1.8.2.js')}}"></script>
+  <script src="{{=URL('static','js_and_css/jquery-ui.js')}}"></script>
+<style>
+body {
+  font-family: "Lato", sans-serif;
+}
+
+
+
+#main {
+  transition: margin-left .5s;
+  padding: 16px;
+}
+
+@media screen and (max-height: 450px) {
+  .sidenav {padding-top: 15px;}
+  .sidenav a {font-size: 18px;}
+}
+</style>
+ 
+  <style type="text/css">
+.password-mask {
+
+  -webkit-text-security: disc;
+  -moz-binding: url('https://example.com#fake_moz_binding');
+}
+
+
+ input[type=text], input[type=password],  select {
+    margin: 2px 0px 2px 0px;
+	width:250px;
+}
+
+select{ width:265px; margin:2px 0px 2px 0px;}
+
+textarea{
+    width:250px;
+	height:50px;
+	margin:2px 0px 2px 0px;
+}
+
+div.error {
+    margin-left:0px;
+	width:265px;
+}
+.page_color,body{
+	font-family:Arial, Helvetica, sans-serif;
+	font-size:13px;
+	}
+	
+#uni_middle_str4{
+width:100px;
+}
+
+ </style>
+
+<table width="100%"  height="100%"   border="0" cellspacing="0" cellpadding="0" style="background-color:#FFFFFF;" >
+ 
+  <tr  height="1px" >
+      <td colspan="3" ></td>
+  </tr>
+
+  <tr>
+    <td>
+      
+        <table border="0" cellspacing="0" cellpadding="0" style="background-color:#FFFFFF;" >
+              <tr height="40px" >
+                <td>
+                  <img onClick="$(this).hide();window.print();" src="{{=URL('static','images/printer-icon.png')}}"/>
+                </td>
+                <td align="middle" width="100%" style="background-color:#FFFFFF;font-weight: bold;font-size: 30px;" >
+                  <span class="blackCatTitle">&nbsp;INVOICE</span>
+                </td>
+              <td width="500" >&nbsp;</td>
+                <td>&nbsp;</td>
+              </tr>
+              <tr  height="1px" style="background-color:#CCCCCC;">
+                <td colspan="3" ></td>
+              </tr>
+        </table>
+
+        <table width="100%" align="left" height="100%" border="0"  cellpadding="0" cellspacing="0" style="margin-left:auto; margin-right:auto;background-color:#FFFFFF;" >
+          
+          <tr>
+            <td height="80%" valign="middle">
+
+
+
+                <table width="100%" align="left" cellpadding="2" class="rounded_corner" style="background-color:#FFFFFF;font-weight: bold;font-size:15PX">
+
+                        <tr >
+                          <td width="100px" style="vertical-align: middle;">Bill To</td>
+                          <td width="10px" style="vertical-align: middle;font-size: 20px;">:</td>
+                        </tr>
+
+                        <tr >
+                          <td width="100px" style="vertical-align: middle;">Date</td>
+                          <td width="10px" style="vertical-align: middle;font-size: 20px;">:</td>
+                          <td>
+                            {{sales_date = current_date}}
+                            {{=sales_date}}
+                          </td>
+                        </tr>
+                        <tr >
+                          <td width="100px" style="vertical-align: middle;">Invoice</td>
+                          <td width="10px" style="vertical-align: middle;font-size: 20px;">:</td>
+                          <td>{{=depot_id}}-{{=sl}}
+                          </td>
+                        </tr>
+                        <tr >
+                          <td width="100px" style="vertical-align: middle;">Branch</td>
+                          <td width="10px" style="vertical-align: middle;font-size: 20px;">:</td>
+                          <td>
+                          	{{=depot_id}} | {{=depot_name}}
+                          </td>
+                        </tr>
+
+                        <tr >
+                          <td width="100px" style="vertical-align: middle;">Physician</td>
+                          <td width="10px" style="vertical-align: middle;font-size: 20px;">:</td>
+                          {{if physician_id == '' or physician_id == 'None' or physician_id == None:}}
+                          <td></td>
+                          {{else:}}
+                          <td>{{=physician_id}} | {{=physician_name}}</td>
+                          {{pass}}
+                        </tr>
+
+                        <tr>
+                          <td width="100px" style="vertical-align: middle;">Discount&nbsp;Type</td>
+                          <td width="10px" style="vertical-align: middle;font-size: 20px;">:</td>
+                          <td>{{=discount_type}}</td>
+                        </tr>
+                        <tr>
+                          <td width="100px" style="vertical-align: middle;">Note</td>
+                          <td width="10px" style="vertical-align: middle;font-size: 20px;">:</td>
+                          {{if note =='' or note == 'None' or note == None:}}
+                          <td></td>
+                          {{else:}}
+                          <td>{{=note}}</td>
+                          {{pass}}
+                        </tr>
+
+                        <tr>
+                          <td width="100px" style="vertical-align: middle;">Status</td>
+                          <td width="10px" style="vertical-align: middle;font-size: 20px;">:</td>
+                          <td>{{=status}}</td>
+                        </tr>
+                </table>
+
+                <table  border="2px" style="font-weight:bold;">
+
+                      <tr style="font-weight:bold; font-size: 15px;">
+                        <td  width="80px" style="vertical-align: middle; padding-left: 10px; height: 30px;">SL No</td>
+                        <td width="120px"  style="vertical-align: middle;">Item ID</td>
+                        <td width="200px"  style="vertical-align: middle;">Item Name</td>
+                        <td align="right"  width="100px" style="vertical-align: middle;">MRP</td>
+                        <td align="right"width="100px" style="vertical-align: middle;">Qty</td>
+                        <!-- <td align="right"width="100px" style="vertical-align: middle;">Discount</td> -->
+                        <td align="right" width="100px" style="vertical-align: middle;">Total</td>
+                      </tr>
+
+                      {{
+                        grand_total = 0
+                        total_discount = 0
+                        total_discount_sum = 0
+                        net_total = 0
+                        sl_count = 0
+                        for i in range(len(counter_invoice_details_rows_print)):
+                         records_ov_dict=counter_invoice_details_rows_print[i]  
+                         #record_id=str(records_ov_dict["id"]) 
+                         item_id=str(records_ov_dict["item_id"]) 
+                         item_name=str(records_ov_dict["item_name"])      
+                         actual_tp= records_ov_dict["actual_tp"]    
+                         quantity= records_ov_dict["quantity"]
+                         item_discount_percent= records_ov_dict["item_discount_percent"]
+                         total_price=records_ov_dict["total_price"]
+                         order_sl_counter=str(records_ov_dict["order_sl_counter"]) 
+                         order_date=str(records_ov_dict["order_date"]) 
+                         sl_count += 1
+
+                         total_discount = (total_price * item_discount_percent) / 100
+                         total_discount_sum += total_discount
+
+                       }}
+
+                    <tr  align="left" class="blackCat"  style="vertical-align:middle">
+                        <td  style="vertical-align: middle;">{{=sl_count}}</td>
+                        <td style="vertical-align: middle;">{{=item_id}}</td>
+                        <td style="vertical-align: middle;padding-left: 5px">{{=item_name}}</td>
+                        <td align="right" width="120px" style="vertical-align: middle;">{{=actual_tp}}</td>
+                        <td align="right" width="120px" style="vertical-align: middle;">{{=quantity}}</td>
+                        <!-- <td align="right"  width="120px" style="vertical-align: middle;">{{#=easy_format(item_discount_percent)}}%</td> -->
+                        <td align="right"  width="120px" style="vertical-align: middle;">{{=total_price}}</td>
+    
+                    </tr>
+                        {{grand_total += total_price}}
+                      {{pass}}
+                      
+                      <tr class="blackCat" >
+                       <td  colspan="5" align="right" style="font-weight: bold; border: none">Total&nbsp;Trade&nbsp;Price<strong>:</strong></td>
+                       <td style="border-bottom:2px;border-left:2" colspan="7" align="right" style="font-weight: bold;">{{=grand_total }}</td>
+                      </tr>
+
+                      <tr class="blackCat" >
+                         <td  colspan="5"  align="right" style="font-weight: bold;border: none; ">Discount<strong>:</strong></td>
+                         <td style="border-bottom:2px;border-left:1;" colspan="7"  align="right" style="font-weight: bold;">{{=easy_format(total_discount_sum)}}</td>
+                      </tr>
+                      
+                      <tr class="blackCat">
+                         {{net_total = grand_total - total_discount_sum}}
+                         {{net_total_ammount = '{0:.2f}'.format(net_total)}}
+
+                        <td colspan="4" style="border:none">Taka in Words : 
+                        {{try:}}
+                            {{amount_taka=str(net_total_ammount).split('.')[0]}}
+                            {{#=amount_taka}}
+                        {{except:}}
+                            amount_taka='0'
+                        {{pass}}   
+                        {{try:}} 
+                            {{amount_paisa=str(net_total_ammount).split('.')[1]}}
+                            {{#=amount_paisa}}
+                        {{except:}}
+                          {{amount_paisa='0'}}
+                        {{pass}}
+                        {{if int(amount_taka)> 0 :
+                          try:
+                            text_amount_taka = number_to_words(int(amount_taka)) + " Taka"
+                          except:
+                            text_amount_taka = ''
+                          pass
+                        else:
+                          text_amount_taka=''
+
+                        pass
+                      }}
+                      {{
+                        if int(amount_paisa) > 0 :
+                          #if (amount_paisa[1] != '0'):
+                          if len(amount_paisa) == 1:
+                            amount_paisa=amount_paisa+'0'
+                          pass
+                          try:
+                            text_amount_paisa = number_to_words(int(amount_paisa)) + " Paisa"
+                          except:
+                            text_amount_paisa = ''
+                          pass
+
+                        else:
+                          text_amount_paisa =''
+                        pass
+
+                      }}
+                        {{#= text_amount_taka+' '+text_amount_paisa}}
+                        {{= text_amount_taka}}
+                      </td>
+                         <td  align="right" style="font-weight: bold;border: none;">Net Total<strong>:</strong></td>
+                         <td align="right" style="font-weight: bold;">{{=round(net_total)}}</td>
+                      </tr>
+
+
+
+            </table>
+
+            <table width="100%">
+              <tr>
+                <td height="30px">&nbsp;</td>
+              </tr>
+
+              <tr >
+                <td width="200px" style="vertical-align: middle;font-size: 16px; font-weight: bold;">Remarks :</td>
+              </tr>
+
+              <tr>
+                <td height="8px"></td>
+              </tr>
+              <tr>
+                  <td width="60%" align="left" style="vertical-align: middle;font-size: 16px;font-weight: bold;">Authenticated By :</td>
+                  <td width="50%" align="left"style="vertical-align: middle;font-size: 16px;font-weight: bold;">Recieved By :</td>
+              </tr>
+
+              <tr>
+                <td height="10px">&nbsp;</td>
+                <td >&nbsp;</td>
+              </tr>
+              <tr>
+                  <td width="70%" align="left" style="vertical-align: middle;font-size: 16px;font-weight: bold;">_____________________</td>
+                  <td width="30%" align="left" style="vertical-align: middle;font-size: 16px;font-weight: bold;">______________________</td>
+              </tr>
+
+              <tr>
+                <td width="60%" align="left" style="vertical-align: middle;font-size: 16px;font-weight: bold;">Branch</td>
+                <td width="50%" align="left" style="vertical-align: middle;font-size: 16px;font-weight: bold;">Customer</td>
+              </tr>
+              
+            </table>
+
+
+        </td>
+        </tr>
+        
+ </table>

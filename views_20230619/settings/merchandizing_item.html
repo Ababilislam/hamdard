@@ -1,0 +1,136 @@
+{{extend 'layout.html'}}
+
+  <link rel="stylesheet" href="{{=URL('static', 'js_and_css/ui.theme.css')}}" type="text/css" />
+  <link rel="stylesheet" href="{{=URL('static', 'js_and_css/jquery-ui.css')}}" type="text/css" />
+  <link rel="stylesheet" href="{{=URL('static', 'js_and_css/style.css')}}" type="text/css" />
+   <script src="{{=URL('static','js_and_css/jquery-1.8.2.js')}}"></script>
+    <script src="{{=URL('static','js_and_css/jquery-ui.js')}}"></script>
+  
+  
+  <style type="text/css">
+	 input[type=text], input[type=password],  select {
+    margin: 2px 0px 2px 0px;
+	}
+	
+	#sm_merchandizing_item_item_id{
+	width:60px;
+	}
+	#sm_merchandizing_item_name{
+	width:200px;
+	}
+	#sm_merchandizing_item_des{
+	width:300px;
+	}
+	
+	div.error {
+		color: white;
+		padding: 0px;
+		width: auto; 
+		margin-left:0px;
+	}
+	.page_color,body{
+		font-family:Arial, Helvetica, sans-serif;
+		font-size:13px;	
+		}
+ </style>
+
+
+<table width="100%"  border="0" cellspacing="0" cellpadding="0" style="background-color:#FFFFFF;" >
+  <tr height="30px" >
+    <td><span class="blackCatTitle">Merchandizing Item</span></td>
+  </tr>
+  <tr  height="1px" style="background-color:#CCCCCC;">
+	    <td ></td>
+  </tr>
+  </table>
+  
+  
+  <table width="100%" height="500px"  border="0" cellspacing="0" cellpadding="0" class="page_color"  >
+  <tr height="100%"  style="vertical-align:top;">
+    <td>
+	<table width="100%"  border="0" cellpadding="0" cellspacing="0"  >
+      <tr>
+        <td width="5">&nbsp;</td>
+        <td>
+		
+		<table width="1000" border="0" cellpadding="0" cellspacing="0" >
+			<tr>
+				<td width="100">&nbsp;</td>
+				<td width="900" align="right">&nbsp;</td>
+				<td align="right">&nbsp;</td>
+			</tr>
+		</table>
+		
+		</td>
+      </tr>
+      <tr>
+        <td width="5">&nbsp;</td>
+        <td>			
+            <br />
+               <table width="700" border="1" cellpadding="1" cellspacing="1" class="sample_border" >
+               
+                 <tr align="left" class="blackCatHead"  height="20px">
+                   <td width="117" >&nbsp;</td>
+                   <td >&nbsp;</td>
+                   <td width="100" align="right"  >&nbsp;</td>
+                   <td width="80" align="right"  ><a href="{{=URL(c='settings',f='download_merchandizing_item')}}">
+                   <input type="button" name="" id="" value="Download"   class="button_update" title="Need Filter"/></a></td>
+                  </tr>
+			    
+            </table>
+				<br />
+			 <table width="700" border="1" cellpadding="1" cellspacing="1" class="sample_border" >
+               <tr align="left" class="blackCatHead"  height="20px">
+                 <td width="80" >ID</td>
+                 <td width="250" >Name</td>
+                 <td >Des</td>
+                 <td ></td>
+               </tr>
+               {{if access_permission==True:}} 
+                    {{=form.custom.begin}}
+                  <tr  align="left" class="blackCat"  style="vertical-align:middle">
+                    <td width="80" >{{=form.custom.widget.item_id}}</td>
+                     <td width="250" >{{=form.custom.widget.name}}</td>
+                     <td >{{=form.custom.widget.des}}</td> 
+                     <td >{{=form.custom.submit}}</td>                    
+              	  </tr>
+              		{{=form.custom.end}}
+              {{pass}}
+			   			   
+			   	  
+			   {{for i,record in enumerate(records):}}
+			   		{{ if i==items_per_page: break}}  
+                      <tr  align="left" class="blackCat"  style="font-size:12px"> 
+                      <td width="80" >{{=record.item_id}}</td>
+                      <td width="250" >{{=record.name}}</td>
+                      <td >{{=record.des}}</td>
+                      <form id="form1" name="form1" method="post" action="{{=URL(c='settings',f='merchandizing_item',vars=dict(rid=record.id))}}">
+                      <td align="right" >{{if access_permission==True:}}
+                        <input type="submit" name="btn_delete" id="btn_delete" value=" X "   class="button_update"/>
+                        {{pass}}
+                      </td>
+                      </form>
+                      
+                    </tr>
+  
+			   {{pass}}
+</table>
+
+
+
+	      </td>
+         </tr>
+    </table>
+
+{{if page:}}
+&nbsp;&nbsp;<a href="{{=URL(args=[page-page])}}">first</a> |  
+&nbsp;&nbsp;<a href="{{=URL(args=[page-1])}}">previous</a> |
+{{pass}}
+
+{{if len(records)>items_per_page:}}
+&nbsp;&nbsp;<a href="{{=URL(args=[page+1])}}">next</a>
+{{pass}}
+	</td>
+  </tr>
+</table>
+

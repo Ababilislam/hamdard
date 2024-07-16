@@ -1,0 +1,75 @@
+{{extend 'layout_report.html'}}
+<html>
+<head>
+<script type="text/javascript">
+function print_page()
+  {
+    window.print()
+  }
+</script>
+
+</head>
+<body>
+<div class="blackCatTitle">&nbsp;Sales Summary (Rep/Supervisor Wise)</div>
+<br/>
+<table width="900px;"> <tr><td style="text-align:right"><a href="{{=URL(c='analysis',f='sales_summary_repwise_download',vars=dict(fromDate=fromDate,toDate=toDate,regionValue=regionValue,areaValue=areaValue,territoryValue=territoryValue,marketValue=marketValue,repCM=repCM))}}" >Downlaod</a></td></tr></table>
+
+<table width="700px" cellspacing="1" cellpadding="1">
+	<tr>
+		<td>
+			<table width="900" class="sample_border" >
+                <tr style="background-color:#E6E6E6;">
+                  <td width="150" >Date Range</td>
+                  <td width="100" >{{=session.level0Name}}</td>
+                  <td width="100" >{{=session.level1Name}}</td>
+                  <td width="150" >Visit By</td>
+                </tr>
+                <tr style="background-color:#F0FAFF">
+                    <td width="150" >							
+                    {{=datetime.datetime.strptime(fromDate,'%Y-%m-%d').strftime('%d-%m-%Y ')}} <b> To</b> {{=datetime.datetime.strptime(toDate,'%Y-%m-%d').strftime('%d-%m-%Y ')}}</td>
+                    <td width="100" align="left" valign="top">{{if regionValue=='':}}
+                        All
+                    {{else:}}
+                    {{=regionValueShow}}{{pass}}</td>
+                    <td width="100" align="left" valign="top">{{if areaValue=='':}}
+                        All
+                    {{else:}}
+                    {{=areaValueShow}}{{pass}}</td>
+                    <td width="150" align="left" valign="top">{{if repCM=='':}}
+                        All
+                    {{else:}}
+                    {{=repCM}}{{pass}}</td>
+                </tr>
+		  </table>
+	  </td>
+	</tr>
+	<tr height="10px"></tr>
+	<tr>
+		<td>
+			<table width="900" border="1" cellpadding="1" cellspacing="1" class="sample_border" >                
+                <tr align="left" class="blackCatHead" height="20px" ;  style="font-size:12px">
+                  <td width="300"  >Rep/Supervisor</td>
+                  <td  >Item</td>
+                  <td width="100"  >Qty</td>
+                </tr>
+                {{for i,record in enumerate(records):}}
+                
+                {{# if i==items_per_page: break}}
+              <tr  align="left" class="blackCat"  style="vertical-align:middle; font-size:11px;">
+                <td width="300" >{{=record.sm_invoice.rep_name}} - {{=record.sm_invoice.rep_id}}</td>
+                <td >{{=record.sm_invoice.item_name}} - {{=record.sm_invoice.item_id}}</td>
+                <td width="100" style="border-right-width:3px;">{{=record[db.sm_invoice.quantity.sum()]}}</td>
+              </tr>
+                {{pass}}
+              </table>
+		  
+		</td>
+			
+	</tr>
+</table>
+
+
+<br/>
+
+</body>
+</html>

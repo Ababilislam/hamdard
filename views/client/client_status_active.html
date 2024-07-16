@@ -1,0 +1,85 @@
+{{extend 'layout.html'}}
+  
+  
+  <table width="100%"  border="0" cellspacing="0" cellpadding="0" style="background-color:#FFFFFF;" >
+  <tr height="30px" >
+    <td width="800"><span class="blackCatTitle">Client Status Active</span></td>
+	<form action="{{=URL(c='client',f='client')}}" method="post">
+	<td align="left">	
+	<input name="" type="submit"  value="Back"/>	
+	</td>
+	</form>
+  </tr>
+  <tr  height="1px" style="background-color:#CCCCCC;">
+	    <td width="800" ></td>
+		<td ></td>
+  </tr>
+  </table>
+  
+  
+  <table width="100%" height="500px"  border="0" cellspacing="0" cellpadding="0" class="page_color"  >
+  <tr height="100%"  style="vertical-align:top;">
+    <td>
+	<table width="100%"  border="0" cellpadding="0" cellspacing="0"  >
+     
+      <tr>
+        <td width="5">&nbsp;</td>
+        <td>
+		<!--start-->
+
+
+<table width="750" border="0" cellpadding="0" cellspacing="0" class="page_color">
+  
+
+  <tr>
+    <td colspan="2"  bgcolor="#C8E8EA" align="center"> <div align="left"><br/>
+    </td>
+  </tr>
+
+  <form name="batch_client" id="batch_client" method="post" action="{{=URL(c='client',f='client_status_active')}}">
+  
+    <tr>
+      <td colspan="2" bgcolor="#DBF0EF" style="color: black;">
+  	     <textarea name="client_id" id="client_id" placeholder="Enter Client ID 1001,1002,1003" style="width:800px; height:200px;border-style:solid;" > 
+         </textarea>
+	    </td>
+    </tr>
+
+  <tr>
+    <td align="left">
+      <label for="item1">
+          <input  style="height:25px;vertical-align: middle;" type="checkbox" id="item1" name="item1" onclick="toggleButtons()" >
+          <input type="submit" style="width:120px;background-color: #86B54F; color:#FCF9F9; height:30px" name="btn_active", id="btn_active" value="ACTIVE"  onclick="if (!confirm('Do you really want to change the Customer status to ACTIVE?')) { return false }" disabled>
+          <input type="submit" style="width:120px;background-color: #976C64; color:#FCF9F9; height:30px" name="btn_inactive", id="btn_inactive" value="INACTIVE"  onclick="if (!confirm('Do you really want to change the Customer status to INACTIVE?')) { return false }" disabled>
+      </label>
+    </td>
+  </tr>
+
+	</form>
+
+
+</table>
+
+	</td>
+  </tr>
+</table>
+	<!--end-->
+	</td>
+  </tr>
+</table>
+
+<script>
+  function toggleButtons() {
+    var checkbox = document.getElementById("item1");
+    var activeButton = document.getElementById("btn_active");
+    var inactiveButton = document.getElementById("btn_inactive");
+
+    if (checkbox.checked) {
+      activeButton.disabled = false;
+      inactiveButton.disabled = false;
+    } else {
+      activeButton.disabled = true;
+      inactiveButton.disabled = true;
+    }
+  }
+</script>

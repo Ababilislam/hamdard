@@ -1,0 +1,248 @@
+{{extend 'layout.html'}}
+{{extend 'layout.html'}}
+
+ <link rel="stylesheet" href="{{=URL('static', 'js_and_css/ui.theme.css')}}" type="text/css" />
+  <link rel="stylesheet" href="{{=URL('static', 'js_and_css/jquery-ui.css')}}" type="text/css" />
+  <link rel="stylesheet" href="{{=URL('static', 'js_and_css/style.css')}}" type="text/css" />
+  <script src="{{=URL('static','js_and_css/jquery-1.8.2.js')}}"></script>
+  <script src="{{=URL('static','js_and_css/jquery-ui.js')}}"></script>
+<style>
+body {
+  font-family: "Lato", sans-serif;
+}
+
+
+
+#main {
+  transition: margin-left .5s;
+  padding: 16px;
+}
+
+@media screen and (max-height: 450px) {
+  .sidenav {padding-top: 15px;}
+  .sidenav a {font-size: 18px;}
+}
+</style>
+ 
+  <style type="text/css">
+ input[type=text], input[type=password],  select {
+    margin: 2px 0px 2px 0px;
+	width:250px;
+}
+
+select{ width:265px; margin:2px 0px 2px 0px;}
+
+textarea{
+    width:250px;
+	height:50px;
+	margin:2px 0px 2px 0px;
+}
+
+div.error {
+    margin-left:0px;
+	width:265px;
+}
+.page_color,body{
+	font-family:Arial, Helvetica, sans-serif;
+	font-size:13px;
+	}
+	
+#uni_middle_str4{
+width:100px;
+}
+
+ </style>
+
+<script>
+
+
+   var base_url=location.protocol + "//" + location.hostname + (location.port && ":" + location.port) + "/{{=request.application}}/";
+
+$(function() {
+ 
+ var employeeListStr="";  
+   
+    // alert(base_url+'doctor_degree/degree_list')
+    $.ajax({
+      url: base_url+'doctor_degree/degree_list',
+      success: function(retStr) {
+        // alert (retStr)
+        employeeListStr=retStr 
+      }
+    }); 
+// alert (employeeListStr)
+
+// =================================
+$('#searchValue_OpName').keyup(function(){
+      // alert('ok')
+      //-------------------------
+      var ref_list = employeeListStr.split(',');  
+      var ref_name=$("#searchValue_OpName").val();
+      // alert(ref_name)
+      
+      //---------------- auto complete combo list
+      var ref_list_new=new Array();
+      lc=0;
+      i =0;
+      var refStr="";        
+      while (i < ref_list.length)
+      {
+        refStr=ref_list[i];
+        i=i+1;          
+        var res=refStr.toUpperCase().match(ref_name.toUpperCase());
+        if (res!=null){
+          ref_list_new[lc]=refStr;
+          lc=lc+1;
+          if (lc==30){
+            break;
+          };
+        }else{
+          continue;
+        }         
+      };
+      
+      //-------------- auto complete source
+      $( "input#searchValue_OpName" ).autocomplete({
+        source: ref_list_new
+      });
+    
+    }); 
+// =======================
+ 
+// -----------------------------------
+});
+
+
+</script>  
+
+
+<table width="100%"   border="0" cellspacing="0" cellpadding="0" style="background-color:#F5F5F5;" >
+ 
+  <tr  height="1px" >
+  <td colspan="3" ></td>
+  </tr>
+
+  <tr>
+    <td>
+      
+<tabl border="0" cellspacing="0" cellpadding="0" style="background-color:#FFFFFF;" >
+  <tr height="30px" >
+    <td width="100%" style="background-color:#FFFFFF;" ><span class="blackCatTitle">&nbsp;Doctor Degree</span></td>
+  <td width="500" >&nbsp;</td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr  height="1px" style="background-color:#CCCCCC;">
+  <td colspan="3" ></td>
+  </tr>
+</table>
+
+<table width="70%" align="left" height="100%" border="0"  cellpadding="0" cellspacing="0" style="margin-left:auto;margin-right:auto;" >
+  
+  <tr>
+    <td height="80%" valign="middle">
+
+      <form  name="form1" action="{{=URL(c='doctor_degree',f='degree_add')}}" method="post"  >
+                        <!-- FILTERING BY USER TYPE -->
+
+        <table width="100%" border="1" class="sample_border" >
+          
+               <tr align="left" height="30px"; class="filterRow" style="background:#eee">
+                 <td width="150px" class="tdDecoratoin">              
+                   {{if session.searchValue_OpName=='' or session.searchValue_OpName==None:}}
+                   <input type="text" class="text" name="searchValue_OpName" id="searchValue_OpName" value="" placeholder="Degree Name" autocomplete="off" style="width:150px"/>
+                   {{else:}}
+                    <input type="text" name="searchValue_OpName" id="searchValue_OpName" value="{{=session.degree_name}}" autocomplete="off" />
+                   {{pass}}
+                 </td>
+                  <td align="left" class="tdDecoratoin inputSubmitStyle" style="padding-left: 10px;">
+                    <input type="submit" name="btn_filter" id="btn_filter" value="Filter" style="vertical-align:middle;height:30px ;width: 60px;" class="button_update" title=""/>
+                    <input type="submit" name="btn_all" id="btn_all" value="All" style="vertical-align:middle;height:30px; width:50px;margin-left: 10px;"class="button_update"/>
+                 </td>
+                  <td width="400px" align="right">
+                    <a href="{{=URL(c='doctor_type',f='doctor_type')}}" style="text-align:left;">
+                      <input type="button" name="doc_type" id="doc_type" value="Doctor Type" style="vertical-align:middle;height:30px ;"  class="button_update"/>
+                    </a>
+                  </td>
+                 <td align="right">
+                    <a href="{{=URL(c='doctor_degree',f='degree_list_Download')}}" style="text-align:left;">
+                      <input type="button" name="Input2" id="Input2" value="Download" style="vertical-align:middle;height:30px ;"  class="button_update"/>
+                    </a>
+                  </td>
+               </tr>     
+        </table>
+
+        <table width="100%" align="left" cellpadding="2"  class="sample_border"  style="background-color:#EBEBEB">
+                    <!-- INSERT ADMIN / OPERATOR -->
+            <tr >
+              <td width="10" align="left" colspan="8">&nbsp;Total:{{=(len(degreeRows))}}</td>
+            </tr>
+
+            <tr >
+              <td width="150" style="vertical-align: middle;">Degree&nbsp;ID&nbsp;</td>
+              <td width="150" style="vertical-align: middle;">Degree&nbsp;Name</td>
+              <td width="150" style="vertical-align: middle; ">Doctor&nbsp;Type</td>
+              <td width="150" style="vertical-align: middle;"></td>
+            </tr>
+
+            <tr>
+              <td>
+              	<input  type="text" name="degree_id" id="degree_id" size="10" placeholder="Degree ID" style="width:150px"/>
+              </td>
+              <td>
+              	<input  type="text" name="degree_name" id="degree_name" size="10" placeholder="Degree Name" style="width:150px" />
+              </td>
+              <td width="200px">
+                <select name="doctor_type" id="doctor_type" >
+                    <option value="">Select Value</option>
+                    {{for record in range(len(doc_type_record)):
+                        record_data = doc_type_record[record]
+                        doc_type_name = str(record_data["doc_type_name"])
+                    }}
+                      <option value="{{=doc_type_name}}">{{=doc_type_name}}</option>
+                    {{pass}}                                
+                </select>
+              </td>
+              <td align="right" >
+                <div align="right">
+                  <input  type="submit" name="submit" id="submit" value=" Save " style="vertical-align:middle;height:30px; width: 60px;" />
+                </div>
+              </td>
+            </tr>
+      <!-- </table> -->
+  </form>
+                            <!-- SHOW ALL USER  -->
+
+      <!-- <table width="100%" border="1" cellpadding="2" cellspacing="1" class="sample_border" style="margin-left:5px;margin-right:auto;" > -->
+
+               {{for i in range(len(degreeRows)):
+                  records_ov_dict=degreeRows[i]   
+                  #record_id=str(records_ov_dict["id"])      
+                  degree_id=str(records_ov_dict["degree_id"])      
+                  degree_name=str(records_ov_dict["degree_name"])                                   
+                  doc_type_name=str(records_ov_dict["doc_type_name"])                                   
+                }}
+
+               <tr  align="left" class="blackCat"  style="vertical-align:middle; font-size:12px; background-color:#f5f5f5;margin:5px"> 
+                <td width="150">{{=degree_id}}</td>
+                <td width="150">{{=degree_name}}</td>
+                <td width="150">{{=doc_type_name}}</td>
+
+                 <form  name="form2" action="{{=URL(c='doctor_degree',f='degree_edit',args=[degree_id,degree_name, doc_type_name])}}" method="post"  >
+                      <td align="right" width="150"style="vertical-align:top;">
+                          <button type="submit" name="btn_edit" id="btn_edit" value="" style="background-color: transparent;border: none;">>>
+                          </button> 
+                      </td>
+                </form> 
+              </tr>
+
+              {{pass}}
+      </table>
+      
+  </td>
+  </tr>
+ 
+</table>
+   </td>
+
+</tr>
+</table>

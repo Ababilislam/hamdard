@@ -1,0 +1,662 @@
+{{extend 'layout.html'}}
+
+
+
+<link rel="stylesheet" href="{{=URL('static', 'js_and_css/ui.theme.css')}}" type="text/css" />
+
+<link rel="stylesheet" href="{{=URL('static', 'js_and_css/jquery-ui.css')}}" type="text/css" />
+
+<link rel="stylesheet" href="{{=URL('static', 'js_and_css/style.css')}}" type="text/css" />
+
+<script src="{{=URL('static','js_and_css/jquery-1.8.2.js')}}"></script>
+
+<script src="{{=URL('static','js_and_css/jquery-ui.js')}}"></script>
+
+
+ <style type="text/css">
+
+	 input[type=text], input[type=password],  select {
+
+		margin: 2px 0px 2px 0px;
+
+		width:100px;
+
+	
+
+	}
+
+	div.error {
+
+		margin-left:0px;
+
+		width:auto;
+
+	}
+
+	#status,#note{
+
+	 width:150px;
+
+	 }
+
+	
+
+	#depot_id,#sl,#status{
+
+	 background-color:#F7F7F7;
+
+	  }
+
+	
+
+	 #sm_damage_item_id{
+
+	 width:80px;
+
+	 }
+
+	 #sm_damage_quantity{
+
+	 width:80px;
+
+	 text-align:right;
+
+	 }
+
+	 #sm_damage_item_name{
+
+	 width:200px;
+
+	 }
+
+	 #sm_damage_short_note{
+
+	 width:180px;
+
+	 }
+
+	
+
+	.page_color,body{
+
+		font-family:Arial, Helvetica, sans-serif;
+
+		font-size:13px;	
+
+	}
+
+ </style>
+
+
+
+<script>
+
+var base_url=location.protocol + "//" + location.hostname + (location.port && ":" + location.port) + "/{{=request.application}}/";
+
+
+
+$(function() {
+		var batchListStr="";
+		
+	 	var valueListStr=localStorage.itemDataStr;
+
+		$('#item_details').keyup(function(){
+			var  store_id=$("#store_id").val();
+			
+			if(store_id==''){
+				alert('Required Store');
+			}else{			
+				//-------------------------
+	
+				var valueList = valueListStr.split(',');				
+	
+				var searchValue=$("#item_details").val();
+	
+				//---------------- auto complete combo list
+	
+				var valueList_new=new Array();
+	
+				lc=0;
+	
+				i =0;
+	
+				var valueStr="";
+					while (i < valueList.length){
+						var valueStrList=valueList[i].split('|');				
+						valueStr=valueStrList[0]+'|'+valueStrList[1]
+						
+						i=i+1;					
+	
+						var res=valueStr.toUpperCase().match(searchValue.toUpperCase());
+	
+						if (res!=null){
+	
+							valueList_new[lc]=valueStr;
+	
+							lc=lc+1;
+	
+							if (lc==30){
+	
+								break;
+	
+							};
+	
+						}else{
+	
+							continue;
+	
+						}					
+	
+					};
+	
+					//alert (ref_list_new);
+	
+					//-------------- auto complete source
+	
+					$( "input#item_details" ).autocomplete({
+	
+						source: valueList_new
+	
+					});
+		};
+	  }); 
+		
+	   //==============	 
+		var depotId=''
+		var storeId=''
+		var getFunc=''
+		
+	   $('#item_details').blur(function(){
+			
+			depotId=$("#depot_id").val().split('|')[0];
+			storeId=$("#store_id").val().split('|')[0];		
+			getFunc='get_available_batch_by_item'
+							
+		   var my_array=new Array();
+			my_array=$("#item_details").val().split('|');
+			
+			if (my_array.length == 2){
+				document.getElementById('item_name').value=my_array[0];
+				document.getElementById('item_id').value=my_array[1];
+				<!--document.getElementById('dist_rate').value=my_array[3];-->
+				
+				document.getElementById('name_value').innerHTML = my_array[0];
+				document.getElementById('id_value').innerHTML = my_array[1];
+				<!--document.getElementById('price_value').innerHTML = my_array[3];	-->
+				
+				
+				//--------------- get item batch id
+				$.ajax({
+				  url: base_url+'default/'+getFunc+'?depotId='+depotId+'&storeId='+storeId+'&itemId='+my_array[1],
+				  success: function(resStr) {
+					  batchListStr=resStr;
+				  }
+				});	
+				
+			};
+		    //============
+		}); 
+	
+	//==============	item batch add ajax	
+	$('#batch_id').keyup(function(){
+			depotId=$("#depot_id").val().split('|')[0];
+			storeId=$("#store_id").val().split('|')[0];			
+			getFunc='get_available_batch_by_item'
+								
+			var itemId=$('#item_id').val();
+			
+			//-------------------------
+			$.ajax({
+			  url: base_url+'default/'+getFunc+'?depotId='+depotId+'&storeId='+storeId+'&itemId='+itemId,
+			  success: function(resStr) {
+				  batchListStr=resStr;
+			  }
+			});
+			
+			var valueList = batchListStr.split(',');
+			var searchValue=$("#batch_id").val();			
+			//---------------- auto complete combo list
+			
+			var valueList_new=new Array();
+			
+			lc=0;	
+			i =0;	
+			var valueStr="";
+			while (i < valueList.length){
+				var valueStr=valueList[i];				
+				//valueStr=valueStrList[0]+'|'+valueStrList[1]
+				
+				i=i+1;					
+
+				var res=valueStr.toUpperCase().match(searchValue.toUpperCase());
+
+				if (res!=null){
+
+					valueList_new[lc]=valueStr;
+
+					lc=lc+1;
+
+					if (lc==30){
+
+						break;
+
+					};
+
+				}else{
+					continue;
+				}					
+
+			};
+			
+			//-------------- auto complete source
+
+			$( "input#batch_id" ).autocomplete({
+				source: valueList_new
+			});	
+	  }); 
+	});
+	 
+function hideBtnPostCancel(){					
+	$("#btn_post").hide();
+	$("#btn_cancel").hide();
+};
+
+//==============	item batch update ajax	
+
+
+</script>
+
+    
+
+<body > 
+
+<table width="100%"  border="0" cellspacing="0" cellpadding="0" style="background-color:#FFFFFF;" >
+
+  <tr height="30px" >
+
+    <td width="500"><span class="blackCatTitle">Internal Transfer(Stock)</span></td>
+    <form action="{{=URL(c='depot',f='depot_stock_transfer_list')}}" method="post">
+    <td width="380" align="right"><input name="" type="submit"  value="Back"/></td>
+    </form>
+     
+     <form id="form1" name="form1" method="post" action="{{=URL(c='depot',f='depot_stock_transfer',vars=dict(req_sl=0))}}">
+
+    <td width="50" align="right">
+    {{if access_permission==True:}}<input type="submit" name="btn_new" id="btn_new" value="New"  class="button_update"/>{{pass}}
+    </td>
+    </form>
+    <td>&nbsp;</td>
+
+  </tr>
+
+  <tr  height="1px" style="background-color:#CCCCCC;">
+
+	    <td colspan="4" ></td>
+
+  </tr>
+
+</table>
+
+  
+
+  
+
+  <table width="100%" height="500px"  border="0" cellspacing="0" cellpadding="0" class="page_color"  >
+
+  <tr height="100%"  style="vertical-align:top;">
+
+    <td width="10px">&nbsp;</td>
+
+    <td>
+
+	<!--start-->
+
+	<table width="100%"  border="0" cellpadding="0" cellspacing="0"  >
+
+      <tr>
+
+        <td colspan="2">&nbsp;</td>
+
+      </tr>
+
+      <tr>
+
+        <td colspan="2">
+
+          <table width="900" height="78" border="0" cellpadding="0" cellspacing="0">
+
+            <tr>
+
+			<td width="450" valign="top">
+
+			
+
+			
+
+			<table width="422" class="blackCat">			  
+
+                {{=form.custom.begin}}				
+
+                <tr>
+
+        <td width="120"> Branch ID </td>
+
+                  <td>:&nbsp;<input type="text" style="width:250px;" name="depot_id" id="depot_id" value="{{=depot_id}}|{{=depot_name}}" readonly/></td>
+
+                  </tr>
+
+      <tr>
+
+        <td width="120">Transfer Sl</td>
+
+        <td>:&nbsp;<input type="text" style="width:250px;" name="type_sl" id="type_sl" value="{{=type_sl}}" readonly/>
+        <input type="hidden" style="width:250px;" name="sl" id="sl" value="{{=sl}}" readonly/>
+        
+        </td>
+		
+        </tr>
+
+      <tr>
+        <td width="120">From Store</td>
+        <td>
+        :{{if sl==0:}}
+			<select name="store_id" id="store_id" style="width:265px;">
+				<option value=""></option>
+				{{for row in storeRecords:}}
+					<option value="{{=row.store_id}}|{{=row.store_name}}" >{{=row.store_id}} | {{=row.store_name}}</option>
+				{{pass}}
+			</select>
+		{{else:}}
+        	<input type="text" name="store_id" id="store_id" value="{{=store_id}}|{{=store_name}}" style="background-color:#F3F3F3;width:250px;" readonly/>
+		{{pass}}
+        </td>
+      </tr>
+      <tr>
+        <td width="120">To Store</td>
+        <td>
+        :{{if sl==0:}}
+			<select name="store_id_to" id="store_id_to" style="width:265px;">
+				<option value=""></option>
+				{{for row in storeRecords:}}
+					<option value="{{=row.store_id}}|{{=row.store_name}}" >{{=row.store_id}} | {{=row.store_name}}</option>
+				{{pass}}
+			</select>
+		{{else:}}
+        	<input type="text" name="store_id_to" id="store_id_to" value="{{=store_id_to}}|{{=store_name_to}}" style="background-color:#F3F3F3;width:250px;" readonly/>
+		{{pass}}
+        </td>
+      </tr>
+      <tr>
+
+        <td width="120">Date</td>
+
+        <td>:&nbsp;<input name="damage_date" style="width:250px;" type="Text" id="date1" value="{{=damage_date}}" readonly  /></td>
+
+        </tr>
+      
+      <tr>
+        <td width="120">Cause</td>
+        <td>
+            : {{if adjustment_reference=='':}}
+                <select name="adjustment_reference" id="adjustment_reference" style="width:265px;">
+                    <option value=""></option>
+                    {{for row in refRecords:}}
+                        <option value="{{=row.cat_type_id}}" >{{=row.cat_type_id}}</option>
+                    {{pass}}
+                </select>
+            {{else:}}
+                <input type="text" name="adjustment_reference" id="adjustment_reference" value="{{=adjustment_reference}}" style="background-color:#F3F3F3;width:250px;" readonly/>
+            {{pass}}
+        
+        </td>
+        </tr>
+      
+      <!--<tr>
+        <td>&nbsp;</td>
+        <td width="97">&nbsp;{{if adjustment_type=='Positive':}}<input type="radio" name="adjustment_type" id="adjustment_type" value="Positive" checked >{{else:}}<input type="radio" name="adjustment_type" id="adjustment_type" value="Positive" >{{pass}}Positive
+        </td>
+        <td width="209">{{if adjustment_type=='Negetive':}}<input type="radio" name="adjustment_type" id="adjustment_type" value="Negetive" checked >{{else:}}<input type="radio" name="adjustment_type" id="adjustment_type"  value="Negetive">{{pass}}Negetive</td>
+      </tr>-->
+      
+      
+        </table>
+        </td>
+        
+              <td width="400" align="right">              
+              <table class="blackCat">
+      <tr>
+
+        <td width="100">Status</td>
+
+        <td>:<input type="text" style="width:200px;" name="status" id="status" value="{{=status}}" readonly/></td>
+
+        </tr>
+
+        <td width="100">Description</td>
+
+        <td>:<input type="text" style="width:200px;" name="note" id="note" value="{{=note}}"/></td>
+
+        </tr>
+
+      <tr>
+
+        <td width="100">&nbsp;</td>
+
+        <td>
+
+		{{if ((status=='Posted') or (status=='Cancelled') or (sl==0) or (access_permission!=True)):}}
+
+		&nbsp;
+
+		{{else:}}
+
+		&nbsp;<input type="submit" name="btn_update" id="btn_update" value="Update"/>
+
+		  {{pass}}
+
+          </td>
+
+        </tr>
+
+      <tr>
+
+        <td width="100">&nbsp;</td>
+
+        <td>&nbsp;</td>
+
+        </tr>
+
+      
+
+                
+
+              </table></td>
+
+            </tr>
+
+
+
+            <tr id="upload_div">
+
+              <td width="450" valign="bottom"></td>
+
+              <td width="400" align="right">&nbsp;</td>
+
+            </tr>
+
+            <tr>
+
+              <td colspan="2"><table width="900" border="1" cellpadding="1" cellspacing="1" class="sample_border" >
+
+                  {{if (status!='Posted' and status!='Cancelled'):}}
+
+                      <tr align="left" class="blackCatHead"  height="20px" ;"vertical-align:middle">
+
+                        <td colspan="4" style="font-size:9px;"><strong>Name:</strong> <span id="name_value"></span>,&nbsp;<strong>ID:</strong> <span id="id_value"></span></td>
+
+                        <td align="right"  >&nbsp;</td>
+						
+                      </tr>
+
+                    <tr align="left" class="blackCatHead"  height="20px" ;"vertical-align:middle">
+
+                    <td colspan="2" >
+
+					<input type="hidden" name="item_id" id="item_id" />					
+
+					<input type="hidden" name="item_name" id="item_name" />
+
+					<input type="hidden" name="dist_rate" id="dist_rate" value="0"/>					
+
+					<input type="text" name="item_details" id="item_details" style="width:400px;" value="" placeholder="Select Item" autocomplete="off"  autofocus/>
+
+                    
+
+                    </td>
+
+                    <td width="200" align="left"  >
+                    <input type="text" name="batch_id" id="batch_id" style="width:200px;" value="" placeholder="Select Batch ID By Item ID" autocomplete="off" />
+                      
+                      </td>
+                    <td width="80" align="right"  >{{=form.custom.widget.quantity}} </td>
+
+                    <td width="60" align="right"  >
+                      
+                      
+                      
+                      {{=form.custom.submit}}	
+                    </td>
+
+                  </tr>
+
+				  {{pass}}
+
+				  {{=form.custom.end}}
+
+
+
+				  <tr align="left" class="blackCatHead"  height="20px" ;"vertical-align:middle">                    
+
+                    <td >Name</td>
+
+					<td width="100" >Item ID </td>
+
+                    <td width="200" align="left"  >Batch ID</td>
+                    <td width="80" align="right"  >Qty</td>
+
+                    <td width="60" align="right"  >&nbsp;</td>
+
+                  </tr>
+
+
+				  {{gross_total=0.0}}
+
+			   {{for record in (records):}}
+
+			<tr  align="left" class="blackCat"  style="vertical-align:middle">	  
+
+			  <td >{{=record.item_name}}</td>
+			  <td width="100" >{{=record.item_id}}</td>
+			  <td width="200" align="left" >{{=record.batch_id}}</td>
+			  <td width="80" align="right" >{{=record.quantity}}</td>
+
+			  <form id="form1" name="form1" method="post" action="{{=URL(c='depot',f='delete_transfer_item',args=[depot_id,sl,record.item_id,record.id])}}">
+			    
+			    <td width="60" align="right"  >
+			      
+			      {{if ((status=='Posted') or (status=='Cancelled') or (access_permission!=True)):}}
+			      
+			      &nbsp;
+			      
+			      {{else:}}
+			      
+			      <input type="submit" name="btn_delete" id="btn_delete" value="X"  class="button_update"/>
+			      
+			      {{pass}}			  </td>			  
+			    
+			    </form>
+
+			</tr>
+
+
+			   {{pass}}
+
+
+
+              </table>
+              </td>
+
+              </tr>
+
+          </table>
+          </td>
+
+      </tr>
+
+      <tr>
+
+        <td colspan="2">&nbsp;</td>
+
+      </tr>
+      <tr>
+
+        <td width="250">
+
+		<a href="{{=URL(c ='depot',f ='preview_transfer',args=[depot_id,sl])}}" style="text-decoration:none" target="_blank">
+
+          <input name="button" type="button" style="width:240px;" value="(2.2.2) Preview-Internal Transfer"/>
+
+		</a></td>
+
+		  <form id="form1" name="form1" method="post" action="{{=URL(c='depot',f='post_cancel_transfer',args=[depot_id,sl,damage_date])}}">
+
+		  <td>
+
+		
+
+		{{if access_permission==True:}}		  
+
+		  {{if (status=='Posted' or status=='Cancelled' or sl==0):}}
+
+		&nbsp;
+
+		{{else:}}
+
+        <input type="submit" name="btn_post" id="btn_post" style="width:80px;" value="Post" onClick="hideBtnPostCancel()"/>
+
+&nbsp;
+
+<input type="submit" name="btn_cancel" id="btn_cancel" style="width:80px;" value="Cancel" onClick="hideBtnPostCancel()"/>
+
+{{pass}} 
+
+{{pass}}
+
+
+
+</td>
+
+        </form>
+
+      </tr>
+
+	  
+
+    </table>
+
+
+
+
+
+<!--end-->	</td>
+
+  </tr>
+
+</table>
+
+</body>
+
+
+
+	
+

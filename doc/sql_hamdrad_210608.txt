@@ -1,0 +1,14 @@
+update `sm_promo_approved_rate` set status='INACTIVE';
+
+
+ALTER TABLE `sm_depot_distributor` ADD `dist_disc_percent` DOUBLE NOT NULL DEFAULT '0' AFTER `dist_name`; 
+
+
+ALTER TABLE `sm_invoice_head` ADD `dist_discount` DOUBLE NOT NULL DEFAULT '0' AFTER `updated_by`; 
+ALTER TABLE `sm_invoice_head` ADD `ret_dist_discount` DOUBLE NOT NULL DEFAULT '0' AFTER `dist_discount`; 
+
+ALTER TABLE `sm_invoice` ADD `dist_discount_item` DOUBLE NOT NULL DEFAULT '0' AFTER `updated_by`; 
+ALTER TABLE `sm_invoice` ADD `ret_dist_discount_item` DOUBLE NOT NULL DEFAULT '0' AFTER `dist_discount_item`; 
+
+ALTER TABLE `sm_return_head` ADD `inv_dist_discount` DOUBLE NOT NULL DEFAULT '0' AFTER `updated_by`, ADD `dist_discount` DOUBLE NOT NULL DEFAULT '0' AFTER `inv_dist_discount`; 
+ALTER TABLE `sm_return` ADD `dist_discount_item` DOUBLE NOT NULL DEFAULT '0' AFTER `updated_by`, ADD `inv_dist_discount_item` DOUBLE NOT NULL DEFAULT '0' AFTER `dist_discount_item`; 

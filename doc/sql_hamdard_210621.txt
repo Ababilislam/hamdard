@@ -1,0 +1,3 @@
+ALTER TABLE `sm_depot_distributor` ADD `depot_name` VARCHAR(100) NOT NULL DEFAULT '' AFTER `depot_id`;
+
+update `sm_depot_distributor` a, sm_depot b set a.depot_name=b.name WHERE a.cid='HAMDARD' and a.depot_id=b.depot_id;

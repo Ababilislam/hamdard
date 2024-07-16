@@ -1,0 +1,92 @@
+{{extend 'layout.html'}}
+<style type="text/css">
+	.rounded_corner{
+	background-color:#CCCCCC;
+	font:Arial, Helvetica, sans-serif;
+	color:#666666;
+	font-size:14px;
+	
+	display: block;
+	display: block;
+	-moz-border-radius: 10px;
+	-webkit-border-radius: 10px;
+}
+
+</style>
+<table width="100%"  border="0" cellspacing="0" cellpadding="0" style="background-color:#FFFFFF;" >
+  <tr height="30px" >
+    <td width="650"><span class="blackCatTitle">SMS Re-Submit</span></td>
+    
+    <form action="{{=URL(c='utility_mrep',f='utility')}}" method="post">
+    <td><input name="" type="submit"  value="Back"/></td>
+    </form>
+   
+    <td>&nbsp;</td>
+  </tr>
+  <tr  height="1px" style="background-color:#CCCCCC;">
+    <td colspan="4" ></td>
+  </tr>
+</table>
+<table width="787" border="0"  cellpadding="0" cellspacing="0" >
+  <tr>
+    <td width="5" rowspan="2" align="center" valign="middle">&nbsp;</td>
+    <td width="782" height="132" align="left" valign="top">
+	
+    {{if (session.user_type=='Admin'):}}
+	  <table width="700" border="0" cellpadding="0" cellspacing="0" class="blackCatHead">
+	  <form name="form1" id="form1" action="{{=URL(c='utility_mrep',f='sms_resubmit')}}">
+      <tr >
+        <td width="12">&nbsp;</td>
+        <td width="100">&nbsp;</td>
+        <td width="3">&nbsp;</td>
+        <td width="120" align="left"></td>
+        <td>&nbsp;</td>
+      </tr>
+      <tr >
+        <td>&nbsp;</td>
+        <td width="100">Date</td>
+        <td width="3">:</td>
+        <td align="left">{{=search_date.custom.widget.from_date}}</td>
+        <td>&nbsp;</td>
+      </tr>
+      <tr >
+        <td>&nbsp;</td>
+        <td width="100">Mobile</td>
+        <td width="3">:</td>
+        <td align="left"><input type="text" name="smsMobile" value=""/></td>
+        <td>&nbsp;</td>
+      </tr>
+      <tr >
+        <td>&nbsp;</td>
+        <td width="100">SMS</td>
+        <td width="3">:</td>
+        <td align="left"><textarea name="smsText" style="width:380px;"></textarea></td>
+        <td>&nbsp;<font color="#999999">NB. Exclude (Keyword.)</font></td>
+      </tr>
+      <tr >
+        <td>&nbsp;</td>
+        <td width="100">&nbsp;</td>
+        <td width="3">&nbsp;</td>
+        <td align="left"><input type="submit" style="width:100px; background-color:#EFEFEF;" name="btn_resubmit" value="Re Submit" title=""/></td>
+        <td>&nbsp;</td>
+      </tr>
+      <tr >
+        <td>&nbsp;</td>
+        <td width="100">&nbsp;</td>
+        <td width="3">&nbsp;</td>
+        <td align="left">&nbsp;</td>
+        <td>&nbsp;</td>
+      </tr>
+      </form>
+    </table>
+	{{pass}}
+    
+</td>
+  </tr>
+  
+  <tr>
+    <td height="31" align="left" valign="middle">&nbsp;</td>
+  </tr>
+  
+  
+</table>

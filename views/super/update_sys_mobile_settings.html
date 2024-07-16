@@ -1,0 +1,14 @@
+{{extend 'layout_login.html'}}
+
+<table width="900px" border="0">
+  <tr>
+    <td align="left"><div class="blackCatTitle">Mobile Settings-Edit</div></td>
+    <td align="right">
+	<form action="{{=URL(c='super',f='sys_mobile_settings',args=[page])}}" method="post">
+	<input name="" type="submit"  value="Back"/>
+	</form>
+	</td>
+  </tr>
+</table>
+
+{{=form}}

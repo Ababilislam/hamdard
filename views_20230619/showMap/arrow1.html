@@ -1,0 +1,355 @@
+{{extend 'layout.html'}}
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+    <meta charset="utf-8">
+  
+    <style>
+      html, body, #map-canvas {
+        height: 100%;
+        margin: 0px;
+        padding: 0px
+      }
+    </style>
+     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDu--SRHoHCMbwyIhDv29b_uTHkTa6sh3o&sensor=true&region=BD"></script>
+    <script>
+// This example adds a predefined symbol (an arrow) to a polyline.
+// Setting offset to 100% places the arrow at the end of the line.
+//var abc={{=center_point}};
+
+function initialize() {
+  var myLatlng = new google.maps.LatLng({{=center_point}});
+  //var myLatlng = new google.maps.LatLng(20.291, 153.027);
+  var a= $("#description").val();
+   //alert (a);
+  
+  var mapOptions = {
+    zoom: 12,
+    center: myLatlng,
+	
+    //mapTypeId: google.maps.MapTypeId.TERRAIN
+  };
+  
+  var map = new google.maps.Map(document.getElementById('map-canvas'),
+      mapOptions);
+
+ 
+ 
+ 
+ 
+ // drwow visit path========================
+
+ var a= $("#description").val();
+
+  var fields = a.split('rdrd');
+  var total_fields=a.split("rdrd").length-1
+  //alert (total_fields);
+  
+  
+var locations = [];
+ var field=[];
+ var j=0;
+ var lineCoordinates=[]
+ 
+ var lineSymbol = {
+    path: google.maps.SymbolPath.FORWARD_CLOSED_ARROW
+  };
+ 
+ for (j = 0; j < total_fields; j++){
+	 
+	 var s=0;
+	 //field.push(fields[j])
+	 var fields_single = fields[j].split(',');
+  	 var total_fields_single=fields[j].split(",").length-1
+	 //alert (total_fields_single);
+	 var arr=[];
+	 
+	 for (s = 0; s < total_fields_single; s++){
+		 arr.push(fields_single[s]);
+		 lineCoordinates.push(new google.maps.LatLng(fields_single[1],fields_single[2]));
+		// alert (lineCoordinates.length);
+		   // if (lineCoordinates.length>1){
+				 
+				//var flightPlanCoordinates ={{=map_string_ac}};
+				//alert (s);
+				if (s > 0){
+					var flightPlanCoordinates =lineCoordinates;
+			
+					   var flightPath = new google.maps.Polyline({
+						path: flightPlanCoordinates,
+	
+						//path: lineCoordinates,
+						strokeColor: '#C00A29',
+						icons: [{
+						  icon: lineSymbol,
+						  offset: '100%',
+						  strokeOpacity: 1.0,
+						  strokeWeight: 2
+						}],
+						map: map
+					  });
+			  }
+  		}
+	locations.push(arr);
+	
+ }
+ 
+ 
+ 
+ 
+ 
+ 
+// ==============visit path==================
+ 
+  // [START region_polyline]
+  // Define a symbol using a predefined path (an arrow)
+  // supplied by the Google Maps JavaScript API.
+ /* var lineSymbol = {
+    path: google.maps.SymbolPath.FORWARD_CLOSED_ARROW
+  };
+	
+  // Create the polyline and add the symbol via the 'icons' property.
+ 	
+ 
+   var fields = a.split('rdrd');
+  var total_fields=a.split("rdrd").length-1
+  //alert (total_fields);
+  
+  
+var locations = [];
+ var field=[];
+ var j=0;
+ var lineCoordinates=[]
+ for (j = 0; j < total_fields; j++){
+	 
+	 var s=0;
+	 //field.push(fields[j])
+	 var fields_single = fields[j].split(',');
+  	 var total_fields_single=fields[j].split(",").length-1
+	 //alert (total_fields_single);
+	 var arr=[];
+	 
+	 for (s = 0; s < total_fields_single; s++){
+		 arr.push(fields_single[s]);
+		 lineCoordinates.push(new google.maps.LatLng(fields_single[1],fields_single[2]));
+		// alert (lineCoordinates.length);
+		   // if (lineCoordinates.length>1){
+				 
+				 var line = new google.maps.Polyline({
+					path: lineCoordinates,
+					geodesic: true,
+					icons: [{
+					  //icon: lineSymbol,
+					  strokeColor: '#FF0000',
+					  strokeOpacity: 1.0,
+    				  strokeWeight: 2,
+					  offset: '100%'
+					}],
+					map: map
+					
+				  });
+			 //}
+  		}
+	locations.push(arr);
+	
+ }*/
+ 
+ /* var lineCoordinates = [
+    new google.maps.LatLng(22.291, 153.027),
+    new google.maps.LatLng(18.291, 153.027)
+  ];*/
+
+  
+// [END region_polyline]
+
+
+
+
+
+
+// Show Police Station================================
+ 
+  var p_station=$("#desc_p").val();
+  var fields_p = p_station.split('rdrd');
+  var total_fields_p=p_station.split("rdrd").length-1
+  //alert (p_station);
+  
+  
+ var locations_p = [];
+ var field_p=[];
+ var p=0;
+
+ for (p = 0; p < total_fields_p; p++){
+	 var st=0;
+	 //field.push(fields[j])
+	 var fields_single_p = fields_p[p].split(',');
+  	 var total_fields_single_p=fields_p[p].split(",").length-1
+	// alert (total_fields_single);
+	 var arr_p=[];
+	 for (st = 0; st < total_fields_single_p; st++){
+		 
+		 arr_p.push(fields_single_p[st]);
+  		}
+	locations_p.push(arr_p);
+	
+ }
+  
+ 
+ var marker_p, ip;
+ var icons_p="{{=URL('static','images/uni_small.png')}}";
+ 
+ for (ip = 0; ip < locations_p.length; ip++) {  
+ 	  //	 alert (locations_p.length);
+        marker_p = new google.maps.Marker({
+
+        position: new google.maps.LatLng(locations_p[ip][1], locations_p[ip][2]),
+		map: map,
+		icon: icons_p
+//		icon: iconBase + 'http://127.0.0.1:8000/touries/static/images/loading143.gif'
+	   
+      });
+
+	  
+      google.maps.event.addListener(marker_p, 'click', (function(marker_p, ip) {
+        return function() {
+          infowindow.setContent(locations_p[ip][0]);
+          infowindow.open(map, marker_p);
+        }
+      })(marker_p, ip));
+  
+  
+  }  
+  
+  
+//======================================
+ var infowindow = new google.maps.InfoWindow();
+ var marker, i;
+ var icons="{{=URL('static','images/uni_small.png')}}";
+ 
+ for (i = 0; i < locations.length; i++) {  
+ 	  //alert (locations[i][1]);
+      marker = new google.maps.Marker({
+
+        position: new google.maps.LatLng(locations[i][1], locations[i][2]),
+		map: map,
+		icon: icons
+//		icon: iconBase + 'http://127.0.0.1:8000/touries/static/images/loading143.gif'
+	   
+      });
+//alert (locations.length);
+	  
+      google.maps.event.addListener(marker, 'click', (function(marker, i) {
+        return function() {
+		
+		// var arr = [9, 9, 111, 2, 3, 4, 4, 5, 7];
+		/*var sorted_arr = locations.sort(); // You can define the comparing function here. 
+									 // JS by default uses a crappy string compare.
+		
+		for (var d = 0; d < locations.length - 1; d++) {
+			var results =sorted_arr[d][0];
+			//alert (sorted_arr[i][1]);
+			if ((sorted_arr[d + 1][1] == sorted_arr[d][1])) {
+				results=results+sorted_arr[d][0]
+				//results.push(sorted_arr[i]);
+			}
+		}	
+		 infowindow.setContent(results);*/
+          infowindow.setContent(locations[i][0]);
+          infowindow.open(map, marker);
+        }
+      })(marker, i));
+  
+  
+  }
+//==================================
+
+
+}
+
+google.maps.event.addDomListener(window, 'load', initialize);
+
+    </script>
+  </head>
+  <body>
+  
+  <table width="100%" border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <td>&nbsp;</td>
+  
+    <td>
+	<div  id="map-canvas" style="height:600px; width:900px"></div>	</td>
+   
+    <td>
+	  <div align="left">
+	    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+	      <tr>
+	        <td>&nbsp;</td>
+      <td>&nbsp;</td>
+      <td>&nbsp;</td>
+    </tr>
+	      <tr>
+	        <td>&nbsp;</td>
+      <td>&nbsp;</td>
+      <td>&nbsp;</td>
+    </tr>
+	      <tr>
+	        <td>RepID</td>
+      <td>:</td>
+	  <td>{{=session.search_rep_map}}</td>
+  </tr>
+  <tr>
+    <td>Name</td>
+      <td>:</td>
+	  <td>{{=session.search_repname_map}}</td>
+    </tr>
+	      <tr>
+	        <td>Date</td>
+      <td>:</td>
+	  <td>{{=session.search_date_map}}</td>
+    </tr>
+	      
+	      
+	      {{
+	      map_string=map_string_name.split('rdrd',map_string_name.count('rdrd'))
+	      map_string_total=map_string_name.count('rdrd')
+	      #=map_string_total
+	      }}
+	      {{
+	      r=0
+	      while (r < map_string_total ):
+	      
+	      show_v_info_single=map_string[r].split(',',map_string[r].count(','))
+	      show_v_info = show_v_info_single[0]
+	      
+	      show_v_info_list = show_v_info.split('</br>',show_v_info.count('</br>'))
+	      outlet=show_v_info_list[0]
+	      start_time=show_v_info_list[1]
+	      end_time=show_v_info_list[2]
+	      lat=show_v_info_single[1]
+	      long=show_v_info_single[2]
+	      }}
+	      <tr>
+	        <td colspan="3"><div style="color:#C00A29">{{=outlet}}</div>
+      {{=start_time}}  </br>
+	          {{=end_time}}</br>
+	          Location:{{=lat}},{{=long}}
+	          
+	          <div style="background-color:#408080; height:2px"></div>
+	{{
+	r=r+1
+	pass}}	  </td>
+      </tr>
+        </table>
+    </div></td>
+  </tr>
+</table>
+
+   
+	
+	<input name="description" id="description" value="{{=map_string_name}}" type="hidden">
+	
+	<input name="description_ac" id="description_ac" value="{{=map_string_name_ac}}" type="hidden">
+	<input name="desc_p" id="desc_p" placesholder="" value="{{=map_string_name_p}}" type="hidden">
+  </body>
+</html>

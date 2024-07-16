@@ -1,0 +1,218 @@
+{{extend 'layout.html'}}
+   
+<link rel="stylesheet" href="{{=URL('static', 'js_and_css/ui.theme.css')}}" type="text/css" />
+<link rel="stylesheet" href="{{=URL('static', 'js_and_css/jquery-ui.css')}}" type="text/css" />
+<link rel="stylesheet" href="{{=URL('static', 'js_and_css/style.css')}}" type="text/css" />
+<script src="{{=URL('static','js_and_css/jquery-1.8.2.js')}}"></script>
+<script src="{{=URL('static','js_and_css/jquery-ui.js')}}"></script>
+  
+<style type="text/css">
+ input[type=text], input[type=password],  select {
+    margin: 2px 0px 2px 0px;
+	width:200px;
+}
+
+div.error {
+    padding: 0px;
+	width:inherit;
+	margin-left:0px;
+}
+.page_color,body{
+	font-family:Arial, Helvetica, sans-serif;
+	font-size:13px;	
+	}
+	
+ </style>
+ 
+ 
+ <script>
+var base_url=location.protocol + "//" + location.hostname + (location.port && ":" + location.port) + "/{{=request.application}}/";
+
+$(function() {
+	 	var valueListStr="";		
+		$('#item_id_value').keyup(function(){
+			$.ajax({
+				  url: base_url+'default/get_item_list',
+				  success: function(resStr) {
+					  valueListStr=resStr
+				  }
+				});
+			
+			//-------------------------
+			var valueList = valueListStr.split(',');				
+			var searchValue=$("#item_id_value").val();
+			
+			//---------------- auto complete combo list
+			var valueList_new=new Array();
+			lc=0;
+			i =0;
+			var valueStr="";				
+			while (i < valueList.length)
+			{
+				valueStr=valueList[i];
+				i=i+1;					
+				var res=valueStr.toUpperCase().match(searchValue.toUpperCase());
+				if (res!=null){
+					valueList_new[lc]=valueStr;
+					lc=lc+1;
+					if (lc==30){
+						break;
+					};
+				}else{
+					continue;
+				}					
+			};
+			//alert (ref_list_new);
+			
+			//-------------- auto complete source
+			$( "input#item_id_value" ).autocomplete({
+				source: valueList_new
+			});
+		
+	  }); 
+	      
+	   	   
+}); 
+</script>
+
+<table width="100%"  border="0" cellspacing="0" cellpadding="0" style="background-color:#FFFFFF;" >
+  <tr height="30px" >
+    <td width="500"><span class="blackCatTitle">Restricted Stock Item</span></td>
+    
+	<form action="{{=URL(c='utility',f='settings_home')}}" method="post">
+	<td width="415" align="right"><!--<input name="" type="submit"  value="Back"/>--></td>
+	</form>
+	
+    <td>&nbsp;</td>
+  </tr>
+  <tr  height="1px" style="background-color:#CCCCCC;">
+	    <td colspan="3" ></td>
+  </tr>
+  </table>
+  
+  
+  <table width="100%" height="500px"  border="0" cellspacing="0" cellpadding="0" class="page_color"  >
+  <tr height="100%"  style="vertical-align:top;">
+    <td>
+	
+	<table width="900px"  border="0" cellpadding="0" cellspacing="0"  >
+      <tr>
+        <td width="10">&nbsp;</td>
+        <td>&nbsp;</td>
+        <td>&nbsp;</td>
+      </tr>
+      <tr>
+        <td width="10">&nbsp;</td>
+        <td>&nbsp;</td>
+        <td valign="top">
+		{{#if access_permission==True:}} 
+          <table width="600" class="blackCat">
+		  {{=form.custom.begin}}            
+            <tr>
+              <td width="150" height="21"> Item ID </td>
+              <td width="200">{{=form.custom.widget.item_id}}</td>
+              <td>&nbsp;</td>
+              </tr>
+            <tr>
+              <td width="150" height="21">Quantity</td>
+              <td width="200" >{{=form.custom.widget.item_qty}}</td>
+              <td>&nbsp;</td>
+              </tr>
+            <tr>
+              <td height="21">Auto Voucher </td>
+              <td >{{=form.custom.widget.auto_voucher}}</td>
+              <td>&nbsp;</td>
+            </tr>
+            <tr>
+              <td height="21">Status</td>
+              <td >{{=form.custom.widget.status}}</td>
+              <td>&nbsp;</td>
+            </tr>
+            
+            <tr style="height:10px">
+              <td width="150"></td>
+              <td width="200"></td>
+              <td></td>
+            </tr>
+            
+            <tr>
+              <td width="150">&nbsp;</td>
+              <td width="200">{{=form.custom.submit}}</td>
+              <td>&nbsp;</td>
+            </tr>
+            <tr>
+              <td width="150" height="21">&nbsp;</td>
+              <td width="200">&nbsp;</td>
+              <td>&nbsp;</td>
+            </tr>
+		{{=form.custom.end}}
+		</table>     
+		{{#pass}}
+          
+                      
+			 <br />
+			 <table width="900" border="1" cellpadding="1" cellspacing="1" class="sample_border" >
+			 <form id="form1" name="form1" method="post" action="{{=URL(c='restricted_stock_item',f='restricted_stock_item_add')}}">
+               <tr align="left" height="20px" ;"vertical-align:middle">
+                 <td colspan="6"  >
+                 {{if session.item_id_value_restr=='' or session.item_id_value_restr==None:}}
+                   <input  name="item_id_value" type="text" id="item_id_value" size="25" value="" placeholder="Select Item ID/Name" autocomplete="off" style="width:300px"/>
+                 {{else:}}
+                   <input  name="item_id_value" type="text" id="item_id_value" size="25" value="{{=session.item_id_value_restr}}" placeholder="Select Item ID/Name" autocomplete="off" style="width:300px"/>
+                 {{pass}}
+                 
+                 </td>
+                 <td colspan="3" align="right"  ><input type="submit" name="btn_filter" id="btn_filter" value="Filter"   class="button_update"/>
+                  <input type="submit" name="btn_all" id="btn_all" value="All"   class="button_update"/></td>
+                </tr>
+			   </form>
+			   
+               <tr align="left" class="blackCatHead" height="20px" ;"vertical-align:middle">
+                 <td width="60"  >Item ID  </td>
+                 <td  >Item Name </td>
+                 <td width="80" align="center"  >Category</td>
+                 <td width="60" align="right"  >Distributor Price </td>
+                 <td width="60" align="right"  >Retail Price </td>
+                 <td width="80" align="right"  >Quantity</td>
+                 <td width="80" align="center"  >Auto V. </td>
+                 <td width="80" align="center"  >Status</td>
+                 <td width="30" s="s" ></td>
+               </tr>
+	  
+			   {{for i,record in enumerate(records):}}
+			    {{ if i==items_per_page: break}} 
+				<tr  align="left" class="blackCat"  style="vertical-align:middle; font-size:11px;"> 
+				  <td width="60" >{{=record.item_id}}</td>
+				  <td >{{=record.item_name}}</td>
+				  <td width="80" align="center" >{{=record.item_cat}}</td>
+				  <td width="60" align="right" >{{=record.dist_price}}</td>
+				  <td width="60" align="right" >{{=record.retail_price}}</td>
+				  <td width="80" align="right" >{{=record.item_qty}}</td>
+				  <td width="80" align="center" >{{=record.auto_voucher}}</td>
+				  <td width="80" align="center" >{{=record.status}}</td>
+				  <form id="form1" name="form1" method="post" action="{{=URL(c='restricted_stock_item',f='restricted_stock_item_edit',args=[page,record.id])}}">
+				  <td width="30" align="right"  ><input type="submit" name="btn_go" id="btn_go" value="&gt;&gt;"  class="button_update"/></td>
+			      </form>
+				</tr>
+				
+			   {{pass}}
+		    </table>
+			 
+		  </td>
+      </tr>
+    </table>
+
+{{if page:}}
+&nbsp;&nbsp;<a href="{{=URL(args=[page-page])}}">first</a> |
+&nbsp;&nbsp;<a href="{{=URL(args=[page-1])}}">previous</a> |
+{{pass}}
+
+{{if len(records)>items_per_page:}}
+&nbsp;&nbsp;<a href="{{=URL(args=[page+1])}}">next</a>
+{{pass}}
+	</td>
+  </tr>
+</table>
+<br />
+<br />
+

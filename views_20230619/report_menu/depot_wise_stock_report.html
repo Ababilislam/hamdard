@@ -1,0 +1,305 @@
+{{extend 'layout_report.html'}}
+
+
+<html>
+
+
+<head>
+
+<link rel="stylesheet" href="{{=URL('static', 'js_and_css/jquery-ui.css')}}" type="text/css" />
+
+<script src="{{=URL('static','js_and_css/jquery-1.8.2.js')}}"></script>
+<script src="{{=URL('static','js_and_css/jquery-ui.js')}}"></script>
+
+ <style type="text/css">
+
+.page_color,body{
+	font-family:Arial, Helvetica, sans-serif;
+	font-size:13px;	
+}
+
+</style>
+ 
+<script type="text/javascript">
+
+
+function print_page()
+
+
+  {
+
+
+    window.print()
+
+
+  }
+
+
+</script>
+
+
+
+<script>
+var base_url=location.protocol + "//" + location.hostname + (location.port && ":" + location.port) + "/{{=request.application}}/";
+
+$(function() {
+		
+		var storeListStr=''
+		$.ajax({
+			  url: base_url+'default/get_depot_store_list_all?depotid={{=depot_id}}',
+			  success: function(resStr2) {
+				  storeListStr=resStr2;
+			  }
+			});
+		
+		var batchListStr="";
+		
+	 	var valueListStr=localStorage.itemDataStr;
+		
+		$('#item_details').keyup(function(){
+
+			//-------------------------
+			var valueList = valueListStr.split(',');				
+
+			var searchValue=$("#item_details").val();
+
+			//---------------- auto complete combo list
+
+			var valueList_new=new Array();
+
+			lc=0;
+
+			i =0;
+
+			var valueStr="";				
+
+			while (i < valueList.length)
+
+			{
+				var valueStrList=valueList[i].split('|');				
+				valueStr=valueStrList[1]+'|'+valueStrList[0]
+				//valueStr=valueList[i];+'|'+valueStrList[2]+'|'+valueStrList[4]
+				
+				i=i+1;					
+
+				var res=valueStr.toUpperCase().match(searchValue.toUpperCase());
+
+				if (res!=null){
+
+					valueList_new[lc]=valueStr;
+
+					lc=lc+1;
+
+					if (lc==30){
+
+						break;
+
+					};
+
+				}else{
+
+					continue;
+
+				}					
+
+			};
+
+			//alert (ref_list_new);
+
+			//-------------- auto complete source
+
+			$( "input#item_details" ).autocomplete({
+
+				source: valueList_new
+
+			});
+
+	  }); 
+	  
+	  //------------Depot Store
+	  $('#store_idname').keyup(function(){	
+		
+		//-------------------------
+		var ref_list = storeListStr.split(',');
+		var ref_name=$("#store_idname").val();
+		
+		//---------------- auto complete combo list
+		var ref_list_new=new Array();
+		lc=0;
+		i =0;
+		var refStr="";				
+		while (i < ref_list.length)
+		{
+			refStr=ref_list[i];
+			i=i+1;					
+			var res=refStr.toUpperCase().match(ref_name.toUpperCase());
+			if (res!=null){
+				ref_list_new[lc]=refStr;
+				lc=lc+1;
+				if (lc==30){
+					break;
+				};
+			}else{
+				continue;
+			}					
+		};
+		//alert (ref_list_new);
+		
+		//-------------- auto complete source
+		$( "input#store_idname" ).autocomplete({
+			source: ref_list_new
+		});
+		
+	  });
+	  //-----------
+
+}); 
+
+</script>
+
+
+</head>
+
+
+<body>
+
+{{today=datetime.datetime.strptime(current_date,'%Y-%m-%d')}}
+
+
+<div class="blackCatTitle">Branch wise stock report</div><br/>
+
+
+<table width="800" border="0" cellspacing="0" cellpadding="0">
+
+<form id="form1" name="form1" method="post" action="{{=URL(c='report_menu',f='depot_wise_stock_report',vars=dict(page=0,depot_id=depot_id,depot_name=depot_name))}}">
+	
+  <tr >
+    <td width="110" style="padding-left:0px;"><b>Branch ID</b></td>
+    <td width="5"><b>:</b></td>
+    <td width="150" align="left">{{=depot_id}} </td>    
+    <td width="150" align="left">    
+     {{if session.store_idname=='' or session.store_idname==None:}}
+        <input  name="store_idname" type="text" id="store_idname" size="25" value="" placeholder="Select Store" autocomplete="off" style="width:180px"/>
+      {{else:}}
+        <input  name="store_idname" type="text" id="store_idname" size="25" value="{{=session.store_idname}}" placeholder="Select Store" autocomplete="off" style="width:180px"/>
+      {{pass}}    
+    </td>
+    
+    <td align="right">
+    {{if session.itemIdName=='' or session.itemIdName==None:}}
+        <input  name="item_details" type="text" id="item_details" size="25" value="" placeholder="Select Item" autocomplete="off" style="width:250px"/>
+      {{else:}}
+        <input  name="item_details" type="text" id="item_details" size="25" value="{{=session.itemIdName}}" placeholder="Select Item" autocomplete="off" style="width:250px"/>
+      {{pass}}    
+    </td>
+    <td width="30" align="left"><input type="submit" name="btn_filter" value="Search" style="width:60px;"/></td>
+	
+  </tr>
+
+  <tr>
+    <td width="110" style="padding-left:0px;"><b>Branch Name</b></td>
+    <td width="5"><b>:</b></td>
+    <td width="300" colspan="2">{{=depot_name}} </td>
+    <td style="text-align:right">
+    {{if session.without_zero=='' or session.without_zero==None:}}
+        <input type="checkbox" style="height:25px; width:25px;" name="without_zero" value="YES"/>&nbsp;Without Zero (0)
+    {{else:}}
+      	<input type="checkbox" style="height:25px; width:25px;" name="without_zero" value="YES" checked/>&nbsp;Without Zero (0)
+    {{pass}}    
+    </td>
+    <td style="text-align:right"><input type="submit" name="btn_all" value="ALL" style="width:60px;"/></td>
+
+  </tr>
+</form>
+
+</table>
+
+
+<table width="800" border="1" cellspacing="1" cellpadding="1"  class="sample_border"> 
+          <tr class="table_title">
+            <td width="200" align="left">Store</td>
+            <td width="80" >Item ID </td> 
+            <td >Name</td>
+            <td width="60" align="center">Unit Type </td>
+            <td width="60" align="center">Batch ID</td>
+            <td width="80" align="center">Expiary Date</td>
+
+
+            <td width="60" align="right">Stock Quantity</td>
+            <td width="60" align="right">Blocked Quantity</td>
+            <td width="60" align="right">Available Quantity</td>
+
+
+  </tr>   
+
+		  {{ p=0}}
+		  {{ c=''}}
+
+		   {{for i,record in enumerate(stockBalanceRecords):}}
+				
+                {{ if i==items_per_page: break}}
+                
+    			{{store_id=record.sm_depot_stock_balance.store_id}}
+                {{store_name=record.sm_depot_stock_balance.store_name}}
+                {{item_id=record.sm_depot_stock_balance.item_id}}
+                {{batch_id=record.sm_depot_stock_balance.batch_id}}
+                {{expiary_date=record.sm_depot_stock_balance.expiary_date}}
+                {{quantity=record.sm_depot_stock_balance.quantity}}
+                {{blocked_quantity=record.sm_depot_stock_balance.block_qty}}
+                {{item_name=record.sm_item.name}}
+                {{unit_type=record.sm_item.unit_type}}
+                
+                {{if expiary_date!=None:}}
+                	{{expiaryDate=datetime.datetime.strptime(str(expiary_date),'%Y-%m-%d')}}
+                {{pass}}
+                
+                {{ if p==0:}} {{c ='table_row1'}}{{ p=1}} {{ else:}} {{c ='table_row2'}}{{ p=0}} {{ pass}} 				 
+    			
+                {{if expiaryDate < today:}}
+                	<tr class='{{=c}}' style="background-color:#FFE8E8">
+                {{else:}}
+                    <tr class='{{=c}}' >
+                {{pass}}
+                	
+     				<td width="200" align="left">{{=store_id}}|{{=store_name}}</td>
+                    <td width="80" >{{=item_id}}</td>
+                    <td >{{=item_name}}</td>
+                    <td width="60" align="center">{{=unit_type}}</td>
+                    <td width="60" align="center">{{=batch_id}}</td>
+                    <td width="80" align="center">{{if expiary_date!=None:}}{{=expiary_date}}{{pass}}</td>
+                    <td width="60" align="right">{{=quantity}}</td>
+                    <td width="60" align="right">{{=blocked_quantity}}</td>
+                    <td width="60" align="right">{{=quantity-blocked_quantity}}</td>
+                </tr>
+		   {{pass}}
+
+</table>
+
+
+{{if page:}}
+
+
+{{ =A('first', _href =URL(c ='report_menu',f='depot_wise_stock_report',vars=dict(page=(page-page),depot_id=depot_id,depot_name=depot_name)))}} |
+
+{{ =A('previous', _href =URL(c ='report_menu',f='depot_wise_stock_report',vars=dict(page=(page-1),depot_id=depot_id,depot_name=depot_name)))}} |
+
+{{pass}}
+
+
+{{if len(stockBalanceRecords)>items_per_page:}}
+{{ =A('next', _href =URL(c ='report_menu',f='depot_wise_stock_report',vars=dict(page=(page+1),depot_id=depot_id,depot_name=depot_name)))}}
+{{pass}}
+
+
+<table width="800" border="0">
+  <tr>
+    <td align="left" class="report_body">{{ =A('download', _href =URL(r=request, c ='report_menu',f ='download_depot_wise_stock',vars=dict(depot_id=depot_id,depot_name=depot_name)))}}</td>
+    <td align="right" class="report_body"><a href="" onClick="print_page()" style="text-decoration:none">Print</a></td>
+  </tr>
+</table>
+
+</body>
+
+</html>
+
+

@@ -1,0 +1,196 @@
+{{extend 'layout_invoice.html'}}
+
+<html>
+
+<head>
+
+
+
+</head>
+
+<body>
+
+		<!--<img src="{{#=URL('static','images/SKFLogo.png')}}"/> style="background:url({{#=URL('static','images/SKFLogo.png')}}); background-repeat:no-repeat; background-position:center"-->
+        
+        
+<table width="900" border="0" cellspacing="1" cellpadding="1" >         
+
+		<tr style="font-size:15px; font-weight:bold">
+		  <th colspan="3" style="vertical-align:middle">&nbsp;</th>
+		  <th colspan="5" align="center" ><span style="font-size:25px; font-weight:bold;border-bottom:solid; border-bottom-color:#999">Return</span></th>
+		  <th align="center" >&nbsp;</th>
+  </tr>
+		<tr style="font-size:15px;">
+		  <td align="left">Invoice SL</td>
+		  <td style="vertical-align:middle"><strong>:</strong></td>
+		  <td colspan="2" align="left" style="vertical-align:middle">INV{{=depot_id}}-{{if invoice_sl!=0:}}{{=invoice_sl}}{{pass}}</td>
+		  <td align="left" >&nbsp;</td>
+		  <td width="5" align="left" >&nbsp;</td>
+		  <td colspan="3" align="left" ><!--SKSH-->
+	      <strong>RET{{=depot_id}}<b>-</b>{{=sl}}</strong></td>
+  </tr>
+		<tr >
+		  <td align="left">Client/Retailer ID</td>
+		  <td ><strong>:</strong></td>
+		  <td colspan="2" align="left">{{=client_id}} | {{=client_name}}</td>
+		  <td rowspan="3" align="center" valign="middle" ><img src="{{=URL('static','images/comp_logo1.png')}}"/></td>
+	      <td valign="top" >&nbsp;</td>
+	      <td valign="top" >Return  Date</td>
+	      <td valign="top" ><b>:</b></td>
+	      <td valign="top" >{{if return_date!=None:}}{{=return_date.strftime('%d-%b-%y')}}{{pass}}</td>
+  </tr>
+		  <tr >
+		    <td width="120" valign="top" >Rep/Sup ID</td>
+		    <td width="1" valign="top" ><strong>:</strong></td>
+		    <td width="240" colspan="2" valign="top" >{{=rep_id}} | {{=rep_name}}</td>
+		    <td width="5" valign="top" >&nbsp;</td>
+		    <td width="100" valign="top" >Status</td>
+		    <td width="1" valign="top" ><b>:</b></td>
+		    <td width="180" valign="top" >{{=status}}</td>
+	      </tr>
+		  <tr >
+		    <td width="120" valign="top" >Cause</td>
+		    <td width="1" valign="top" ><strong>:</strong></td>
+		    <td colspan="2" valign="top" >{{=cause}}</td>
+		    <td valign="top" >&nbsp;</td>
+		    <td width="100" valign="top" >&nbsp;</td>
+		    <td width="1" valign="top" >&nbsp;</td>
+		    <td width="180" valign="top" >&nbsp;</td>
+	      </tr>
+		  <tr >
+		    <td width="120" valign="top" >Description</td>
+		    <td width="1" valign="top" ><strong>:</strong></td>
+		    <td colspan="4" valign="top" >{{=req_note}}</td>
+		    <td width="100" valign="top" >&nbsp;</td>
+		    <td width="1" valign="top" >&nbsp;</td>
+		    <td width="180" valign="top" ><strong>{{=depotName}}</strong></td>
+	      </tr>
+    </table>
+  <table width="900" border="1" cellpadding="1" cellspacing="1" class="sample_border" style="border: solid 1px #C4C4C4">
+
+  <tr align="left" class="blackCatHead"  height="20px" style="vertical-align:middle; background-color:#E6E6E6">
+
+    <td width="60" >Item ID</td>
+    <td >Item Name</td>
+    <td width="60" >BatchID</td>
+    <td width="80" align="center"  >Category</td>
+    <td width="60" align="center"  >Inv. (Qty+BQty)</td>
+    <td width="60" align="center"  >PrevRet. (Qty+BQty)</td>
+    <td width="60" align="center"  >Ret.Qty</td>
+    <td width="60" align="center"  >Ret.BQty</td>
+    <td width="60" align="center"  >TP</td>
+    <td width="60" align="center"  >Vat</td>
+
+    <td width="100" align="right"  >Cost Adjustment</td>
+
+    </tr>
+
+	 {{ p=0}} 		  
+
+    {{gross_total=0.0}}
+	{{total_qty=0}}
+
+
+    {{for i in sorted(range(len(showList))):}}
+
+	{{dictData=showList[i]}}
+
+
+    {{qty=0;rate=0}}
+
+          <tr  align="left" class="blackCat"  style="vertical-align:middle; background-color:#FBFBFB">
+        
+            <td width="60" >{{=dictData['item_id']}}</td>
+            <td >{{=dictData['item_name']}}</td>
+            <td width="60" >{{=dictData['batch_id']}}</td>
+            <td width="80" align="center" >{{=dictData['category_id']}}</td>
+            <td width="60" align="center" >{{=dictData['inv_quantity']}}+{{=dictData['inv_bonus_qty']}}</td>
+            <td width="60" align="center" >{{=dictData['prev_return_qty']}}+{{=dictData['prev_return_bonus_qty']}}</td>
+            <td width="60" align="center" >{{qty=dictData['quantity']}}{{=qty}} {{total_qty+=qty}}</td>
+            <td width="60" align="center" >{{bonus_qty=int(dictData['bonus_qty'])}}{{=bonus_qty}}</td>
+            <td width="60" align="center" >{{rate=dictData['price']}}{{=rate}}</td>
+            <td width="60" align="center" >{{itemVat=dictData['item_vat']}}{{=itemVat}}</td>
+        
+            <td width="100" align="right" >{{amt=qty*(rate+itemVat)}}{{gross_total+=amt}}{{=amt}}</td>
+        
+          </tr>
+
+    {{pass}}
+
+
+
+    <tr  align="left" class="blackCat"  style="background-color:#FBFBFB">
+      <td align="left" style="border-bottom-style:none; border-left:none; border-top:none">&nbsp;</td>
+      <td align="left" style="border-bottom-style:none; border-left:none; border-top:none">&nbsp;</td>
+      <td align="right" style="border-bottom-style:none; border-left:none; border-top:none">&nbsp;</td>
+      <td align="right" style="border-bottom-style:none; border-left:none; border-top:none">&nbsp;</td>
+      <td align="center" style="border-bottom-style:none; border-left:none; border-top:none">&nbsp;</td>
+      <td align="center" style="border-bottom-style:none; border-left:none; border-top:none">&nbsp;</td>
+      <td align="center" style="border-bottom-style:none; border-left:none; border-top:none">&nbsp;</td>
+      <td align="right" style="border-bottom-style:none; border-left:none; border-top:none">&nbsp;</td>
+      <td align="right" style="border-bottom-style:none; border-left:none; border-top:none">&nbsp;</td>
+      <td align="right" style="border-bottom-style:none; border-left:none; border-top:none">Total</td>
+      <td align="right" >{{=gross_total}}</td>
+    </tr>
+    <tr  align="left" class="blackCat"  style="background-color:#FBFBFB">
+      <td align="left" style="border-bottom-style:none; border-left:none; border-top:none">&nbsp;</td>
+      <td align="left" style="border-bottom-style:none; border-left:none; border-top:none">&nbsp;</td>
+      <td align="right" style="border-bottom-style:none; border-left:none; border-top:none">&nbsp;</td>
+      <td align="right" style="border-bottom-style:none; border-left:none; border-top:none">&nbsp;</td>
+      <td align="center" style="border-bottom-style:none; border-left:none; border-top:none">&nbsp;</td>
+      <td align="center" style="border-bottom-style:none; border-left:none; border-top:none">&nbsp;</td>
+      <td align="center" style="border-bottom-style:none; border-left:none; border-top:none">&nbsp;</td>
+      <td align="right" style="border-bottom-style:none; border-left:none; border-top:none">&nbsp;</td>
+      <td align="right" style="border-bottom-style:none; border-left:none; border-top:none">&nbsp;</td>
+      <td align="right" style="border-bottom-style:none; border-left:none; border-top:none">Discount</td>
+      <td align="right" >{{=discount}}</td>
+    </tr>
+    <tr  align="left" class="blackCat"  style="background-color:#FBFBFB">
+    <td align="left" style="border-bottom-style:none; border-left:none; border-top:none">&nbsp;</td>
+    <td align="left" style="border-bottom-style:none; border-left:none; border-top:none">&nbsp;</td>
+    <td align="right" style="border-bottom-style:none; border-left:none; border-top:none">&nbsp;</td>
+    <td width="80" align="right" style="border-bottom-style:none; border-left:none; border-top:none"><strong>Total</strong></td>
+    <td align="center" style="border-bottom-style:none; border-left:none; border-top:none">&nbsp;</td>
+    <td align="center" style="border-bottom-style:none; border-left:none; border-top:none">&nbsp;</td>
+    <td align="center" style="border-bottom-style:none; border-left:none; border-top:none">{{=total_qty}}</td>
+    <td align="right" style="border-bottom-style:none; border-left:none; border-top:none">&nbsp;</td>
+    <td align="right" style="border-bottom-style:none; border-left:none; border-top:none">&nbsp;</td>
+    <td align="right" style="border-bottom-style:none; border-left:none; border-top:none">Net Total</td>
+    <td align="right" ><strong>{{=easy_format(gross_total-discount)}}</strong></td>
+  </tr>
+  
+</table>
+<table width="900" >
+    <tr>
+      <td width="100" align="left">&nbsp;</td>
+      <td align="left">&nbsp;</td>
+    </tr>
+    <tr>
+      <td width="100" align="left"><strong>Comments:</strong></td>
+      <td align="left"><strong><!--Transcom Distribution Co. Ltd.-->
+      </strong></td>
+    </tr>
+</table>
+<br/>
+<br/>
+<table width="900" >
+	<tr>
+	  <td >{{=updatedBy}}</td>
+	  <td >&nbsp;</td>
+	  <td >&nbsp;</td>
+  </tr>
+ <tr style="height:2px;">
+	  <td align="center" style="height:2px;">____________________</td>
+	  <td align="center" style="height:2px;">______________________________________</td>
+	  <td width="150" align="right" style="height:2px;">_______________</td>
+  </tr>
+	<tr>
+	  <td width="150" align="left"><strong>Prepared By</strong></td>
+	  <td align="center"><strong>for {{=session.cName}}</strong></td>
+	  <td width="150" align="right"><strong>Checked By</strong></td>
+  </tr>
+</table>
+
+</body>
+</html>
+

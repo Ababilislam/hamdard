@@ -1,0 +1,905 @@
+{{extend 'layout.html'}}
+
+<link rel="stylesheet" href="{{=URL('static', 'js_and_css/ui.theme.css')}}" type="text/css" />
+
+<link rel="stylesheet" href="{{=URL('static', 'js_and_css/jquery-ui.css')}}" type="text/css" />
+
+<link rel="stylesheet" href="{{=URL('static', 'js_and_css/style.css')}}" type="text/css" />
+
+<script src="{{=URL('static','js_and_css/jquery-1.8.2.js')}}"></script>
+
+<script src="{{=URL('static','js_and_css/jquery-ui.js')}}"></script>
+
+  
+
+  <style type="text/css">
+
+ input[type=text], input[type=password],  select {
+
+    margin: 2px 0px 2px 0px;
+
+	width:100px;
+
+}
+
+div.error {
+
+    padding: 0px;
+
+	width:inherit;
+
+	margin-left:0px;
+
+}
+
+
+#sm_search_date_from_dt,#sm_search_date_to_dt{
+ width:140px;
+ }
+ 
+.page_color,body{
+	font-family:Arial, Helvetica, sans-serif;
+	font-size:13px;
+	}
+
+ </style>
+
+ 
+
+ 
+
+ <script>
+
+var base_url=location.protocol + "//" + location.hostname + (location.port && ":" + location.port) + "/{{=request.application}}/";
+
+
+
+$(function() {
+
+	 	var valueListStr="";
+		var valueListStr5="";
+		
+		//----------
+		$.ajax({
+		  url: base_url+'default/get_area_list',
+		  success: function(resStr) {
+			  //valueListStr=resStr
+			  valueListStr5=resStr
+		  }
+		});
+		//--------------
+			
+		
+		//==============Delivery man auto complete
+	  
+	   var valueListStr4="";		
+
+		$('#dp_id').keyup(function(){
+
+			var depotValue=$("#depot_id_value").val().split('|')[0];
+
+			$.ajax({
+
+				  url: base_url+'default/get_depot_delivery_man_list?depot='+depotValue,
+
+				  success: function(resStr) {
+
+					  valueListStr4=resStr
+
+				  }
+
+				});
+
+			
+
+			//-------------------------
+
+			var valueList = valueListStr4.split(',');				
+
+			var searchValue=$("#dp_id").val();
+
+			
+
+			//---------------- auto complete combo list
+
+			var valueList_new=new Array();
+
+			lc=0;
+
+			i =0;
+
+			var valueStr="";				
+
+			while (i < valueList.length)
+
+			{
+
+				valueStr=valueList[i];
+
+				i=i+1;					
+
+				var res=valueStr.toUpperCase().match(searchValue.toUpperCase());
+
+				if (res!=null){
+
+					valueList_new[lc]=valueStr;
+
+					lc=lc+1;
+
+					if (lc==30){
+
+						break;
+
+					};
+
+				}else{
+
+					continue;
+
+				}					
+
+			};
+
+			//alert (ref_list_new);
+			
+			//-------------- auto complete source
+
+			$( "input#dp_id" ).autocomplete({
+
+				source: valueList_new
+
+			});
+
+	  });
+	  
+	  //==============Territory auto complete
+	  
+		$('#territory_id').keyup(function(){
+
+			var depotValue=$("#depot_id_value").val().split('|')[0];
+		
+			$.ajax({
+
+				  url: base_url+'default/get_area_list',
+
+				  success: function(resStr) {
+
+					  valueListStr5=resStr
+
+				  }
+
+				});
+
+			
+
+			//-------------------------
+
+			var valueList = valueListStr5.split(',');				
+
+			var searchValue=$("#territory_id").val();
+
+			
+
+			//---------------- auto complete combo list
+
+			var valueList_new=new Array();
+
+			lc=0;
+
+			i =0;
+
+			var valueStr="";				
+
+			while (i < valueList.length)
+
+			{
+
+				valueStr=valueList[i];
+
+				i=i+1;					
+
+				var res=valueStr.toUpperCase().match(searchValue.toUpperCase());
+
+				if (res!=null){
+
+					valueList_new[lc]=valueStr;
+
+					lc=lc+1;
+
+					if (lc==30){
+
+						break;
+
+					};
+
+				}else{
+
+					continue;
+
+				}					
+
+			};
+
+			//alert (ref_list_new);
+			
+			//-------------- auto complete source
+
+			$( "input#territory_id" ).autocomplete({
+
+				source: valueList_new
+
+			});
+
+	  });
+	  
+	  //==============	
+
+	   var valueListStr2="";		
+
+		$('#payment_customer_id').keyup(function(){
+
+			var depotValue = '{{=session.depot_id}}'//$("#depot_id").val().split('|')[0];
+
+			$.ajax({
+
+				  url: base_url+'default/get_depot_client_list?depot='+depotValue,
+
+				  success: function(resStr) {
+
+					  valueListStr2=resStr
+
+				  }
+
+				});
+
+			
+
+			//-------------------------
+
+			var valueList = valueListStr2.split(',');				
+
+			var searchValue=$("#payment_customer_id").val();
+
+			
+
+			//---------------- auto complete combo list
+
+			var valueList_new=new Array();
+
+			lc=0;
+
+			i =0;
+
+			var valueStr="";				
+
+			while (i < valueList.length)
+
+			{
+
+				valueStr=valueList[i];
+
+				i=i+1;					
+
+				var res=valueStr.toUpperCase().match(searchValue.toUpperCase());
+
+				if (res!=null){
+
+					valueList_new[lc]=valueStr;
+
+					lc=lc+1;
+
+					if (lc==30){
+
+						break;
+
+					};
+
+				}else{
+
+					continue;
+
+				}
+
+			};
+
+			
+
+			//-------------- auto complete source
+
+			$( "input#payment_customer_id" ).autocomplete({
+
+				source: valueList_new
+
+			});
+
+	  });
+	  
+	  
+}); 
+
+
+
+</script>
+
+ 
+
+ 
+
+ <body>
+
+<table width="100%"  border="0" cellspacing="0" cellpadding="0" style="background-color:#FFFFFF;" >
+
+  <tr height="30px" >
+
+    <td width="500"><span class="blackCatTitle">Payment Collection</span></td>    
+
+	<td width="515" align="right">&nbsp;</td>	
+
+    <td>&nbsp;</td>
+
+  </tr>
+
+  <tr  height="1px" style="background-color:#CCCCCC;">
+
+	    <td colspan="3" ></td>
+
+  </tr>
+
+</table>
+
+  
+
+  <table width="100%" height="500px"  border="0" cellspacing="0" cellpadding="0" class="page_color"  >
+
+  <tr height="100%"  style="vertical-align:top;">
+
+    <td width="10">&nbsp;</td>
+
+    <td>
+
+		<table width="100%"  border="0" cellpadding="0" cellspacing="0"  >
+
+		  <tr>
+
+			<td width="1000" align="right">
+            <a href="{{=URL('payment_collection','collection_adjustment')}}" ><input type="button" name="btn_reverse" id="btn_reverse" value="Adjustment"  class="button_update"/></a>
+            &nbsp;&nbsp;
+            <a href="{{=URL('payment_collection','payment_list')}}" ><input type="button" name="btn_showpayment" id="btn_showpayment" value="Show Transaction"  class="button_update"/></a></td>
+			<td align="center">&nbsp;</td>
+
+      		</tr>
+
+      <tr>
+
+        <td colspan="2">
+
+          <table width="720" height="78" border="0" cellpadding="0" cellspacing="0">            
+
+            <tr>
+
+              <td width="100%" colspan="2">
+				
+              <table width="1000" border="1" cellpadding="1" cellspacing="1" class="sample_border" >
+
+                <form id="form1" name="form1" method="post" action="{{=URL(c='payment_collection',f='collection_list')}}">
+					
+                    {{if session.user_type!='Depot':}}
+                      <input  name="depot_id_value" type="hidden" id="depot_id_value" style="width:80px" value="" title="Depot ID" />
+					{{else:}}
+                      <input  name="depot_id_value" type="hidden" id="depot_id_value" style="width:80px; background-color:#F8F8F8" value="{{=session.depot_id}}" title="Depot ID" />
+                    {{pass}}
+                    
+                    <tr align="left" class="blackCatHead" height="20px" ;"vertical-align:middle">
+                      <td width="120" >&nbsp;</td>
+                      <td width="150"  title="Search Type">FromTo </td>
+                      <td width="150"  title="Search Type">(As of Date)</td>
+                      <td  title="Search Type">&nbsp;</td>
+                      <td rowspan="8" align="right" valign="middle" >&nbsp;</td>
+                      </tr>
+                    <tr align="left" class="blackCatHead" height="20px" ;"vertical-align:middle">
+
+                    <td width="120" >Invoice Date</td>
+
+						  <td colspan="3"  title="Search Type">{{=filterform.custom.widget.from_dt}}&nbsp;{{=filterform.custom.widget.to_dt}}</td>
+					  </tr>
+                  <tr align="left" class="blackCatHead" height="20px" ;"vertical-align:middle">
+                    <td width="120" >DP</td>
+                    <td width="300" colspan="3"  title="">
+                      
+                      {{if session.dp_id=='' or session.dp_id==None:}}
+                      <input  name="dp_id" type="text" id="dp_id" size="25" value="" placeholder="Select DP" autocomplete="off" style="width:300px"/>
+                      {{else:}}
+                      <input  name="dp_id" type="text" id="dp_id" size="25" value="{{=session.dp_id}}" placeholder="Select DP" autocomplete="off" style="width:300px"/>
+                      {{pass}}
+                      
+                    </td>
+                    </tr>
+                  <tr align="left" class="blackCatHead" height="20px" ;"vertical-align:middle">
+                    <td width="120" >Territory</td>
+                    <td colspan="3"  title="">                    
+                    {{if session.territory_id=='' or session.territory_id==None:}}
+                      <input  name="territory_id" type="text" id="territory_id" size="25" value="" placeholder="Select Territory" autocomplete="off" style="width:300px"/>
+                    {{else:}}
+                      <input  name="territory_id" type="text" id="territory_id" size="25" value="{{=session.territory_id}}" placeholder="Select Territory" autocomplete="off" style="width:300px"/>
+                    {{pass}}
+                      
+                    </td>
+                  </tr>
+                  <tr align="left" class="blackCatHead" height="20px" ;"vertical-align:middle">
+                    <td width="120" >Customer</td>
+                    <td colspan="3"  title="">
+                    {{if session.payment_customer_id=='' or session.payment_customer_id==None:}}
+                      <input  name="payment_customer_id" type="text" id="payment_customer_id" size="25" value="" placeholder="Select Customer" autocomplete="off" style="width:300px"/>
+                    {{else:}}
+                      <input  name="payment_customer_id" type="text" id="payment_customer_id" size="25" value="{{=session.payment_customer_id}}" placeholder="Select Customer" autocomplete="off" style="width:300px"/>
+                    {{pass}}                    
+                    </td>
+                  </tr>
+                  <tr align="left" class="blackCatHead" height="20px" ;"vertical-align:middle">
+                    <td width="120" >INV.SL</td>
+                    <td colspan="3"  title="">INV{{=session.depot_id}}-
+                    {{if session.payment_inv_sl=='' or session.payment_inv_sl==None:}}
+                      <input  name="payment_inv_sl" type="text" id="payment_inv_sl" size="25" value="" placeholder="Invoice SL" autocomplete="off" style="width:235px"/>
+                    {{else:}}
+                      <input  name="payment_inv_sl" type="text" id="payment_inv_sl" size="25" value="{{=session.payment_inv_sl}}" placeholder="Invoice SL" autocomplete="off" style="width:235px"/>
+                    {{pass}}
+                    </td>
+                  </tr>
+                  <tr align="left" class="blackCatHead" height="20px" ;"vertical-align:middle">
+                    <td width="120" >Des/Old Inv.No</td>
+                    <td colspan="2"  title="">
+                    {{if session.payment_old_inv_no=='' or session.payment_old_inv_no==None:}}
+                      <input  name="payment_old_inv_no" type="text" id="payment_old_inv_no" size="25" value="" placeholder="Like Old Invoice No" autocomplete="off" style="width:300px"/>
+                    {{else:}}
+                      <input  name="payment_old_inv_no" type="text" id="payment_old_inv_no" size="25" value="{{=session.payment_old_inv_no}}" placeholder="Like Old Invoice No" autocomplete="off" style="width:300px"/>
+                    {{pass}}
+                    </td>
+                    <td align="right"  title="">&nbsp;</td>
+                  </tr>
+                  <tr align="left" class="blackCatHead" height="20px" ;"vertical-align:middle">
+                    <td width="120" >Invoice Term</td>
+                    <td width="300" colspan="2"  title="">
+                    <select name="invoice_term" id="invoice_term" style="width:100px" >
+                      <option value="">ALL</option>
+                      {{for invRow in invoiceTermRows:}}
+                      	{{if session.invoice_term==invRow.cat_type_id:}}
+                        	<option value="{{=invRow.cat_type_id}}" selected="selected">{{=invRow.cat_type_id}}</option>
+                        {{else:}}
+                        	<option value="{{=invRow.cat_type_id}}">{{=invRow.cat_type_id}}</option>
+                        {{pass}}
+                      {{pass}}
+                      </select>
+                    
+                    </td>
+                    <td width="150" align="right"  title=""><input type="submit" name="btn_filter" id="btn_filter" value="Filter" style="height:30px; font-weight:bold; margin-top:5px" class="button_update" title=""/>
+                      &nbsp;
+                      <input type="submit" name="btn_all" id="btn_all" value=" ALL " style="height:30px;font-weight:bold;margin-top:5px" class="button_update"/></td>
+                    </tr>
+
+                  </form>
+
+			    </table>
+
+				<strong>Total : </strong>{{=totalRecords}}<br />                
+
+                <table width="1000" border="1" cellpadding="1" cellspacing="1" class="sample_border" >			  
+
+                  <tr align="left" class="blackCatHead"  height="20px" ;"vertical-align:middle">
+
+                      <td width="20" >&nbsp;</td>
+                      <td width="120" >INV.SL</td>
+
+                      <td width="50" >Ref.</td>
+                      <td width="50" >Territory</td>
+                      <td width="150"  >Customer/Client</td>
+                      <td width="150"  >DP</td>
+                      <td width="120"  >Inv. Date</td>
+
+                      <td width="80" align="right"  >Total Amount</td>
+					  <td width="80" align="right"  >Due Amount</td>
+					  <td width="80" align="right"  >Applied Amount</td>
+					  <td width="50" align="center"  >Inv.Term</td>
+					  <td align="left"  >Description/<br>
+					    Old Inv.No</td>
+                    </tr>
+
+                  <form name="headForm" id="headForm" method="post" action="{{=URL(c='payment_collection',f='collection_list_update')}}">
+						<input type="hidden" name="vslList" id="vslfield" value="-1">
+                        
+                  {{for i,record in enumerate(records):}}					
+                    
+                  		{{if i==items_per_page: break}}
+				
+                {{dueAmt=0}}
+                
+                <!--<form  name="subForm_{{=i+1}}" id="subForm_{{=i+1}}" method="post" action="{{=URL(c='payment_collection',f='update_collection',vars=dict(depotId=record.depot_id,rowId=record.id))}}">
+				-->	
+                  <tr  align="left" class="blackCat"  style=" font-size:12px">				  
+                  <td width="20" ><input type="checkbox" name="vslList" id="vslfield_{{=i}}" value="{{=record.id}}"></td>
+                  <td width="120" >INV{{=record.depot_id}}-{{=record.sl}}</td> 
+				  <td width="50" >{{=record.id}}</td>
+				  <td width="50" >{{=record.area_id}}</td>
+                  <td width="150" >{{=record.client_id}}<br />{{=record.client_name}}</td>
+                  <td width="150" >{{=record.d_man_id}}<br />{{=record.d_man_name}}</td>
+                  <td width="120" >{{if record.invoice_date!=None:}}{{=record.invoice_date.strftime('%d-%m-%Y')}}{{pass}}</td>
+			     <td width="80" align="right" >{{=record.total_amount}}</td>
+			     <td width="80" align="right" >{{dueAmt=(record.total_amount-record.collection_amount)-(record.return_tp+record.return_vat-record.return_discount)}}{{=dueAmt}}</td>
+			     <td width="80" align="right" ><input type="text" name="appliedAmount_{{=record.id}}" id="appliedAmount_{{=record.id}}" style="text-align:right; width:80px;" value="{{=dueAmt}}"/></td>
+			     <td width="50" align="center" >{{=record.payment_mode}}</td>
+			     <td align="left" >{{=record.note}}</td>
+			     
+                 <!--<a href="" ><input type="submit" name="btn_update" id="btn_update" value="Show>>"  class="button_update"/></a>-->
+			   
+              </tr>
+				<!--</form>-->
+               {{pass}}
+				
+                <tr  align="left" class="blackCat"  style="vertical-align:middle; border:none">
+                  <td colspan="6" style="background-color: #EBEBEB">
+                    
+                    <img src="{{=URL('static','images/arrow_ltr.png')}}" width="38" height="22" alt="^" />
+                    <a href="" onClick="if (markAllRows()) return false;">Check All</a>&nbsp;/&nbsp;
+                    <a href="" onClick="if (unMarkAllRows()) return false;">Uncheck All</a>&nbsp;&nbsp;&nbsp;
+                    <input type="hidden" name="totalInvoiceSelect" id="totalInvoiceSelect" value="0" style="width:50" readonly/>
+                  </td>
+                  <td colspan="6" rowspan="5" valign="top" >&nbsp;&nbsp;&nbsp;<input type="button" name="btn_show_total" id="btn_show_total" value="Show Total" onClick="showTotalAmount()" title="Show selected voucher amount"/>:<input type="text" id="showSelectedAmount" value="0" style="width:100px; text-align:right; font-weight:bold" readonly/><span id="show_msg_amount"></span>
+                  </td>
+                  </tr>
+                
+                <tr  align="left" class="blackCat"  style="vertical-align:middle; border:none">
+                  <td colspan="4" >Payment Type:</td>
+                  <td colspan="2" >:<select name="payment_type" id="payment_type" style="width:165px" >
+                      <option value=""></option>
+                    
+                     {{for pTypeRow in paymentTypeRows:}}
+                     	{{if pTypeRow.cat_type_id=='CASH':}}
+                    		<option value="{{=pTypeRow.cat_type_id}}" selected>{{=pTypeRow.cat_type_id}}</option>                                  
+                        {{else:}}
+                        	<option value="{{=pTypeRow.cat_type_id}}">{{=pTypeRow.cat_type_id}}</option> 
+                        {{pass}}
+                     {{pass}}
+                      
+                  </select></td>
+                  </tr>
+                <tr  align="left" class="blackCat"  style="vertical-align:middle; border:none">
+                  <td colspan="4" >Note:</td>
+                  <td colspan="2" >:<input  name="notes" type="text" id="notes" size="25" value="" autocomplete="off" style="width:280px"/></td>
+                  </tr>
+                <tr  align="left" class="blackCat"  style="vertical-align:middle; border:none">
+                  <td colspan="4" >Batch</td>
+                  <td colspan="2" >:<input  name="collectionBatch" type="text" id="collectionBatch" size="25" value="{{=str(date_fixed)[0:16].replace('-','').replace(' ','').replace(':','')}}" autocomplete="off" style="width:150px"/ readonly></td>
+                  </tr>
+                <tr  align="left" class="blackCat"  style="vertical-align:middle; border:none">
+
+				  <td colspan="4" >&nbsp;</td>
+				  <td colspan="2" >&nbsp;&nbsp;<input type="submit" name="btn_submit"  value="Submit" title="Collect Amount"/></td>
+				  </tr>
+				
+				</form>
+
+				</table>
+
+				</td>
+
+				</tr>
+
+          </table>
+
+		   </td>
+
+      </tr>
+
+    </table>
+
+      <br />
+
+    {{if page:}}    
+    &nbsp;&nbsp;<a href="{{=URL(args=[page-page])}}">first</a> |
+    &nbsp;&nbsp;<a href="{{=URL(args=[page-1])}}">previous</a> |
+    {{pass}}
+    
+    {{if len(records)>items_per_page:}}
+    &nbsp;&nbsp;<a href="{{=URL(args=[page+1])}}">next</a>
+    {{pass}}
+
+
+<br>
+
+<br>
+<br>
+<br>
+</td>
+
+  </tr>
+
+</table>
+
+
+</body>
+
+
+
+
+<script>
+var base_urlpath=location.protocol + "//" + location.hostname + (location.port && ":" + location.port) + "/{{=request.application}}/";
+
+var totalRow='{{=totalRecords}}';
+
+
+/*checked all*/
+
+function markAllRows() {    
+
+    var checkbox;	
+
+    for ( var i = 0; i < totalRow; i++ ) {		
+
+		checkbox = document.getElementById('vslfield_'+i);
+
+        if ( checkbox && checkbox.type == 'checkbox' ) {
+
+            if ( checkbox.disabled == false ) {
+
+                checkbox.checked = true;                
+
+            }
+
+        }
+
+    }
+
+    return true;
+
+}
+
+
+/*unchecked all*/
+
+function unMarkAllRows() {
+
+    var checkbox;
+
+    for ( var i = 0; i < totalRow; i++ ) {
+
+        checkbox = document.getElementById('vslfield_'+i);
+
+        if ( checkbox && checkbox.type == 'checkbox' ) {
+
+            checkbox.checked = false;
+
+        }
+
+    }
+    return true;
+}
+
+/*Count selected*/
+function countAllMark() {    
+	var numOfSelectedInvoice=0
+	var slNoStr='';
+	
+    var checkbox;	
+	
+    for ( var i = 0; i < totalRow; i++ ) {
+		
+		checkbox = document.getElementById('vslfield_'+i);		
+		var temp='vslfield_'+i;		
+        if ( checkbox && checkbox.type == 'checkbox' ) {			
+			//var confirmStatus=$("input[name='"+checkbox+"']:checked").val();
+			var confirmValue=$("input[id='"+temp+"']:checked").val();
+			if (confirmValue!=undefined){				
+				
+				if (slNoStr==''){
+					slNoStr=confirmValue;
+				}else{
+					slNoStr=slNoStr+','+confirmValue;
+				}
+				
+				numOfSelectedInvoice+=1;
+				
+			}		
+        }
+		
+    }
+	
+	$('#totalInvoiceSelect').val(numOfSelectedInvoice)
+	$('#slStrList').val(slNoStr)
+		
+    return true;
+
+}
+
+/*Count selected report*/
+function countAllMarkReport() {    
+	var numOfSelectedInvoice=0
+	var slNoStr='';
+	
+    var checkbox;	
+	
+    for ( var i = 0; i < totalRow; i++ ) {
+		
+		checkbox = document.getElementById('vslfield_'+i);		
+		var temp='vslfield_'+i;		
+        if ( checkbox && checkbox.type == 'checkbox' ) {			
+			//var confirmStatus=$("input[name='"+checkbox+"']:checked").val();
+			var confirmValue=$("input[id='"+temp+"']:checked").val();
+			if (confirmValue!=undefined){				
+				
+				if (slNoStr==''){
+					slNoStr=confirmValue;
+				}else{
+					slNoStr=slNoStr+','+confirmValue;
+				}
+				
+				numOfSelectedInvoice+=1;
+				
+			}		
+        }
+		
+    }
+	
+	$('#totalInvoiceSelectReport').val(numOfSelectedInvoice)
+	$('#slStrListReport').val(slNoStr)
+		
+    return true;
+
+}
+
+/* invoice post*/
+function postInvoice() {	
+	$('#postMsg').text(' ');
+	var filterType='{{=session.search_type_printm}}'
+	
+	var numOfSelectedInvoice=$('#totalInvoiceSelect').val()
+	var slNoStr=$('#slStrList').val()
+	
+	var depotId=$('#depot_id_value').val()
+	var invoiceDate=$('#invoice_date').val()	
+	var d_man_id=$('#d_man_id').val()
+	
+	
+	if(depotId=='' || invoiceDate==''){
+		$('#postMsg').text('Depot ID / Invoice Date not found');
+	}else{
+	
+		if(filterType!=='ROUTEID'){
+			$('#postMsg').text('Required {{=session.level3Name}} wise filter');
+			
+		}else{
+			if (numOfSelectedInvoice==''){
+				$('#postMsg').text('Required Selected Confirmation');
+			}else{
+				if (slNoStr==''){	
+					$('#postMsg').text('Selected Invoice not available');	
+				}else{
+					
+						if (d_man_id==''){	
+							$('#postMsg').text('Required Delivery Man');
+						}else{
+							
+							//------------
+							var slList=slNoStr.split(',');
+							var slCount=slList.length;
+							var postCount=0
+							var postFlag=true;
+							
+							for ( var i = 0; i < slCount; i++ ) {
+								var slNo=slList[i]
+								
+								//alert(base_urlpath+'payment_collection/post_invoice?deptId='+depotId+'&slNo='+slNo+'&invoiceDate='+invoiceDate+'&deliveryManId='+d_man_id);							
+								
+								$.ajax({
+									  url: base_urlpath+'payment_collection/post_invoice?deptId='+depotId+'&slNo='+slNo+'&invoiceDate='+invoiceDate+'&deliveryManId='+d_man_id,
+									  success: function(resStr) {
+										  var resultList=resStr.split('<fd>')
+										  if(resultList[0]=="Error"){	
+										  	  $('#postMsg').text('Failed.'+resultList[1]);										  
+											  postFlag=false;
+											  location.reload();
+										  }else{
+										  	postCount+=1;
+										  }
+										  //$('#postMsg').text('Completed'+postCount);
+									  }
+									});
+									
+								//next();
+								
+							};
+							if(postFlag==false){
+								$('#postMsg').text('Error');
+							}else{
+								$('#postMsg').text('Success');
+							}
+							location.reload();
+							
+							//--------------
+						}
+				}
+			}
+	  }
+	}
+}
+
+
+
+/* invoice post*/
+function showTotalAmount() {	
+	$('#showSelectedAmount').val(0)
+	$('#show_msg_amount').text('');
+	
+	var numOfSelectedInvoice=0
+	var slNoStr='';	
+    var checkbox;
+    for ( var i = 0; i < totalRow; i++ ) {
+		
+		checkbox = document.getElementById('vslfield_'+i);		
+		var temp='vslfield_'+i;		
+        if ( checkbox && checkbox.type == 'checkbox' ) {
+			var confirmValue=$("input[id='"+temp+"']:checked").val();
+			if (confirmValue!=undefined){				
+				
+				if (slNoStr==''){
+					slNoStr=confirmValue;
+				}else{
+					slNoStr=slNoStr+','+confirmValue;
+				}				
+				numOfSelectedInvoice+=1;				
+			}		
+        }
+		
+    }
+	
+	
+	if (numOfSelectedInvoice==0){
+		$('#show_msg_amount').text('Required invoice selection');
+	}else{
+		if (slNoStr==''){	
+			$('#show_msg_amount').text('Selected Invoice not available');	
+		}else{
+			//------------
+			var slList=slNoStr.split(',');
+			var slCount=slList.length;
+			var postCount=0
+			var postFlag=true;
+			var amountTotal=0
+			var amount=0;
+			for ( var i = 0; i < slCount; i++ ) {
+				var slNo=slList[i]
+				
+				try{
+					amount=eval($('#appliedAmount_'+slNo).val())
+				}catch(e){
+					continue;
+					}
+				amountTotal+=amount
+				
+			};
+			
+			$('#showSelectedAmount').val(parseFloat(amountTotal.toFixed(2)));
+			
+			//--------------
+		}
+	}
+	 
+}
+
+
+//Time Sleep Method
+var maxLoops = 50;
+var counter = 0;
+
+function next() {	
+		
+		if (counter++ >= maxLoops) return;
+					
+		setTimeout(function() {
+			$('#postMsg').text('Time '+counter);	
+			
+			next();
+			
+		}, 100);
+	}
+
+
+	</script>

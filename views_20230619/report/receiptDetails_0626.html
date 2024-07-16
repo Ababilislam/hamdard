@@ -1,0 +1,126 @@
+{{extend 'layout_invoice.html'}}
+
+<html>
+
+<head>
+
+<script type="text/javascript">
+
+function print_page()
+
+  {
+
+    window.print()
+
+  }
+
+</script>
+
+
+
+</head>
+
+<body>
+
+<!--<table width="900px;"> <tr><td style="text-align:right"><a href="{{=URL(c='report',f='downloadAdjustmentItemWise',vars=dict(fromDate=fromDate,toDate=toDate,depotID=depotID,depotName=depotName,storeID=storeID,storeName=storeName))}}" >Downlaod</a></td></tr></table>-->
+
+<table width="900" cellpadding="0" cellspacing="0" style="border:none;" >
+    <tr >
+      <td width="300" ><div style="border: solid 2px #C4C4C4; width:100%; font-weight:bold;" >IC Receipt Details</div></td>
+      <td width="100" align="right" >Date From</td>
+      <td width="2" >:</td>
+      <td width="100" >{{=datetime.datetime.strptime(str(fromDate),'%Y-%m-%d').strftime('%d-%b-%y')}}</td>
+      <td width="20" align="right" >To</td>
+      <td width="2" >:</td>
+      <td width="100" >{{=datetime.datetime.strptime(str(toDate),'%Y-%m-%d').strftime('%d-%b-%y')}}</td>
+      <td width="30" align="right" ><a href="{{=URL(c='report',f='receiptDetails_download',vars=dict(fromDate=fromDate,toDate=toDate,depotID=depotID,storeID=storeID))}}" >Download</a></td>
+      <td width="100" ><img style="width:80px;" src="{{=URL('static','images/comp_logo1.png')}}"/></td>
+  </tr>
+</table>
+<table width="900" border="1" cellpadding="1" cellspacing="1" class="sample_border" >
+  <tr align="left" class="blackCatHead" height="20px" ;  style="font-size:12px">
+      <td width="50" align="center"  >Item Id</td>
+      <td width="60"  >Item Name</td>
+      <td width="60" align="center"  >Date</td>
+      <td align="center"  >Receipt From</td>
+      <td width="140" align="center"  >Receipt To</td>
+      <td width="80" align="center"  >Quantity</td>
+      <td width="80" align="right"  > Trade Price</td>
+      
+  </tr>
+	{{totalQty=0}}
+    {{totalTp=0}}
+    {{for i in range(len(recItemList)):}}
+        {{dictData=recItemList[i]}}        
+  
+  <tr  align="left" class="blackCat"  style="background-color:#F7F7F7; font-size:11px;">
+    <td width="50" align="center" style=" text-align:center;"><strong>{{=dictData['ItemID']}}</strong></td>
+    <td colspan="4" ><strong>{{=dictData['itemName']}}</strong></td>
+    <td width="80" align="center" style=" text-align:right; font-weight:bold;">{{=dictData['hQty']}}{{totalQty+=int(dictData['hQty'])}}</td> 
+    <td width="80" align="right" style=" text-align:right; font-weight:bold;">{{=easy_format(float(dictData['hTp']))}}{{totalTp+=float(dictData['hTp'])}}</td>                
+  </tr>
+      {{detailList=dictData['rDetails']}}
+      {{for j in range(len(detailList)):}}
+        {{dictDetData=detailList[j]}}   	
+  <tr align="left" style="background-color:#FBFBFB; font-size:11px">          		
+               <td height="18" align="center" ></td>
+               <td height="18" align="center" >{{=dictDetData['slNo']}}</td>
+               <td align="center" >{{=dictDetData['recDate']}}</td>
+                <td width="140" >{{=dictDetData['receFromDepot']}}:{{=dictDetData['receFromDepotName']}}</td>
+                <td width="140" >{{=dictDetData['receToDepot']}}:{{=dictDetData['receToDepotName']}}</td>
+                <td width="80" align="center" style=" text-align:right;">{{=dictDetData['qty']}}</td>
+                <td width="80" align="right" style=" text-align:right;">{{=dictDetData['recTp']}}</td>          	                      
+  </tr>     
+      {{pass}}  
+   {{pass}}
+</table>
+<table width="900" style="border: solid 1px #C4C4C4; margin:3px 0px;" >
+  <tr align="left" >          		
+       <td height="18" align="right" >Total </td>
+      <td width="2" >:</td>
+      <td width="100" align="center" style=" text-align:right;">{{=totalQty}}</td>
+        <td width="100" align="right" style=" text-align:right;">{{=easy_format(totalTp)}}</td>          	                      
+ 	</tr>  
+</table>   
+<br/>
+<table width="900" >
+	<tr>
+	  <td width="150" align="left">__________________</td>
+	  <td align="center">____________________________________</td>
+	  <td width="20" align="center">&nbsp;</td>
+	  <td width="180" align="center">&nbsp;</td>
+  </tr>
+	<tr>
+	  <td width="150" align="left"><strong>Store Department</strong></td>
+	  <td width="150" align="center"><span style=" font-style:italic;">for</span>&nbsp;<strong>{{=session.cName}}</strong></td>
+	  <td width="20" align="center">&nbsp;</td>
+	  <td width="180" align="center">&nbsp;</td>
+  </tr>
+</table>
+
+<!--{{ #if page: }}
+
+<a href="{{=URL(args=[page-page],vars=dict(fromDate=fromDate,toDate=toDate,depotID=depotID,depotName=depotName,storeID=storeID,storeName=storeName))}}">first</a> | 
+
+<a href="{{=URL(args=[page-1],vars=dict(fromDate=fromDate,toDate=toDate,depotID=depotID,depotName=depotName,storeID=storeID,storeName=storeName))}}">previous</a> |
+
+{{pass}}
+
+
+
+{{#if len(records)>items_per_page:}}
+
+<a href="{{=URL(args=[page+1],vars=dict(fromDate=fromDate,toDate=toDate,depotID=depotID,depotName=depotName,storeID=storeID,storeName=storeName))}}">next</a>
+
+{{pass}}-->
+
+
+
+<br/>
+
+
+
+</body>
+
+</html>
+

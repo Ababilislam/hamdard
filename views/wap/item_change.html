@@ -1,0 +1,79 @@
+
+    
+{{extend 'layout_wap.html'}}
+    
+
+<table width="100%"  border="0" cellpadding="0" cellspacing="0">
+
+
+
+    
+    
+    <tr style="background-color:#DDDDDD">
+      <td colspan="2" align="left" >Route: Bashundhara </td>
+      </tr>
+    <tr style="background-color:#DDDDDD">
+      <td colspan="2"  align="left" >{{=session.wap_client_name}}[{{=session.wap_client_id}}]:</td>
+      </tr>
+	  
+    
+	{{
+	
+	x=0
+	for i in range(len(ins_list)):
+	dictData=ins_list[i]}}
+	
+	
+	<form  name="form1" action="{{=URL(c='wap',f='show_cart')}}" method="post"  >
+	<tr >
+      <td width="20" align="left" >
+	  <input  type="text" name="item_qty" id="item_qty" size="2" value="{{=dictData['qty']}}"  />
+	  <input  type="hidden" name="item_id" id="item_id" size="2" value="{{=dictData['item_id']}}"   />
+	  <input  type="hidden" name="category_id" id="category_id" size="2" value="{{=dictData['category_id']}}"   />
+	  <input  type="hidden" name="price" id="price" size="2" value="{{=dictData['price']}}"   />
+	  <input  type="hidden" name="item_name" id="item_name" size="2" value="{{=dictData['name']}}"   />
+	  
+	  </td>
+      <td  align="left" >{{=dictData['name']}}[{{=dictData['item_id']}}]</td>
+      </tr>
+    <tr >
+      {{ 
+	  x=x+1
+	  
+	  pass}}
+	  {{#=x}}
+    <tr>
+      <td align="left" >&nbsp;</td>
+      <td align="left" ><input type="submit" name="login" id="login" value="Next" /></td>
+    </tr>
+    <tr>
+      <td align="left" >&nbsp;</td>
+      <td align="left" ><a href="{{=URL(c='wap',f='menu')}}">Menu</a></td>
+    </tr>
+	</form>
+</table>   
+</div> 
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

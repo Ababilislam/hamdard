@@ -1,0 +1,423 @@
+{{extend 'layout.html'}}
+ 
+ 
+<link rel="stylesheet" href="{{=URL('static', 'js_and_css/ui.theme.css')}}" type="text/css" />
+<link rel="stylesheet" href="{{=URL('static', 'js_and_css/jquery-ui.css')}}" type="text/css" />
+<link rel="stylesheet" href="{{=URL('static', 'js_and_css/style.css')}}" type="text/css" />
+<script src="{{=URL('static','js_and_css/jquery-1.8.2.js')}}"></script>
+<script src="{{=URL('static','js_and_css/jquery-ui.js')}}"></script>
+
+<link rel="stylesheet" href="{{=URL('static', 'js_and_css/ui.theme.css')}}" type="text/css" />
+
+<link rel="stylesheet" href="{{=URL('static', 'js_and_css/jquery-ui.css')}}" type="text/css" />
+
+<link rel="stylesheet" href="{{=URL('static', 'js_and_css/style.css')}}" type="text/css" />
+<script src="{{=URL('static','js_and_css/jquery-1.8.2.js')}}"></script>
+<script src="{{=URL('static','js_and_css/jquery-ui.js')}}"></script>
+
+
+<script src="{{=URL('static','js/bootstrap-multiselect.js')}}"></script>
+<script src="{{=URL('static','js/bootstrap.min.js')}}"></script>
+  
+<style type="text/css">
+ 
+ input[type=text], input[type=password],  select {
+    margin: 2px 0px 2px 0px;
+	width:250px;
+}
+
+div.error {
+    margin-left:0px;
+	width: 200px;
+}
+
+.page_color,body{
+	font-family:Arial, Helvetica, sans-serif;
+	font-size:13px;	
+	}
+	
+ </style>
+ 
+ <script> 
+  var base_url=location.protocol + "//" + location.hostname + (location.port && ":" + location.port) + "/{{=request.application}}/";
+
+  
+$(function() {
+   // autoType(".type-js", 200);
+    $('#dt_search_date_from_dt').attr('placeholder','Start Date');
+    $('#dt_search_date_to_dt').attr('placeholder','End Date');
+    $('#dt_search_date_from_dt').attr('autocomplete','off');
+    $('#dt_search_date_to_dt').attr('autocomplete','off');
+
+  // ========================Route ID Name==================================
+
+    var SelectRouteIDName="";
+     // alert(base_url+'target/get_target_route_id_name')
+  $.ajax({
+
+      url: base_url+'target/get_target_route_id_name',
+      success: function(targetRoute) {
+        SelectRouteIDName = targetRoute
+      }
+    });
+  
+
+   
+    $('#target_route_id_name').keyup(function(){
+      // alert('ok')
+      //-------------------------
+      var ref_list = SelectRouteIDName.split(',');  
+      var ref_name=$("#target_route_id_name").val();
+      // alert(ref_name)
+      
+      //---------------- auto complete combo list
+      var ref_list_new=new Array();
+      lc=0;
+      i =0;
+      var refStr="";        
+      while (i < ref_list.length)
+      {
+        refStr=ref_list[i];
+        i=i+1;          
+        var res=refStr.toUpperCase().match(ref_name.toUpperCase());
+        if (res!=null){
+          ref_list_new[lc]=refStr;
+          lc=lc+1;
+          if (lc==30){
+            break;
+          };
+        }else{
+          continue;
+        }         
+      };
+      
+      //-------------- auto complete source
+      $( "input#target_route_id_name" ).autocomplete({
+        source: ref_list_new
+      });
+    
+    }); 
+
+// ======================================Link Type=====================================================
+  // ========================Route ID Name==================================
+
+    var SelectRouteIDNameI="";
+     // alert(base_url+'target/get_target_route_id_name_input')
+  $.ajax({
+
+      url: base_url+'target/get_target_route_id_name_input',
+      success: function(targetRouteI) {
+        SelectRouteIDNameI = targetRouteI
+      }
+    });
+  
+
+   
+    $('#target_route_id_name_input').keyup(function(){
+      // alert('ok')
+      //-------------------------
+      var ref_list = SelectRouteIDNameI.split(',');  
+      var ref_name=$("#target_route_id_name_input").val();
+      // alert(ref_name)
+      
+      //---------------- auto complete combo list
+      var ref_list_new=new Array();
+      lc=0;
+      i =0;
+      var refStr="";        
+      while (i < ref_list.length)
+      {
+        refStr=ref_list[i];
+        i=i+1;          
+        var res=refStr.toUpperCase().match(ref_name.toUpperCase());
+        if (res!=null){
+          ref_list_new[lc]=refStr;
+          lc=lc+1;
+          if (lc==30){
+            break;
+          };
+        }else{
+          continue;
+        }         
+      };
+      
+      //-------------- auto complete source
+      $( "input#target_route_id_name_input" ).autocomplete({
+        source: ref_list_new
+      });
+    
+    }); 
+
+// ======================================Link Type=====================================================
+
+    var SelectItemIDName="";
+     // alert(base_url+'target/get_target_item_id_name')
+  $.ajax({
+
+      url: base_url+'target/get_target_item_id_name',
+      success: function(targetItem) {
+        SelectItemIDName = targetItem
+      }
+    });
+  
+
+   
+    $('#target_item_id_name').keyup(function(){
+      // alert('ok')
+      //-------------------------
+      var ref_list = SelectItemIDName.split(',');  
+      var ref_name=$("#target_item_id_name").val();
+      // alert(ref_name)
+      
+      //---------------- auto complete combo list
+      var ref_list_new=new Array();
+      lc=0;
+      i =0;
+      var refStr="";        
+      while (i < ref_list.length)
+      {
+        refStr=ref_list[i];
+        i=i+1;          
+        var res=refStr.toUpperCase().match(ref_name.toUpperCase());
+        if (res!=null){
+          ref_list_new[lc]=refStr;
+          lc=lc+1;
+          if (lc==30){
+            break;
+          };
+        }else{
+          continue;
+        }         
+      };
+      
+      //-------------- auto complete source
+      $( "input#target_item_id_name" ).autocomplete({
+        source: ref_list_new
+      });
+    
+    }); 
+
+// =============================================================================================
+         
+}); 
+
+
+</script> 
+ 
+ 
+<table width="100%"  border="0" cellspacing="0" cellpadding="0" style="background-color:#FFFFFF;" >
+  <tr height="30px" >
+    <td><span class="blackCatTitle">Target</span></td>
+  </tr>
+  <tr  height="1px" style="background-color:#CCCCCC;">
+	    <td ></td>
+  </tr>
+</table>
+  
+  
+  <table width="100%" height="500px"  border="0" cellspacing="0" cellpadding="0" class="page_color"  >
+  <tr height="100%"  style="vertical-align:top;">
+    <td width="10px">&nbsp;</td>
+    <td>
+	<table width="100%"  border="0" cellpadding="0" cellspacing="0"  >
+      <!-- <tr>
+        <td>&nbsp;</td>
+      </tr> -->
+      <tr>
+        <td align="left" valign="top">
+		
+		{{if access_permission==True:}} 
+		
+          <table width="500" class="blackCat">
+		  
+		  {{=form.custom.begin}}
+            
+            <tr>
+              <td width="150">Year-Month</td>
+              <td>
+              {{startYear=2020}}
+              <select id="year" name="year" style="width:122px;" >
+                <option value="">Year</option>
+                {{for i in range(5):}}
+                    <option value="{{=startYear+i}}">{{=startYear+i}}</option>
+                {{pass}}		
+              </select>
+                -
+                <select id="month" name="month" style="width:128px;" >
+                    <option value="">Month</option>
+                    <option value="01">Jan</option>
+                    <option value="02">Feb</option>
+                    <option value="03">Mar</option>
+                    <option value="04">Apr</option>
+                    <option value="05">May</option>
+                    <option value="06">Jun</option>
+                    <option value="07">Jul</option>
+                    <option value="08">Aug</option>
+                    <option value="09">Sep</option>
+                    <option value="10">Oct</option>
+                    <option value="11">Nov</option>
+                    <option value="12">Dec</option>
+                </select>
+              
+              </td>
+              <td>&nbsp;</td>
+            </tr>
+            <tr>
+              <td width="150">Route ID </td>
+              <td>
+                <input type="input" name="territory_id" id="target_route_id_name_input" style="width: 260px">
+              <!-- {{#=form.custom.widget.territory_id}} -->
+            </td>
+              <td>&nbsp;</td>
+            </tr>
+            <tr>
+              <td width="150">Item ID</td>
+              <td>
+                <input type="input" name="item_id" id="target_item_id_name" style="width: 260px">
+
+                <!-- {{#=form.custom.widget.item_id}} -->
+              </td>
+              <td>&nbsp;</td>
+            </tr>
+            <tr>
+              <td width="150">Item Name</td>
+              <td><input type="input" name="item_name" id="target_item_id_name" style="width: 260px">
+
+              <!-- {{#=form.custom.widget.item_name}}</td> -->
+              <td>&nbsp;</td>
+            </tr>
+            <tr>
+              <td width="150">Target  (Bag)</td>
+              <td>{{=form.custom.widget.target_qty}}</td>
+              <td>&nbsp;</td>
+            </tr>
+            <tr>
+              <td width="150">&nbsp;</td>
+              <td>{{=form.custom.submit}}</td>
+              <td>&nbsp;</td>
+            </tr>
+            <tr>
+              <td width="150"></td>
+              <td></td>
+              <td></td>
+              </tr>
+			{{=form.custom.end}}
+          </table>
+          {{pass}}
+
+  
+          <br />
+
+                      <table width="1000" border="1"  class="sample_border" >
+                      <form id="form1" name="form1" method="post" action="{{=URL(c='target',f='target_add_route_item')}}">
+                      <tr align="left" class="blackCatHead"  height="20px" ;"vertical-align:middle">
+                      <td width="200" >
+
+                      <!-- <select name="searchType" id="searchType" style="width:150px" title="Search Type">
+                      <option value="" selected="selected">Select a Type</option>
+                      {{if session.searchType_target=='RouteID':}}<option value="RouteID" selected="selected">Route ID</option>{{else:}}<option value="RouteID" >Route ID</option>{{pass}}
+                      </select> -->
+
+{{if session.target_route_id_name=='' or session.target_route_id_name==None:}}
+
+<input  name="target_route_id_name" type="text" id="target_route_id_name" size="25" value="" placeholder="Select Route ID" autocomplete="off" style="width:200px;"/>
+{{else:}}
+<input  name="target_route_id_name" type="text" id="target_route_id_name" size="25" value="{{=session.target_route_id_name}}" placeholder="Select Route ID" autocomplete="off" style="width:200px"/>
+{{pass}}
+
+                      </td>
+
+                      <!-- <td width="300" > -->
+
+
+
+                        <!-- {{if session.searchValue_target=='' or session.searchValue_target==None:}}
+                      <input  name="searchValue" type="text" id="searchValue" size="25" value="" placeholder="Enter value" autocomplete="off" style="width:300px"/>
+                      {{else:}}
+                      <input  name="searchValue" type="text" id="searchValue" size="25" value="{{=session.searchValue_target}}" placeholder="Enter value" autocomplete="off" style="width:300px"/>
+                      {{pass}} -->
+
+                       <!-- </td> -->
+
+                      <td align="left"  ><input type="submit" name="btn_filter" id="btn_filter" value="Filter"   class="button_update"/>
+                      &nbsp;
+                      <input type="submit" name="btn_all" id="btn_all" value="All"   class="button_update"/>
+                      &nbsp; </td>
+                      <td align="right" width="60px">
+                        <a href="http://w05.yeapps.com/hamdard/auto_acehivement_process/process_sales_ad_route_item?req_date=" target="blank">
+                          <input type="button" name="input" id="input" value="Step 1" class="button_update" title=""/>
+                      </td>
+                      <td align="right" width="60px">
+                        <a href="http://w05.yeapps.com/hamdard/auto_acehivement_process/update_acehivement?req_date= "target="blank">
+                          <input type="button" name="input" id="input" value="Step 2" class="button_update" title=""/>
+                      </td>
+
+                      <td width="80" height="28" align="right"  >
+                      <a href="{{=URL(c='target',f='target_batch_upload_route_item')}}">
+                      <input type="button" name="input" id="input" value="Batch Upload"   class="button_update" title=""/>
+                      </a></td>
+                      </tr></form>
+                      </table>
+
+                      <br />
+			 <table width="1000" border="1" cellpadding="1" cellspacing="1" class="sample_border" >
+               <tr align="left" class="blackCatHead"  height="20px" ;"vertical-align:middle">
+                 <td width="100" style="border-right-width:3px;">Year-Month</td>
+                 <td align="left" style="border-right-width:3px;">Territory</td>
+                 <td width="100" align="left" style="border-right-width:3px;">Item ID</td>
+                 <td width="150" align="left" style="border-right-width:3px;">Item Name</td>
+                 <td width="60" align="right" style="border-right-width:3px;">Target (Pcs)</td>
+                 <!-- <td width="60" align="right" style="border-right-width:3px;">Achievement (Pcs)</td> -->
+                 <td width="34" align="right" ></td>
+                 <td width="34" align="right" ></td>
+                 <td width="34" align="right" ></td>
+               </tr>
+               
+			    
+			   {{for i,record in enumerate(records):}}
+			   	{{ if i==items_per_page: break}}
+              
+                <tr  align="left" class="blackCat"  style="vertical-align:middle"> 
+                  <td width="100"  style="border-right-width:3px;">{{=record.first_date.strftime('%Y-%b')}}</td>
+                  <td width="80"  >{{=record.territory_id}}</td>
+                  <td width="100"  >{{=record.item_id}}</td>
+                  <td width="150"  style="border-right-width:3px;">{{=record.item_name}}</td>
+                  <td width="60" align="right"  style="border-right-width:3px;">{{=record.target_qty}}&nbsp;</td>
+                  <!--<td width="60" align="right"  style="border-right-width:3px;">{{=record.achievement_qty}}&nbsp;</td>-->
+                  
+                  <form id="form1" name="form1" method="post" action="{{=URL(c='target',f='target_add_route_item',args=[page,record.id])}}">
+               	  <td width="34" align="right"  >
+                  {{if record.achievement_qty==0:}}
+                    <input type="checkbox" name="check_cancel" id="check_cancel" value="YES" title="Confirmation to cancel" style="width:18px; height:18px;"/>
+                  {{pass}}
+                  </td>
+               	  <td width="34" align="right"  >
+                   {{if record.achievement_qty==0:}}
+                  	<input type="submit" name="btn_delete" id="btn_delete" value=" X "/>
+                   {{pass}}
+                   </td>
+                  </form>
+
+<form id="form1" name="form1" method="post" action="{{=URL(c='target',f='target_add_route_item_edit',args=[page,record.id])}}">
+<td width="50" align="right"  ><input type="submit" name="btn_go" id="btn_go" value="Edit" class="button_update"/>  </td>
+</form>
+                  
+                </tr>
+              
+			   
+			   {{pass}}
+		    </table>
+	    <p>&nbsp;</p>	      </td></tr>
+    </table>
+      
+{{if page:}}
+<a href="{{=URL(args=[page-page])}}">first</a> |
+<a href="{{=URL(args=[page-1])}}">previous</a> |
+{{pass}}
+
+{{if len(records)>items_per_page:}}
+<a href="{{=URL(args=[page+1])}}">next</a>
+{{pass}}	</td>
+  </tr>
+</table>
+

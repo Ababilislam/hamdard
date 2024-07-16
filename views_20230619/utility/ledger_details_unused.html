@@ -1,0 +1,103 @@
+{{extend 'layout_report.html'}}
+<html>
+<head>
+<script type="text/javascript">
+function print_page()
+  {
+    window.print()
+  }
+</script>
+</head>
+<body>
+<div class="blackCatTitle">Ledger Details </div>
+<br>
+
+<table width="900" border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <td style=" padding-left:0px;"><b>Account</b></td>
+    <td><b>:</b></td>
+    <td align="left"><font size="3px;">{{=txAccountValue}}</font></td>
+    <td width="120"><span style="padding-left:0px;">Tx Type </span></td>
+    <td width="5">:</td>
+    <td width="100">{{=txType}}</td>
+  </tr>
+  <tr>
+    <td width="51" style=" padding-left:0px;"><b>From</b></td>
+    <td width="5"><b>:</b></td>
+    <td align="left">{{=from_date}} </td>
+    <td width="120"><span style="padding-left:0px;">Opposite Account </span></td>
+    <td width="5">:</td>
+    <td width="100">{{=txOppositeAccountValue}}</td>
+  </tr>
+  <tr>
+    <td width="51" style="padding-left:0px;"><b>To<b></td>
+    <td width="5"><b>:</b></td>
+    <td align="left">{{=to_date}}</td>
+    <td width="120">&nbsp;</td>
+    <td width="5">&nbsp;</td>
+    <td width="100">&nbsp;</td>
+  </tr>
+</table>
+<br/>
+<table width="900" border="1" cellspacing="1" cellpadding="1"  class="sample_border">
+  <tr class="table_title">
+    <td width="100" >Date</td>
+    <td width="150" >Opposite Account </td>
+    <td align="left" >Description</td>
+    <td width="100" align="right" >Tx Amount</td>
+    <td width="100" align="right" >Closing Balance</td>
+  </tr>
+
+  {{gross_total=float(op_balance)}}
+    
+  <tr class="table_row2">
+    <td >Opening</td>
+    <td >&nbsp;</td>
+    <td align="left" >&nbsp;</td>
+    <td align="right" >&nbsp;</td>
+    <td align="right" >{{=gross_total}}</td>
+  </tr>
+
+  	{{ p=0}}
+	{{ c=''}}
+				
+  {{for i,record in enumerate(txRecords):}}  
+  		{{if i==items_per_page: break}}
+  	
+	{{amount=0.0}}
+	
+  {{ if p==0:}} {{c ='table_row1'}}{{ p=1}} {{ else:}} {{c ='table_row2'}}{{ p=0}} {{ pass}}
+  <tr class="{{=c}}" >
+    <td width="100" valign="top" >{{=record.tx_date}}</td>
+    <td width="150" valign="top" >{{=record.opposite_account}}</td>
+    <td align="left">{{=record.tx_des}}</td>
+    <td width="100" align="right" >{{amount=record.tx_amount}}{{gross_total+=amount}}{{=amount}}</td>
+    <td width="100" align="right" >{{=gross_total}}</td>
+  </tr>
+  {{pass}}
+  
+  <tr class="table_row2">
+    <td colspan="4" align="right">Total</td>
+    <td width="100" align="right"><b>{{=gross_total}}</b></td>
+  </tr>
+</table>
+<br/>
+
+	{{if page:}}
+{{ =A('first', _href =URL(c ='utility',f ='ledger_details',vars=dict(page=(page-page),from_date=from_date,to_date=to_date,txAccountValue=txAccountValue,txOppositeAccountValue=txOppositeAccountValue,txType=txType)))}} |
+
+<!--{{# =A('previous', _href =URL(c ='utility',f ='ledger_details',vars=dict(page=(page-1),next_opening=gross_total,from_date=from_date,to_date=to_date,txAccountValue=txAccountValue,txOppositeAccountValue=txOppositeAccountValue,txType=txType)))}} |
+-->
+{{pass}}
+
+{{if len(txRecords)>items_per_page:}}
+{{ =A('next', _href =URL(c ='utility',f ='ledger_details',vars=dict(page=(page+1),next_opening=gross_total,from_date=from_date,to_date=to_date,txAccountValue=txAccountValue,txOppositeAccountValue=txOppositeAccountValue,txType=txType)))}}
+{{pass}}
+	<table width="900" border="0">
+          <tr><td align="right" class="report_body"><a href="" onClick="print_page()" style="text-decoration:none">Print</a></td></tr>
+</table>
+
+
+
+</body>
+</html>

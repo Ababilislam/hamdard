@@ -1,0 +1,181 @@
+{{extend 'layout.html'}}
+   <style type="text/css">
+ input[type=text], input[type=password],  select {
+    margin: 2px 0px 2px 0px;
+	width:200px;
+}
+div.error {
+    margin-left:0px;
+	width:210px;
+}
+#trade_promotional_offer_target_qty{	
+	text-align:right;
+	}
+
+
+ </style>
+
+ 
+  {{currentDate=datetime.datetime.strptime(str(current_date),'%Y-%m-%d')}}
+  
+<table width="100%" border="0" cellspacing="0" cellpadding="0" style="background-color:#FFFFFF;" >
+  <tr height="30px" >
+    <td width="500"><span class="blackCatTitle">Campaign</span></td>    
+	<td width="500" align="right">&nbsp;</td>	
+    <td>&nbsp;</td>
+  </tr>
+  <tr  height="1px" style="background-color:#CCCCCC;">
+	    <td colspan="3" ></td>
+  </tr>
+  </table>
+  
+  
+  <table width="100%" height="500px"  border="0" cellspacing="0" cellpadding="0" class="page_color"  >
+  <tr height="100%"  style="vertical-align:top;">
+    <td>
+	
+	<table width="900px"  border="0" cellpadding="0" cellspacing="0"  >
+      <tr>
+        <td width="10">&nbsp;</td>
+        <td>&nbsp;</td>
+        <td>&nbsp;</td>
+      </tr>
+      <tr>
+        <td width="10">&nbsp;</td>
+        <td>&nbsp;</td>
+        <td align="left" valign="top">
+		{{if access_permission==True:}} 
+          <table width="500" class="blackCat"  style="background-color:#F0F0F0">
+		  {{=form.custom.begin}}            
+            <tr>
+              <td width="150" align="left">Offer</td>
+              <td>{{=form.custom.widget.offer_name}}</td>
+              </tr>
+            <tr>
+              <td width="150" height="21" align="left">Date From</td>
+              <td >{{=form.custom.widget.from_date}}</td>
+              </tr>
+            
+			
+            <tr>
+              <td width="150" align="left">Date To</td>
+              <td >{{=form.custom.widget.to_date}}</td>
+              </tr>
+            <tr>
+              <td width="150" align="left">Target Qty (Bag)</td>
+              <td >{{=form.custom.widget.target_qty}}</td>
+              </tr>
+            <tr>
+              <td width="150" align="left">Reward</td>
+              <td >{{=form.custom.widget.reward}}</td>
+              </tr>
+            <tr>
+              <td width="150" align="left">Bonus  for monthly consistency</td>
+              <td >{{=form.custom.widget.bonus_con}}</td>
+              </tr>
+            
+            
+            <tr style="height:15px">
+              <td width="150" align="left"></td>
+              <td></td>
+              </tr>
+            <tr>
+              <td width="150" align="left">Status</td>
+              <td>{{=form.custom.widget.status}}</td>
+              </tr>
+            <tr>
+              <td width="150" align="left">&nbsp;</td>
+              <td>{{=form.custom.submit}}</td>
+              </tr>
+            <tr>
+              <td width="150" align="left">&nbsp;</td>
+              <td>&nbsp;</td>
+              </tr>
+		{{=form.custom.end}}
+		</table>     
+		{{pass}}
+            
+			 <br />
+			 <table width="900" border="1" cellpadding="1" cellspacing="1" class="sample_border" >
+			 <form id="form1" name="form1" method="post" action="{{=URL(c='campaign',f='campaign_add')}}">
+               <tr align="left" height="20px" ;"vertical-align:middle">
+                 <td colspan="6"  >
+                   
+                   <select name="searchType" id="searchType" style="width:150px" title="Search Type">
+                     <option value="" selected="selected">Select a Type</option>
+                      {{if session.searchType_tpcp=='Reference':}}<option value="Reference" selected="selected">Offer</option>{{else:}}<option value="Reference" >Offer</option>{{pass}}
+                      {{if session.searchType_tpcp=='Status':}}<option value="Status" selected="selected">Status</option>{{else:}}<option value="Status" >Status</option>{{pass}}
+                   </select>
+                   
+                   {{if session.searchValue_tpcp=='' or session.searchValue_tpcp==None:}}
+                   <input  name="searchValue" type="text" id="searchValue" size="25" value="" placeholder="Enter value" autocomplete="off" style="width:300px"/>
+                   {{else:}}
+                   <input  name="searchValue" type="text" id="searchValue" size="25" value="{{=session.searchValue_tpcp}}" placeholder="Enter value" autocomplete="off" style="width:300px"/>
+                   {{pass}}
+                   
+                 </td>
+                 <td colspan="2" align="right"  ><input type="submit" name="btn_filter" id="btn_filter" value="Filter"   class="button_update"/>
+                   <input type="submit" name="btn_all" id="btn_all" value="All"   class="button_update"/></td>
+                </tr>
+			   </form>
+			   
+               <tr align="left" class="blackCatHead" height="20px" ;>
+                 <td width="100" rowspan="2"  >Offer</td>
+                 <td colspan="2" align="center"  >Date</td>
+                 <td width="100" rowspan="2" align="center"  >Target Qty (Bag)</td>
+                 <td width="150" rowspan="2" align="center" >Reward</td>
+                 <td rowspan="2" align="center" >Bonus  for monthly consistency</td>
+                 <td width="80" rowspan="2" align="center" >Status</td>
+                 <td width="30" rowspan="2" ></td>
+               </tr>
+               <tr align="left" class="blackCatHead" height="20px" ;>
+                 <td  >From</td>
+                 <td width="80"  >To</td>
+               </tr>
+	  
+			   {{for i,record in enumerate(records):}}
+			    {{ if i==items_per_page: break}} 
+                {{toDay=datetime.datetime.strptime(str(record.to_date),'%Y-%m-%d')}}
+                
+                
+                {{if toDay < currentDate:}}
+                	{{bgc='background-color:#FFEAEE;'}}
+                {{else:}}
+					{{bgc='background-color:inherit;'}}
+                {{pass}}
+                
+                <tr  align="left" class="blackCat"  style="vertical-align:middle; font-size:12px;{{=bgc}}">
+				  <td width="100" >{{=record.offer_name}}</td> 
+				  <td width="80" >{{=record.from_date}}</td>
+				  <td width="80" >{{=record.to_date}}</td>
+				  <td width="100" align="right" >{{=record.target_qty}}&nbsp;</td>
+				  <td width="150" align="center" >{{=record.reward}}</td>
+				  <td align="center" >{{=record.bonus_con}}</td>
+				  <td width="80" align="center"  >{{=record.status}}</td>
+				  <form id="form1" name="form1" method="post" action="{{=URL(c='campaign',f='campaign_edit',args=[page,record.id])}}">
+				  <td width="30" align="right"  ><input type="submit" name="btn_go" id="btn_go" value="&gt;&gt;"  class="button_update"/></td>
+			      </form>
+				</tr>
+				
+			   {{pass}}
+		    </table>
+			 
+		  </td>
+      </tr>
+    </table>
+
+
+{{if page:}}
+&nbsp;&nbsp;<a href="{{=URL(args=[page-page])}}">first</a> |
+&nbsp;&nbsp;<a href="{{=URL(args=[page-1])}}">previous</a> |
+{{pass}}
+
+{{if len(records)>items_per_page:}}
+&nbsp;&nbsp;<a href="{{=URL(args=[page+1])}}">next</a>
+{{pass}}
+	<br /></td>
+  </tr>
+</table>
+<br />
+<br />
+

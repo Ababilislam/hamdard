@@ -1,0 +1,526 @@
+{{extend 'layout.html'}}
+
+
+
+  <link rel="stylesheet" href="{{=URL('static', 'js_and_css/ui.theme.css')}}" type="text/css" />
+
+  <link rel="stylesheet" href="{{=URL('static', 'js_and_css/jquery-ui.css')}}" type="text/css" />
+
+  <link rel="stylesheet" href="{{=URL('static', 'js_and_css/style.css')}}" type="text/css" />
+
+   <script src="{{=URL('static','js_and_css/jquery-1.8.2.js')}}"></script>
+
+    <script src="{{=URL('static','js_and_css/jquery-ui.js')}}"></script>
+
+  
+
+  
+
+  <style type="text/css">
+
+	 input[type=text], input[type=password]{
+
+		margin: 2px 0px 2px 0px;
+
+	}
+
+	div.error {
+
+		width: auto;
+
+	}
+
+	
+
+	#sm_rep_rep_id{
+
+		width: 80px;
+
+	}
+
+	#sm_rep_name{
+
+		width: 250px;
+
+	}
+
+	#sm_rep_status{
+
+		width: 120px;
+
+	}
+
+	
+
+	#sm_rep_mobile_no{
+
+		width: 120px;
+
+	}
+
+.page_color,body{
+
+	font-family:Arial, Helvetica, sans-serif;
+
+	font-size:13px;	
+
+	}
+
+ </style>
+
+ 
+
+ <script>
+
+var base_url=location.protocol + "//" + location.hostname + (location.port && ":" + location.port) + "/{{=request.application}}/";
+
+
+
+$(function() {
+
+	 	var valueListStr="";
+		$.ajax({
+		  url: base_url+'visitPlan/get_rep_list',
+		  success: function(resStr) {
+			  valueListStr_rep=resStr
+		  }
+
+		});
+		var valueListStr="";
+		$.ajax({
+		  url: base_url+'visitPlan/get_microunion_list',
+		  success: function(resStr) {
+			  valueListStr_micro=resStr
+		  }
+
+		});
+		var valueListStr="";
+		$.ajax({
+		  url: base_url+'visitPlan/get_area_list',
+		  success: function(resStr) {
+			  valueListStr_area=resStr
+		  }
+
+		});
+		var valueListStr="";
+		$.ajax({
+		  url: base_url+'visitPlan/get_region_list',
+		  success: function(resStr) {
+			  valueListStr_reg=resStr
+		  }
+
+		});
+		var valueListStr="";
+		$.ajax({
+		  url: base_url+'visitPlan/get_zone_list',
+		  success: function(resStr) {
+			  valueListStr_zone=resStr
+		  }
+
+		});
+
+		$('#search_rep').keyup(function(){
+			//-------------------------
+			var valueList = valueListStr_rep.split(',');				
+			var searchValue=$("#search_rep").val();
+			//---------------- auto complete combo list
+			var valueList_new=new Array();
+			lc=0;
+			i =0;
+			var valueStr="";				
+			while (i < valueList.length)
+			{
+				valueStr=valueList[i];
+				i=i+1;					
+				var res=valueStr.toUpperCase().match(searchValue.toUpperCase());
+				if (res!=null){
+					valueList_new[lc]=valueStr;
+					lc=lc+1;
+					if (lc==30){
+						break;
+					};
+				}else{
+					continue;
+				}					
+			};
+
+			//-------------- auto complete source
+
+			$( "input#search_rep" ).autocomplete({
+				source: valueList_new
+			});
+	  }); 
+
+//	  ===========micro=======
+	$('#search_microunion').keyup(function(){
+			//-------------------------
+			var valueList = valueListStr_micro.split(',');				
+			var searchValue=$("#search_microunion").val();
+			//---------------- auto complete combo list
+			var valueList_new=new Array();
+			lc=0;
+			i =0;
+			var valueStr="";				
+			while (i < valueList.length)
+			{
+				valueStr=valueList[i];
+				i=i+1;					
+				var res=valueStr.toUpperCase().match(searchValue.toUpperCase());
+				if (res!=null){
+					valueList_new[lc]=valueStr;
+					lc=lc+1;
+					if (lc==30){
+						break;
+					};
+				}else{
+					continue;
+				}					
+			};
+
+			//-------------- auto complete source
+
+			$( "input#search_microunion" ).autocomplete({
+				source: valueList_new
+			});
+	  });
+	  
+	  
+//	  ===============Area
+	$('#search_area').keyup(function(){
+			//-------------------------
+			var valueList = valueListStr_area.split(',');				
+			var searchValue=$("#search_area").val();
+			//---------------- auto complete combo list
+			var valueList_new=new Array();
+			lc=0;
+			i =0;
+			var valueStr="";				
+			while (i < valueList.length)
+			{
+				valueStr=valueList[i];
+				i=i+1;					
+				var res=valueStr.toUpperCase().match(searchValue.toUpperCase());
+				if (res!=null){
+					valueList_new[lc]=valueStr;
+					lc=lc+1;
+					if (lc==30){
+						break;
+					};
+				}else{
+					continue;
+				}					
+			};
+
+			//-------------- auto complete source
+
+			$( "input#search_area" ).autocomplete({
+				source: valueList_new
+			});
+	  });
+	  
+//	  ===============Region
+	$('#search_reg').keyup(function(){
+			//-------------------------
+			var valueList = valueListStr_reg.split(',');				
+			var searchValue=$("#search_reg").val();
+			//---------------- auto complete combo list
+			var valueList_new=new Array();
+			lc=0;
+			i =0;
+			var valueStr="";				
+			while (i < valueList.length)
+			{
+				valueStr=valueList[i];
+				i=i+1;					
+				var res=valueStr.toUpperCase().match(searchValue.toUpperCase());
+				if (res!=null){
+					valueList_new[lc]=valueStr;
+					lc=lc+1;
+					if (lc==30){
+						break;
+					};
+				}else{
+					continue;
+				}					
+			};
+
+			//-------------- auto complete source
+
+			$( "input#search_reg" ).autocomplete({
+				source: valueList_new
+			});
+	  });
+	  
+//	  ===============Region
+	$('#search_zone').keyup(function(){
+			//-------------------------
+			var valueList = valueListStr_zone.split(',');				
+			var searchValue=$("#search_zone").val();
+			//---------------- auto complete combo list
+			var valueList_new=new Array();
+			lc=0;
+			i =0;
+			var valueStr="";				
+			while (i < valueList.length)
+			{
+				valueStr=valueList[i];
+				i=i+1;					
+				var res=valueStr.toUpperCase().match(searchValue.toUpperCase());
+				if (res!=null){
+					valueList_new[lc]=valueStr;
+					lc=lc+1;
+					if (lc==30){
+						break;
+					};
+				}else{
+					continue;
+				}					
+			};
+
+			//-------------- auto complete source
+
+			$( "input#search_zone" ).autocomplete({
+				source: valueList_new
+			});
+	  });	  
+	  	  
+	  
+}); 
+
+
+
+</script>
+
+
+
+<body >   
+
+<table width="100%"  border="0" cellspacing="0" cellpadding="0" style="background-color:#FFFFFF;" >
+
+  <tr height="30px" >
+
+    <td width="500"><span class="blackCatTitle">&nbsp;Visit Plan</span></td>
+
+    
+
+	
+	<td width="415" align="right"><!--<input name="" type="submit"  value="Back"/>--></td>
+
+	
+
+	
+
+	
+
+    <td>&nbsp;</td>
+
+  </tr>
+
+  <tr  height="1px" style="background-color:#CCCCCC;">
+
+	    <td colspan="3" ></td>
+
+  </tr>
+
+</table>
+
+  
+
+  <table width="800" border="1"  class="sample_border" >
+
+          <form id="form1" name="form1" method="post" action="{{=URL(c='visitPlan',f='visitPlan')}}">
+			 <tr align="left" class="blackCatHead"  height="20px" ;"vertical-align:middle">
+
+              <td  height="28" colspan="8" >
+                From
+                {{ if session.search_dateFrom!=None and session.search_dateFrom!='': }}
+                <input  name="search_dateFrom" type="date" id="search_dateFrom" size="25" value="{{=session.search_dateFrom}}" placeholder="Rep" autocomplete="off" style="width:200px"/>
+                {{else:}}
+              <input  name="search_dateFrom" type="date" id="search_dateFrom" size="25" value="" placeholder="Rep" autocomplete="off" style="width:200px"/>
+              {{pass}}
+              
+              
+                To
+                {{ if session.search_dateTo!=None and session.search_dateTo!='': }}
+    <input  name="search_dateTo" type="date" id="search_dateTo" size="25" value="{{=session.search_dateTo}}" placeholder="Rep" autocomplete="off" style="width:200px"/>
+    			 {{else:}}
+                  <input  name="search_dateTo" type="date" id="search_dateTo" size="25" value="" placeholder="Rep" autocomplete="off" style="width:200px"/>
+                  {{pass}}
+    			{{#=session.search_rep}}
+                {{ if session.search_rep!=None and session.search_rep!='': }}
+                <input  name="search_rep" type="text" id="search_rep" size="25" value="{{=session.search_rep}}" placeholder="Rep" autocomplete="off" style="width:200px"/>
+                {{else:}}
+                 <input  name="search_rep" type="text" id="search_rep" size="25" value="" placeholder="Rep" autocomplete="off" style="width:200px"/>
+                 {{pass}}
+              </td>
+
+            </tr> 
+            
+            <tr align="left" class="blackCatHead"  height="20px" ;"vertical-align:middle">
+
+              
+
+              <td >
+			 {{ if session.search_microunion!=None and session.search_microunion!='': }}
+             <input  name="search_microunion" type="text" id="search_microunion" size="25" value="{{=session.search_microunion}}" placeholder="Microunion" autocomplete="off" style="width:150px"/>
+             {{else:}}
+              <input  name="search_microunion" type="text" id="search_microunion" size="25" value="" placeholder="Microunion" autocomplete="off" style="width:150px"/>
+              {{pass}}
+              </td>
+              <td align="left"  >
+              {{ if session.search_area!=None and session.search_area!='': }}
+              <input  name="search_area" type="text" id="search_area" size="25" value="{{=session.search_area}}" placeholder="Area" autocomplete="off" style="width:150px"/>
+              {{else:}}
+              <input  name="search_area" type="text" id="search_area" size="25" value="" placeholder="Teritory" autocomplete="off" style="width:150px"/>
+              {{pass}}
+              </td>
+              <td align="left"  >
+              {{ if session.search_reg!=None and session.search_reg!='': }}
+              <input  name="search_reg" type="text" id="search_reg" size="25" value="{{=session.search_reg}}" placeholder="Region" autocomplete="off" style="width:150px"/>
+              {{else:}}
+              <input  name="search_reg" type="text" id="search_reg" size="25" value="" placeholder="Area" autocomplete="off" style="width:150px"/>
+              {{pass}}
+              </td>
+			  <td align="left"  >
+              {{ if session.search_zone!=None and session.search_zone!='': }}
+               <input  name="search_zone" type="text" id="search_zone" size="25" value="{{=session.search_zone}}" placeholder="Zone" autocomplete="off" style="width:150px"/>
+              {{else:}}
+               <input  name="search_zone" type="text" id="search_zone" size="25" value="" placeholder="Region" autocomplete="off" style="width:150px"/>
+               {{pass}}
+              </td>
+              <td align="left"  >
+              <input type="submit" name="btn_filter" id="btn_filter" value="Filter"   class="button_update"/>
+			  </td>
+               <td align="left"  >
+
+                <input type="submit" name="btn_rep_all" id="btn_rep_all" value="All"   class="button_update"/>
+				</td>
+
+              <td width="200" align="right"  >
+
+              
+
+			  
+          </td>
+
+            </tr>
+	
+		  </form>
+
+        </table>
+
+  <table width="100%" height="500px"  border="0" cellspacing="0" cellpadding="0" class="page_color" id="table_big"  >
+
+  <tr height="100%"  style="vertical-align:top;">
+
+    <td width="10px">&nbsp;</td>
+
+    <td>
+
+	<table width="100%"  border="0" cellpadding="0" cellspacing="0"  >
+	<tr>
+
+        <td><strong>Total:</strong> {{=totalCount}}<br />
+
+			 <table width="1000" border="1" cellpadding="1" cellspacing="1" class="sample_border" >
+
+               <tr align="left" class="blackCatHead"  height="20px" ;"vertical-align:middle">
+
+                 <td  >Rep </td>
+
+                 <td width="200px">Microunion</td>
+
+                 <td width="200px" >Teritory</td>
+
+                 <td width="200px" >Area</td>
+                 <td width="200px"  >Region</td>
+
+                
+
+               </tr>
+
+			  
+
+			   
+
+			   {{for i,record in enumerate(records):}}
+
+                   {{ if i==items_per_page: break}}
+					
+                  	{{ 
+                    status='Submitted'
+                    if record[db.sm_doctor_visit_plan.status]=='Confirmed':
+                    	status='Approved'
+                    elif record[db.sm_doctor_visit_plan.status]=='ConfirmedASM':
+                    	status='ApprovedASM'
+                    elif record[db.sm_doctor_visit_plan.status]=='CReq':
+                    	status='AmndReq'
+                    elif record[db.sm_doctor_visit_plan.status]=='CReqASM':
+                    	status='AmndReqASM'
+                        
+                    elif record[db.sm_doctor_visit_plan.status]=='Cancelled':
+                    	status='Cancelled'
+                        
+                        
+                     pass
+                     }}
+
+                    <tr  align="left" class="blackCat"  style="font-size:13px"> 
+
+                      <td  >{{=record[db.sm_doctor_visit_plan.rep_name]}} | {{=record[db.sm_doctor_visit_plan.rep_id]}} <br><font style="color:#600; font-size:9px">{{=record[db.sm_doctor_visit_plan.schedule_date]}}</font>&nbsp;&nbsp;<font style="color:#F00; font-size:9px">{{=status}}</font></td>
+
+                      <td >{{=record[db.sm_microunion.microunion_name]}} | {{=record[db.sm_microunion.microunion_id]}}</td>
+
+                      <td  >{{=record[db.sm_microunion.area_name]}} | {{=record[db.sm_microunion.area_id]}}</td>
+
+                      <td  >{{=record[db.sm_microunion.level2_name]}} | {{=record[db.sm_microunion.level2]}}</td>
+                      <td   >{{=record[db.sm_microunion.level1_name]}} | {{=record[db.sm_microunion.level1]}}</td>
+
+                      
+
+                      
+
+                      
+
+                    </tr>
+
+                 
+
+			  {{pass}}
+
+              
+
+		    </table>
+
+		  
+
+          </td></tr>
+
+    </table>
+
+   
+
+{{if page:}}
+
+<a href="{{=URL(args=[page-page])}}">first</a> |   
+
+<a href="{{=URL(args=[page-1])}}">previous</a> |
+
+{{pass}}
+
+
+
+{{if len(records)>items_per_page:}}
+
+<a href="{{=URL(args=[page+1])}}">next</a>
+
+{{pass}}	</td>
+
+  </tr>
+
+</table>
+
+
+
+</body>
+

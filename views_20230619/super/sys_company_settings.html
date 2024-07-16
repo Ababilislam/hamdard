@@ -1,0 +1,73 @@
+{{extend 'layout_login.html'}}
+
+<table width="900px" border="0">
+  <tr>
+    <td align="left"><div class="blackCatTitle">Company Settings</div></td>
+    <td align="right">
+	<form action="{{=URL(c='super',f='home')}}" method="post">
+	<input name="" type="submit"  value="Back"/>
+	</form>
+	</td>
+  </tr>
+</table>
+
+{{=form}}
+
+<table width="900" border="0" >
+  <tr style="background-color:#F0F8FF;"><form action="{{=URL(c='super',f='sys_company_settings')}}" method="post">
+    <td width="400" align="left">CID:
+	<input type="text" name="cid_value" id="cid_value" style="width:100px" value=""></td>
+	
+    <td width="190" align="right">	
+	<input name="btn_filter_comp_sett" type="submit"  value="Filter" style="background-color:#ECF5FF" class="button_update"/>
+	<input name="btn_filter_all" type="submit"  value="All" style="background-color:#ECF5FF" class="button_update"/>	
+	</td></form>
+  </tr>
+</table>
+
+<table width="900" border="0" class="sample2"  >
+  <tr align="left" class="blackCatHead" style="background-color:#CAE4FF;font-size:14px" height="auto";"vertical-align:middle"; >
+    <td width="50">CID</td>
+    <td width="100">Http Pass </td>
+    <td>Subscription Model</td>
+    <td width="100">Clean Data</td>
+    <td width="100">Keep History</td>
+    <td width="150">Subscription Date</td>
+    <td width="50">status</td>
+    <td width="50">&nbsp;</td>
+  </tr>
+  {{ p=0}} 
+
+  {{for i,record in enumerate(records):}}	
+	{{if i==items_per_page: break}}
+
+  {{ p=p%2 }}
+  {{ if p==0:}}
+  <tr  align="left" class="blackCat"  style="background-color:#F0F8FF;font-size:12px" ;"vertical-align:middle"> {{else:}}
+  <tr  align="left" valign="top" class="blackCat"  style="background-color:#DFEFFF;font-size:12px" ;"vertical-align:middle"> {{pass}}
+  
+    <td width="50" height="30" >{{=record.cid}}</td>
+    <td width="100" >{{=record.http_pass}}</td>
+    <td >{{=record.subscription_model}}</td>
+    <td width="100" >{{=record.clean_Data}}</td>
+    <td width="100" >{{=record.keep_history}}</td>
+    <td width="150" >{{=record.subscription_date}}</td>
+    <td width="50" >{{=record.status}}</td>
+    <form id="form1" method="post" action="{{=URL(c='super',f='update_sys_company_settings',args=[page,record.id])}}">
+      <td width="50">
+      <input type="submit" name="update" id="update" value="Edit"  style="background-color:#ECF5FF" class="button_update"/></td></form>
+  </tr>
+  {{ p=p+1 }} 
+  {{pass}}
+</table>
+
+<br/>
+{{if page:}}
+<a href="{{=URL(args=[page-page])}}">first</a> | 
+<a href="{{=URL(args=[page-1])}}">previous</a> |
+{{pass}}
+
+{{if len(records)>items_per_page:}}
+<a href="{{=URL(args=[page+1])}}">next</a>
+{{pass}}
+ <br/><br/><br/><br/>

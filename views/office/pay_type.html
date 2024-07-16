@@ -1,0 +1,115 @@
+{{extend 'layout.html'}}
+ 
+<table width="100%"  border="0" cellspacing="0" cellpadding="0" style="background-color:#FFFFFF;" >
+  <tr height="30px" >
+    <td><span class="blackCatTitle">Representative</span></td>
+  </tr>
+  <tr  height="1px" style="background-color:#CCCCCC;">
+	    <td ></td>
+  </tr>
+</table>
+  
+  
+  <table width="100%" height="500px"  border="0" cellspacing="0" cellpadding="0" class="page_color"  >
+  <tr height="100%"  style="vertical-align:top;">
+    <td width="10px">&nbsp;</td>
+    <td>
+	<table width="100%"  border="0" cellpadding="0" cellspacing="0"  >
+      <tr>
+        <td>&nbsp;</td>
+      </tr>
+      <tr>
+        <td>
+		
+		{{if access_permission==True:}} 
+		
+          <table class="blackCat">
+		  
+		  {{=form.custom.begin}}
+            <tr>
+              <td> Pay Type </td>
+              <td>{{=form.custom.widget.paytype}}</td>
+              <td>&nbsp;</td>
+              </tr>
+            <tr>
+              <td>Detail</td>
+              <td>{{=form.custom.widget.detail}}</td>
+              <td>&nbsp;</td>
+              </tr>
+            <tr>
+              <td>&nbsp;</td>
+              <td>&nbsp;&nbsp;{{=form.custom.submit}}</td>
+              <td>&nbsp;</td>
+              </tr>
+            <tr>
+              <td></td>
+              <td></td>
+              <td></td>
+              </tr>
+			{{=form.custom.end}}
+          </table>
+          {{pass}}
+
+  
+    
+          <br />
+          <table width="700" border="1"  class="sample_border" >
+		  <form id="form1" name="form1" method="post" action="{{=URL(c='representative',f='rep')}}">
+            <tr align="left" class="blackCatHead"  height="20px" ;"vertical-align:middle">
+              <td width="143" >Search Type:</td>
+              <td width="118" >
+                <select name="search_type" id="search_type" style="width:100px" >
+				<option selected="selected"></option>
+                  <option value="Rep ID" >Rep ID</option>
+				  <option value="Mobile No" >Mobile No</option>
+				  <option value="Status" >Status</option>
+				  <option value="Depot" >Depot</option>
+                </select>              </td>
+              <td width="196" ><input  name="search_value" type="text" id="search_value" size="25" value="" title="" /></td>
+              <td width="220" align="right"  ><input type="submit" name="btn_filter_rep" id="btn_filter_rep" value="Filter"   class="button_update"/>
+                &nbsp;
+                <input type="submit" name="btn_rep_all" id="btn_rep_all" value="All"   class="button_update"/>
+                &nbsp;&nbsp;</td>
+            
+			  <td height="28" align="right"  ><a href="{{=URL(c='representative',f='download_representative')}}">
+			    <input type="button" name="" id="" value="Download"   class="button_update"/></a></td>
+            </tr></form>
+          </table>
+  
+			 <br />
+			 <table width="494" border="1" cellpadding="1" cellspacing="1" class="sample_border" >
+               <tr align="left" class="blackCatHead"  height="20px" ;"vertical-align:middle">
+                 <td width="212" >Pay Type</td>
+                 <td width="212" >Detail</td>
+                 <td width="52" ></td>
+               </tr>
+			   {{ p=0}} 		  
+			   {{for i,record in enumerate(records):}}
+			   {{# if i==items_per_page: break}}
+  <form id="form1" name="form1" method="post" action="{{=URL(c='office',f='pay_type_edit',args=[page,record.id])}}">
+    {{ p=p%2 }}
+    
+    <tr  align="left" class="blackCat"  style="vertical-align:middle"> 
+      <td width="212" ><input  name="record_id" type="hidden" id="record_id" size="25" value="{{=record.id}}" title="" />
+        {{=record.paytype}}</td>
+      <td width="212" >{{=record.detail}}</td>
+      <td width="52"  >
+	  	  <input type="submit" name="btn_go" id="btn_go" value="&gt;&gt;"   class="button_update"/>	    </td>
+    </tr>
+  </form>
+			   {{ p=p+1 }} 
+			   {{pass}}
+		    </table>
+		  <p>&nbsp;</p>	      </td></tr>
+    </table>
+<a href="{{=URL(args=[page-page])}}">first</a> |      
+{{if page:}}
+<a href="{{=URL(args=[page-1])}}">previous</a> |
+{{pass}}
+
+{{if len(records)>items_per_page:}}
+<a href="{{=URL(args=[page+1])}}">next</a>
+{{pass}}	</td>
+  </tr>
+</table>
+

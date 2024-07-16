@@ -1,0 +1,106 @@
+{{extend 'layout.html'}}
+ 
+   <style type="text/css">
+ input[type=text], input[type=password],  select {
+    margin: 2px 0px 2px 0px;
+	width:150px;
+}
+div.error {
+    margin-left:0px;
+	width:auto;
+}
+ </style>
+ 
+<table width="100%"  border="0" cellspacing="0" cellpadding="0" style="background-color:#FFFFFF;" >
+  <tr height="30px" >
+    <td width="300"><span class="blackCatTitle">Restricted Stock Item  - Edit</span></td>
+	<form action="{{=URL(c='restricted_stock_item',f='restricted_stock_item_add',args=[page])}}" method="post">
+    <td width="200" align="right"><input name="" type="submit"  value="Back"/></td>
+	</form>
+    <td>&nbsp;</td>
+  </tr>
+  <tr  height="1px" style="background-color:#CCCCCC;">
+	    <td colspan="3" ></td>
+  </tr>
+  </table>
+  
+  
+  <table width="100%" height="500px"  border="0" cellspacing="0" cellpadding="0" class="page_color"  >
+  <tr height="100%"  style="vertical-align:top;">
+    <td>
+	<table width="100%"  border="0" cellpadding="0" cellspacing="0"  >
+      <tr>
+        <td width="10px">&nbsp;</td>
+        <td>&nbsp;</td>
+      </tr>
+      <tr>
+        <td>&nbsp;</td>
+        <td align="left" valign="top">
+			<table width="600" class="blackCat">
+		  {{=form.custom.begin}}            
+            <tr>
+              <td width="150"> Item ID </td>
+              <td><input type="text"  name="" id="" value="{{=records[0].item_id}}" readonly="True" style="background-color:#EFEFEF"/></td>
+              <td>&nbsp;</td>
+              </tr>
+            <tr>
+              <td width="150" height="21">Item Name</td>
+              <td ><input type="text"  name="input" id="input" value="{{=records[0].item_name}}" readonly="readonly" style="background-color:#EFEFEF"/></td>
+              <td>&nbsp;</td>
+            </tr>
+            <tr>
+              <td width="150" height="21">Item Category</td>
+              <td ><input type="text"  name="input2" id="input2" value="{{=records[0].item_cat}}" readonly="readonly" style="background-color:#EFEFEF"/></td>
+              <td>&nbsp;</td>
+            </tr>
+            <tr>
+              <td width="150" height="21">Quantity</td>
+              <td >{{=form.custom.widget.item_qty}}</td>
+              <td>&nbsp;</td>
+              </tr>
+            
+            <tr style="height:10px">
+              <td width="150"></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td width="150" height="21">Auto Voucher </td>
+              <td >{{=form.custom.widget.auto_voucher}}</td>
+              <td>&nbsp;</td>
+              </tr>
+            
+
+            <tr>
+              <td width="150">Status</td>
+              <td>{{=form.custom.widget.status}}</td>
+              <td>&nbsp;</td>
+            </tr>
+            <tr>
+              <td width="150">Delete?</td>
+              <td>{{=form.custom.deletable}}</td>
+              <td>&nbsp;</td>
+            </tr>
+            <tr>
+              <td width="150">&nbsp;</td>
+              <td>{{=form.custom.submit}}</td>
+              <td>&nbsp;</td>
+            </tr>
+            <tr>
+              <td width="150">&nbsp;</td>
+              <td>&nbsp;</td>
+              <td>&nbsp;</td>
+            </tr>
+		{{=form.custom.end}}
+		</table>
+		
+		
+		
+		
+          </td>
+      </tr>
+    </table>
+	</td>
+  </tr>
+</table>
+

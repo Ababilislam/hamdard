@@ -1,0 +1,251 @@
+
+ALTER TABLE `target_vs_achievement_route_item` ADD `zone_name` VARCHAR(100) NOT NULL AFTER `zone_id`;
+ALTER TABLE `target_vs_achievement_route_item` ADD `region_name` VARCHAR(100) NOT NULL AFTER `region_id`;
+ALTER TABLE `target_vs_achievement_route_item` ADD `area_name` VARCHAR(100) NOT NULL AFTER `area_id`;
+ALTER TABLE `target_vs_achievement_route_item` ADD `territory_name` VARCHAR(100) NOT NULL AFTER `territory_id`;
+ALTER TABLE `target_vs_achievement_route_item` ADD `category_id` VARCHAR(20) NOT NULL AFTER `price`;
+
+
+
+
+--
+-- Table structure for table `temp_sales_ad_route_item`
+--
+
+CREATE TABLE `temp_sales_ad_route_item` (
+  `id` int(11) NOT NULL,
+  `cid` varchar(10) DEFAULT NULL,
+  `ym_date` date DEFAULT NULL,
+  `process_date` date DEFAULT NULL,
+  `item_id` varchar(10) DEFAULT NULL,
+  `sales_qty` int(11) DEFAULT NULL,
+  `level0_id` varchar(50) NOT NULL DEFAULT '',
+  `level1_id` varchar(100) DEFAULT NULL,
+  `level2_id` varchar(20) DEFAULT NULL,
+  `level3_id` varchar(100) DEFAULT NULL,
+  `depot_id` varchar(10) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Indexes for dumped tables
+--
+
+--
+-- Indexes for table `temp_sales_ad_route_item`
+--
+ALTER TABLE `temp_sales_ad_route_item`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `cid` (`cid`,`ym_date`,`level3_id`);
+
+--
+-- AUTO_INCREMENT for dumped tables
+--
+
+--
+-- AUTO_INCREMENT for table `temp_sales_ad_route_item`
+--
+ALTER TABLE `temp_sales_ad_route_item`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+COMMIT;
+
+
+
+-- insert demo target for test
+
+INSERT INTO `target_vs_achievement_route_item` (`cid`, `first_date`, `target_date`, `item_id`, `item_name`, `price`, `category_id`, `zone_id`, `zone_name`, `region_id`, `region_name`, `area_id`, `area_name`, `territory_id`, `territory_name`, `depot_id`, `target_qty`, `achievement_qty`) VALUES
+('HAMDARD', '2021-03-01', '2021-03-01', 'HONE80', ' Honey  80 ml ', 130, 'FOOD_ITEMS', 'ZZONE', 'ZZONE', 'ZREGION', 'ZREGION', 'ZAREA', 'ZAREA', 'DEMO', 'DEMO', '-', 2000, 0),
+('HAMDARD', '2021-03-01', '2021-03-01', 'RAF300', ' Rooh Afza  300ml ', 150, 'FOOD_ITEMS', 'ZZONE', 'ZZONE', 'ZREGION', 'ZREGION', 'ZAREA', 'ZAREA', 'DEMO', 'DEMO', '-', 3000, 0),
+('HAMDARD', '2021-03-01', '2021-03-01', 'RAF750', ' Rooh Afza  750ml ', 250, 'FOOD_ITEMS', 'ZZONE', 'ZZONE', 'ZREGION', 'ZREGION', 'ZAREA', 'ZAREA', 'DEMO', 'DEMO', '-', 4000, 0),
+('HAMDARD', '2021-03-01', '2021-03-01', 'ALIS50', 'Alisa 10 x 5 tab', 100, 'OTHERS', 'ZZONE', 'ZZONE', 'ZREGION', 'ZREGION', 'ZAREA', 'ZAREA', 'DEMO', 'DEMO', '-', 5000, 30),
+('HAMDARD', '2021-03-01', '2021-03-01', 'ALK100', 'Alkuli 100ml', 50, 'BASKET_01', 'ZZONE', 'ZZONE', 'ZREGION', 'ZREGION', 'ZAREA', 'ZAREA', 'DEMO', 'DEMO', '-', 2000, 0),
+('HAMDARD', '2021-03-01', '2021-03-01', 'ALK225', 'Alkuli 225ml', 90, 'OTHERS', 'ZZONE', 'ZZONE', 'ZREGION', 'ZREGION', 'ZAREA', 'ZAREA', 'DEMO', 'DEMO', '-', 3000, 0),
+('HAMDARD', '2021-03-01', '2021-03-01', 'ALK450', 'Alkuli 450ml', 140, 'BASKET_01', 'ZZONE', 'ZZONE', 'ZREGION', 'ZREGION', 'ZAREA', 'ZAREA', 'DEMO', 'DEMO', '-', 4000, 0),
+('HAMDARD', '2021-03-01', '2021-03-01', 'ALV100', 'Alvasin 100 ml', 70, 'BASKET_02', 'ZZONE', 'ZZONE', 'ZREGION', 'ZREGION', 'ZAREA', 'ZAREA', 'DEMO', 'DEMO', '-', 5000, 50),
+('HAMDARD', '2021-03-01', '2021-03-01', 'ALV225', 'Alvasin 225ml', 140, 'BASKET_02', 'ZZONE', 'ZZONE', 'ZREGION', 'ZREGION', 'ZAREA', 'ZAREA', 'DEMO', 'DEMO', '-', 2000, 5),
+('HAMDARD', '2021-03-01', '2021-03-01', 'ANT450', 'Antifev 450 ml', 150, 'OTHERS', 'ZZONE', 'ZZONE', 'ZREGION', 'ZREGION', 'ZAREA', 'ZAREA', 'DEMO', 'DEMO', '-', 3000, 0),
+('HAMDARD', '2021-03-01', '2021-03-01', 'ANT150', 'Antiligo 5 x 10 cap', 150, 'OTHERS', 'ZZONE', 'ZZONE', 'ZREGION', 'ZREGION', 'ZAREA', 'ZAREA', 'DEMO', 'DEMO', '-', 4000, 20),
+('HAMDARD', '2021-03-01', '2021-03-01', 'APE100', 'Apelin 100ml', 60, 'OTHERS', 'ZZONE', 'ZZONE', 'ZREGION', 'ZREGION', 'ZAREA', 'ZAREA', 'DEMO', 'DEMO', '-', 5000, 0),
+('HAMDARD', '2021-03-01', '2021-03-01', 'APE450', 'Apelin 450ml', 200, 'BASKET_01', 'ZZONE', 'ZZONE', 'ZREGION', 'ZREGION', 'ZAREA', 'ZAREA', 'DEMO', 'DEMO', '-', 2000, 102),
+('HAMDARD', '2021-03-01', '2021-03-01', 'GOA450', 'Arq Gawzaban', 150, 'EXTRA', 'ZZONE', 'ZZONE', 'ZREGION', 'ZREGION', 'ZAREA', 'ZAREA', 'DEMO', 'DEMO', '-', 3000, 0),
+('HAMDARD', '2021-03-01', '2021-03-01', 'AMK450', 'Arq Mako 450 ml', 120, 'EXTRA', 'ZZONE', 'ZZONE', 'ZREGION', 'ZREGION', 'ZAREA', 'ZAREA', 'DEMO', 'DEMO', '-', 4000, 0),
+('HAMDARD', '2021-03-01', '2021-03-01', 'MAH450', 'Arq Maul Hayat', 180, 'EXTRA', 'ZZONE', 'ZZONE', 'ZREGION', 'ZREGION', 'ZAREA', 'ZAREA', 'DEMO', 'DEMO', '-', 5000, 20),
+('HAMDARD', '2021-03-01', '2021-03-01', 'MAU225', 'Arq Maul Lahm 225 ml', 120, 'EXTRA', 'ZZONE', 'ZZONE', 'ZREGION', 'ZREGION', 'ZAREA', 'ZAREA', 'DEMO', 'DEMO', '-', 2000, 0),
+('HAMDARD', '2021-03-01', '2021-03-01', 'POO450', 'Arq Poodina 450 ml', 100, 'EXTRA', 'ZZONE', 'ZZONE', 'ZREGION', 'ZREGION', 'ZAREA', 'ZAREA', 'DEMO', 'DEMO', '-', 2000, 0),
+('HAMDARD', '2021-03-01', '2021-03-01', 'AJW450', 'Arq. Ajwain 450 ml', 100, 'EXTRA', 'ZZONE', 'ZZONE', 'ZREGION', 'ZREGION', 'ZAREA', 'ZAREA', 'DEMO', 'DEMO', '-', 2000, 0),
+('HAMDARD', '2021-03-01', '2021-03-01', 'BAD450', 'Arq. Badiyan 450 ml', 110, 'EXTRA', 'ZZONE', 'ZZONE', 'ZREGION', 'ZREGION', 'ZAREA', 'ZAREA', 'DEMO', 'DEMO', '-', 2000, 20),
+('HAMDARD', '2021-03-01', '2021-03-01', 'CALR50', 'Calrip 10 x 5 tab', 1100, 'OTHERS', 'ZZONE', 'ZZONE', 'ZREGION', 'ZREGION', 'ZAREA', 'ZAREA', 'DEMO', 'DEMO', '-', 2000, 0),
+('HAMDARD', '2021-03-01', '2021-03-01', 'AGER50', 'Cap.Agerd 5 x 10 cap', 150, 'OTHERS', 'ZZONE', 'ZZONE', 'ZREGION', 'ZREGION', 'ZAREA', 'ZAREA', 'DEMO', 'DEMO', '-', 2000, 0),
+('HAMDARD', '2021-03-01', '2021-03-01', 'CAR100', 'Carmina 100ml', 50, 'BASKET_01', 'ZZONE', 'ZZONE', 'ZREGION', 'ZREGION', 'ZAREA', 'ZAREA', 'DEMO', 'DEMO', '-', 2000, 0),
+('HAMDARD', '2021-03-01', '2021-03-01', 'CAR225', 'Carmina 225ml', 85, 'OTHERS', 'ZZONE', 'ZZONE', 'ZREGION', 'ZREGION', 'ZAREA', 'ZAREA', 'DEMO', 'DEMO', '-', 2000, 0),
+('HAMDARD', '2021-03-01', '2021-03-01', 'CAR450', 'Carmina 450ml', 130, 'BASKET_01', 'ZZONE', 'ZZONE', 'ZREGION', 'ZREGION', 'ZAREA', 'ZAREA', 'DEMO', 'DEMO', '-', 2000, 0),
+('HAMDARD', '2021-03-01', '2021-03-01', 'TCAR60', 'Carmina 60 tab', 85, 'OTHERS', 'ZZONE', 'ZZONE', 'ZREGION', 'ZREGION', 'ZAREA', 'ZAREA', 'DEMO', 'DEMO', '-', 2000, 0),
+('HAMDARD', '2021-03-01', '2021-03-01', 'CENT50', 'Centurin 5 x 10 cap', 220, 'OTHERS', 'ZZONE', 'ZZONE', 'ZREGION', 'ZREGION', 'ZAREA', 'ZAREA', 'DEMO', 'DEMO', '-', 2000, 0),
+('HAMDARD', '2021-03-01', '2021-03-01', 'CHY500', 'ChyabanPrash 250 gm', 250, 'OTHERS', 'ZZONE', 'ZZONE', 'ZREGION', 'ZREGION', 'ZAREA', 'ZAREA', 'DEMO', 'DEMO', '-', 2000, 0),
+('HAMDARD', '2021-03-01', '2021-03-01', 'CHY250', 'ChyabanPrash 500 gm', 450, 'OTHERS', 'ZZONE', 'ZZONE', 'ZREGION', 'ZREGION', 'ZAREA', 'ZAREA', 'DEMO', 'DEMO', '-', 2000, 0),
+('HAMDARD', '2021-03-01', '2021-03-01', 'CIN100', 'Cinkara 100ml', 60, 'OTHERS', 'ZZONE', 'ZZONE', 'ZREGION', 'ZREGION', 'ZAREA', 'ZAREA', 'DEMO', 'DEMO', '-', 2000, 0),
+('HAMDARD', '2021-03-01', '2021-03-01', 'CIN225', 'Cinkara 225ml', 120, 'OTHERS', 'ZZONE', 'ZZONE', 'ZREGION', 'ZREGION', 'ZAREA', 'ZAREA', 'DEMO', 'DEMO', '-', 2000, 0),
+('HAMDARD', '2021-03-01', '2021-03-01', 'CIN450', 'Cinkara 450ml', 200, 'BASKET_01', 'ZZONE', 'ZZONE', 'ZREGION', 'ZREGION', 'ZAREA', 'ZAREA', 'DEMO', 'DEMO', '-', 2000, 0),
+('HAMDARD', '2021-03-01', '2021-03-01', 'DANT50', 'Danta Rakkha 50 mg', 65, 'OTHERS', 'ZZONE', 'ZZONE', 'ZREGION', 'ZREGION', 'ZAREA', 'ZAREA', 'DEMO', 'DEMO', '-', 2000, 0),
+('HAMDARD', '2021-03-01', '2021-03-01', 'DERM20', 'Dermaid 20 gm', 70, 'OTHERS', 'ZZONE', 'ZZONE', 'ZREGION', 'ZREGION', 'ZAREA', 'ZAREA', 'DEMO', 'DEMO', '-', 2000, 0),
+('HAMDARD', '2021-03-01', '2021-03-01', 'DIAB30', 'Diabeat 5 x6 cap', 180, 'OTHERS', 'ZZONE', 'ZZONE', 'ZREGION', 'ZREGION', 'ZAREA', 'ZAREA', 'DEMO', 'DEMO', '-', 2000, 0),
+('HAMDARD', '2021-03-01', '2021-03-01', 'DOLA50', 'Dolabi 10 x 5 tab', 150, 'OTHERS', 'ZZONE', 'ZZONE', 'ZREGION', 'ZREGION', 'ZAREA', 'ZAREA', 'DEMO', 'DEMO', '-', 2000, 0),
+('HAMDARD', '2021-03-01', '2021-03-01', 'DYSN50', 'Dysni 10 x 5 tab', 150, 'OTHERS', 'ZZONE', 'ZZONE', 'ZREGION', 'ZREGION', 'ZAREA', 'ZAREA', 'DEMO', 'DEMO', '-', 2000, 0),
+('HAMDARD', '2021-03-01', '2021-03-01', 'ENDE20', 'Endemali 20 shac', 380, 'OTHERS', 'ZZONE', 'ZZONE', 'ZREGION', 'ZREGION', 'ZAREA', 'ZAREA', 'DEMO', 'DEMO', '-', 2000, 0),
+('HAMDARD', '2021-03-01', '2021-03-01', 'ENDU20', 'Endurex 4 x 5 cap', 1200, 'BASKET_02', 'ZZONE', 'ZZONE', 'ZREGION', 'ZREGION', 'ZAREA', 'ZAREA', 'DEMO', 'DEMO', '-', 2000, 0),
+('HAMDARD', '2021-03-01', '2021-03-01', 'BAD100', 'Etrifal Badian', 70, 'EXTRA', 'ZZONE', 'ZZONE', 'ZREGION', 'ZREGION', 'ZAREA', 'ZAREA', 'DEMO', 'DEMO', '-', 2000, 0),
+('HAMDARD', '2021-03-01', '2021-03-01', 'KAS100', 'Etrifal Kashnizi', 70, 'EXTRA', 'ZZONE', 'ZZONE', 'ZREGION', 'ZREGION', 'ZAREA', 'ZAREA', 'DEMO', 'DEMO', '-', 2000, 0),
+('HAMDARD', '2021-03-01', '2021-03-01', 'ESH100', 'Etrifal Shahtara 100 gm', 100, 'EXTRA', 'ZZONE', 'ZZONE', 'ZREGION', 'ZREGION', 'ZAREA', 'ZAREA', 'DEMO', 'DEMO', '-', 2000, 0),
+('HAMDARD', '2021-03-01', '2021-03-01', 'UST100', 'Etrifal Ustukhudus 100 gm', 120, 'OTHERS', 'ZZONE', 'ZZONE', 'ZREGION', 'ZREGION', 'ZAREA', 'ZAREA', 'DEMO', 'DEMO', '-', 2000, 0),
+('HAMDARD', '2021-03-01', '2021-03-01', 'ZAM100', 'Etrifal Zamani', 120, 'EXTRA', 'ZZONE', 'ZZONE', 'ZREGION', 'ZREGION', 'ZAREA', 'ZAREA', 'DEMO', 'DEMO', '-', 2000, 0),
+('HAMDARD', '2021-03-01', '2021-03-01', 'FAU450', 'Faulin 450 ml', 140, 'OTHERS', 'ZZONE', 'ZZONE', 'ZREGION', 'ZREGION', 'ZAREA', 'ZAREA', 'DEMO', 'DEMO', '-', 2000, 0),
+('HAMDARD', '2021-03-01', '2021-03-01', 'FEV100', 'Fevnil 100 ml', 70, 'OTHERS', 'ZZONE', 'ZZONE', 'ZREGION', 'ZREGION', 'ZAREA', 'ZAREA', 'DEMO', 'DEMO', '-', 2000, 0),
+('HAMDARD', '2021-03-01', '2021-03-01', 'FROD20', 'Frodex 10 x 2 tab', 850, 'BASKET_02', 'ZZONE', 'ZZONE', 'ZREGION', 'ZREGION', 'ZAREA', 'ZAREA', 'DEMO', 'DEMO', '-', 2000, 0),
+('HAMDARD', '2021-03-01', '2021-03-01', 'GHI450', 'Ghitika 450ml', 200, 'OTHERS', 'ZZONE', 'ZZONE', 'ZREGION', 'ZREGION', 'ZAREA', 'ZAREA', 'DEMO', 'DEMO', '-', 2000, 0),
+('HAMDARD', '2021-03-01', '2021-03-01', 'GINT30', 'Ginton 5 x6 cap', 360, 'BASKET_01', 'ZZONE', 'ZZONE', 'ZREGION', 'ZREGION', 'ZAREA', 'ZAREA', 'DEMO', 'DEMO', '-', 2000, 0),
+('HAMDARD', '2021-03-01', '2021-03-01', 'AML130', 'Hamdard Amla Oil 130 ml', 200, 'OTHERS', 'ZZONE', 'ZZONE', 'ZREGION', 'ZREGION', 'ZAREA', 'ZAREA', 'DEMO', 'DEMO', '-', 2000, 0),
+('HAMDARD', '2021-03-01', '2021-03-01', 'HAMB20', 'Hamdard Balm 20 gm', 100, 'BASKET_03', 'ZZONE', 'ZZONE', 'ZREGION', 'ZREGION', 'ZAREA', 'ZAREA', 'DEMO', 'DEMO', '-', 2000, 0),
+('HAMDARD', '2021-03-01', '2021-03-01', 'HORS20', 'Hamdard ORS 20 sach', 100, 'OTHERS', 'ZZONE', 'ZZONE', 'ZREGION', 'ZREGION', 'ZAREA', 'ZAREA', 'DEMO', 'DEMO', '-', 2000, 0),
+('HAMDARD', '2021-03-01', '2021-03-01', 'SAN200', 'Hand Sanitizer 200 ml', 200, 'OTHERS', 'ZZONE', 'ZZONE', 'ZREGION', 'ZREGION', 'ZAREA', 'ZAREA', 'DEMO', 'DEMO', '-', 2000, 0),
+('HAMDARD', '2021-03-01', '2021-03-01', 'HANP50', 'Hanpy 10 x 5 tab', 100, 'OTHERS', 'ZZONE', 'ZZONE', 'ZREGION', 'ZREGION', 'ZAREA', 'ZAREA', 'DEMO', 'DEMO', '-', 2000, 0),
+('HAMDARD', '2021-03-01', '2021-03-01', 'HANR50', 'Hanrhoid 10 x 5 tab', 150, 'OTHERS', 'ZZONE', 'ZZONE', 'ZREGION', 'ZREGION', 'ZAREA', 'ZAREA', 'DEMO', 'DEMO', '-', 2000, 0),
+('HAMDARD', '2021-03-01', '2021-03-01', 'HANB50', 'Hanrhoid B 10 x 5 tab', 150, 'OTHERS', 'ZZONE', 'ZZONE', 'ZREGION', 'ZREGION', 'ZAREA', 'ZAREA', 'DEMO', 'DEMO', '-', 2000, 0),
+('HAMDARD', '2021-03-01', '2021-03-01', 'HANT50', 'Hantar 10 x 5 tab', 100, 'EXTRA', 'ZZONE', 'ZZONE', 'ZREGION', 'ZREGION', 'ZAREA', 'ZAREA', 'DEMO', 'DEMO', '-', 2000, 0),
+('HAMDARD', '2021-03-01', '2021-03-01', 'HELA50', 'Helax 10 x 5 tab', 100, 'OTHERS', 'ZZONE', 'ZZONE', 'ZREGION', 'ZREGION', 'ZAREA', 'ZAREA', 'DEMO', 'DEMO', '-', 2000, 0),
+('HAMDARD', '2021-03-01', '2021-03-01', 'HERM50', 'Hermin 10 x 5 tab', 300, 'OTHERS', 'ZZONE', 'ZZONE', 'ZREGION', 'ZREGION', 'ZAREA', 'ZAREA', 'DEMO', 'DEMO', '-', 2000, 0),
+('HAMDARD', '2021-03-01', '2021-03-01', 'HOL100', 'Holarant 100 ml', 60, 'OTHERS', 'ZZONE', 'ZZONE', 'ZREGION', 'ZREGION', 'ZAREA', 'ZAREA', 'DEMO', 'DEMO', '-', 2000, 0),
+('HAMDARD', '2021-03-01', '2021-03-01', 'HOL225', 'Holarant 225 ml', 110, 'OTHERS', 'ZZONE', 'ZZONE', 'ZREGION', 'ZREGION', 'ZAREA', 'ZAREA', 'DEMO', 'DEMO', '-', 2000, 0),
+('HAMDARD', '2021-03-01', '2021-03-01', 'ICT100', 'Icturn 100ml', 60, 'OTHERS', 'ZZONE', 'ZZONE', 'ZREGION', 'ZREGION', 'ZAREA', 'ZAREA', 'DEMO', 'DEMO', '-', 2000, 0),
+('HAMDARD', '2021-03-01', '2021-03-01', 'ICT225', 'Icturn 225ml', 100, 'OTHERS', 'ZZONE', 'ZZONE', 'ZREGION', 'ZREGION', 'ZAREA', 'ZAREA', 'DEMO', 'DEMO', '-', 2000, 0),
+('HAMDARD', '2021-03-01', '2021-03-01', 'ICT450', 'Icturn 450ml', 150, 'BASKET_01', 'ZZONE', 'ZZONE', 'ZREGION', 'ZREGION', 'ZAREA', 'ZAREA', 'DEMO', 'DEMO', '-', 2000, 0),
+('HAMDARD', '2021-03-01', '2021-03-01', 'INSP50', 'Insperm 10 x 5 tab', 150, 'OTHERS', 'ZZONE', 'ZZONE', 'ZREGION', 'ZREGION', 'ZAREA', 'ZAREA', 'DEMO', 'DEMO', '-', 2000, 0),
+('HAMDARD', '2021-03-01', '2021-03-01', 'ISPA25', 'Ispaghol 25 shac', 300, 'BASKET_02', 'ZZONE', 'ZZONE', 'ZREGION', 'ZREGION', 'ZAREA', 'ZAREA', 'DEMO', 'DEMO', '-', 2000, 0),
+('HAMDARD', '2021-03-01', '2021-03-01', 'JAB225', 'Jabeen 225ml', 140, 'OTHERS', 'ZZONE', 'ZZONE', 'ZREGION', 'ZREGION', 'ZAREA', 'ZAREA', 'DEMO', 'DEMO', '-', 2000, 0),
+('HAMDARD', '2021-03-01', '2021-03-01', 'JER100', 'Jernide 100ml', 70, 'BASKET_02', 'ZZONE', 'ZZONE', 'ZREGION', 'ZREGION', 'ZAREA', 'ZAREA', 'DEMO', 'DEMO', '-', 2000, 0),
+('HAMDARD', '2021-03-01', '2021-03-01', 'JIGA30', 'Jigarine 5 x6 cap', 240, 'OTHERS', 'ZZONE', 'ZZONE', 'ZREGION', 'ZREGION', 'ZAREA', 'ZAREA', 'DEMO', 'DEMO', '-', 2000, 0),
+('HAMDARD', '2021-03-01', '2021-03-01', 'JIN225', 'Jinsant', 150, 'OTHERS', 'ZZONE', 'ZZONE', 'ZREGION', 'ZREGION', 'ZAREA', 'ZAREA', 'DEMO', 'DEMO', '-', 2000, 0),
+('HAMDARD', '2021-03-01', '2021-03-01', 'JIN450', 'Jinsant 450 ml', 240, 'BASKET_02', 'ZZONE', 'ZZONE', 'ZREGION', 'ZREGION', 'ZAREA', 'ZAREA', 'DEMO', 'DEMO', '-', 2000, 0),
+('HAMDARD', '2021-03-01', '2021-03-01', 'JONO30', 'Jonort 5 x6 cap', 210, 'OTHERS', 'ZZONE', 'ZZONE', 'ZREGION', 'ZREGION', 'ZAREA', 'ZAREA', 'DEMO', 'DEMO', '-', 2000, 0),
+('HAMDARD', '2021-03-01', '2021-03-01', 'JOSH25', 'Joshina 25 shac', 325, 'OTHERS', 'ZZONE', 'ZZONE', 'ZREGION', 'ZREGION', 'ZAREA', 'ZAREA', 'DEMO', 'DEMO', '-', 2000, 0),
+('HAMDARD', '2021-03-01', '2021-03-01', 'AML100', 'Jowarish Amla 100 gm', 120, 'EXTRA', 'ZZONE', 'ZZONE', 'ZREGION', 'ZREGION', 'ZAREA', 'ZAREA', 'DEMO', 'DEMO', '-', 2000, 0),
+('HAMDARD', '2021-03-01', '2021-03-01', 'BIS100', 'Jowarish Bisbasa 100 gm', 130, 'EXTRA', 'ZZONE', 'ZZONE', 'ZREGION', 'ZREGION', 'ZAREA', 'ZAREA', 'DEMO', 'DEMO', '-', 2000, 0),
+('HAMDARD', '2021-03-01', '2021-03-01', 'JAL100', 'Jowarish Jalinoos 100 gm', 260, 'EXTRA', 'ZZONE', 'ZZONE', 'ZREGION', 'ZREGION', 'ZAREA', 'ZAREA', 'DEMO', 'DEMO', '-', 2000, 0),
+('HAMDARD', '2021-03-01', '2021-03-01', 'KAM100', 'Jowarish Kamuni 100 gm', 110, 'EXTRA', 'ZZONE', 'ZZONE', 'ZREGION', 'ZREGION', 'ZAREA', 'ZAREA', 'DEMO', 'DEMO', '-', 2000, 0),
+('HAMDARD', '2021-03-01', '2021-03-01', 'MUST80', 'Jowarish Mustagi 80 gm', 240, 'EXTRA', 'ZZONE', 'ZZONE', 'ZREGION', 'ZREGION', 'ZAREA', 'ZAREA', 'DEMO', 'DEMO', '-', 2000, 0),
+('HAMDARD', '2021-03-01', '2021-03-01', 'JSH100', 'Jowarish Shahi 100 gm', 90, 'EXTRA', 'ZZONE', 'ZZONE', 'ZREGION', 'ZREGION', 'ZAREA', 'ZAREA', 'DEMO', 'DEMO', '-', 2000, 0),
+('HAMDARD', '2021-03-01', '2021-03-01', 'TAM100', 'Jowarish Tamar Hindi 100 gm', 130, 'EXTRA', 'ZZONE', 'ZZONE', 'ZREGION', 'ZREGION', 'ZAREA', 'ZAREA', 'DEMO', 'DEMO', '-', 2000, 0),
+('HAMDARD', '2021-03-01', '2021-03-01', 'ZAR100', 'Jowarish Zarooni 100 gm', 230, 'OTHERS', 'ZZONE', 'ZZONE', 'ZREGION', 'ZREGION', 'ZAREA', 'ZAREA', 'DEMO', 'DEMO', '-', 2000, 0),
+('HAMDARD', '2021-03-01', '2021-03-01', 'ABRE80', 'Khamira Abresham 80 gm', 170, 'EXTRA', 'ZZONE', 'ZZONE', 'ZREGION', 'ZREGION', 'ZAREA', 'ZAREA', 'DEMO', 'DEMO', '-', 2000, 0),
+('HAMDARD', '2021-03-01', '2021-03-01', 'GAWZ80', 'Khamira Gawzaban 80 gm', 140, 'EXTRA', 'ZZONE', 'ZZONE', 'ZREGION', 'ZREGION', 'ZAREA', 'ZAREA', 'DEMO', 'DEMO', '-', 2000, 0),
+('HAMDARD', '2021-03-01', '2021-03-01', 'GAWA80', 'Khamira Gawzaban Ambari  Jaw 80 gm', 550, 'EXTRA', 'ZZONE', 'ZZONE', 'ZREGION', 'ZREGION', 'ZAREA', 'ZAREA', 'DEMO', 'DEMO', '-', 2000, 0),
+('HAMDARD', '2021-03-01', '2021-03-01', 'MARW80', 'Khamira Marwareed', 140, 'EXTRA', 'ZZONE', 'ZZONE', 'ZREGION', 'ZREGION', 'ZAREA', 'ZAREA', 'DEMO', 'DEMO', '-', 2000, 0),
+('HAMDARD', '2021-03-01', '2021-03-01', 'KOBI60', 'Kobi60mg 5 x6 cap', 210, 'BASKET_02', 'ZZONE', 'ZZONE', 'ZREGION', 'ZREGION', 'ZAREA', 'ZAREA', 'DEMO', 'DEMO', '-', 2000, 0),
+('HAMDARD', '2021-03-01', '2021-03-01', 'KULZ15', 'Kulzam 15 ml', 70, 'BASKET_02', 'ZZONE', 'ZZONE', 'ZREGION', 'ZREGION', 'ZAREA', 'ZAREA', 'DEMO', 'DEMO', '-', 2000, 0),
+('HAMDARD', '2021-03-01', '2021-03-01', 'LADI30', 'Ladica 5 x6 cap', 180, 'OTHERS', 'ZZONE', 'ZZONE', 'ZREGION', 'ZREGION', 'ZAREA', 'ZAREA', 'DEMO', 'DEMO', '-', 2000, 0),
+('HAMDARD', '2021-03-01', '2021-03-01', 'SAP100', 'Laooq Sapistan 100 gm', 120, 'EXTRA', 'ZZONE', 'ZZONE', 'ZREGION', 'ZREGION', 'ZAREA', 'ZAREA', 'DEMO', 'DEMO', '-', 2000, 0),
+('HAMDARD', '2021-03-01', '2021-03-01', 'LIBI20', 'Libidex 4 x 5 cap', 650, 'BASKET_01', 'ZZONE', 'ZZONE', 'ZREGION', 'ZREGION', 'ZAREA', 'ZAREA', 'DEMO', 'DEMO', '-', 2000, 0),
+('HAMDARD', '2021-03-01', '2021-03-01', 'LIN500', 'Lina  500mg  5 x6 cap', 240, 'BASKET_01', 'ZZONE', 'ZZONE', 'ZREGION', 'ZREGION', 'ZAREA', 'ZAREA', 'DEMO', 'DEMO', '-', 2000, 0),
+('HAMDARD', '2021-03-01', '2021-03-01', 'LIVE30', 'Livec 5 x6 cap', 240, 'OTHERS', 'ZZONE', 'ZZONE', 'ZREGION', 'ZREGION', 'ZAREA', 'ZAREA', 'DEMO', 'DEMO', '-', 2000, 0),
+('HAMDARD', '2021-03-01', '2021-03-01', 'LIV450', 'Liverist 450 ml', 150, 'OTHERS', 'ZZONE', 'ZZONE', 'ZREGION', 'ZREGION', 'ZAREA', 'ZAREA', 'DEMO', 'DEMO', '-', 2000, 0),
+('HAMDARD', '2021-03-01', '2021-03-01', 'LKB100', 'Lubub Kabir 100 gm', 750, 'OTHERS', 'ZZONE', 'ZZONE', 'ZREGION', 'ZREGION', 'ZAREA', 'ZAREA', 'DEMO', 'DEMO', '-', 2000, 0),
+('HAMDARD', '2021-03-01', '2021-03-01', 'LKS100', 'Lubub Kabir SF 100 gm', 900, 'OTHERS', 'ZZONE', 'ZZONE', 'ZREGION', 'ZREGION', 'ZAREA', 'ZAREA', 'DEMO', 'DEMO', '-', 2000, 0),
+('HAMDARD', '2021-03-01', '2021-03-01', 'KHU100', 'Majoon Arade Khurma 100 gm', 130, 'OTHERS', 'ZZONE', 'ZZONE', 'ZREGION', 'ZREGION', 'ZAREA', 'ZAREA', 'DEMO', 'DEMO', '-', 2000, 0),
+('HAMDARD', '2021-03-01', '2021-03-01', 'CHO100', 'Majoon Choobchini 100 gm', 130, 'EXTRA', 'ZZONE', 'ZZONE', 'ZREGION', 'ZREGION', 'ZAREA', 'ZAREA', 'DEMO', 'DEMO', '-', 2000, 0),
+('HAMDARD', '2021-03-01', '2021-03-01', 'DWAR80', 'Majoon Dabeedul Ward 80 gm', 220, 'EXTRA', 'ZZONE', 'ZZONE', 'ZREGION', 'ZREGION', 'ZAREA', 'ZAREA', 'DEMO', 'DEMO', '-', 2000, 0),
+('HAMDARD', '2021-03-01', '2021-03-01', 'FAL100', 'Majoon Falasefa 100 gm', 120, 'EXTRA', 'ZZONE', 'ZZONE', 'ZREGION', 'ZREGION', 'ZAREA', 'ZAREA', 'DEMO', 'DEMO', '-', 2000, 0),
+('HAMDARD', '2021-03-01', '2021-03-01', 'KUN100', 'Majoon Kundur 100 gm', 110, 'OTHERS', 'ZZONE', 'ZZONE', 'ZREGION', 'ZREGION', 'ZAREA', 'ZAREA', 'DEMO', 'DEMO', '-', 2000, 0),
+('HAMDARD', '2021-03-01', '2021-03-01', 'LAN100', 'Majoon Lana 100 gm', 800, 'EXTRA', 'ZZONE', 'ZZONE', 'ZREGION', 'ZREGION', 'ZAREA', 'ZAREA', 'DEMO', 'DEMO', '-', 2000, 0),
+('HAMDARD', '2021-03-01', '2021-03-01', 'MUG100', 'Majoon Mughalliz 100 gm', 170, 'OTHERS', 'ZZONE', 'ZZONE', 'ZREGION', 'ZREGION', 'ZAREA', 'ZAREA', 'DEMO', 'DEMO', '-', 2000, 0),
+('HAMDARD', '2021-03-01', '2021-03-01', 'MUM100', 'Majoon Mumsik 100 gm', 575, 'OTHERS', 'ZZONE', 'ZZONE', 'ZREGION', 'ZREGION', 'ZAREA', 'ZAREA', 'DEMO', 'DEMO', '-', 2000, 0),
+('HAMDARD', '2021-03-01', '2021-03-01', 'SOH100', 'Majoon Sohagsoonth 100 gm', 120, 'EXTRA', 'ZZONE', 'ZZONE', 'ZREGION', 'ZREGION', 'ZAREA', 'ZAREA', 'DEMO', 'DEMO', '-', 2000, 0),
+('HAMDARD', '2021-03-01', '2021-03-01', 'SUR100', 'Majoon Suranjan 100 gm', 110, 'EXTRA', 'ZZONE', 'ZZONE', 'ZREGION', 'ZREGION', 'ZAREA', 'ZAREA', 'DEMO', 'DEMO', '-', 2000, 0),
+('HAMDARD', '2021-03-01', '2021-03-01', 'USH100', 'Majoon Ushba 100 gm', 100, 'OTHERS', 'ZZONE', 'ZZONE', 'ZREGION', 'ZREGION', 'ZAREA', 'ZAREA', 'DEMO', 'DEMO', '-', 2000, 0),
+('HAMDARD', '2021-03-01', '2021-03-01', 'MAR100', 'Marbelus 100 ml', 60, 'BASKET_02', 'ZZONE', 'ZZONE', 'ZREGION', 'ZREGION', 'ZAREA', 'ZAREA', 'DEMO', 'DEMO', '-', 2000, 0),
+('HAMDARD', '2021-03-01', '2021-03-01', 'MAR225', 'Marbelus 225 ml', 100, 'BASKET_02', 'ZZONE', 'ZZONE', 'ZREGION', 'ZREGION', 'ZAREA', 'ZAREA', 'DEMO', 'DEMO', '-', 2000, 0),
+('HAMDARD', '2021-03-01', '2021-03-01', 'MAS100', 'Masturin 100ml', 60, 'OTHERS', 'ZZONE', 'ZZONE', 'ZREGION', 'ZREGION', 'ZAREA', 'ZAREA', 'DEMO', 'DEMO', '-', 2000, 0),
+('HAMDARD', '2021-03-01', '2021-03-01', 'MAS225', 'Masturin 225 ml   ', 100, 'EXTRA', 'ZZONE', 'ZZONE', 'ZREGION', 'ZREGION', 'ZAREA', 'ZAREA', 'DEMO', 'DEMO', '-', 2000, 0),
+('HAMDARD', '2021-03-01', '2021-03-01', 'MAS450', 'Masturin 450ml', 150, 'BASKET_01', 'ZZONE', 'ZZONE', 'ZREGION', 'ZREGION', 'ZAREA', 'ZAREA', 'DEMO', 'DEMO', '-', 2000, 0),
+('HAMDARD', '2021-03-01', '2021-03-01', 'MASU30', 'Masukh Suda 5 x6 cap', 210, 'OTHERS', 'ZZONE', 'ZZONE', 'ZREGION', 'ZREGION', 'ZAREA', 'ZAREA', 'DEMO', 'DEMO', '-', 2000, 0),
+('HAMDARD', '2021-03-01', '2021-03-01', 'NAU100', 'Naunehal 100ml', 60, 'BASKET_01', 'ZZONE', 'ZZONE', 'ZREGION', 'ZREGION', 'ZAREA', 'ZAREA', 'DEMO', 'DEMO', '-', 2000, 0),
+('HAMDARD', '2021-03-01', '2021-03-01', 'NEE225', 'Neelofar 225 ml', 70, 'OTHERS', 'ZZONE', 'ZZONE', 'ZREGION', 'ZREGION', 'ZAREA', 'ZAREA', 'DEMO', 'DEMO', '-', 2000, 0),
+('HAMDARD', '2021-03-01', '2021-03-01', 'NERV50', 'Nervent 10 x 5 tab', 1000, 'OTHERS', 'ZZONE', 'ZZONE', 'ZREGION', 'ZREGION', 'ZAREA', 'ZAREA', 'DEMO', 'DEMO', '-', 2000, 0),
+('HAMDARD', '2021-03-01', '2021-03-01', 'NER450', 'Nervonic 450 ml', 200, 'OTHERS', 'ZZONE', 'ZZONE', 'ZREGION', 'ZREGION', 'ZAREA', 'ZAREA', 'DEMO', 'DEMO', '-', 2000, 0),
+('HAMDARD', '2021-03-01', '2021-03-01', 'NIMU30', 'Nimulant 5 x6 cap', 240, 'BASKET_02', 'ZZONE', 'ZZONE', 'ZREGION', 'ZREGION', 'ZAREA', 'ZAREA', 'DEMO', 'DEMO', '-', 2000, 0),
+('HAMDARD', '2021-03-01', '2021-03-01', 'NEUT08', 'Nishat 10 x 5 tab', 1150, 'OTHERS', 'ZZONE', 'ZZONE', 'ZREGION', 'ZREGION', 'ZAREA', 'ZAREA', 'DEMO', 'DEMO', '-', 2000, 0),
+('HAMDARD', '2021-03-01', '2021-03-01', 'NISH50', 'Nishat 10 x 5 tab', 1150, 'OTHERS', 'ZZONE', 'ZZONE', 'ZREGION', 'ZREGION', 'ZAREA', 'ZAREA', 'DEMO', 'DEMO', '-', 2000, 0),
+('HAMDARD', '2021-03-01', '2021-03-01', 'NORM50', 'Normatensin 10 x 5 tab', 150, 'OTHERS', 'ZZONE', 'ZZONE', 'ZREGION', 'ZREGION', 'ZAREA', 'ZAREA', 'DEMO', 'DEMO', '-', 2000, 0),
+('HAMDARD', '2021-03-01', '2021-03-01', 'OCA450', 'O Care 450 ml', 150, 'OTHERS', 'ZZONE', 'ZZONE', 'ZREGION', 'ZREGION', 'ZAREA', 'ZAREA', 'DEMO', 'DEMO', '-', 2000, 0),
+('HAMDARD', '2021-03-01', '2021-03-01', 'ORG100', 'Orangin 100 ml', 50, 'OTHERS', 'ZZONE', 'ZZONE', 'ZREGION', 'ZREGION', 'ZAREA', 'ZAREA', 'DEMO', 'DEMO', '-', 2000, 0),
+('HAMDARD', '2021-03-01', '2021-03-01', 'ORG450', 'Orangin 450 ml', 140, 'OTHERS', 'ZZONE', 'ZZONE', 'ZREGION', 'ZREGION', 'ZAREA', 'ZAREA', 'DEMO', 'DEMO', '-', 2000, 0),
+('HAMDARD', '2021-03-01', '2021-03-01', 'PALM30', 'Palmet 5 x6 cap', 240, 'OTHERS', 'ZZONE', 'ZZONE', 'ZREGION', 'ZREGION', 'ZAREA', 'ZAREA', 'DEMO', 'DEMO', '-', 2000, 0),
+('HAMDARD', '2021-03-01', '2021-03-01', 'PEBL50', 'Peblew 10 x 5 tab', 100, 'OTHERS', 'ZZONE', 'ZZONE', 'ZREGION', 'ZREGION', 'ZAREA', 'ZAREA', 'DEMO', 'DEMO', '-', 2000, 0),
+('HAMDARD', '2021-03-01', '2021-03-01', 'PENI15', 'Peniton Oil 15ml', 200, 'OTHERS', 'ZZONE', 'ZZONE', 'ZREGION', 'ZREGION', 'ZAREA', 'ZAREA', 'DEMO', 'DEMO', '-', 2000, 0),
+('HAMDARD', '2021-03-01', '2021-03-01', 'PENI20', 'Peniton ointment 20gm', 200, 'OTHERS', 'ZZONE', 'ZZONE', 'ZREGION', 'ZREGION', 'ZAREA', 'ZAREA', 'DEMO', 'DEMO', '-', 2000, 0),
+('HAMDARD', '2021-03-01', '2021-03-01', 'PROM50', 'Promef 10 x 5 tab', 250, 'OTHERS', 'ZZONE', 'ZZONE', 'ZREGION', 'ZREGION', 'ZAREA', 'ZAREA', 'DEMO', 'DEMO', '-', 2000, 0),
+('HAMDARD', '2021-03-01', '2021-03-01', 'RED100', 'Redid 10 x 10 tab', 150, 'OTHERS', 'ZZONE', 'ZZONE', 'ZREGION', 'ZREGION', 'ZAREA', 'ZAREA', 'DEMO', 'DEMO', '-', 2000, 0),
+('HAMDARD', '2021-03-01', '2021-03-01', 'ROSN50', 'Rosnum 10 x 5 tab', 150, 'OTHERS', 'ZZONE', 'ZZONE', 'ZREGION', 'ZREGION', 'ZAREA', 'ZAREA', 'DEMO', 'DEMO', '-', 2000, 0),
+('HAMDARD', '2021-03-01', '2021-03-01', 'SURK10', 'Rowghan Surkh 10 ml', 50, 'OTHERS', 'ZZONE', 'ZZONE', 'ZREGION', 'ZREGION', 'ZAREA', 'ZAREA', 'DEMO', 'DEMO', '-', 2000, 0),
+('HAMDARD', '2021-03-01', '2021-03-01', 'SAD100', 'Saduri 100 ml', 60, 'BASKET_02', 'ZZONE', 'ZZONE', 'ZREGION', 'ZREGION', 'ZAREA', 'ZAREA', 'DEMO', 'DEMO', '-', 2000, 0),
+('HAMDARD', '2021-03-01', '2021-03-01', 'SAD225', 'Saduri 225 ml', 120, 'BASKET_02', 'ZZONE', 'ZZONE', 'ZREGION', 'ZREGION', 'ZAREA', 'ZAREA', 'DEMO', 'DEMO', '-', 2000, 0),
+('HAMDARD', '2021-03-01', '2021-03-01', 'SAF225', 'SAF225 225ml', 120, 'OTHERS', 'ZZONE', 'ZZONE', 'ZREGION', 'ZREGION', 'ZAREA', 'ZAREA', 'DEMO', 'DEMO', '-', 2000, 0),
+('HAMDARD', '2021-03-01', '2021-03-01', 'SAF100', 'Safi 100ml', 65, 'OTHERS', 'ZZONE', 'ZZONE', 'ZREGION', 'ZREGION', 'ZAREA', 'ZAREA', 'DEMO', 'DEMO', '-', 2000, 0),
+('HAMDARD', '2021-03-01', '2021-03-01', 'SAF450', 'Safi 450ml', 175, 'BASKET_01', 'ZZONE', 'ZZONE', 'ZREGION', 'ZREGION', 'ZAREA', 'ZAREA', 'DEMO', 'DEMO', '-', 2000, 0),
+('HAMDARD', '2021-03-01', '2021-03-01', 'CSAF30', 'Safi 5 x 6 cap', 180, 'BASKET_01', 'ZZONE', 'ZZONE', 'ZREGION', 'ZREGION', 'ZAREA', 'ZAREA', 'DEMO', 'DEMO', '-', 2000, 0),
+('HAMDARD', '2021-03-01', '2021-03-01', 'SELV50', 'Selvin ', 200, 'OTHERS', 'ZZONE', 'ZZONE', 'ZREGION', 'ZREGION', 'ZAREA', 'ZAREA', 'DEMO', 'DEMO', '-', 2000, 0),
+('HAMDARD', '2021-03-01', '2021-03-01', 'SPE100', 'Spermatin 18x5 tab', 180, 'OTHERS', 'ZZONE', 'ZZONE', 'ZREGION', 'ZREGION', 'ZAREA', 'ZAREA', 'DEMO', 'DEMO', '-', 2000, 0),
+('HAMDARD', '2021-03-01', '2021-03-01', 'SUA100', 'Sualin 10x10 tab', 250, 'OTHERS', 'ZZONE', 'ZZONE', 'ZREGION', 'ZREGION', 'ZAREA', 'ZAREA', 'DEMO', 'DEMO', '-', 2000, 0),
+('HAMDARD', '2021-03-01', '2021-03-01', 'SUD450', 'Sudys ', 150, 'OTHERS', 'ZZONE', 'ZZONE', 'ZREGION', 'ZREGION', 'ZAREA', 'ZAREA', 'DEMO', 'DEMO', '-', 2000, 0),
+('HAMDARD', '2021-03-01', '2021-03-01', 'SAML50', 'Sufoof Amla Prostatum 50 gm', 60, 'EXTRA', 'ZZONE', 'ZZONE', 'ZREGION', 'ZREGION', 'ZAREA', 'ZAREA', 'DEMO', 'DEMO', '-', 2000, 0),
+('HAMDARD', '2021-03-01', '2021-03-01', 'IDRA12', 'Sufoof Idrar K 1', 65, 'EXTRA', 'ZZONE', 'ZZONE', 'ZREGION', 'ZREGION', 'ZAREA', 'ZAREA', 'DEMO', 'DEMO', '-', 2000, 0),
+('HAMDARD', '2021-03-01', '2021-03-01', 'JIGA12', 'Sufoof Jigar JHS 12 gm', 45, 'EXTRA', 'ZZONE', 'ZZONE', 'ZREGION', 'ZREGION', 'ZAREA', 'ZAREA', 'DEMO', 'DEMO', '-', 2000, 0),
+('HAMDARD', '2021-03-01', '2021-03-01', 'JIRY50', 'Sufoof Jiryan 50 gm', 90, 'OTHERS', 'ZZONE', 'ZZONE', 'ZREGION', 'ZREGION', 'ZAREA', 'ZAREA', 'DEMO', 'DEMO', '-', 2000, 0),
+('HAMDARD', '2021-03-01', '2021-03-01', 'KASH12', 'Sufoof Kashnizi K 2 12 gm', 25, 'EXTRA', 'ZZONE', 'ZZONE', 'ZREGION', 'ZREGION', 'ZAREA', 'ZAREA', 'DEMO', 'DEMO', '-', 2000, 0),
+('HAMDARD', '2021-03-01', '2021-03-01', 'MOYA50', 'Sufoof Moya 50 gm', 200, 'EXTRA', 'ZZONE', 'ZZONE', 'ZREGION', 'ZREGION', 'ZAREA', 'ZAREA', 'DEMO', 'DEMO', '-', 2000, 0),
+('HAMDARD', '2021-03-01', '2021-03-01', 'MUGA50', 'Sufoof Mugalliz 50 gm', 70, 'EXTRA', 'ZZONE', 'ZZONE', 'ZREGION', 'ZREGION', 'ZAREA', 'ZAREA', 'DEMO', 'DEMO', '-', 2000, 0),
+('HAMDARD', '2021-03-01', '2021-03-01', 'JYHB12', 'Sufoof Musakkin JYHB 12 gm', 35, 'EXTRA', 'ZZONE', 'ZZONE', 'ZREGION', 'ZREGION', 'ZAREA', 'ZAREA', 'DEMO', 'DEMO', '-', 2000, 0),
+('HAMDARD', '2021-03-01', '2021-03-01', 'MUSH12', 'Sufoof Mushil J 2 12 gm', 40, 'EXTRA', 'ZZONE', 'ZZONE', 'ZREGION', 'ZREGION', 'ZAREA', 'ZAREA', 'DEMO', 'DEMO', '-', 2000, 0),
+('HAMDARD', '2021-03-01', '2021-03-01', 'QARH50', 'Sufoof Qarhin', 475, 'EXTRA', 'ZZONE', 'ZZONE', 'ZREGION', 'ZREGION', 'ZAREA', 'ZAREA', 'DEMO', 'DEMO', '-', 2000, 0),
+('HAMDARD', '2021-03-01', '2021-03-01', 'SAND12', 'Sufoof Sandal K 3 12 gm', 35, 'EXTRA', 'ZZONE', 'ZZONE', 'ZREGION', 'ZREGION', 'ZAREA', 'ZAREA', 'DEMO', 'DEMO', '-', 2000, 0),
+('HAMDARD', '2021-03-01', '2021-03-01', 'SUPA50', 'Sufoof Suparipak 50 gm', 100, 'OTHERS', 'ZZONE', 'ZZONE', 'ZREGION', 'ZREGION', 'ZAREA', 'ZAREA', 'DEMO', 'DEMO', '-', 2000, 0),
+('HAMDARD', '2021-03-01', '2021-03-01', 'SURA12', 'Sufoof Suranjan J 3 12 gm', 40, 'EXTRA', 'ZZONE', 'ZZONE', 'ZREGION', 'ZREGION', 'ZAREA', 'ZAREA', 'DEMO', 'DEMO', '-', 2000, 0),
+('HAMDARD', '2021-03-01', '2021-03-01', 'SUPU30', 'Suput 5 x6 cap', 150, 'OTHERS', 'ZZONE', 'ZZONE', 'ZREGION', 'ZREGION', 'ZAREA', 'ZAREA', 'DEMO', 'DEMO', '-', 2000, 0),
+('HAMDARD', '2021-03-01', '2021-03-01', 'SURO50', 'Surobin 10 x 5 tab', 150, 'OTHERS', 'ZZONE', 'ZZONE', 'ZREGION', 'ZREGION', 'ZAREA', 'ZAREA', 'DEMO', 'DEMO', '-', 2000, 0),
+('HAMDARD', '2021-03-01', '2021-03-01', 'SUVI30', 'Suvit 30 Tab', 240, 'BASKET_02', 'ZZONE', 'ZZONE', 'ZREGION', 'ZREGION', 'ZAREA', 'ZAREA', 'DEMO', 'DEMO', '-', 2000, 0),
+('HAMDARD', '2021-03-01', '2021-03-01', 'SUZA50', 'Suzarn 10 x 5 tab', 150, 'OTHERS', 'ZZONE', 'ZZONE', 'ZREGION', 'ZREGION', 'ZAREA', 'ZAREA', 'DEMO', 'DEMO', '-', 2000, 0),
+('HAMDARD', '2021-03-01', '2021-03-01', 'TONA50', 'Tonalax 10 x 5 tab', 150, 'OTHERS', 'ZZONE', 'ZZONE', 'ZREGION', 'ZREGION', 'ZAREA', 'ZAREA', 'DEMO', 'DEMO', '-', 2000, 0),
+('HAMDARD', '2021-03-01', '2021-03-01', 'CHUR25', 'Trifala Churna 25 sach', 225, 'OTHERS', 'ZZONE', 'ZZONE', 'ZREGION', 'ZREGION', 'ZAREA', 'ZAREA', 'DEMO', 'DEMO', '-', 2000, 0),
+('HAMDARD', '2021-03-01', '2021-03-01', 'CTRIG8', 'Trigone ', 560, 'OTHERS', 'ZZONE', 'ZZONE', 'ZREGION', 'ZREGION', 'ZAREA', 'ZAREA', 'DEMO', 'DEMO', '-', 2000, 0),
+('HAMDARD', '2021-03-01', '2021-03-01', 'TTRIG8', 'Trigone 4 x2 tab', 560, 'OTHERS', 'ZZONE', 'ZZONE', 'ZREGION', 'ZREGION', 'ZAREA', 'ZAREA', 'DEMO', 'DEMO', '-', 2000, 0),
+('HAMDARD', '2021-03-01', '2021-03-01', 'VALE30', 'Valent 5 x6 cap', 300, 'OTHERS', 'ZZONE', 'ZZONE', 'ZREGION', 'ZREGION', 'ZAREA', 'ZAREA', 'DEMO', 'DEMO', '-', 2000, 0),
+('HAMDARD', '2021-03-01', '2021-03-01', 'VIT100', 'Vitorist 100 ml', 60, 'OTHERS', 'ZZONE', 'ZZONE', 'ZREGION', 'ZREGION', 'ZAREA', 'ZAREA', 'DEMO', 'DEMO', '-', 2000, 0),
+('HAMDARD', '2021-03-01', '2021-03-01', 'VIT450', 'Vitorist 450 ml', 200, 'BASKET_01', 'ZZONE', 'ZZONE', 'ZREGION', 'ZREGION', 'ZAREA', 'ZAREA', 'DEMO', 'DEMO', '-', 2000, 0);
+COMMIT;
+
+
+
+
+
+-- achivement process auto
+
+-- cteate sales ad this month
+http://127.0.0.1:8000/hamdard/auto_acehivement_process/process_sales_ad_route_item
+
+-- update achievement_qty
+
+http://127.0.0.1:8000/hamdard/auto_acehivement_process/update_acehivement
+
+
+
+
+-- view report link
+
+-- zone
+http://127.0.0.1:8000/hamdard/report_summary_mobile/index?cid=HAMDARD&rep_id=ITZM&rep_pass=1234
+
+-- region
+http://127.0.0.1:8000/hamdard/report_summary_mobile/index?cid=HAMDARD&rep_id=ITRSM&rep_pass=1234
+
+-- area
+http://127.0.0.1:8000/hamdard/report_summary_mobile/index?cid=HAMDARD&rep_id=ITFM&rep_pass=1234
+
+--tr
+http://127.0.0.1:8000/hamdard/report_summary_mobile/index?cid=HAMDARD&rep_id=IT03&rep_pass=1234

@@ -1,0 +1,291 @@
+{{extend 'layout.html'}}
+
+
+ <link rel="stylesheet" href="{{=URL('static', 'js_and_css/ui.theme.css')}}" type="text/css" />
+  <link rel="stylesheet" href="{{=URL('static', 'js_and_css/jquery-ui.css')}}" type="text/css" />
+  <link rel="stylesheet" href="{{=URL('static', 'js_and_css/style.css')}}" type="text/css" />
+  <script src="{{=URL('static','js_and_css/jquery-1.8.2.js')}}"></script>
+  <script src="{{=URL('static','js_and_css/jquery-ui.js')}}"></script>
+<style>
+body {
+  font-family: "Lato", sans-serif;
+}
+
+
+
+#main {
+  transition: margin-left .5s;
+  padding: 16px;
+}
+
+@media screen and (max-height: 450px) {
+  .sidenav {padding-top: 15px;}
+  .sidenav a {font-size: 18px;}
+}
+</style>
+ 
+  <style type="text/css">
+.password-mask {
+/*  display: inline-block;*/
+/*  padding: 2px;
+  background-color: black;
+  color: black;
+  font-size: 0;
+  line-height: 1;
+  letter-spacing: 0.5em;*/
+  -webkit-text-security: disc;
+  -moz-binding: url('https://example.com#fake_moz_binding');
+}
+
+
+ input[type=text], input[type=password],  select {
+    margin: 2px 0px 2px 0px;
+	width:250px;
+}
+
+select{ width:265px; margin:2px 0px 2px 0px;}
+
+textarea{
+    width:250px;
+	height:50px;
+	margin:2px 0px 2px 0px;
+}
+
+div.error {
+    margin-left:0px;
+	width:265px;
+}
+.page_color,body{
+	font-family:Arial, Helvetica, sans-serif;
+	font-size:13px;
+	}
+	
+#uni_middle_str4{
+width:100px;
+}
+
+ </style>
+
+<script>
+
+
+   var base_url=location.protocol + "//" + location.hostname + (location.port && ":" + location.port) + "/{{=request.application}}/";
+
+$(function() {
+ 
+var discount_typeStr="";  
+   
+    // alert(base_url+'counter_market_transaction/get_active_item_list')
+    $.ajax({
+      url: base_url+'counter_market_transaction/get_active_item_list',
+      success: function(retStr) {
+        // alert (retStr)
+        discount_typeStr=retStr 
+      }
+    }); 
+// alert (discount_typeStr)
+
+// =================================
+$('#item_id').keyup(function(){
+      // alert('ok')
+      //-------------------------
+      var ref_list = discount_typeStr.split(',');  
+      var ref_name=$("#item_id").val();
+      // alert(ref_name)
+      
+      //---------------- auto complete combo list
+      var ref_list_new1 =new Array();
+      lc=0;
+      i =0;
+      var refStr="";        
+      while (i < ref_list.length)
+      {
+        refStr=ref_list[i];
+        i=i+1;          
+        var res=refStr.toUpperCase().match(ref_name.toUpperCase());
+        if (res!=null){
+          ref_list_new1[lc]=refStr;
+          lc=lc+1;
+          if (lc==30){
+            break;
+          };
+        }else{
+          continue;
+        }         
+      };
+      
+      //-------------- auto complete source
+      $( "input#item_id" ).autocomplete({
+        source: ref_list_new1
+      });
+    
+    }); 
+// =======================
+ 
+// -----------------------------------
+});
+
+
+</script>  
+
+
+<table width="100%"   border="0" cellspacing="0" cellpadding="0" style="background-color:#F5F5F5;margin-left:auto;margin-right:auto;" >
+ 
+  <tr  height="1px" >
+  <td colspan="3" ></td>
+  </tr>
+  <tr>
+  <td>
+      
+<table border="0" cellspacing="0" cellpadding="0" style="background-color:#FFFFFF;" >
+  <tr height="30px" >
+    <td width="100%" style="background-color:#FFFFFF;" ><span class="blackCatTitle">&nbsp;Transaction List</span></td>
+  <td width="500" >&nbsp;</td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr  height="1px" style="background-color:#CCCCCC;">
+  <td colspan="3" ></td>
+  </tr>
+</table>
+
+<table width="98%" align="left" height="100%"  border="0"  cellpadding="0" cellspacing="0" style="margin-left:auto;margin-right:auto;background-color:#F5F5F5;" >
+  
+  <tr>
+    <td valign="middle">
+
+      <form  name="form1" action="{{=URL(c='counter_market_transaction_show',f='counter_market_transaction_show')}}" method="post"  >
+                        <!-- FILTERING BY USER TYPE -->
+
+          <table width="98%" border="1" class="sample_border" style="background-color: #EBEBEB;" >
+            
+                 <tr align="left" height="30px"; class="filterRow" style="background:#eee">
+                 <!-- <td width="100px" class="tdDecoratoin">
+                 
+                   <input type="text" class="text" name="searchValue_OpName" id="searchValue_OpName" value="{{#=session.depot_id}} | {{#=session.user_depot_name}}" readonly style="width:180px"/>
+                   
+                 </td> -->
+                 <td align="left" width="100px" style="padding-left: 10px;">
+                     {{if session.from_dt=='' or session.from_dt=='None':}}                                         
+                     <input  name="from_dt" type="text" id="from_dt" size="25" value="" autocomplete="off" placeholder="From Date" style="width:100px" class="date" />
+                     {{else:}}
+                     <input  name="from_dt" type="text" id="from_dt" size="25" value="{{=session.from_dt}}" autocomplete="off" style="width:100px" class="date" />
+                     {{pass}}
+                 </td>
+
+                 <td align="left" width="100px" style="padding-left: 10px;">    
+                     {{if session.to_dt=='' or session.to_dt=='None':}} 
+                     <input align="left" name="to_dt" type="text" id="to_dt" size="25" placeholder="To Date" autocomplete="off"  value="" style="width:100px" class="date"/>
+                     {{else:}}
+                     <input  name="to_dt" type="text" id="to_dt" size="25" placeholder="To Date"  autocomplete="off" value="{{=session.to_dt}}" style="width:100px" class="date" />
+                     {{pass}}
+                 </td >
+                 <td align="left" width="200px" style="padding-left: 10px;">
+                     {{if session.item=='' or session.item=='None' or session.item == None:}}                                         
+                     <input  name="item_id" type="text" id="item_id" size="25" value="" autocomplete="off" placeholder="Item ID / Name" style="width:200px"/>
+                     {{else:}}
+                     <input  name="item_id" type="text" id="item_id" size="25" value="{{=session.item}}" autocomplete="off" style="width:200px"/>
+                     {{pass}}
+                 </td>
+                 <td align="left" width="150px" style="padding-left: 10px;">
+                     <select name="transaction_type" id="transaction_type" style="width:215px" >
+                          {{if session.transaction_type == 'market_to_counter':}}
+                            <option value="market_to_counter" >Market To Counter</option>
+                          {{elif session.transaction_type == 'counter_to_market':}}
+                            <option value="counter_to_market" >Counter To Market</option>
+                          {{else:}}
+                            <option value="" >Select a Type</option>
+                            <option value="market_to_counter" >Market To Counter</option>
+                            <option value="counter_to_market" >Counter To Market</option>
+                            {{pass}}
+                      </select>
+                 </td>
+                 
+                  <td class="tdDecoratoin inputSubmitStyle" align="left" style="padding-left: 10px;" >
+                   <input  type="submit" name="btn_filter" id="btn_filter" value="Filter" style="vertical-align:middle;height:30px ; width:60px;" class="button_update" title=""/>
+                   <input type="submit" name="btn_all" id="btn_all" value="All" style="vertical-align:middle;height:30px ; width: 50px;margin-left: 5px;"  class="button_update"/>
+                     
+                   </td>
+                  <td align="right">
+                  <a href="{{=URL(c='counter_market_transaction_show',f='counter_market_transaction_show_Download')}}" style="text-align:left;">
+                    <input type="button" name="Input2" id="Input2" value="Download" style="vertical-align:middle;height:30px ;"  class="button_update"/>
+                  </a>
+                  <!-- <a href="{{=URL(c='counter_invoice',f='counter_invoice_batch_upload')}}" style="text-align:left;">
+                    <input type="button" name="Input2" id="Input2" value="Batch Upload" style="vertical-align:middle;height:30px ;"  class="button_update"/>&nbsp;
+                  </a> -->
+                 </td>
+                 </tr>
+                 <tr>
+                   <td style="font-family: sans-serif;  font-weight: bold;">Total: {{=len(get_total_record)}}</td>
+                 </tr>
+        </table>
+
+    </form>
+                    <!-- INSERT ADMIN / OPERATOR -->
+        
+                            <!-- SHOW ALL USER  -->
+
+      <table width="98%" border="1" cellpadding="0" cellspacing="0" class="sample_border" style="background-color:#F5F5F5;margin-left:5px;margin-right:auto;" >
+            <tr class="blackCatHead" style="font-size:15px;">
+               <td width="80px">Depot ID</td>
+               <td width="150px">Depot Name</td>
+               <td width="80px">Item ID</td>
+               <td width="200px">Item&nbsp;Name</td>
+               <td width="150px">Transaction Type</td>
+               <td width="80px">Date</td>
+               <td width="120px" align="right">Item&nbsp;Per&nbsp;Unit</td>
+               <td width="80px" align="right">Quantity</td>
+               <td width="120px" align="right" >Counter&nbsp;Quantity</td>
+            </tr>
+
+               {{
+                for i in range(len(counter_market_transaction_rec)):
+                    records_ov_dict=counter_market_transaction_rec[i]   
+                    record_id=str(records_ov_dict["id"])
+                    depot_id=str(records_ov_dict["depot_id"])
+                    depot_name=str(records_ov_dict["depot_name"])
+                    item_id=str(records_ov_dict["item_id"])
+                    item_name=str(records_ov_dict["item_name"])
+                    transaction_type=str(records_ov_dict["transaction_type"])                                         
+                    transaction_date=str(records_ov_dict["transaction_date"])                                         
+                    Item_per_unit=str(records_ov_dict["Item_per_unit"])
+                    qty=str(records_ov_dict["qty"])
+                    counter_qty=records_ov_dict["counter_qty"]
+                    
+                }}
+
+               <tr align="left" class="blackCat"  style="vertical-align:middle; font-size:12px;"> 
+                  <td >{{=depot_id}}</td>
+                  <td >{{=depot_name}}</td>
+                  <td >{{=item_id}}</td>
+                  <td >{{=item_name}}</td>
+                  <td >{{=transaction_type}}</td>
+                  <td >{{=transaction_date}}</td>
+                  <td  align="right">{{=Item_per_unit}}</td>
+                  <td align="right" >{{=qty}}</td>
+                  <td align="right" >{{=counter_qty}}</td>
+
+              </tr>
+
+              {{pass}}
+      </table>
+
+  </td>
+  </tr>
+  <tr>
+    <td>
+      {{if page_Number:}}
+      <a href="{{=URL(args=[0])}}">First</a> | &nbsp;&nbsp;
+      <a href="{{=URL(args=[page_Number-1 if page_Number>0 else 0])}}">Previous</a> |
+      {{pass}}
+      {{if len(counter_market_transaction_rec)>=item_per_page:}}
+      &nbsp;&nbsp;
+      <a href="{{=URL(args=[page_Number+1])}}">Next &nbsp;&nbsp;</a>
+      {{pass}}
+    </td>
+  </tr>
+
+</table>
+</td>
+
+</tr>
+</table>

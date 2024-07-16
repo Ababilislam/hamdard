@@ -1,0 +1,75 @@
+{{extend 'layout_report.html'}}
+<html>
+<head>
+<script type="text/javascript">
+function print_page()
+  {
+    window.print()
+  }
+</script>
+
+<style type="text/css">
+.blackCat{
+vertical-align:middle;
+background-color:#FBFBFB;
+}
+
+
+</style>
+
+</head>
+<body>
+
+<br/> 
+
+<table width="600" border="0" cellpadding="0" cellspacing="0" >
+
+  <tr align="left" class="blackCatHead"  height="20px" ; style="vertical-align:middle; background-color:#E6E6E6">
+    <td colspan="2" align="center" >Payment Received </td>
+    </tr>
+
+  <tr  align="left" class="blackCat"  >
+    <td width="120" >Received At </td>
+    <td >:&nbsp;{{if to_depot_name=='':}}{{=to_depot}}{{else:}}{{=to_depot}}|{{=to_depot_name}}{{pass}}</td>
+  </tr>
+  <tr  align="left" class="blackCat"  >
+    <td width="120" >Paid By </td>
+    <td >:&nbsp;{{=from_depot}}|{{=from_depot_name}}</td>
+  </tr>
+  <tr  align="left" class="blackCat"  >
+    <td width="120" >Date</td>
+    <td >:&nbsp;{{=str(pay_date)[0:10]}}</td>
+  </tr>
+  <tr  align="left" class="blackCat" >
+    <td >SL</td>
+    <td >:&nbsp;{{=sl}}</td>
+  </tr>
+  
+  <tr  align="left" class="blackCat" >
+    <td width="120" >Payment Type </td>
+    <td >:&nbsp;{{=paytype}}</td>
+  </tr>
+  <tr  align="left" class="blackCat" >
+    <td width="120" >Description</td>
+    <td >:&nbsp;{{=narration}}</td>
+  </tr>
+  <tr  align="left" class="blackCat">
+    <td width="120" >Amount</td>
+    <td >:&nbsp;{{=amount}}</td>
+  </tr>
+  <tr  align="left" class="blackCat" >
+    <td width="120" >&nbsp;</td>
+    <td >&nbsp;</td>
+  </tr>
+</table>
+	<table width="600" border="0">
+          
+          <tr>
+            <td align="right" class="report_body"></td>
+          </tr>
+          <tr><td align="right" class="report_body"><a href="" onClick="print_page()" style="text-decoration:none">Print</a></td></tr>
+</table>
+
+    <br/>
+</body>
+</html>

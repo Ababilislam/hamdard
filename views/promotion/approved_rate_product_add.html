@@ -1,0 +1,132 @@
+{{extend 'layout.html'}}
+
+ 
+
+  <style type="text/css">
+
+ input[type=text], input[type=password],  select {
+
+    margin: 2px 0px 2px 0px;
+
+}
+
+div.error {
+    width: 170px;
+}
+
+#bonus_type,#sm_promo_approved_rate_status{
+	width: 185px;
+}
+
+ </style>
+<script>
+
+	$(function() {
+		$("#sm_promo_approved_rate_client_id").attr("readonly",true);	
+		$("#sm_promo_approved_rate_client_name").attr("readonly",true);	
+		
+		$("#sm_promo_approved_rate_product_id").attr("readonly",true);
+		$("#sm_promo_approved_rate_product_name").attr("readonly",true);
+		
+		$("#sm_promo_approved_rate_fixed_percent_rate").attr("readonly",true);	
+		
+	});
+
+</script>
+ 
+
+  <table width="100%"  border="0" cellspacing="0" cellpadding="0" style="background-color:#FFFFFF;" >
+
+  <tr height="30px" >
+
+    <td width="300"><span class="blackCatTitle">Add New Product</span></td>
+
+	<form action="{{=URL(c='promotion',f='approved_rate')}}" method="post">
+
+	<td width="500" align="right">	
+
+	<input name="" type="submit"  value="Back"/>	</td>
+
+	<td align="left">&nbsp;</td>
+
+	</form>
+
+  </tr>
+
+  <tr  height="1px" style="background-color:#CCCCCC;">	
+
+	<td width="300" align="left">	</td>
+
+	<td colspan="2" align="right">	</td>
+
+  </tr>
+
+  </table>
+
+    {{bonusTypeReadonly=''}}
+    {{bonusTypeReadonly='readonly="readonly"'}}  
+
+  <table width="100%" height="500px"  border="0" cellspacing="0" cellpadding="0" class="page_color"  >
+
+  <tr height="100%"  style="vertical-align:top;">
+
+    <td>
+
+	<table width="100%"  border="0" cellpadding="0" cellspacing="0"  >
+
+      <tr>
+
+        <td width="10px">&nbsp;</td>
+
+        <td>&nbsp;</td>
+
+      </tr>
+
+      <tr>
+
+        <td>&nbsp;</td>
+
+        <td align="left" valign="top">
+
+          <table width="900">
+			<form name="batch_client" id="batch_client" method="post" action="{{=URL(c='promotion',f='approved_rate_product_add')}}">
+
+            <tr>
+              <td><strong style="text-decoration:underline">Percentage (%):</strong></td>
+            </tr>
+            <tr>
+              <td>Add <strong>New Product ID</strong>
+                <input type="text" name="percentage_prod_id_new" value="" placeholder="New Product ID" autocomplete="off"/>
+                to all existing approved customers with <em>Same Percentage</em> as <br />
+                the <strong>Existing Product ID</strong>&nbsp;<input type="text" name="percentage_prod_id_exist" value="" placeholder="Existing Product ID" autocomplete="off"/>&nbsp;<input type="submit" name="btn_percentage_add" id="btn_percentage_add" value="Submit" /></td>
+              </tr>
+            <tr>
+              <td>&nbsp;</td>
+              </tr>
+            <tr>
+              <td><strong style="text-decoration:underline">Fixed:</strong></td>
+            </tr>
+            <tr>
+
+              <td width="485">Add <strong>New Product ID</strong>
+                <input type="text" name="fixed_prod_id_new" value="" placeholder="New Product ID" autocomplete="off"/>
+                to all existing approved customers  as <br />
+                the <strong>Fixed CPP</strong>
+                <input type="text" name="fixed_cpp" value="" placeholder="Fixed CPP (with vat)" autocomplete="off"/>
+                <input type="submit" name="btn_fixed_add" id="btn_fixed_add" value="Submit" /></td>
+
+              </tr>
+			</form>
+          </table>
+
+		  </td>
+
+      </tr>
+
+		  </table>
+
+	</td>
+
+  </tr>
+
+</table>

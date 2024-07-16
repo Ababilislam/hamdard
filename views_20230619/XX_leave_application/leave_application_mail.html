@@ -1,0 +1,288 @@
+{{extend 'layout_change_pass.html'}}
+
+<link rel="stylesheet" href="{{=URL('static', 'js_and_css/ui.theme.css')}}" type="text/css" />
+<link rel="stylesheet" href="{{=URL('static', 'js_and_css/jquery-ui.css')}}" type="text/css" />
+<link rel="stylesheet" href="{{=URL('static', 'js_and_css/style.css')}}" type="text/css" />
+<script src="{{=URL('static','js_and_css/jquery-1.8.2.js')}}"></script>
+<script src="{{=URL('static','js_and_css/jquery-ui.js')}}"></script>
+<style type="text/css">
+.rounded_corner{
+background-color:#CCCCCC;
+font:Arial, Helvetica, sans-serif;
+color:#666666;
+font-size:14px;
+
+display: block;
+display: block;
+-moz-border-radius: 10px;
+-webkit-border-radius: 10px;
+}
+#sm_search_date_from_dt_2,#sm_search_date_to_dt_2{
+  width: 90px;
+  padding: 6px 7px
+}
+
+
+
+table {
+
+font-size:14px;
+}
+</style>
+
+
+
+<script>
+var base_url=location.protocol + "//" + location.hostname + (location.port && ":" + location.port) + "/{{=request.application}}/";
+
+
+$(function() {
+  
+  
+
+
+});
+
+
+$(document).on('blur','#sm_search_date_to_dt_2', function(){
+  // var thisElement=$(this);
+  // var parentTr= thisElement.parents('tr.leave_date');
+
+  var from_dt_2= $("#sm_search_date_from_dt_2").val();
+  var to_dt_2=$("#sm_search_date_to_dt_2").val();
+  
+  
+  // var FromDate=(from_dt_2)
+  // var toDate=(to_dt_2)
+
+  var leaveFromDate=(from_dt_2).split('-')[2]
+  var leaveToDate=(to_dt_2).split('-')[2]
+
+  var leaveDay= leaveToDate-leaveFromDate
+  
+
+   $("#leaveDayVal").val(leaveDay);
+   $("#fromDayVal").val(from_dt_2);
+   $("#toDayVal").val(to_dt_2);
+   $("#t_leaveVal").val(leaveDay);
+   $("#tLeaveVal").val(leaveDay);
+   
+
+});
+</script>
+
+{{currYear=str(date_fixed)[0:4]}}
+{{currMonth=str(date_fixed)[5:7]}}
+
+<div class="view" id="change_pw">
+   <div class="pages" style="background-color:#fff">
+      <div class="panel" id="change_pwView" style="background: #fff;">     
+        <div  style=" width: 100%; height:auto;background: #fff;touch-action: pan-y"> 
+          <table width="100%" height="auto"  border="0" cellspacing="0" cellpadding="0" align="center" class=""  >
+            <form id="form1" name="form1" method="post" action="{{#=URL(c='leave_application',f='leave_application_mail',vars=dict(cid=cid,rep_id=rep_id,password=password))}}"> 
+            <tr height="100%"  style="vertical-align:top;">
+              <td align="center">
+                <div class="formBody"> 
+                  <table width="80%" border="0">                    
+                    <tr>
+                      <td colspan='2'  align="center" style="  width:300px; height:auto;"><h2 id="sfs" style=" color:#000;margin: 10px">Leave Application </h2></td>
+                     </tr>
+                   
+              
+             
+                   
+                    <tr class="leave_date">
+                      <td style="width:20%">&nbsp;</td>                      
+                      <td style="width:80%">
+                        <span style="vertical-align:middle;">From &nbsp;{{=from_date}}&nbsp; To&nbsp;{{=to_date}}</span>  
+                      </td>                       
+                    </tr>
+                    <tr>
+                      <td colspan="2">&nbsp;</td>
+                    </tr> 
+                    
+                    <tr>
+                      <td style="width:20%">&nbsp;</td> 
+                      <td style="width:80% ;font-size: 15px;">
+                        Days: &nbsp;&nbsp;&nbsp;&nbsp;{{=total_leave}} 
+
+                      </td>                       
+                    </tr>
+                    
+                    <tr>
+                      <td style="width:20%">&nbsp;</td> 
+                      <td style="width:80%">
+                        <span style="vertical-align:middle;">Leave Type&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{=leave_type}}
+                          
+                        </span>  
+                      </td>                       
+                    </tr>
+                    
+                    <tr>
+                      <td >&nbsp;</td> 
+                      <td >
+                        <div>
+                        <br><br> 
+                        
+
+
+
+                    
+                    <table>
+                      <tr>
+                        <td>
+                          তারিখঃ  &nbsp;{{=current_date}}
+                        </td>
+                      </tr>
+
+                      <tr>
+                        <td>
+
+                          <br>
+                          বরাবর <br>
+                          মাননীয় চীফ মোতাওয়াল্লী ও ব্যবস্থাপনা পরিচালক <br>
+                          হামদার্দ ল্যাবরেটরীজ (ওয়াক্‌ফ) বাংলাদেশ <br>
+                          রূপায়ন ট্রেড সেন্টার (১৩-১৪ তলা)<br>
+                          ১১৪, কাজী নজরুল ইসলাম এভিনিউ <br>
+                          বাংলামটর, ঢাকা - ১০০০<br><br>
+
+                          মাধ্যমঃ যথাযথ কর্তৃপক্ষ।<br><br>
+
+                          বিষয়ঃ দিনের নৈম‌ি‌ত্তিক ছুটি প্রদানের আবেদন।<br><br>
+                          শ্রদ্ধেয় স্যার, <br>
+
+                         
+
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>
+                            যথাবিহীত সম্মানপূর্বক বিনীত নিবেদন এই যে, পারিবারিক বিশেষ প্রয়োজনে আমার আগামী&nbsp; {{=from_date}}  খ্রি. তারিখ হতে &nbsp; {{=to_date}} &nbsp; খ্রি. তারিখ পর্যন্ত &nbsp;
+                           {{=total_leave}} দিন ছুটির একান্ত প্রয়োজন।
+                        </td> 
+                      </tr>
+
+                      <tr>
+                        <td>অতএব, আমাকে উক্ত 
+                       &nbsp;
+                       {{=total_leave}}&nbsp;
+                        দিনের নৈ‌মি‌ত্তিক ছুটি প্রদানের জন্য মহোদয়ের নিকট বিনীত প্রার্থনা করছি।<br><br>
+                      </td>                         
+                      </tr>
+                      
+                      <tr>
+                        <td style="">
+                        বিনীত নিবেদক, <br><br>
+                      </td>                         
+                      </tr>
+                   
+                      <tr>
+                        <td style=" ">নামঃ&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                       {{=emp_name}}
+                      </td>                         
+                      </tr>
+
+                      <tr><td >&nbsp;</td> </tr>
+                      
+                     <tr>
+                        <td style="">এমপ্লয়ি আইডিঃ&nbsp;&nbsp;&nbsp;&nbsp;
+                       {{=emp_id}}
+                      </td>                         
+                      </tr> 
+                      <tr><td >&nbsp;</td> </tr>
+                      <tr><td >&nbsp;</td> </tr>
+                      <tr><td >&nbsp;</td> </tr>
+                      
+                      <tr>                      
+                      <td>
+                        <span style="vertical-align:middle; font-style:bold;">Area Head &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                          {{=area_head_status}}
+                        </span>  
+                      </td>                 
+                    </tr>
+                  
+                      <tr><td >&nbsp;</td> </tr>
+                      <tr>
+                        <td style="">Name:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                       {{=ared_head_name}}|{{=ared_head_id}}
+                        </td>                         
+                      </tr>
+                      <tr><td >&nbsp;</td> </tr>
+                      
+                      
+                    <tr>                     
+                      <td >
+                        <span style="vertical-align:middle;">Zonal Head &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                         {{=zonal_head_status}}
+                        </span>  
+                      </td>                       
+                    </tr>
+                     <tr><td >&nbsp;</td> </tr>                 
+                    <tr>
+                        <td style="">Name:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                       {{=zonal_head_name}}|{{=zonal_head_id}}
+                      </td>                         
+                      </tr>
+                      <tr><td >&nbsp;</td> </tr>
+                      
+
+                      <tr>                      
+                      <td >
+                        <span style="vertical-align:middle;">Divisional Head &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                          {{=divisional_head_status}}
+                        </span>  
+                      </td>                       
+                    </tr>
+                    <tr><td >&nbsp;</td> </tr>
+                    <tr>
+                        <td style="">Name:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                       {{=divisional_head_name}}|{{=divisional_head_id}}
+                      </td>                         
+                      </tr>
+                      <tr><td >&nbsp;</td> </tr>
+                      
+                      <tr>                      
+                      <td >
+                        <span style="vertical-align:middle;">Director Marketing&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                          {{=director_marktng_status}}
+                        </span>  
+                      </td>                       
+                    </tr>
+
+                    <tr><td >&nbsp;</td> </tr>
+                    <tr>
+                        <td style="">Name:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                       {{=director_name}}|{{=director_id}}
+                      </td>                         
+                      </tr>
+                     
+
+                    </table>
+                    
+                    <br><br><br>
+
+                          <!-- <div id="btn_id">
+                            <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                              <tr>
+                                <td align="center">
+                                  <input type="submit" id="btn_leave_application" name="btn_leave_application" style="width:100%; height:50px; background:#807e7e;color: #FFF; font-size:20px;  border: 1px solid #807e7e;" value="     Submit    "   /> 
+                                </td>
+                                <td  width="2%"> </td>
+                              </tr>
+                            </table>    
+                          </br></br>
+                          </div> -->
+                                  
+                </form>
+              </table>                                 
+            </div>                 
+          </td>
+        </tr>
+       
+
+          </table>         
+      </br>
+    </div>
+  </div>
+</div> 
+</div>

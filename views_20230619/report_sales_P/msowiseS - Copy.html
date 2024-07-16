@@ -1,0 +1,308 @@
+{{extend 'layout_sales_report.html'}}
+
+<html>
+
+<head>
+
+<script type="text/javascript">
+
+function print_page()
+
+  {
+
+    window.print()
+
+  }
+
+</script>
+
+
+
+</head>
+
+<body>
+
+
+<table width="900px;"> <tr><td style="text-align:right"><!--<a href="{{#=URL(c='report',f='downloadGoodsReceivedSummary',vars=dict(date_from=date_from,date_to=date_to,depot_id=depot_id,depot_name=depot_name,store_id=store_id,store_name=store_name,customer_id=customer_id,customer_name=customer_name,mso_id=mso_id,mso_name=mso_name))}}" >Downlaod</a>--></td></tr></table>
+
+
+
+<table width="700px" cellspacing="1" cellpadding="1">
+
+	<tr>
+
+		<td><table width="900px" style="border:none;" >
+		  <tr >
+		    <td >Date Range</td>
+		    <td >&nbsp;</td>
+		    <td >{{=date_from}} - {{=date_to}}</td>
+		    <td >&nbsp;</td>
+		    <td >&nbsp;</td>
+		    <td width="266" >&nbsp;</td>
+	      </tr>
+		  <tr >
+		    <td width="90" > Depot/Branch</td>
+		    <td width="10" >:</td>
+		    <td width="424" ><span style="border-right-width:3px;">{{=depot_id}}|{{=depot_name}}</span></td>
+		    <td width="79" >Customer</td>
+		    <td width="3" >:</td>
+		    <td ><span style="border-right-width:3px;">{{=customer_id}}
+		      {{=customer_name}}</span></td>
+	      </tr>
+		  <tr >
+		    <td >Store</td>
+		    <td >:</td>
+		    <td ><span style="border-right-width:3px;">{{=store_id}}|{{=store_name}}</span></td>
+		    <td >MSO</td>
+		    <td >:</td>
+		    <td ><span style="border-right-width:3px;">{{=mso_id}}
+		      {{=mso_name}}</span></td>
+	      </tr>
+		  <tr >
+		    <td >Teritory</td>
+		    <td >:</td>
+		    <td ><span style="border-right-width:3px;">{{=teritory_id}}
+		      {{=teritory_name}}</span></td>
+		    <td >Market</td>
+		    <td >:</td>
+		    <td ><span style="border-right-width:3px;">{{=market_id}}
+		      {{=market_name}}</span></td>
+	      </tr>
+		  </table>
+          <table width="900px" style="border:none; text-align:center; font-weight:bold;" >
+            <tr >
+              <td width="100" >&nbsp;</td>
+              <td align="center" ><span style="border-bottom:1px solid #333;">MSO wise Sales </span></td>
+              <td width="100" ><img  height="30px" src="{{=URL('static','images/comp_logo1.png')}}"/></td>
+            </tr>
+          </table>
+          <br>
+            <!--<table width="900" class="sample_border" >
+
+                <tr style="background-color:#E6E6E6;">
+                  <td ><strong>Summary</strong></td>
+                  <td width="53" colspan="3" align="center" >&nbsp;</td>
+                </tr>
+
+                <tr style="background-color:#F0FAFF">
+                  <td width="300" >&nbsp;</td>
+                  <td width="53" align="right">Total</td>
+                 
+                  <td width="53" align="right">{{#=customer_count}}</td>
+                </tr>
+
+	      </table>-->
+	  </td>
+
+	</tr>
+
+	<tr height="10px"></tr>
+
+	<tr>
+
+		<td>
+
+		  <table width="900" border="1" cellpadding="1" cellspacing="1" class="sample_border" >                
+
+                <tr align="left" class="blackCatHead" height="20px" ;  style="font-size:12px">
+
+                  
+
+                  
+                  <td width="80"  style="border-right-width:3px;"  >MSO TR</td>
+                  <td width="100"  style="border-right-width:3px;" >MSO Name</td>
+                  
+                  <td width="150"  style="border-right-width:3px;" >Market</td>
+
+                  <td width="80"  style="border-right-width:3px;" align="right" >Invoice Total</td>
+                  <td width="100"  style="border-right-width:3px;" align="right">No of Invoive</td>
+                  <td width="100"  style="border-right-width:3px;" align="right">Return Total</td>
+                  <td width="100"  style="border-right-width:3px;" align="right">Exec %</td>
+                  <td width="80"  style="border-right-width:3px;" align="right">Returm %</td>
+                  <td width="150"  style="border-right-width:3px;" align="right">Net Sold</td>
+              </tr>
+				{{p=0}}
+                {{for i,record in enumerate(records):}}
+
+                
+              
+                
+
+              {{ if (i % 2 == 0):}}
+              <tr  align="left" style="vertical-align:middle; font-size:12px; background:#FBFBFB;">
+                {{else:}}
+              <tr  align="left" style="vertical-align:middle; font-size:12px; background:#F5F5F5;">
+                
+				{{pass}}
+
+                
+                <td  style="border-right-width:3px;">{{=record[db.sm_invoice_head.area_id]}}</td>
+               
+                
+                <td  style="border-right-width:3px;">{{=record[db.sm_invoice_head.area_name]}}</td>
+                <td  style="border-right-width:3px;" >{{=record[db.sm_invoice_head.market_id]}}</td>
+                <td  style="border-right-width:3px;" align="right">{{='{:20,.2f}'.format(record[db.sm_invoice_head.total_amount.sum()])}}</td>
+                <td  style="border-right-width:3px;" align="right">{{=record[db.sm_invoice_head.id.count()]}}</td>
+                
+                {{return_amount=record[db.sm_invoice_head.return_tp.sum()] + record[db.sm_invoice_head.return_vat.sum()]-record[db.sm_invoice_head.return_discount.sum()]}}
+                 <td  style="border-right-width:3px;" align="right">{{='{:20,.2f}'.format(return_amount)}}</td>
+                
+                
+                {{netSold=record[db.sm_invoice_head.total_amount.sum()]-return_amount
+                sale=(record[db.sm_invoice_head.total_amount.sum()]+record[db.sm_invoice_head.discount.sum()]+record[db.sm_invoice_head.sp_discount.sum()])-record[db.sm_invoice_head.vat_total_amount.sum()]
+                rSale=return_amount
+                }}
+                
+                {{eP=(netSold*100)/sale}}
+                {{rP=(return_amount*100)/sale}}
+                
+                <td  style="border-right-width:3px;" align="right">{{='{:20,.2f}'.format(eP)}}</td>
+                <td  style="border-right-width:3px;" align="right">{{='{:20,.2f}'.format(rP)}}</td>
+                <td  style="border-right-width:3px;" align="right">{{='{:20,.2f}'.format(netSold)}}</td>
+              </tr>
+              {{p=p+1}}
+				
+                {{p=0}}
+                {{pass}}
+                {{pass}}
+				
+          </table>
+			<br>
+			Total for fm:
+            <table width="900" border="1" cellpadding="1" cellspacing="1" class="sample_border" >
+            <tr align="left"   style="font-size:12px; border-style:hidden">
+                  <td width="80"  style="border-right-width:3px;"  ></td>
+                  <td width="100"  style="border-right-width:3px;" ></td>
+                  
+                  <td width="150"  style="border-right-width:3px;" ></td>
+
+                  <td width="80"  style="border-right-width:3px;" align="right" ></td>
+                  <td width="100"  style="border-right-width:3px;" align="right"></td>
+                  <td width="100"  style="border-right-width:3px;" align="right"></td>
+                  <td width="100"  style="border-right-width:3px;" align="right"></td>
+                  <td width="80"  style="border-right-width:3px;" align="right"></td>
+                  <td width="150"  style="border-right-width:3px;" align="right"></td>
+              </tr>
+              {{for r,records_fm in enumerate(records_fm):}}
+            
+                <tr  align="left" class="blackCat"  style="vertical-align:middle; font-size:11px;">
+                  <td  style="border-right-width:3px;">{{=records_fm[db.sm_invoice_head.area_id]}}</td>
+                  <td  style="border-right-width:3px;">{{=records_fm[db.sm_invoice_head.area_name]}}</td>
+                  <td  style="border-right-width:3px;" >{{=records_fm[db.sm_invoice_head.market_id]}}</td>
+                  <td  style="border-right-width:3px;" align="right">{{='{:20,.2f}'.format(records_fm[db.sm_invoice_head.total_amount.sum()])}}</td>
+                   <td  style="border-right-width:3px;" align="right">{{=records_fm[db.sm_invoice_head.id.count()]}}</td>
+                  {{return_amount_fm=records_fm[db.sm_invoice_head.return_tp.sum()] + records_fm[db.sm_invoice_head.return_vat.sum()]-records_fm[db.sm_invoice_head.return_discount.sum()]}}
+  <td  style="border-right-width:3px;" align="right">{{='{:20,.2f}'.format(return_amount_fm)}}</td>
+  
+                  {{netSold_fm=records_fm[db.sm_invoice_head.total_amount.sum()]-return_amount_fm
+                  sale_fm=records_fm[db.sm_invoice_head.total_amount.sum()]+records_fm[db.sm_invoice_head.return_discount.sum()]-records_fm[db.sm_invoice_head.return_vat.sum()]
+                  rSale_fm=return_amount_fm
+                  }}
+                  
+                  {{eP_fm=(netSold_fm*100)/sale_fm}}
+                  {{rP_fm=(return_amount_fm*100)/sale_fm}}
+  <td  style="border-right-width:3px;" align="right">{{='{:20,.2f}'.format(eP_fm)}}</td>
+  <td  style="border-right-width:3px;" align="right">{{='{:20,.2f}'.format(rP_fm)}}</td>
+  <td  style="border-right-width:3px;" align="right">{{='{:20,.2f}'.format(netSold_fm)}}</td>
+                </tr>
+              {{pass}}
+            </table>
+<br>
+<br>
+Total for rsm:
+<table width="900" border="1" cellpadding="1" cellspacing="1" class="sample_border" >
+<tr align="left"   style="font-size:12px; border-style:hidden">
+                  <td width="80"  style="border-right-width:3px;"  ></td>
+                  <td width="100"  style="border-right-width:3px;" ></td>
+                  
+                  <td width="150"  style="border-right-width:3px;" ></td>
+
+                  <td width="80"  style="border-right-width:3px;" align="right" ></td>
+                  <td width="100"  style="border-right-width:3px;" align="right"></td>
+                  <td width="100"  style="border-right-width:3px;" align="right"></td>
+                  <td width="100"  style="border-right-width:3px;" align="right"></td>
+                  <td width="80"  style="border-right-width:3px;" align="right"></td>
+                  <td width="150"  style="border-right-width:3px;" align="right"></td>
+              </tr>
+  {{for r,records_rsm in enumerate(records_rsm):}}
+    <tr  align="left" class="blackCat"  style="vertical-align:middle; font-size:11px;">
+      <td  style="border-right-width:3px;">{{=records_rsm[db.sm_invoice_head.area_id]}}</td>
+      <td  style="border-right-width:3px;">{{=records_rsm[db.sm_invoice_head.area_name]}}</td>
+      <td  style="border-right-width:3px;" >{{=records_rsm[db.sm_invoice_head.market_id]}}</td>
+      <td  style="border-right-width:3px;" align="right">{{='{:20,.2f}'.format(records_rsm[db.sm_invoice_head.total_amount.sum()])}}</td>
+       <td  style="border-right-width:3px;" align="right">{{=records_rsm[db.sm_invoice_head.id.count()]}}</td>
+      {{return_amount_rsm=records_rsm[db.sm_invoice_head.return_tp.sum()] + records_rsm[db.sm_invoice_head.return_vat.sum()]-records_rsm[db.sm_invoice_head.return_discount.sum()]}}
+  <td  style="border-right-width:3px;" align="right">{{='{:20,.2f}'.format(return_amount_rsm)}}</td>
+  
+      {{netSold_rsm=records_rsm[db.sm_invoice_head.total_amount.sum()]-return_amount_rsm
+      sale_rsm=records_rsm[db.sm_invoice_head.total_amount.sum()]+records_rsm[db.sm_invoice_head.return_discount.sum()]-records_rsm[db.sm_invoice_head.return_vat.sum()]
+      rSale_rsm=return_amount_rsm
+      }}
+      
+      {{eP_rsm=(netSold_rsm*100)/sale_rsm}}
+      {{rP_rsm=(return_amount_rsm*100)/sale_rsm}}
+  <td  style="border-right-width:3px;" align="right">{{='{:20,.2f}'.format(eP_rsm)}}</td>
+  <td  style="border-right-width:3px;" align="right">{{='{:20,.2f}'.format(rP_rsm)}}</td>
+  <td  style="border-right-width:3px;" align="right">{{='{:20,.2f}'.format(netSold_rsm)}}</td>
+    </tr>
+  {{pass}}
+</table>
+<br>
+Total :
+<table width="900" border="1" cellpadding="1" cellspacing="1" class="sample_border" >
+<tr align="left"   style="font-size:12px; border-style:hidden">
+                  <td width="80"  style="border-right-width:3px;"  ></td>
+                  <td width="100"  style="border-right-width:3px;" ></td>
+                  
+                  <td width="150"  style="border-right-width:3px;" ></td>
+
+                  <td width="80"  style="border-right-width:3px;" align="right" ></td>
+                  <td width="100"  style="border-right-width:3px;" align="right"></td>
+                  <td width="100"  style="border-right-width:3px;" align="right"></td>
+                  <td width="100"  style="border-right-width:3px;" align="right"></td>
+                  <td width="80"  style="border-right-width:3px;" align="right"></td>
+                  <td width="150"  style="border-right-width:3px;" align="right"></td>
+              </tr>
+  {{for r,records_total in enumerate(records_total):}}
+    <tr  align="left" class="blackCat"  style="vertical-align:middle; font-size:11px;">
+      <td  style="border-right-width:3px;">{{=records_total[db.sm_invoice_head.area_id]}}</td>
+      <td  style="border-right-width:3px;">{{=records_total[db.sm_invoice_head.area_name]}}</td>
+      <td  style="border-right-width:3px;" >{{=records_total[db.sm_invoice_head.market_id]}}</td>
+      <td  style="border-right-width:3px;" align="right">{{='{:20,.2f}'.format(records_total[db.sm_invoice_head.total_amount.sum()])}}</td>
+      {{return_amount_total=records_total[db.sm_invoice_head.return_tp.sum()] + records_total[db.sm_invoice_head.return_vat.sum()]-records_total[db.sm_invoice_head.return_discount.sum()]}}
+  <td  style="border-right-width:3px;" align="right">{{='{:20,.2f}'.format(return_amount_total)}}</td>
+  <td  style="border-right-width:3px;" align="right">{{=records_total[db.sm_invoice_head.id.count()]}}</td>
+  
+      {{netSold_total=records_total[db.sm_invoice_head.total_amount.sum()]-return_amount_total
+      sale_total=records_total[db.sm_invoice_head.total_amount.sum()]+records_total[db.sm_invoice_head.return_discount.sum()]-records_total[db.sm_invoice_head.return_vat.sum()]
+      rSale_total=return_amount_total
+      }}
+      
+      {{eP_total=(netSold_total*100)/sale_total}}
+      {{rP_total=(return_amount_total*100)/sale_total}}
+  <td  style="border-right-width:3px;" align="right">{{='{:20,.2f}'.format(eP_total)}}</td>
+  <td  style="border-right-width:3px;" align="right">{{='{:20,.2f}'.format(rP_total)}}</td>
+  <td  style="border-right-width:3px;" align="right">{{='{:20,.2f}'.format(netSold_total)}}</td>
+    </tr>
+  {{pass}}
+</table></td>
+
+			
+
+	</tr>
+
+</table>
+
+<br/>
+
+
+
+
+<br/>
+
+
+
+</body>
+
+</html>
+

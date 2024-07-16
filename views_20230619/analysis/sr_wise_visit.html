@@ -1,0 +1,122 @@
+{{extend 'layout_report.html'}}
+<html>
+    <head>
+    <!--<script type="text/javascript" src="{{=URL('static','gchart/js/loader.js')}}"></script>
+    <script type="text/javascript">
+		google.charts.load('current', {'packages':['corechart', 'bar']});
+      google.charts.setOnLoadCallback(drawStuff);
+
+      function drawStuff() {
+        var data = google.visualization.arrayToDataTable(eval($("#sr_wise_visit_chart").val()));        
+        var classicOptions = {
+          title: 'SR Wise Order',
+          vAxes: {
+            // Adds titles to each axis.
+            0: {title: 'Order'}
+          },
+		  legend: { position: "right" }
+		  
+
+        };
+          var classicChart = new google.visualization.ColumnChart(chartDiv);
+          classicChart.draw(data, classicOptions);          
+    };      
+    </script>-->
+    </head>
+    <body>    
+    <div class="blackCatTitle">&nbsp;SR Wise Order Summary (Based on Order Date)</div>       
+    <!--<table width="900px;"> <tr><td style="text-align:right"><a href="{{=URL(c='',f='',vars=dict())}}" >Downlaod</a></td></tr></table>
+    -->
+    <table width="900" class="sample_border" >
+        <tr style="background-color:#E6E6E6;">
+            <td width="150" >Date Range</td>
+            <td width="100" >{{=session.level0Name}}</td>
+            <td width="100" >{{=session.level1Name}}</td>
+            <td width="150" >Order By</td>
+        </tr>
+        <tr style="background-color:#F0FAFF">
+            <td width="150" >							
+            {{=datetime.datetime.strptime(fromDate,'%Y-%m-%d').strftime('%d-%m-%Y ')}} <b> To</b> {{=datetime.datetime.strptime(toDate,'%Y-%m-%d').strftime('%d-%m-%Y ')}}</td>
+            <td width="100" align="left" valign="top">{{if regionValue=='':}}
+            All
+            {{else:}}
+            {{=regionValueShow}}{{pass}}</td>
+            <td width="100" align="left" valign="top">{{if areaValue=='':}}
+            All
+            {{else:}}
+            {{=areaValueShow}}{{pass}}</td>
+            <td width="150" align="left" valign="top">{{if repCM=='':}}
+            All
+            {{else:}}
+            {{=repCM}}{{pass}}
+            </td>
+        </tr>
+    </table>
+    <!--<br/>
+    <div id="chartDiv" style="width: 900px; height: 300px; margin:0px auto;"></div>-->			
+    <br/>
+    {{if len(records)==0:}}
+    	Data not available
+    {{else:}}
+		<table width="900" style="margin-bottom:10px;" >        
+            
+            {{for i in range(len(recordsSum)):}}
+            {{recSumStr=recordsSum[i]}}
+            <tr>
+                <td width="300" >
+                    <div style="background-color:#603CBA; color:#FFF; margin:1px; text-align:center; border-radius:5px;">
+                        <h4>Total No. of Order</h4>
+                        <h2>{{=recSumStr['orderCount']}}</h2>
+                    </div>
+                </td>
+                <td width="300" >
+                    <div style="background-color:#00A300; color:#FFF; margin:1px; text-align:center; border-radius:5px;">
+                        <h4>Total Order Quantity</h4>
+                        <h2>{{=recSumStr['orderQty']}}</h2>
+                    </div>
+                </td>
+                <td width="300" >
+                    <div style="background-color:#2D89EF; color:#FFF; margin:1px; text-align:center; border-radius:5px;">
+                        <h4>Total Order Amount</h4>
+                        <h2>{{=easy_format(recSumStr['orderAmount'])}}</h2>
+                    </div>
+                </td>                               
+            </tr> 
+            {{pass}}  
+        </table>
+                
+        <table width="900" border="1" cellpadding="1" cellspacing="1" class="sample_border" >
+            <tr align="left" class="blackCatHead" height="20px" ;  style="font-size:12px; background-color:#E9E9E9;">
+                <td align="left"  >Zone</td>
+                <td align="left"  >Region</td>
+                <td align="left"  >Area</td>
+                <td align="left"  >SR</td>
+				<td align="left"  >Depot</td>
+                <td width="100"   align="right" >Order Amount </td>               
+            </tr>        
+            {{for i in range(len(records)):}}
+            {{recStr=records[i]}}
+            <tr  align="left" class="blackCat"  style="vertical-align:middle; font-size:11px;">
+                <td align="left" >{{=recStr['level0_id']}}|{{=recStr['level0_name']}}</td>
+                <td align="left" >{{=recStr['level1_id']}}|{{=recStr['level1_name']}}</td>
+                <td align="left" >{{=recStr['level2_id']}}|{{=recStr['level2_name']}}</td>
+                <td align="left" style="text-align:left;">{{=recStr['rep_id']}}|{{=recStr['rep_name']}}</td>
+				<td align="left" style="text-align:left;">{{=recStr['depot_id']}}|{{=recStr['depot_name']}}</td>
+                <td width="100"  align="right" style=" text-align:right;">{{=easy_format(recStr['orderAmount'])}}</td>                        
+            </tr>
+            {{pass}}       
+        </table>
+     {{pass}}
+     <input type="hidden" id="sr_wise_visit_chart" value="{{=sr_wise_visit_list}}"/>
+    <!--<br/>    
+    {{ if page: }}    
+        <a href="{{=URL(args=[page-page],vars=dict())}}">first</a> |     
+        <a href="{{=URL(args=[page-1],vars=dict())}}">previous</a> |    
+    {{pass}}
+    {{if len(records)>items_per_page:}}    
+    	<a href="{{=URL(args=[page+1],vars=dict())}}">next</a>    
+    {{pass}}    
+    <br/>-->
+    </body>
+</html>
+

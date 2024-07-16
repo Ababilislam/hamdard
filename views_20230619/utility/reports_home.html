@@ -1,0 +1,292 @@
+{{extend 'layout.html'}}
+
+	
+
+<link rel="stylesheet" href="{{=URL('static', 'js_and_css/ui.theme.css')}}" type="text/css" />
+
+<link rel="stylesheet" href="{{=URL('static', 'js_and_css/jquery-ui.css')}}" type="text/css" />
+
+<link rel="stylesheet" href="{{=URL('static', 'js_and_css/style.css')}}" type="text/css" />
+
+<script src="{{=URL('static','js_and_css/jquery-1.8.2.js')}}"></script>
+
+<script src="{{=URL('static','js_and_css/jquery-ui.js')}}"></script>
+
+
+<style type="text/css">
+
+ input[type=text], input[type=password],  select {
+
+    margin: 2px 0px 2px 0px;
+
+	width:150px;
+
+}
+
+div.error {
+
+    padding: 0px;
+
+	width: 200px;
+
+	margin-left:0px;
+
+}
+
+.page_color,body{
+
+	font-family:Arial, Helvetica, sans-serif;
+
+	font-size:13px;	
+
+	}
+
+	
+
+ </style>
+
+ 
+
+<script>
+
+var base_url=location.protocol + "//" + location.hostname + (location.port && ":" + location.port) + "/{{=request.application}}/";
+
+
+
+$(function() {
+
+	 	var valueListStr="";		
+
+		$('#myAccountValue').keyup(function(){
+
+			/*$.ajax({
+
+				  url: base_url+'default/get_depot_list',
+
+				  success: function(resStr) {
+
+					  valueListStr=resStr
+
+				  }
+
+				});*/
+
+			
+
+			//-------------------------
+
+			//alert("{{=depotStr}}");
+
+			
+
+			var valueList = '{{=depotStr}}'.split('fdrd');//depotStr.split(',');				
+
+			var searchValue=$("#myAccountValue").val();
+
+			
+
+			//---------------- auto complete combo list
+
+			var valueList_new=new Array();
+
+			lc=0;
+
+			i =0;
+
+			var valueStr="";				
+
+			while (i < valueList.length)
+
+			{
+
+				valueStr=valueList[i];
+
+				i=i+1;					
+
+				var res=valueStr.toUpperCase().match(searchValue.toUpperCase());
+
+				if (res!=null){
+
+					valueList_new[lc]=valueStr;
+
+					lc=lc+1;
+
+					if (lc==30){
+
+						break;
+
+					};
+
+				}else{
+
+					continue;
+
+				}					
+
+			};
+
+			//alert (ref_list_new);
+
+			
+
+			//-------------- auto complete source
+
+			$( "input#myAccountValue" ).autocomplete({
+
+				source: valueList_new
+
+			});
+
+	  });
+
+	   //==============
+
+}); 
+
+</script>
+
+ 
+
+
+
+<body >  
+
+<!--Form Title -->
+
+<table width="100%" border="0" cellspacing="0" cellpadding="0" style="background-color:#FFFFFF;">
+
+  <tr height="30px">
+
+    <td width="500"><div class="blackCatTitle">Ledger Reports</div></td>
+
+    
+
+	<form action="{{=URL(c='report',f='reports_home')}}" method="post">
+
+	<td width="200" align="right"><!--<input name="" type="submit"  value="  Back  "/>--></td>
+
+	</form>
+
+	
+
+    <td>&nbsp;</td>
+
+  </tr>
+
+  <tr>
+
+    <td height="1px" colspan="3" style="background-color:#CCCCCC;"></td>
+
+  </tr>
+
+</table>
+
+
+
+<!--Form Content -->
+
+
+
+<table width="100%" border="0" cellspacing="0" cellpadding="0" class="page_color" id="table_details">
+
+  <form name="form1" id="form1" target="_blank">
+
+  <tr height="20px">
+
+  	<td width="10px"></td>
+
+  	<td> </td>	
+
+  </tr>
+
+  
+
+  <tr height="600px">
+
+    <td width="10px"></td>
+
+	<td valign="top">
+
+	
+
+	<table width="700" border="0" cellpadding="0" cellspacing="0" style="background-color: #F0F0F0">
+
+      <tr >
+
+        <td width="5">&nbsp;</td>
+
+        <td>&nbsp;</td>
+
+        <td width="200">&nbsp;</td>
+
+        <td width="214">&nbsp;</td>
+
+        <td width="5">&nbsp;</td>
+
+      </tr>
+
+      <tr >
+
+        <td>&nbsp;</td>
+
+        <td align="right">Present Balance With Others&nbsp;&nbsp; </td>
+
+        <td width="200">
+
+          {{if (session.user_type=='Depot' and session.user_depot_category=='DEPOT'):}}
+			<input type="text" name="myAccountValue" id="myAccountValue" style="width:250px" value="DPT-{{=session.depot_id}}:{{=session.user_depot_name}}" placeholder="Select Branch ID/Name" autocomplete="off"/>
+          {{else:}}
+          	<input type="text" name="myAccountValue" id="myAccountValue" style="width:250px" value="" placeholder="Select Branch ID/Name" autocomplete="off"/>
+		  {{pass}}
+          
+
+        </td>
+
+        <td align="right"><input name="btn_present_balance" type="submit" style="width:150px" title="" value="Show Report"/></td>
+
+        <td width="5">&nbsp;</td>
+
+      </tr>
+
+      <tr >
+
+        <td>&nbsp;</td>
+
+        <td>&nbsp;</td>
+
+        <td width="200">&nbsp;</td>
+
+        <td>&nbsp;</td>
+
+        <td width="5">&nbsp;</td>
+
+      </tr>
+
+      
+
+      <tr >
+
+        <td>&nbsp;</td>
+
+        <td colspan="4">&nbsp;</td>
+
+      </tr>
+
+    </table>
+
+	  
+
+  </form>
+
+<!--start-->
+
+<!--end--></td>
+
+  </tr>
+
+</table>
+
+
+
+</body>
+

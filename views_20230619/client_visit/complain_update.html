@@ -1,0 +1,107 @@
+{{extend 'layout.html'}}
+ 
+ <style type="text/css">
+	 input[type=text], input[type=password]{
+		margin: 2px 0px 2px 0px;
+		width:200px;
+	}
+	select {
+    margin: 2px 0px 2px 0px;
+	width:212px;
+}
+</style>
+
+<table width="100%"  border="0" cellspacing="0" cellpadding="0" style="background-color:#FFFFFF;" >
+  <tr height="30px" >
+    <td width="300"><span class="blackCatTitle">Market Feedback Update</span></td>
+	<form action="{{=URL(c='client_visit',f='complain',args=[page])}}" method="post">
+    <td width="200" align="right"><input name="" type="submit"  value="Back"/></td>
+	</form>
+    <td>&nbsp;</td>
+  </tr>
+  <tr  height="1px" style="background-color:#CCCCCC;">
+	    <td colspan="3" ></td>
+  </tr>
+</table>
+  
+  <table width="100%" height="500px"  border="0" cellspacing="0" cellpadding="0" class="page_color"  >
+  <tr height="100%"  style="vertical-align:top;">
+    <td>
+	<table width="100%"  border="0" cellpadding="0" cellspacing="0"  >
+      <tr>
+        <td width="10px">&nbsp;</td>
+        <td>&nbsp;</td>
+      </tr>
+      <tr>
+        <td>&nbsp;</td>
+        <td>
+          <table class="blackCat">
+		  {{=form.custom.begin}}
+            <tr>
+              <td width="120"> Date</td>
+              <td>: {{=submit_date}}</td>
+              <td>&nbsp;</td>
+              </tr>
+            <tr>
+              <td width="120">Submitted By</td>
+              <td>: {{=submitted_by_id}}-{{=submitted_by_name}}</td>
+              <td>&nbsp;</td>
+              </tr>
+            <tr>
+              <td>Complain Type</td>
+              <td> : {{=complain_type}}</td>
+              <td>&nbsp;</td>
+            </tr>
+            <tr>
+              <td width="120">Complain From</td>
+              <td>: {{=complain_from}}</td>
+              <td>&nbsp;</td>
+            </tr>
+            <tr>
+              <td width="120">Reference</td>
+              <td>: {{=ref}}</td>
+              <td>&nbsp;</td>
+            </tr>
+            
+            <tr>
+              <td>Details</td>
+              <td>: {{=des}}</td>
+              <td>&nbsp;</td>
+            </tr>
+            <tr>
+              <td>&nbsp;</td>
+              <td>&nbsp;</td>
+              <td>&nbsp;</td>
+            </tr>
+            <tr>
+              <td width="120">Message</td>
+              <td>: {{=form.custom.widget.reply_msg}}</td>
+              <td>&nbsp;</td>
+              </tr>
+            
+            <tr>
+              <td width="120">Action</td>
+              <td>: {{=form.custom.widget.action}}</td>
+              <td>&nbsp;</td>
+              </tr>
+            <tr>
+              <td width="120">&nbsp;</td>
+              <td>&nbsp;</td>
+              <td>&nbsp;</td>
+            </tr>
+            <tr>
+              <td width="120">&nbsp;</td>
+              <td>
+			  
+			  {{if action=='Pending':}}{{=form.custom.submit}}
+			  {{pass}}			  </td>
+              <td>&nbsp;</td>
+              </tr>
+          </table>
+          {{=form.custom.end}}</td>
+      </tr>
+    </table>
+	</td>
+  </tr>
+</table>
+

@@ -1,0 +1,151 @@
+{{extend 'layout_sample_report.html'}}
+
+<html>
+<head>
+</head>
+<body>
+<table width="900px" style="border:none; text-align:center; font-weight:bold;" >
+        <tr >
+            <td width="100" >&nbsp;</td>
+            <td align="center" ><span style="border-bottom:1px solid #333;">Physician Track MPO Wise</span></td>
+            <td width="100" ><img  height="30px" src="{{=URL('static','images/comp_logo1.png')}}"/></td>
+        </tr>
+    </table>
+
+    <table width="900" style="border:none; font-weight:bold;" >
+        <tr >
+            <td width="150"  >Date Range</td>
+            <td width="2" >:</td>
+            <td colspan="4" >{{=date_from}}&nbsp;&nbsp; To &nbsp;&nbsp; {{=date_to}}</td>    
+            <td width="100"  ></td>
+            <td width="2" ></td>
+            <td></td>
+            <td width="100"  ></td>
+            <td width="2" ></td>
+            <td></td>            
+        </tr>
+        
+      <tr >
+            <td width="150"  >RM</td>
+            <td width="2" >:</td>
+            <td >{{=pr_region}}</td>    
+            <td width="100"  >ZM</td>
+            <td width="2" >:</td>
+            <td>{{=pr_zone}}</td>
+            <td width="100"  >AM</td>
+            <td width="2" >:</td>
+            <td>{{=pr_area}}</td> 
+            <td width="100"  ></td>
+            <td width="2" ></td>
+            <td></td>               
+        </tr>
+        
+    </table>
+	
+    <br/>    
+    <table width="900px" border="1" cellpadding="1" cellspacing="1" class="sample_border" >
+    
+    	{{for j in range(len(recordListH)):}}
+        {{recordListStrH=recordListH[j]}}
+    
+    	
+        <tr align="left" style="background-color:#DBDBDB; font-size:11px; font-weight:bold;" >		    
+            <td colspan="8" >{{=recordListStrH['area_id']}}&nbsp;&nbsp;:{{=recordListStrH['level3_sup_name']}}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{=recordListStrH['tl_id']}}&nbsp;&nbsp;:{{=recordListStrH['level2_sup_name']}}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{=recordListStrH['reg_id']}}&nbsp;&nbsp;:{{=recordListStrH['level1_sup_name']}}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{=recordListStrH['zone_id']}}&nbsp;&nbsp;:{{=recordListStrH['level0_sup_name']}}</td> 
+            
+      	</tr>
+        
+        
+        <tr align="left" style="background-color:#E5E5E5; font-size:12px; font-weight:bold;" >		    
+            <td width="80" >MPO</td> 
+            <td width="80" >Phy ID</td> 
+            <td width="150" >Physician Name</td> 
+            <td width="80" >Specialization</td> 
+            <td >Chamber Address</td> 
+            <td width="50" align="right" >Base</td>
+          	<td width="50" align="right" >IPI</td>
+            <td width="50" align="right" >PER(%)</td>
+      	</tr>
+        
+        {{rxSubTotal=0}}
+        {{rxSelfSubTotal=0}}
+        {{selfPrPer=0}}
+        {{selfPrPerSubTotal=0}}
+        
+        {{rxMedSubTotal=0}}
+        {{rxSelfMedSubTotal=0}}
+        {{selfMedPrPer=0}}
+        {{selfMedPrPerSubTotal=0}}
+        
+        {{for i in range(len(recordList)):}}
+        {{recordListStr=recordList[i]}}
+        
+        
+        
+       	{{if recordListStrH['area_id']==recordListStr['area_id']:}}
+       	{{rxSubTotal+=recordListStr['rxTotalCount']}}
+        {{rxSelfSubTotal+=recordListStr['rxSelfCount']}}
+        {{
+        if recordListStr['rxTotalCount']>0:
+        	selfPrPer=round((float(recordListStr['rxSelfCount'])/float(recordListStr['rxTotalCount'])*100),3)
+        else:
+        	selfPrPer=0
+        pass
+        }}        
+        {{
+        if rxSubTotal>0:
+        	selfPrPerSubTotal=round((float(rxSelfSubTotal)/float(rxSubTotal)*100),3)
+        else:
+        	selfPrPerSubTotal=0
+        pass
+        }}
+         
+        
+        {{rxMedSubTotal+=recordListStr['rxTotalMed']}}
+        {{rxSelfMedSubTotal+=recordListStr['rxSelfMed']}}
+        
+        {{
+        if recordListStr['rxTotalMed']>0:
+        	selfMedPrPer=round((float(recordListStr['rxSelfMed'])/float(recordListStr['rxTotalMed'])*100),3)
+        else:
+        	selfMedPrPer=0
+        pass
+        }}        
+        {{
+        if rxMedSubTotal>0:
+        	selfMedPrPerSubTotal=round((float(rxSelfMedSubTotal)/float(rxMedSubTotal)*100),3)
+        else:
+        	selfMedPrPerSubTotal=0
+        pass
+        }}
+          <tr  align="left" style="font-size:11px;">
+                <td >{{=recordListStr['area_id']}}</td>
+                <td >{{=recordListStr['doctor_id']}}</td>
+                <td >{{=recordListStr['doctor_name']}}</td>
+                <td >{{=recordListStr['doctor_speciality']}}</td>
+                <td style="font-size:10px;">{{=recordListStr['doctor_chamber_address']}}</td>
+                <!--<td align="right">{{=recordListStr['rxTotalCount']}}</td>
+                <td align="right" >{{=recordListStr['rxSelfCount']}}</td>
+                <td align="right" >{{=selfPrPer}}</td>-->
+                <td align="right">{{=recordListStr['rxTotalMed']}}</td>
+                <td align="right" >{{=recordListStr['rxSelfMed']}}</td>
+                <td align="right" >{{=selfMedPrPer}}</td>
+            </tr>
+            {{pass}}
+         {{pass}}
+         <tr align="left" style="background-color:#F0F0F0; font-size:12px; font-weight:bold;" >		    
+            <td colspan="5" style="text-align:right;" >Total&nbsp;:</td> 
+            <!--<td width="50" align="right" >{{=rxSubTotal}}</td>
+          	<td width="50" align="right" >{{=rxSelfSubTotal}}</td>
+            <td width="50" align="right" >{{=selfPrPerSubTotal}}</td> -->
+            <td width="50" align="right" >{{=rxMedSubTotal}}</td>
+          	<td width="50" align="right" >{{=rxSelfMedSubTotal}}</td>
+            <td width="50" align="right" >{{=selfMedPrPerSubTotal}}</td>
+      	</tr>        
+       {{pass}} 
+        
+</table>		 
+
+</body>
+
+</html>
+

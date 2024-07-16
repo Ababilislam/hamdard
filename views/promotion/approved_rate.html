@@ -1,0 +1,439 @@
+
+{{extend 'layout.html'}}
+  <link rel="stylesheet" href="{{=URL('static', 'js_and_css/ui.theme.css')}}" type="text/css" />
+  <link rel="stylesheet" href="{{=URL('static', 'js_and_css/jquery-ui.css')}}" type="text/css" />
+  <link rel="stylesheet" href="{{=URL('static', 'js_and_css/style.css')}}" type="text/css" />
+   <script src="{{=URL('static','js_and_css/jquery-1.8.2.js')}}"></script>
+    <script src="{{=URL('static','js_and_css/jquery-ui.js')}}"></script>
+  
+  
+  <style type="text/css">
+	 input[type=text], input[type=password],  select {
+		margin: 2px 0px 2px 0px;
+		width: 200px;
+	}
+	div.error {
+		width: 200px;
+	}
+	
+	#sm_promo_approved_rate_bonus_type,#sm_promo_approved_rate_status{
+		width: 215px;
+	}
+.page_color,body{
+	font-family:Arial, Helvetica, sans-serif;
+	font-size:13px;	
+	}
+ </style>
+ 
+ <script>
+var base_url=location.protocol + "//" + location.hostname + (location.port && ":" + location.port) + "/{{=request.application}}/";
+
+$(function() {
+	
+		$("#sm_promo_approved_rate_client_name").attr("readonly",true);	
+		$("#sm_promo_approved_rate_product_name").attr("readonly",true);	
+		
+		$('#sm_promo_approved_rate_client_id').attr('placeholder','Select Client');
+		$('#sm_promo_approved_rate_product_id').attr('placeholder','Select Item');
+		
+		$('#sm_promo_approved_rate_client_id').blur(function(){
+			var clientIdName=$('#sm_promo_approved_rate_client_id').val();
+			if(clientIdName!=''){
+				var clIdNameArray=clientIdName.split("|");
+				if(clIdNameArray.length==2){
+					$('#sm_promo_approved_rate_client_id').val(clIdNameArray[0]);
+					$('#sm_promo_approved_rate_client_name').val(clIdNameArray[1]);
+					}
+				}
+			
+		});
+			
+			
+		$('#sm_promo_approved_rate_product_id').blur(function(){
+			var productIdName=$('#sm_promo_approved_rate_product_id').val();
+			if(productIdName!=''){
+				var proIdNameArray=productIdName.split("|");
+				if(proIdNameArray.length==2){
+					$('#sm_promo_approved_rate_product_id').val(proIdNameArray[0]);
+					$('#sm_promo_approved_rate_product_name').val(proIdNameArray[1]);
+					}
+				}
+			
+		});	
+	
+	 	var valueListStr="";
+		
+		$('#search_type').blur(function(){
+			if ($('#search_type').val()=='Client_id'){
+				//alert(base_url+'default/get_route_list');
+				$.ajax({
+					  url: base_url+'default/get_client_list',
+					  success: function(resStr) {
+						  valueListStr=resStr
+					  }
+					});
+			}else if ($('#search_type').val()=='DepotId'){
+				$.ajax({
+					  url: base_url+'default/get_depot_list',
+					  success: function(resStr) {
+						  valueListStr=resStr
+					  }
+					});
+			}else if ($('#search_type').val()=='Product_id'){
+				$.ajax({
+					  url: base_url+'default/get_item_list',
+					  success: function(resStr) {
+						  valueListStr=resStr
+					  }
+					});
+			}else if ($('#search_type').val()=='Status'){
+				valueListStr="ACTIVE,INACTIVE";
+			}
+			
+	 	});
+	 
+		$('#search_value').keyup(function(){
+			//-------------------------
+			var valueList = valueListStr.split(',');				
+			var searchValue=$("#search_value").val();
+			
+			//---------------- auto complete combo list
+			var valueList_new=new Array();
+			lc=0;
+			i =0;
+			var valueStr="";				
+			while (i < valueList.length)
+			{
+				valueStr=valueList[i];
+				i=i+1;					
+				var res=valueStr.toUpperCase().match(searchValue.toUpperCase());
+				if (res!=null){
+					valueList_new[lc]=valueStr;
+					lc=lc+1;
+					if (lc==30){
+						break;
+					};
+				}else{
+					continue;
+				}					
+			};
+			//alert (ref_list_new);
+			
+			//-------------- auto complete source
+			$( "input#search_value" ).autocomplete({
+				source: valueList_new
+			});
+		
+	  }); 
+	   //==============	   
+}); 
+
+
+
+//========================clientId
+$(function() {
+  var scListStr="";
+		$.ajax({
+			  url: base_url+'default/get_client_list',
+			  success: function(resStr) {
+				  scListStr=resStr
+			  }
+			});
+	 
+		$('#sm_promo_approved_rate_client_id').keyup(function(){	
+			
+			//-------------------------
+			var ref_list = scListStr.split(',');				
+			var ref_name=$("#sm_promo_approved_rate_client_id").val();
+			
+			//---------------- auto complete combo list
+			var ref_list_new=new Array();
+			lc=0;
+			i =0;
+			var refStr="";				
+			while (i < ref_list.length)
+			{
+				refStr=ref_list[i];
+				i=i+1;					
+				var res=refStr.toUpperCase().match(ref_name.toUpperCase());
+				if (res!=null){
+					ref_list_new[lc]=refStr;
+					lc=lc+1;
+					if (lc==30){
+						break;
+					};
+				}else{
+					continue;
+				}					
+			};
+			//alert (ref_list_new);
+			
+			//-------------- auto complete source
+			$( "input#sm_promo_approved_rate_client_id" ).autocomplete({
+				source: ref_list_new
+			});
+		
+	  });    
+});
+
+
+//========================productId
+$(function() {
+  var scListStr="";
+		$.ajax({
+			  url: base_url+'default/get_item_list',
+			  success: function(resStr) {
+				  scListStr=resStr
+			  }
+			});
+	 
+		$('#sm_promo_approved_rate_product_id').keyup(function(){	
+			
+			//-------------------------
+			var ref_list = scListStr.split(',');				
+			var ref_name=$("#sm_promo_approved_rate_product_id").val();
+			
+			//---------------- auto complete combo list
+			var ref_list_new=new Array();
+			lc=0;
+			i =0;
+			var refStr="";				
+			while (i < ref_list.length)
+			{
+				refStr=ref_list[i];
+				i=i+1;					
+				var res=refStr.toUpperCase().match(ref_name.toUpperCase());
+				if (res!=null){
+					ref_list_new[lc]=refStr;
+					lc=lc+1;
+					if (lc==30){
+						break;
+					};
+				}else{
+					continue;
+				}					
+			};
+			//alert (ref_list_new);
+			
+			//-------------- auto complete source
+			$( "input#sm_promo_approved_rate_product_id" ).autocomplete({
+				source: ref_list_new
+			});
+		
+	  });    
+});
+
+
+</script>
+ 
+<table width="100%"  border="0" cellspacing="0" cellpadding="0" style="background-color:#FFFFFF;" >
+  <tr height="30px" >
+    <td><span class="blackCatTitle">Approved Rate</span></td>
+    <td align="right"><span class="blackCatTitle">
+   
+    </span></td>
+    <td align="right" width="20px">&nbsp;</td>
+  </tr>
+  <tr  height="1px" style="background-color:#CCCCCC;">
+	    <td ></td><td ></td><td ></td>
+  </tr>
+  </table>
+  
+  
+  <table width="100%" height="500px"  border="0" cellspacing="0" cellpadding="0" class="page_color"  >
+  <tr height="100%"  style="vertical-align:top;">
+    <td>
+	<table width="100%"  border="0" cellpadding="0" cellspacing="0"  >
+
+      <tr>
+        <td width="10">&nbsp;</td>
+        <td>
+		
+		<br />
+	
+		{{if access_permission==True:}} 
+		<table width="800">
+			<tr>
+				<td width="485">
+          <table width="400" class="blackCat">
+		  {{=form.custom.begin}}
+              <tr>
+                <td width="150"> Customer ID</td>
+                <td width="250">{{=form.custom.widget.client_id}}</td>
+                </tr>
+              <tr>
+                <td width="150">Customer Name</td>
+                <td width="250">{{=form.custom.widget.client_name}}</td>
+                </tr>
+              <tr>
+                <td width="150">From-Date</td>
+                <td width="250">{{=form.custom.widget.from_date}}</td>
+                </tr>
+              <tr>
+                <td width="150">To-Date</td>
+                <td width="250">{{=form.custom.widget.to_date}}</td>
+                </tr>
+              <tr>
+                <td width="150">Product ID</td>
+                <td width="250">{{=form.custom.widget.product_id}}</td>
+                </tr>
+              
+            </table>
+			</td>
+			
+			<td width="303">
+            
+              <table width="450" class="blackCat">	
+              <tr>
+                <td width="200">Product Name</td>
+                <td>{{=form.custom.widget.product_name}}</td>
+                </tr>		 
+               <tr>
+                <td width="200">BonusType </td>
+                <td>{{=form.custom.widget.bonus_type}}</td>
+                </tr>  
+              <tr>
+                <td width="200">Fixed/Percent Rate(TP)</td>
+                <td>{{=form.custom.widget.fixed_percent_rate}}</td>
+                </tr>  
+              <tr>
+                <td width="200">Status </td>
+                <td>{{=form.custom.widget.status}}</td>
+                </tr> 
+              <tr>
+                <td width="200">&nbsp;</td>
+                <td>&nbsp;</td>
+              </tr>
+              <tr>
+                <td width="200">&nbsp;</td>
+                <td>{{=form.custom.submit}}</td>
+              </tr>
+              
+                  {{=form.custom.end}}
+                  </table>
+                </td>
+			</tr>
+			</table>
+            <br />
+         {{pass}} 
+		 
+         <table width="1000" border="1" cellpadding="1" cellspacing="1" class="sample_border" >
+		   
+		   <form id="form1" name="form1" method="post" action="{{=URL(c='promotion',f='approved_rate')}}">
+            <tr align="left" class="blackCatHead"  height="20px" ;"vertical-align:middle">
+              <td width="100" >
+                <select name="search_type" id="search_type" style="width:150px" >
+                  <option value="" selected="selected">Select a type</option>
+                  	{{if session.search_type_approved_rate=='Client_id':}}<option value="Client_id" selected="selected">Client ID/Name</option>{{else:}}<option value="Client_id" >Client ID/Name</option>{{pass}}
+                    {{if session.search_type_approved_rate=='Product_id':}}<option value="Product_id" selected="selected">Product ID/Name</option>{{else:}}<option value="Product_id" >Product ID/Name</option>{{pass}}
+                    {{if session.search_type_approved_rate=='Status':}}<option value="Status" selected="selected">Status</option>{{else:}}<option value="Status" >Status</option>{{pass}}
+                    {{if (session.user_type!='Depot'):}}
+                    	{{if session.search_type_approved_rate=='DepotId':}}<option value="DepotId" selected="selected">Branch ID/Name</option>{{else:}}<option value="DepotId" >Branch ID/Name</option>{{pass}}
+                    {{pass}}
+                </select>
+              </td>
+              <td width="166" >
+              {{if session.search_value_approved_rate=='' or session.search_value_approved_rate==None:}}
+              	<input  name="search_value" type="text" id="search_value" size="25" value="" placeholder="Select a value" autocomplete="off" style="width:300px"/>
+              {{else:}}
+              	<input  name="search_value" type="text" id="search_value" size="25" value="{{=session.search_value_approved_rate}}" placeholder="Select a value" autocomplete="off" style="width:300px"/>
+              {{pass}}
+              
+              </td>
+              <td width="100" ><input type="submit" name="btn_filter_item" id="btn_filter_item" value="Filter"   class="button_update"/>
+			  <input type="submit" name="btn_all" id="btn_all" value="All"   class="button_update"/>		
+		  	   </td>
+              <td width="100" >              
+              {{if access_permission==True:}} 
+			  <a href="{{=URL(c='promotion',f='approved_rate_product_add')}}">
+			  <input type="button" name="" id="" value="Add New Product"   class="button_update"/>
+			  </a>
+			  {{pass}}
+              </td>
+				
+              <td align="right" >
+			  <a href="{{=URL(c='promotion',f='approved_rate_download')}}">
+				 	<input type="button" name="" id="" value="Download"   class="button_update"/>
+			    	</a>
+			{{if access_permission==True:}} 
+			  <a href="{{=URL(c='promotion',f='approved_rate_batch_upload')}}">
+			  <input type="button" name="" id="" value="Batch Upload"   class="button_update"/>
+			  </a>
+			  {{pass}}
+			  </td>
+            </tr>
+		      </form>
+          </table>
+		 <strong>Total:</strong> {{=totalCount}}<br />
+		 
+			 <table width="1261" border="1" cellpadding="1" cellspacing="1" class="sample_border" >
+                <tr align="left" class="blackCatHead"  height="20px" ;"vertical-align:middle">
+                  <td width="50" >BranchID</td>
+                  <td width="100" >Customer ID</td>
+                  <td width="200" >Customer Name</td>
+                  <td width="70" >From-Date</td>
+                  <td width="70" >To-Date</td>
+                  <td width="60" align="center">Product ID</td>
+                  <td width="200" >Product Name</td>
+                  <td width="60" >Bonus Type </td>
+                  <td width="60" align="center"  >Fixed/Per. Rate (TP)</td>
+                  <td width="60" align="center"  >Status </td>
+                  <td width="120" align="center"  >LastUpdated By&amp;Time</td>
+                  <td align="center"  ></td>
+                </tr>
+			    {{ p=0}} 		  
+			    {{for i,record in enumerate(records):}}
+			    {{ if i==items_per_page: break}}
+  <form id="form1" name="form1" method="post" action="{{=URL(c='promotion',f='approved_rate_edit',args=[page,record.id])}}">
+        
+    <tr  align="left" class="blackCat"  style=" font-size:12px">
+      <td width="50" >{{=record.depot_id}}</td> 
+      <td width="100" >{{=record.client_id}}</td>
+      <td width="200" >{{=record.client_name}}</td>
+      <td width="70" >{{=record.from_date.strftime("%d-%b-'%y")}}</td>
+      <td width="70" >{{=record.to_date.strftime("%d-%b-'%y")}}</td>
+      <td width="60"  align="center">{{=record.product_id}}</td>
+      <td width="200" >{{=record.product_name}}</td>
+      <td width="60" >{{=record.bonus_type}}</td>
+      <td width="60" align="center"  >{{=record.fixed_percent_rate}}</td>
+      <td width="60" align="center"  >{{=record.status}}</td>
+      <td width="120" align="center" style="font-size:9px">{{=record.updated_by}}, {{=record.updated_on.strftime("%d-%b-'%y %I:%M%p")}}</td>
+      <td width="38" align="center"  >
+	  {{if access_permission==True:}} 
+	    <input type="submit" name="btn_go" id="btn_go" value="&gt;&gt;"   class="button_update"/>        
+	  
+	  {{pass}}
+	  </td>
+    </tr>
+  </form>
+        
+        {{pass}}
+    </table>
+     
+      
+  </td></tr>
+</table>
+    
+{{if page:}}
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="{{=URL(args=[page-page])}}">first</a> |  
+&nbsp;&nbsp;<a href="{{=URL(args=[page-1])}}">previous</a> |
+{{pass}}
+
+{{if len(records)>items_per_page:}}
+&nbsp;&nbsp;<a href="{{=URL(args=[page+1])}}">next</a>
+{{pass}}
+	</td>
+  </tr>
+</table><br />
+
+{{if (check_role('rm_campaign_manage')==True):}}
+       {{if session.search_type_approved_rate=='Client_id' or session.search_type_approved_rate=='Product_id':}}
+        <form id="form1" name="form1" method="post" action="{{=URL(c='promotion',f='approved_rate')}}">
+              <input type="checkbox" name="check_clean" value="YES" style="width:18px; height:18px;"/>Confirmation&nbsp;<input type="submit" name="btn_clean" id="btn_clean" value="Clean Filtered Data" class="button_update"/>
+        </form>
+    {{else:}}
+     * Data cleaned option available if filtered by Client or Product
+    {{pass}}{{pass}}
+
+<br />
+<br />

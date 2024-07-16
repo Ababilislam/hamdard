@@ -1,0 +1,209 @@
+{{extend 'layout.html'}}
+
+ <link rel="stylesheet" href="{{=URL('static', 'js_and_css/ui.theme.css')}}" type="text/css" />
+  <link rel="stylesheet" href="{{=URL('static', 'js_and_css/jquery-ui.css')}}" type="text/css" />
+  <link rel="stylesheet" href="{{=URL('static', 'js_and_css/style.css')}}" type="text/css" />
+  <script src="{{=URL('static','js_and_css/jquery-1.8.2.js')}}"></script>
+  <script src="{{=URL('static','js_and_css/jquery-ui.js')}}"></script>
+<style>
+body {
+  font-family: "Lato", sans-serif;
+}
+
+
+#main {
+
+/*  transition: margin-left .5s;
+  padding: 20px;*/
+}
+
+</style>
+  
+ 
+  <style type="text/css">
+ input[type=text], input[type=password],  select {
+    margin: 2px 0px 2px 0px;
+	width:250px;
+}
+
+select{ width:100px; margin:2px 0px 2px 0px;}
+
+textarea{
+    width:100px;
+	height:50px;
+	margin:2px 0px 2px 0px;
+}
+
+div.error {
+    margin-left:0px;
+	width:100px;
+}
+.page_color,body{
+	font-family:Arial, Helvetica, sans-serif;
+	font-size:13px;
+	}
+	
+#uni_middle_str4{
+width:50px;
+}
+
+ </style>
+
+
+<script>
+
+
+   var base_url=location.protocol + "//" + location.hostname + (location.port && ":" + location.port) + "/{{=request.application}}/";
+
+$(function() {
+
+ // ========================= DOCTOR ID AND NAME AUTO COMPLETE START ======================================
+ var client_id_ListStr="";  
+   // alert("Hello")
+    // alert(base_url+'temp_data/doctor_id_list');
+
+    $.ajax({
+      url: base_url+'temp_data/doctor_id_list',
+      success: function(ret_doctor_id_Str) {
+        // alert (ret_doctor_id_Str)
+        client_id_ListStr=ret_doctor_id_Str 
+      }
+    }); 
+// alert (client_id_ListStr)
+
+// =================================
+$('#searchValue_doctor_id').keyup(function(){
+      // alert('ok')
+      //-------------------------
+      var ref_list = client_id_ListStr.split(',');  
+      var ref_name=$("#searchValue_doctor_id").val();
+      // alert(ref_name)
+      
+      //---------------- auto complete combo list
+      var ref_list_new=new Array();
+      lc=0;
+      i =0;
+      var ref_poi_id_Str="";        
+      while (i < ref_list.length)
+      {
+        ref_poi_id_Str=ref_list[i];
+        i=i+1;          
+        var res=ref_poi_id_Str.toUpperCase().match(ref_name.toUpperCase());
+        if (res!=null){
+          ref_list_new[lc]=ref_poi_id_Str;
+          lc=lc+1;
+          if (lc==30){
+            break;
+          };
+        }else{
+          continue;
+        }         
+      };
+      
+      //-------------- auto complete source
+      $( "input#searchValue_doctor_id" ).autocomplete({
+        source: ref_list_new
+      });
+    
+    }); 
+//   ========================= DOCTOR ID AND NAME AUTO COMPLETE END ======================================
+ 
+
+
+});
+
+
+</script>  
+
+
+
+<table width="100%"  border="0" cellspacing="0" cellpadding="0" style="background-color:#FFFFFF;" >
+
+<tr height="30px" >
+
+<td style="padding-left: 6px"><span class="blackCatTitle">Doctor</span></td>
+
+<td align="right"><span class="blackCatTitle">
+</span></td>
+<td align="right" width="20px">&nbsp;</td>
+</tr>
+<tr  height="1px" style="background-color:#CCCCCC;">
+<td ></td><td ></td><td ></td>
+</tr>
+</table>
+
+
+  <table width="50%" height = "100%"  cellpadding="1" cellspacing="1" class="sample_border" style="background-color: #F5F5F5; ">
+        <form name="form3" action="{{=URL(c='temp_data',f='doctor')}}" method = post>
+
+            <tr>
+                  <td style="color:black; padding-left:10px;font-size: 15px;padding-top: 8px;">Total : {{=total}}</td>
+                  <!-- <td colspan="6" align="right"> -->
+
+                  <td align="right"  style="padding-top: 1px; padding-left:5px ;padding-top: 5px;" >
+                      {{if session.searchValue_doctor_id=='' or session.searchValue_doctor_id==None :}}
+                        <input  type="text" name="searchValue_doctor_id" id="searchValue_doctor_id" placeholder="Doctor ID/Name" autocomplete="on" value="" style="width:250px; height: 20px;">
+                      {{else:}}
+                        <input  type="text" name="searchValue_doctor_id" id="searchValue_doctor_id" autocomplete="on" value="{{=session.searchValue_doctor_id}}" style="width:250px; height: 20px;">
+                      {{pass}}
+                  </td>
+                  <td  style="padding-left:10px ;  padding-top: 5px;">
+                      <input  type="submit" name="search_btn" id="search_btn" value="Filter"  style=" width:60px; height:30px; background-color:#EBEBEB;color: #212F3C; " />
+                  </td>
+                  <td align="right" style="padding-top: 5px;">
+                      <input type="submit" name="all_btn" id="all_btn" value="ALL" style=" width: 50px; height:30px; background-color:#EBEBEB;color: #212F3C; ">&nbsp;&nbsp;
+                  </td>
+
+            </tr>
+      </form>
+
+
+  </table>
+
+  <table  width="50%"  cellpadding="1" cellspacing="1" class="sample_border" style="background-color: #F5F5F5;border: none; height:100%;margin-left: 5px; margin-top: 10px;" >
+          <tr align="left" class="blackCatHead" height="25px" vertical-align:middle >
+               <td width="100px" style="padding-left:5px;" >Doctor ID</td>
+               <td width="200px"  >Name</td>
+               <td width="120px"  >Status</td>
+               <td width="200px"  >Created ON</td>
+               <td ></td>
+          </tr>
+           {{for i in range(len(doctor_records)):
+              records_ov_dict=doctor_records[i]  
+              #record_poi_id=str(records_ov_dict["id"]) 
+              doc_id=records_ov_dict["doc_id"]   
+              name=records_ov_dict["doc_name"]
+              status=records_ov_dict["status"]                                        
+              created_on=records_ov_dict["created_on"]     
+              #poi_type=str(records_ov_dict["poi_type"])      
+              
+            }}
+          <tr  align="left" class="blackCat"  style="vertical-align:top;border: none; font-size:12px;color: #212F3C;"> 
+                <td align="left" style="height:35px; vertical-align:top;padding-left:5px;">{{=doc_id}}</td>
+                <td style="vertical-align:top;">{{=name}}</td>
+                <td style="vertical-align:top;">{{=status}}</td>
+                <td style="vertical-align:top;">{{=created_on}}</td>
+                <form  name="form1" action="{{=URL(c='temp_data',f='doctor_delete',args=[doc_id])}}" method="post"  >
+
+                <td  align="left" style="padding-right: 5px;vertical-align: top;" >
+                      <button type="submit" name="btn_delete" id="btn_delete" onclick="if (!confirm('Do you really want to delete?')) { return false }"> X 
+                      </button>
+                </td>
+              </form>
+               {{pass}}
+          </tr>
+          <tr>  
+            <td>
+              {{ if page: }}    
+                  <a href="{{=URL(args=[page-page],vars=dict())}}">first</a> |     
+                  <a href="{{=URL(args=[page-1],vars=dict())}}">previous</a> |    
+              {{pass}}
+              {{if len(doctor_records)>items_per_page:}}    
+                  <a href="{{=URL(args=[page+1],vars=dict())}}"> next</a>    
+              {{pass}} 
+            </td>
+          </tr>
+          
+  </table>
+        
+    

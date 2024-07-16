@@ -1,0 +1,160 @@
+{{extend 'layout_invoice.html'}}
+
+<html>
+
+<head>
+
+
+
+</head>
+
+<body>
+
+		<!--<img src="{{#=URL('static','images/SKFLogo.png')}}"/> style="background:url({{#=URL('static','images/SKFLogo.png')}}); background-repeat:no-repeat; background-position:center"-->
+        
+        <span style="float:right">#2.03</span>
+		<table width="900" border="0" cellspacing="1" cellpadding="1" >         
+
+		<tr style="font-size:15px; font-weight:bold">
+		  <th colspan="3" rowspan="3" style="vertical-align:middle"><img src="{{=URL('static','images/adjustment.png')}}"  width="80px" height="80px"/></th>
+		  <th colspan="6" align="center" ><span style="font-size:30px; font-weight:bold">IC Adjustment</span>&nbsp;(with Batch)</th>
+		  </tr>
+		<tr style="font-size:15px; font-weight:bold">
+		  <th rowspan="2" align="left" >&nbsp;</th>
+		  <th align="left" >&nbsp;</th>
+		  <th width="5" align="left" >&nbsp;</th>
+		  <th colspan="3" align="left" ><!--SKSH--></th>
+		  </tr>
+		<tr >
+	      <td rowspan="3" align="center" valign="middle" ><img src="{{=URL('static','images/comp_logo1.png')}}" height="60px"/></td>
+	      <td valign="top" >&nbsp;</td>
+	      <td colspan="3" valign="top" style=" text-align:right;font-size:20px; border-bottom:solid 1px #CCC"><strong>{{=session.prefix_invoice}}AD{{=depot_id}}-{{=type_sl}}</strong></td>
+	      </tr>
+		  <tr >
+		    <td width="120" valign="top" >Reference Number</td>
+		    <td width="1" valign="top" ><strong>:</strong></td>
+		    <td width="240" colspan="2" valign="top" >{{=rowId}}</td>
+		    <td width="5" valign="top" >&nbsp;</td>
+		    <td width="100" valign="top" style="border-left:solid 1px #CCC">Adjustment Date</td>
+		    <td width="1" valign="top" ><b>:</b></td>
+		    <td width="180" valign="top" style="border-right:solid 1px #CCC">{{if damage_date!=None:}}{{=damage_date.strftime('%d-%b-%y')}}{{pass}}</td>
+	      </tr>
+		  <tr >
+		    <td width="120" valign="top" >Cause</td>
+		    <td width="1" valign="top" ><strong>:</strong></td>
+		    <td colspan="2" valign="top" >{{=cause}}</td>
+		    <td valign="top" >&nbsp;</td>
+		    <td width="100" valign="top" style="border-left:solid 1px #CCC">Year-Period</td>
+		    <td width="1" valign="top" ><b>:</b></td>
+		    <td width="180" valign="top" style="border-right:solid 1px #CCC">{{if damage_date!=None:}}{{=damage_date.strftime('%Y-%m')}}{{pass}}</td>
+	      </tr>
+		  <tr >
+		    <td width="120" valign="top" >Description</td>
+		    <td width="1" valign="top" ><strong>:</strong></td>
+		    <td colspan="4" valign="top" >{{=note}}</td>
+		    <td width="100" valign="top" style="border-bottom:solid 1px #CCC;border-left:solid 1px #CCC;">Status</td>
+		    <td width="1" valign="top" style="border-bottom:solid 1px #CCC"><b>:</b></td>
+		    <td width="180" valign="top" style="border-bottom:solid 1px #CCC;border-right:solid 1px #CCC;">{{=status}}</td>
+	      </tr>
+		  <tr >
+		    <td colspan="6" valign="top" style="font-size:16px"><strong>I/C Adjustment Entry</strong></td>
+		    <td valign="top" >&nbsp;</td>
+		    <td valign="top" >&nbsp;</td>
+		    <td valign="top" style="font-size:16px"><strong>{{=depotName}}</strong></td>
+	      </tr>
+    </table>
+  <table width="900" border="1" cellpadding="1" cellspacing="1" class="sample_border" style="border: solid 1px #C4C4C4">
+
+  <tr align="left" class="blackCatHead"  height="20px" style="vertical-align:middle; background-color:#E6E6E6">
+
+    <td width="60" >Item ID</td>
+    <td >Item Name</td>
+    <td width="60" >Adjustment Type</td>
+    <td width="60" >Location Code</td>
+    <td width="150" >Location Description</td>
+
+    <td width="50" align="left"  >Batch No</td>
+    <td width="80" align="center"  >Expiry Date</td>
+    <td width="60" align="center"  >Quantity Adjustment</td>
+    <td width="60" align="center"  >UOM</td>
+
+    <td width="100" align="right"  >Cost Adjustment</td>
+
+    </tr>
+
+	{{total_qty=0}}
+    {{total_tp=0}}
+    {{mCartonTotal=0}}
+    {{for row in detailRecords:}}
+
+    	{{qty=0;rate=0;mCarton=0}}
+
+          <tr  align="left" class="blackCat"  style="vertical-align:middle; background-color:#FBFBFB">
+        
+            <td width="60" >{{=row.item_id}}</td>
+            <td >{{=row.item_name}}</td>
+            <td width="60" >{{=row.adjustment_type}}</td>
+            <td width="60" >{{=row.store_id}}</td>
+            <td width="150" >{{=row.store_name}}</td>
+        
+            <td width="50" align="left" >{{=row.batch_id}}</td>
+            <td width="80" align="center" >{{=row.expiary_date.strftime('%d-%b-%Y')}}{{rate=row.dist_rate}}</td>
+            <td width="60" align="center" >{{qty=int(row.quantity)}} {{=qty}}{{total_qty+=qty}}</td>
+            <td width="60" align="center" >{{=row.item_unit}}</td>
+        
+            <td width="100" align="right" >{{amt=qty*rate}}{{=easy_format(amt)}}{{total_tp+=amt}}</td>
+        
+          </tr>
+
+    {{pass}}
+
+{{total_tp=round(total_tp,2)}}
+
+  <tr  align="left" class="blackCat"  style="background-color:#FBFBFB">
+    <td align="left" style="border-bottom-style:none; border-left:none; border-top:none">&nbsp;</td>
+    <td align="left" style="border-bottom-style:none; border-left:none; border-top:none">&nbsp;</td>
+    <td align="right" style="border-bottom-style:none; border-left:none; border-top:none">&nbsp;</td>
+    <td align="right" style="border-bottom-style:none; border-left:none; border-top:none">&nbsp;</td>
+    <td width="150" align="right" style="border-bottom-style:none; border-left:none; border-top:none">&nbsp;</td>
+    <td width="50" align="left" style="border-bottom-style:none; border-left:none; border-top:none">&nbsp;</td>
+    <td width="80" align="right" style="border-bottom-style:none; border-left:none; border-top:none"><strong>Total</strong></td>
+    <td align="center" style="border-bottom-style:none; border-left:none; border-top:none">{{=total_qty}}</td>
+    <td align="right" style="border-bottom-style:none; border-left:none; border-top:none">&nbsp;</td>
+    <td align="right" ><strong>{{=easy_format(total_tp)}}</strong></td>
+  </tr>
+  
+</table>
+<table width="900" >
+    <tr>
+      <td width="100" align="left">&nbsp;</td>
+      <td align="left">&nbsp;</td>
+    </tr>
+    <tr>
+      <td width="100" align="left"><strong>Comments:</strong></td>
+      <td align="left"><strong><!--Transcom Distribution Co. Ltd.-->
+      </strong></td>
+    </tr>
+</table>
+<br/>
+
+<table width="900" >
+	<tr>
+	  <td >{{=updatedBy}}</td>
+	  <td >&nbsp;</td>
+	  <td >&nbsp;</td>
+  </tr>
+ <tr style="height:2px;">
+	  <td align="center" style="height:2px;">____________________</td>
+	  <td align="center" style="height:2px;">______________________________________</td>
+	  <td width="150" align="right" style="height:2px;">_______________</td>
+  </tr>
+	<tr>
+	  <td width="150" align="left"><strong>Prepared By</strong></td>
+	  <td align="center"><strong>for {{=session.cName}}</strong></td>
+	  <td width="150" align="right"><strong>Checked By</strong></td>
+  </tr>
+</table>
+
+</body>
+</html>
+

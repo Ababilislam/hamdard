@@ -1,0 +1,216 @@
+{{extend 'layout.html'}}
+
+<link rel="stylesheet" href="{{=URL('static', 'js_and_css/ui.theme.css')}}" type="text/css" />
+<link rel="stylesheet" href="{{=URL('static', 'js_and_css/jquery-ui.css')}}" type="text/css" />
+<link rel="stylesheet" href="{{=URL('static', 'js_and_css/style.css')}}" type="text/css" />
+<script src="{{=URL('static','js_and_css/jquery-1.8.2.js')}}"></script>
+<script src="{{=URL('static','js_and_css/jquery-ui.js')}}"></script>
+<style type="text/css">
+	 input[type=text], input[type=password]{
+		margin: 2px 0px 2px 0px;
+	}
+	div.error {
+		width: auto;
+	}
+	#sm_rep_rep_id{
+		width: 80px;
+	}
+	#sm_rep_name{
+		width: 250px;
+	}
+	#sm_rep_status{
+		width: 120px;
+	}
+	#sm_rep_mobile_no{
+		width: 120px;
+	}
+	.page_color,body{
+		font-family:Arial, Helvetica, sans-serif;
+
+		font-size:13px;	
+
+		}
+ </style>
+
+ <script>
+var base_url=location.protocol + "//" + location.hostname + (location.port && ":" + location.port) + "/{{=request.application}}/";
+
+$(function() {
+	//alert( base_url+'tracking/get_type')
+	 	var valueListStr="";
+		$('#search_type').blur(function(){
+			if ($('#search_type').val()=='RepID'){
+				$.ajax({
+					url: base_url+'default/get_rep_list',
+					success: function(resStr) {
+						  valueListStr=resStr
+					}
+				});
+			}else if ($('#search_type').val()=='Type'){
+				$.ajax({
+					  url: base_url+'tracking/get_type',
+					  success: function(retStr) {
+						  valueListStr=retStr
+					  }
+					});
+			
+			}
+	 	});
+		$('#search_value').keyup(function(){
+			var valueList = valueListStr.split(',');				
+			var searchValue=$("#search_value").val();
+			//---------------- auto complete combo list
+			var valueList_new=new Array();
+			lc=0;
+			i =0;
+			var valueStr="";				
+			while (i < valueList.length)
+			{
+				valueStr=valueList[i];
+				i=i+1;					
+				var res=valueStr.toUpperCase().match(searchValue.toUpperCase());
+				if (res!=null){
+					valueList_new[lc]=valueStr;
+					lc=lc+1;
+					if (lc==30){
+						break;
+					};
+				}else{
+					continue;
+				}					
+			};
+			//-------------- auto complete source
+			$( "input#search_value" ).autocomplete({
+				source: valueList_new
+			});
+	  }); 
+}); 
+</script>
+
+<body >   
+	<table width="100%"  border="0" cellspacing="0" cellpadding="0" style="background-color:#FFFFFF;" >
+		<tr height="30px" >
+		    <td width="500"><span class="blackCatTitle">&nbsp;Tracking</span></td>
+			<td>&nbsp;</td>
+	  	</tr>
+		<tr height="1px" style="background-color:#CCCCCC;">
+			<td colspan="3" ></td>
+		</tr>
+
+	</table>
+
+  	<table width="100%" height="500px"  border="0" cellspacing="0" cellpadding="0" class="page_color" id="table_big"  >
+		<tr height="100%"  style="vertical-align:top;">
+			<td width="10px">&nbsp;</td>
+			<td>
+				<table width="100%"  border="0" cellpadding="0" cellspacing="0"  >
+					<tr>
+						<td>&nbsp;</td>
+					</tr>
+					<tr>
+						<td>
+							<table width="1000" border="1"  class="sample_border" >
+								<form id="form1" name="form1" method="post" action="{{=URL(c='tracking',f='tracking')}}">
+									<tr  class="blackCatHead" ;"vertical-align:middle">
+
+										 <tr>
+										 	<td width="250" >
+		                                    	&nbsp;From:&nbsp;<input type="date" style="width:150px" name="from_dt" id="from_dt" >
+		                                    
+		                                    </td>
+										 	<td width="250">
+		                                    	&nbsp;To:&nbsp;
+		                                    	<input type="date" style="width:150px" id="to_dt" name="to_dt">
+		                                    </td>
+											<td width="150" height="28" > 
+												<select name="search_type" id="search_type" style="width:180px" >
+													<option selected="selected">Select a Type</option>
+													{{if session.search_type_rep=='RepID':}}
+														<option value="RepID" selected="selected">User ID</option>
+													{{else:}}
+														<option value="RepID" >User ID</option>
+													{{pass}}
+													{{if session.search_type_rep=='type':}}
+														<option value="Type" selected="selected">Type</option>
+													{{else:}}
+														<option value="Type" >Type</option>
+													{{pass}}
+												</select>
+											</td>
+											<td width="150" >
+												{{if session.search_value_rep=='' or session.search_value_rep==None:}}
+													<input  name="search_value" type="text" id="search_value" size="25" value="" placeholder="Select a value" autocomplete="off" style="width:150px"/>
+												{{else:}}
+													<input  name="search_value" type="text" id="search_value" size="25" value="{{=session.search_value_rep}}" placeholder="Select a value" autocomplete="off" style="width:150px"/>
+												{{pass}}
+											</td>
+                                            
+                                             <!--Nazma Azam 2020-01-22 start-->   
+											<td  width="200" >
+												&nbsp;&nbsp;&nbsp;<input type="submit" name="btn_filter" id="btn_filter" value="Filter"   class="button_update"/>&nbsp;
+                                               
+												<input type="submit" name="btn_rep_all" id="btn_rep_all" value="All"   class="button_update"/>
+                           
+                                           
+                     
+                     
+                    
+											</td>
+											<td width="100" >
+
+								              <a href="{{=URL(c='tracking',f='download_tracking')}}">
+
+								                <input type="button" name="Input2" id="Input2" value="Download"   class="button_update"/></a>
+
+
+								          	</td>
+										
+                                         <!--Nazma Azam 2020-01-22 end-->
+                                        
+										 </tr>
+									</tr>
+								</form>
+							</table>
+							<strong>Total:</strong> {{=totalCount}}<br />
+							<table width="1000" border="1" cellpadding="1" cellspacing="1" class="sample_border" >
+								<tr class="blackCatHead"  height="20px" ;"vertical-align:middle">
+									<td width="100" align="left" >Visit Date </td>
+									<td width="100">Visit Time</td>
+									<td width="100" align="left" >User Id</td>
+									<td  align="left" >Name</td>
+									<td width="100" align="left" >Type</td>
+									<td width="100" align="left" >Visited Id</td>
+									<td  align="left" >Visited Name</td>
+									<td width="100" align="left" >Location</td>
+								</tr>
+								{{for i,record in enumerate(records):}}
+									{{ if i==items_per_page: break}}
+										<tr  align="left" class="blackCat"  style="font-size:13px"> 
+											<td  align="left">{{=record.visit_date}}</td>
+						                    <td  align="left">{{=str(record.visit_time).split(' ')[1]}}</td>
+						                    <td  align="left">{{=record.rep_id}}</td>
+						                    <td>{{=record.rep_name}}</td>
+						                    <td  align="left" >{{=record.call_type}}</td>
+						                    <td  align="left" >{{=record.visited_id}}</td>
+						                    <td  align="left" >{{=record.visited_name}}</td>
+						                    <td  align="left" ><a href="{{='https://maps.google.com/?q='+str(record.visited_latlong)}}" target="_blank">Location</a>{{#=record.visited_latlong}}</td>
+						                   
+						                    
+						                </tr>
+						            {{pass}}
+						    </table>
+						</td>
+					</tr>
+				</table>
+				{{if page:}}
+					<a href="{{=URL(args=[page-page])}}">first</a> |   
+					<a href="{{=URL(args=[page-1])}}">previous</a> |
+				{{pass}}
+				{{if len(records)>items_per_page:}}
+					<a href="{{=URL(args=[page+1])}}">next</a>
+				{{pass}}	
+			</td>
+  		</tr>
+	</table>
+</body>
+

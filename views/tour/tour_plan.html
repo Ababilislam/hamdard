@@ -1,0 +1,406 @@
+{{extend 'layout.html'}}
+
+ <link rel="stylesheet" href="{{=URL('static', 'js_and_css/ui.theme.css')}}" type="text/css" />
+  <link rel="stylesheet" href="{{=URL('static', 'js_and_css/jquery-ui.css')}}" type="text/css" />
+  <link rel="stylesheet" href="{{=URL('static', 'js_and_css/style.css')}}" type="text/css" />
+  <script src="{{=URL('static','js_and_css/jquery-1.8.2.js')}}"></script>
+  <script src="{{=URL('static','js_and_css/jquery-ui.js')}}"></script>
+<style>
+body {
+  font-family: "Lato", sans-serif;
+}
+
+
+#btn_delete{ width:18px; height:18px;background:url('{{=URL('static','images/delete.png')}}') }
+
+#main {
+  transition: margin-left .5s;
+  padding: 16px;
+}
+
+@media screen and (max-height: 450px) {
+  .sidenav {padding-top: 15px;}
+  .sidenav a {font-size: 18px;}
+}
+</style>
+ 
+  <style type="text/css">
+ input[type=text], input[type=password],  select {
+    margin: 2px 0px 2px 0px;
+	width:250px;
+}
+
+select{ width:265px; margin:2px 0px 2px 0px;}
+
+textarea{
+    width:250px;
+	height:50px;
+	margin:2px 0px 2px 0px;
+}
+
+div.error {
+    margin-left:0px;
+	width:265px;
+}
+.page_color,body{
+	font-family:Arial, Helvetica, sans-serif;
+	font-size:13px;
+	}
+	
+#uni_middle_str4{
+width:100px;
+}
+.menu_table{
+  height: auto;
+
+}
+
+</style>
+
+
+
+ <script>
+var base_url=location.protocol + "//" + location.hostname + (location.port && ":" + location.port) + "/{{=request.application}}/";
+
+$(function() {
+    var valueListStr="";
+    
+    $('#search_type').blur(function(){
+      if ($('#search_type').val()=='ID/Name'){
+        // alert(base_url+'default/get_id_list');
+        $.ajax({
+            url: base_url+'default/get_id_list',
+            success: function(resStr) {
+              valueListStr=resStr
+            }
+          });
+      }else if ($('#search_type').val()=='Level'){
+        $.ajax({
+            url: base_url+'default/get_level_list',
+            success: function(resStr) {
+              valueListStr=resStr
+            }
+          });
+      
+      }else if ($('#search_type').val()=='Status'){
+        valueListStr='CANCELLED,APPROVED,AMND,PENDING,DRAFT, NOT SUBMITTED'
+
+        // $.ajax({
+        //   // alert(base_url+'default/get_status_list');
+        //     url: base_url+'default/get_status_list',
+        //     success: function(resStr) {
+        //       valueListStr=resStr
+        //     }
+        //   });
+      
+      }else if ($('#search_type').val()=='Month'){
+        $.ajax({
+          // alert(base_url+'default/get_month_list');
+            url: base_url+'default/get_month_list',
+            success: function(resStr) {
+              valueListStr=resStr
+            }
+          });
+      
+      };
+      
+    });
+   
+    $('#select_item').keyup(function(){
+      //-------------------------
+      var valueList = valueListStr.split(',');        
+      var searchValue=$("#select_item").val();
+      
+      //---------------- auto complete combo list
+      var valueList_new=new Array();
+      lc=0;
+      i =0;
+      var valueStr="";        
+      while (i < valueList.length)
+      {
+        valueStr=valueList[i];
+        i=i+1;          
+        var res=valueStr.toUpperCase().match(searchValue.toUpperCase());
+        if (res!=null){
+          valueList_new[lc]=valueStr;
+          lc=lc+1;
+          if (lc==30){
+            break;
+          };
+        }else{
+          continue;
+        }         
+      };
+      //alert (ref_list_new);
+      
+      //-------------- auto complete source
+      $( "input#select_item" ).autocomplete({
+        source: valueList_new
+      });
+    
+    }); 
+     //==============    
+}); 
+
+</script>
+ 
+
+
+
+  <table align="left" width="80%"  border="0" cellspacing="1" cellpadding="2" style="background-color:#FFFFFF;margin-left:auto;margin-right:auto;">
+        <form action="{{=URL(c='tour',f='tour_plan')}}" method="post">
+
+          <tr>
+                  <td height="25px" style="color:#212F3C; font-size: 20px;padding-top: 5px;"> &nbsp;Tour Plan</td>
+          </tr>
+
+          <tr>
+                  <td colspan="16" style=" background-color: #B2BABB;  height: 1px"> </td>
+          </tr>  
+
+          <tr>
+                  <td colspan="1" align="left" style="padding-left:10px">
+                        <select name="search_type" id="search_type" style="width:150px" >
+                          {{if session.search_type!=None and session.search_type!='None' and session.search_type!='':}}
+                            <option value="{{=session.search_type}}" >{{=session.search_type}}</option>
+                          {{else:}}
+                            <option value="" selected="selected">Select a type</option>   
+                        {{pass}}
+                    {{if session.search_type=='ID/Name':}}
+                        <option value="ID/Name" selected="selected" >ID/Name</option>
+                    {{else:}}
+                    <option value="ID/Name">ID/Name</option>
+                    {{pass}}
+
+                            <!-- <option value="Name" >Name</option> -->
+                            <option value="Level" >Level</option>
+                            <option value="Status" >Status</option>
+                    {{if session.search_type=='Month':}}
+
+                            <option value="Month"selected="selected" >Month</option>
+                            {{else:}}
+                            <option value="Month">Month</option>
+                            {{pass}}
+                        </select>
+      
+                  </td>
+
+                  <td colspan="2" align="left">
+                      {{if session.select_item!=None and session.select_item!='None' and session.select_item!='':}}
+                          <input  type="text" name="select_item" id="select_item" placeholder=" Type " autocomplete="on" value="{{=session.select_item}}" style="width:200px; height: 20px;">
+                      {{else:}}
+                      <input  type="text" name="select_item" id="select_item" placeholder=" Type " autocomplete="on" value="" style="width:200px; height: 20px;">
+                      {{pass}}
+                  </td>
+
+                  <td style="padding-left: 10px; padding-top:2px">
+                          <input  type="submit" name="filter_btn" id="filter_btn" value="Filter"  style=" width:70px; height:30px; background-color:#EBEBEB;color: #212F3C; "/>&nbsp;&nbsp; 
+                  </td>
+
+                  <td style="padding-left: 5px;padding-top:2px">
+                          <input type="submit" name="all_btn" id="all_btn" value=" All " style=" width: 60px; height:30px; background-color:#EBEBEB;color: #212F3C; ">&nbsp;&nbsp;
+                  </td>
+
+                  <td align="right" colspan="8" style="color:#212F3C;width: 40%; padding-left:10px;padding-top:2px">
+                          <a href="{{=URL(c='tour',f='tour_plan_list_Download')}}">
+                          <input type="button" name="tour_download" id="tour_download"  value="Download" style="background-color: #EBEBEB;color: #212F3C;width: 100px;height: 30px; text-align: center;">
+                          </a>
+                  </td> 
+
+          </tr>
+        </form>
+  </table>    
+
+
+
+
+
+    <table width="1000" border="1" cellpadding="1" cellspacing="1" class="sample_border" >
+                <tr align="left" class="blackCatHead"  height="20px" ; style="vertical-align:middle">
+                      <td style="padding-left:10px; " width="40px">ID</td>
+                      <td align="left" width="120px"> Name </td>
+                      <td align="left" width="80px"> Level Name </td>
+                      <td align="left" width="120px"> Level </td>
+                      <td align="left" width="60px"> Status </td>
+                      <td align="center" width="30px">Details </td>
+                    
+                </tr>
+
+                {{
+                  level=''
+                  for i in range(len(active_rep)):
+                      records_ov_dict = active_rep[i]  
+                      rep_id = str(records_ov_dict["rep_id"])
+                      name = str(records_ov_dict["name"])
+                      user_type = str(records_ov_dict["user_type"])
+                      #status = str(records_ov_dict["status"])
+                      level_depth_no = ''
+                      level_name=''
+                      #=user_type
+                      if user_type == 'sup':
+                            sup_level_sql_f = "select level_name,level_depth_no from sm_supervisor_level where  cid = '"+str(session.cid)+"' and sup_id='"+str(rep_id)+"';"
+                           
+                            sup_level_f = db.executesql(sup_level_sql_f, as_dict = True)
+                            for f in range(len(sup_level_f)):
+                                records_dict_f = sup_level_f[f]  
+                                level = str(records_dict_f["level_name"])
+                                level_depth_no = str(records_dict_f["level_depth_no"])
+
+                                if level_depth_no == '0':
+                                  level_name = 'DIVISION'
+                                elif level_depth_no == '1':
+                                  level_name = 'ZONE'
+                                elif level_depth_no == '2':
+                                  level_name = 'AREA'
+                                pass
+                                  
+                            pass
+              
+
+                      else:
+                          #rep_area
+                                rep_level_sql = "select area_name from sm_rep_area where cid = '"+str(session.cid)+"' and rep_id = '"+str(rep_id)+"' ;"
+                                rep_level = db.executesql(rep_level_sql, as_dict = True)
+                                for k in range(len(rep_level)):
+                                    rep_records_dict = rep_level[k]  
+                                    level = str(rep_records_dict["area_name"])
+                                    level_name = 'FF'
+                                pass    
+                      
+                      pass
+
+                      # Srearch -> Tour_plan table(sm_doctor_visit_plan) -> This month ->Get status
+
+                      get_stauts_sql =  "select status from sm_doctor_visit_plan where cid = '"+str(session.cid)+"' and rep_id = '"+str(rep_id)+"' and  first_date = '"+str(session.first_day)+"' group by rep_id;"
+                      #=get_stauts_sql
+                      get_status = db.executesql(get_stauts_sql, as_dict = True)
+                      
+                      status='NOT SUBMITTED'
+                      for a in range(len(get_status)):
+                        #status='NOT SUBMITTED'
+                        records_ov_dict_stauts = get_status[a]  
+                        status = str(records_ov_dict_stauts["status"]).upper()
+                      pass
+
+                      if status=='CONFIRMED':
+                        status='APPROVED'
+                      
+                      elif status=='CREQ':
+                        status='AMND'
+                      
+                      elif status=='SUBMITTED':
+                        status='PENDING'
+                      pass
+
+
+
+                      
+                }} 
+                    
+                {{if session.filter_button=='Filter':
+                    if session.search_type=='Level':
+                          if str(session.select_item)==level_name:
+                          }}
+                           <tr  align="left" class="blackCat"  style="font-size:13px">  
+                          <td align="left"  style="height:40px; vertical-align: top;padding-top: 2px; padding-left: 5px" >{{=rep_id}}</td>
+                          <td align="left" style="vertical-align:top; padding-top: 2px">{{=name}}</td>
+                          <td align="left" style="vertical-align:top; padding-top: 2px">{{=level_name}}{{#=level_depth_no}}</td>
+
+                          <td align="left"  style="vertical-align:top;padding-top: 2px">{{=level}}</td>
+                          <td align="left"  style="vertical-align:top;padding-top: 2px">{{=status}}</td>
+
+                          <form  name="form1" action="{{=URL(c='tour',f='tour_plan_details',args=[rep_id,name,level_name])}}" method="post"> 
+                            {{if status!='NOT SUBMITTED': }}
+                          <td  align="center"  style="vertical-align:top;padding-top: 2px">
+                            <button>
+                              >>
+                            </button>
+                          </td>
+                            {{else:}}
+                            <td></td>
+                            {{pass}}
+                          </form>
+                          </tr>
+                          {{pass}}
+                          {{ elif session.search_type=='Status':
+                          
+                          if str(session.select_item)==status:
+                          
+                          }}
+                           <tr  align="left" class="blackCat"  style="font-size:13px">  
+                          <td align="left"  style="height:40px; vertical-align: top;padding-top: 2px; padding-left: 5px" >{{=rep_id}}</td>
+                          <td align="left" style="vertical-align:top; padding-top: 2px">{{=name}}</td>
+                          <td align="left" style="vertical-align:top; padding-top: 2px">{{=level_name}}{{#=level_depth_no}}</td>
+
+                          <td align="left"  style="vertical-align:top;padding-top: 2px">{{=level}}</td>
+                          <td align="left"  style="vertical-align:top;padding-top: 2px">{{=status}}</td>
+
+                          <form  name="form1" action="{{=URL(c='tour',f='tour_plan_details',args=[rep_id,name,level_name])}}" method="post"> 
+                            {{if status!='NOT SUBMITTED': }}
+                          <td  align="center"  style="vertical-align:top;padding-top: 2px">
+                            <button>
+                              >>
+                            </button>
+                          </td>
+                            {{else:}}
+                            <td></td>
+                            {{pass}}
+                          </form>
+                          </tr>
+                          {{pass}}
+                        {{else:}}
+                           <tr  align="left" class="blackCat"  style="font-size:13px"> 
+                          <td align="left"  style="height:40px; vertical-align: top;padding-top: 2px; padding-left: 5px" >{{=rep_id}}</td>
+                          <td align="left" style="vertical-align:top; padding-top: 2px">{{=name}}</td>
+                          <td align="left" style="vertical-align:top; padding-top: 2px">{{=level_name}}{{#=level_depth_no}}</td>
+
+                          <td align="left"  style="vertical-align:top;padding-top: 2px">{{=level}}</td>
+                          <td align="left"  style="vertical-align:top;padding-top: 2px">{{=status}}</td>
+
+                          <form  name="form1" action="{{=URL(c='tour',f='tour_plan_details',args=[rep_id,name,level_name])}}" method="post"> 
+                            {{if status!='NOT SUBMITTED': }}
+                          <td  align="center"  style="vertical-align:top;padding-top: 2px">
+                            <button>
+                              >>
+                            </button>
+                          </td>
+                            {{else:}}
+                            <td></td>
+                            {{pass}}
+                          </form>
+                          </tr>
+                      {{pass}}
+                  
+                <!-- ========================== -->
+                
+                <!-- ================================= -->
+                {{else:}}
+                      <tr  align="left" class="blackCat"  style="font-size:13px"> 
+                      <td align="left"  style="height:40px; vertical-align: top;padding-top: 2px; padding-left: 5px" >{{=rep_id}}</td>
+                      <td align="left" style="vertical-align:top; padding-top: 2px">{{=name}}</td>
+                      <td align="left" style="vertical-align:top; padding-top: 2px">{{=level_name}}{{#=level_depth_no}}</td>
+                      
+                      <td align="left"  style="vertical-align:top;padding-top: 2px">{{=level}}</td>
+                      <td align="left"  style="vertical-align:top;padding-top: 2px">{{=status}}</td>
+
+                    <form  name="form1" action="{{=URL(c='tour',f='tour_plan_details',args=[rep_id,name,level_name])}}" method="post"> 
+                        {{if status!='NOT SUBMITTED': }}
+                      <td  align="center"  style="vertical-align:top;padding-top: 2px">
+                        <button>
+                          >>
+                        </button>
+                      </td>
+                        {{else:}}
+                        <td></td>
+                        {{pass}}
+                    </form>
+                </tr>
+                {{pass}}
+
+
+            {{pass}}
+    </table>
+     
+
+
+              

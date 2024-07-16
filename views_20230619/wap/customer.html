@@ -1,0 +1,78 @@
+
+    
+{{extend 'layout_wap.html'}}
+    
+
+
+
+  
+
+
+	<table align="left" cellpadding="2"  cellspacing="0"width="100%" border="0" >
+	
+	  <tr style="background-color:#DDDDDD">
+	  <td colspan="2" align="left" >Customer</td>
+	  </tr>
+	
+	
+ 
+    
+    <tr >
+      <td colspan="2" align="left" >Route: {{=session.wap_area_name}}[{{=session.wap_area_id}}] </td>
+      </tr>
+    <tr >
+      <td colspan="2"  align="left" >Select Customer:</td>
+    </tr>
+   
+    {{for record in records:}}
+   
+    <form  name="form1" action="{{=URL(c='wap',f='customer_set')}}" method="post"  >
+    <tr >
+	
+      <td width="15px" align="left" >
+	  <input type="radio" name="Radio_client" id="Radio_client" value="{{=record.client_id}}" />
+	  </td>
+      <td  align="left" >{{=record.name}}[{{=record.client_id}}]</a></td>
+    </tr>
+	 {{pass}}
+	
+	
+    
+    <tr>
+      <td align="left" >&nbsp;</td>
+      <td align="left" ><input type="submit" name="login" id="login" value="Next" onmouseover="device()" /></td>
+    </tr>
+    <tr>
+      <td align="left" >&nbsp;</td>
+      <td align="left" ><a href="{{=URL(c='wap',f='menu')}}">Menu</a></td>
+    </tr>
+	</form>
+</table>   
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</td>
+</tr>
+</table>

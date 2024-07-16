@@ -1,0 +1,151 @@
+{{extend 'layout_sales_report.html'}}
+
+<html>
+
+<head>
+
+<script type="text/javascript">
+
+function print_page()
+
+  {
+
+    window.print()
+
+  }
+
+</script>
+
+
+
+</head>
+
+<body>
+
+
+
+<table width="900px" style="border:none;" >
+  <tr >
+    <td >Date Range</td>
+    <td >&nbsp;</td>
+    <td >{{=date_from}} - {{=date_to}}</td>
+    <td >&nbsp;</td>
+    <td >&nbsp;</td>
+    <td width="266" >&nbsp;</td>
+  </tr>
+  <tr >
+    <td width="90" > Depot/Branch</td>
+    <td width="10" >:</td>
+    <td width="424" ><span >{{=depot_id}}|{{=depot_name}}</span></td>
+    <td width="79" >Customer</td>
+    <td width="3" >:</td>
+    <td ><span >{{=customer_id}}
+    {{=customer_name}}</span></td>
+  </tr>
+  <tr >
+    <td >Store</td>
+    <td >:</td>
+    <td ><span >{{=store_id}}|{{=store_name}}</span></td>
+    <td >MSO</td>
+    <td >:</td>
+    <td ><span >{{=mso_id}}
+    {{=mso_name}}</span></td>
+  </tr>
+  <tr >
+    <td >Teritory</td>
+    <td >:</td>
+    <td ><span >{{=teritory_id}}
+{{=teritory_name}}</span></td>
+    <td >Market</td>
+    <td >:</td>
+    <td ><span >{{=market_id}}
+    {{=market_name}}</span></td>
+  </tr>
+</table>
+
+<table width="900px" style="border:none; text-align:center; font-weight:bold;" >
+   
+    <tr >
+      <td width="100" >&nbsp;</td>
+      <td align="center" ><span style="border-bottom:1px solid #333;">Customer Information</span></td>
+      <td width="100" ><img  height="30px" src="{{=URL('static','images/comp_logo1.png')}}"/></td>      
+    </tr>
+    
+</table>
+
+
+
+<table width="900px" class="sample_border" >
+    <tr style="background-color:#F0FAFF">
+    <td width="53" align="right">Total: {{=customer_count}}</td>
+    </tr>
+</table>
+<table width="900" border="1" cellpadding="1" cellspacing="1" class="sample_border" >                
+ <thead>
+                <tr align="left" class="blackCatHead" height="20px" ;  style="font-size:12px">
+                  <td width="80"    >CustID</td>
+                  <td width="100"   >CustName</td>
+                  
+                  <td width="150"   >CustAddress</td>
+                  <td width="80"   >Teritory</td>
+                  <td width="100"   >TeritoryName</td>
+                  <td width="80"   >MarketID</td>
+                  <td width="100"   >MarketName</td>
+                  <td width="80"   >MSO TR</td>
+                  <td width="150"   >MSO Name</td>
+              </tr>
+              
+              </thead>
+             
+				{{p=0}}
+                {{for i,record in enumerate(records):}}
+			 <tbody> 
+                {{ if (i % 2 == 0):}}
+              <tr  align="left" style="vertical-align:middle; font-size:12px; background:#FBFBFB;">
+                {{else:}}
+              <tr  align="left" style="vertical-align:middle; font-size:12px; background:#F5F5F5;">
+                
+				{{pass}}
+              
+
+                
+                <td  >{{=record[db.sm_client.client_id]}}</td>
+               
+                
+                <td  >{{=record[db.sm_client.name]}}</td>
+                <td   >{{=record[db.sm_client.address]}}</td>
+                 <td   >{{=record[db.sm_client.area_id]}}</td>
+                 <td   >{{=record[db.sm_rep_area.area_name]}}</td>
+                <td   >{{=record[db.sm_client.market_id]}}</td>
+                <td   >{{=record[db.sm_client.market_name]}}</td>
+                <td   >{{=record[db.sm_rep_area.rep_id]}}</td>
+                <td   >{{=record[db.sm_rep_area.rep_name]}}</td>
+              </tr>
+              {{p=p+1}}
+				
+                {{pass}}
+</tbody>
+              </table>
+ 
+		  
+
+		</td>
+
+			
+
+	</tr>
+
+</table>
+<br/>
+
+
+
+
+<br/>
+
+
+
+</body>
+
+</html>
+

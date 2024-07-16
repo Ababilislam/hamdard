@@ -1,0 +1,126 @@
+{{extend 'layout_report.html'}}
+<html>
+    <head> 
+        <script type="text/javascript" src="{{=URL('static','gchart/js/loader.js')}}"></script>
+    <script type="text/javascript">
+		google.charts.load('current', {'packages':['corechart', 'bar']});
+      google.charts.setOnLoadCallback(drawStuff);
+
+      function drawStuff() {
+        var data = google.visualization.arrayToDataTable(eval($("#sales_chart").val()));        
+        var classicOptions = {
+          title: 'Last Seven Days Sales',
+          vAxes: {
+            // Adds titles to each axis.
+            0: {title: 'Sales'}
+          },
+		  legend: { position: "right" }
+		  
+
+        };
+          var classicChart = new google.visualization.ColumnChart(chartDiv);
+          classicChart.draw(data, classicOptions);          
+    };      
+    </script>   
+    </head>
+    <body>    
+    <div class="blackCatTitle">&nbsp;Dashboard</div>       
+    <!--<table width="900px;"> <tr><td style="text-align:right"><a href="{{=URL(c='',f='',vars=dict())}}" >Downlaod</a></td></tr></table>
+    -->
+    <table width="900" class="sample_border" >
+        <tr style="background-color:#E6E6E6;">
+            <td width="150" >Date Range</td>
+            <td width="100" >{{=session.level0Name}}</td>
+            <td width="100" >{{=session.level1Name}}</td>
+            <td width="150" >Visit By</td>
+        </tr>
+        <tr style="background-color:#F0FAFF">
+            <td width="150" >							
+            {{=datetime.datetime.strptime(fromDate,'%Y-%m-%d').strftime('%d-%m-%Y ')}} <b> To</b> {{=datetime.datetime.strptime(toDate,'%Y-%m-%d').strftime('%d-%m-%Y ')}}</td>
+            <td width="100" align="left" valign="top">{{if regionValue=='':}}
+            All
+            {{else:}}
+            {{=regionValueShow}}{{pass}}</td>
+            <td width="100" align="left" valign="top">{{if areaValue=='':}}
+            All
+            {{else:}}
+            {{=areaValueShow}}{{pass}}</td>
+            <td width="150" align="left" valign="top">{{if repCM=='':}}
+            All
+            {{else:}}
+            {{=repCM}}{{pass}}
+            </td>
+        </tr>
+    </table>		
+    <br/>
+       
+        <table width="900" style="margin-bottom:10px;" >            
+            <tr>
+                <td width="450" style="background-color:#F0F0F0; padding:2px;border-radius:5px; text-align:center; color:#3A0099;" >                         
+                        <h2>TOTAL SALES</h2>
+                        <h1>{{=easy_format(total_sales)}}</h1> 
+                        <br/>
+                        <div id="chartDiv" style="width: 430px; height: 300px; margin:0px auto;"></div>                                           
+                </td>
+                <td style="width:2px;"></td>
+                <td width="450" style="background-color:#F0F0F0; padding:5px;border-radius:5px;" >
+                <h2 style="color:#3A0099;">CALL, COVERAGE & PRODUCTIVITY</h2>
+                <table style="background-color:#603CBA; color:#FFF; width:100%; border-radius:5px;">
+                    	<tr style="border-bottom:1px solid #FFF;">
+                        	<td colspan="2"><h4>Scheduled Calls <span style=" float:right;">{{=total_scheduled_client}}</span></h4></td>     
+                    </tr>                        
+                    </table> 
+                    <br/>
+                    <table style="background-color:#00A300; color:#FFF; width:100%; border-radius:5px;">
+                    	<tr style="border-bottom:1px solid #FFF;">
+                        	<td colspan="2"><h4>Zero Sales Outlet</h4></td>     
+                    </tr>
+                        <tr >
+                        	<td style="text-align:center;border-right:1px solid #FFF; width:50%;">
+                            	Planned<br/><h4>{{=zero_sales_scheduled_client}}</h4>
+                          </td>
+                            <td style="text-align:center;border-left:1px solid #FFF; width:50%;">
+                            	Unplanned<br/><h4>{{=zero_sales_unscheduled_client}}</h4>
+                          </td>                            
+                        </tr>
+                    </table> 
+                    <br/>
+                	
+                	<table style="background-color:#2D89EF; color:#FFF; width:100%; border-radius:5px;">
+                    	<tr style="border-bottom:1px solid #FFF;">
+                        	<td colspan="2"><h4>Productivity </h4></td>     
+                    </tr>
+                        <tr >
+                        	<td style="text-align:center;border-right:1px solid #FFF; border-bottom:1px solid #FFF; width:50%;">
+                            	Bill Cut %<br/><h4>0</h4>
+                          </td>
+                            <td style="text-align:center;border-left:1px solid #FFF; border-bottom:1px solid #FFF; width:50%;">
+                            	Avg Line Cut<br/><h4>0</h4>
+                          </td>                            
+                        </tr>
+                        <tr style="border-bottom:1px solid #FFF;">
+                        	<td colspan="2"><h4>Avg Bill Value <span style=" float:right;">0</span> </h4></td>     
+                    </tr>
+                    </table>
+                    <br/>
+                	
+                	<table style="background-color:#F47621; color:#FFF; width:100%; border-radius:5px;">
+                    	
+                        <tr >
+                        	<td style="text-align:center;border-right:1px solid #FFF; width:50%;">
+                            	Unique Billed Outlet<br/><h4>{{=sales_unique_outlet}}</h4>
+                          </td>
+                            <td style="text-align:center;border-left:1px solid #FFF; width:50%;">
+                            	New Outlet Addition<br/><h4>{{=total_new_client}}</h4>
+                          </td>                            
+                        </tr>
+                    </table> 
+                      <br/>              
+                </td>                                         
+            </tr>             
+        </table>
+       
+     <input type="hidden" id="sales_chart" value="{{=seven_day_sales_list}}"/>
+    </body>
+</html>
+

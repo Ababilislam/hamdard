@@ -1,0 +1,54 @@
+{{extend 'layout_wap_login.html'}}
+    
+
+<table width="100%"  border="0" cellpadding="0" cellspacing="0">
+  <tr>
+    <td  align="center" valign="top">
+    <div align="center" class="rounded_corner"> 
+
+    <table align="left" cellpadding="2"  cellspacing="0"width="100%" border="0" >
+  
+  <form  name="form1" action="{{=URL(c='wap',f='check_user')}}" method="post"  >
+    
+    <tr style="background-color:#DDDDDD" >
+      <td align="left" >&nbsp;</td>
+      <td align="left" >Login</td>
+      <td align="left" >&nbsp;</td>
+    </tr>
+    <tr >
+      <td width="8" align="left" >&nbsp;</td>
+      <td  align="left" >CID </td>
+      <td  align="left" ><input  type="text" name="cid" id="cid" size="15" /></td>
+      </tr>
+    <tr >
+      <td  align="left" >&nbsp;</td>
+      <td  align="left" >User Id </td>
+      <td  align="left" ><input  type="text" name="uid" id="uid" size="15"  /></td>
+      </tr>
+    <tr >
+      <td align="left" >&nbsp;</td>
+      <td align="left" >Password</td>
+      <td align="left" ><input  type="password" name="password" id="password" size="15" /></td>
+      </tr>
+    <tr>
+      <td align="center" >&nbsp;</td>
+      <td align="center" >&nbsp;</td>
+      <td align="center" ><div align="left">
+        &nbsp;<input type="submit" name="login" id="login" value="Login"  />
+      </div></td>
+      </tr>
+    <tr>
+      <td height="23" colspan="3" align="left" valign="top" >&nbsp;</td>
+    </tr>
+
+  <tr align="right">
+    <td colspan="3" align="left" >&nbsp;</td>
+  </tr>
+	</form>
+</table>   
+</div> 
+  </td>
+  </tr>
+  
+</table>
+

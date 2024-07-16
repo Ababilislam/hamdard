@@ -1,0 +1,161 @@
+{{extend 'layout_report.html'}}
+<html>
+<head>
+<script type="text/javascript">
+function print_page()
+  {
+    window.print()
+  }
+</script>
+
+</head>
+<body>
+<div class="blackCatTitle">&nbsp;Doctor Visti List</div>
+<br/>
+<table width="900px;"> <tr><td style="text-align:right"><!--<a href="{{#=URL(c='analysis',f='downloadVisitList',vars=dict(fromDate=fromDate,toDate=toDate,regionValue=regionValue,areaValue=areaValue,territoryValue=territoryValue,marketValue=marketValue,repCM=repCM))}}" >Downlaod</a>--></td></tr></table>
+
+<table width="700px" cellspacing="1" cellpadding="1">
+	<tr>
+		<td>
+			<table width="900" class="sample_border" >
+                <tr style="background-color:#E6E6E6;">
+                  <td width="150" >Date Range</td>
+                  <td width="100" >{{=session.level0Name}}</td>
+                  <td width="100" >{{=session.level1Name}}</td>
+                  <td width="150" >Visit By</td>
+                </tr>
+                <tr style="background-color:#F0FAFF">
+                    <td width="150" >							
+                    {{=datetime.datetime.strptime(fromDate,'%Y-%m-%d').strftime('%d-%m-%Y ')}} <b> To</b> {{=datetime.datetime.strptime(toDate,'%Y-%m-%d').strftime('%d-%m-%Y ')}}</td>
+                    <td width="100" align="left" valign="top">{{if regionValue=='':}}
+                        All
+                    {{else:}}
+                    {{=regionValueShow}}{{pass}}</td>
+                    <td width="100" align="left" valign="top">{{if areaValue=='':}}
+                        All
+                    {{else:}}
+                    {{=areaValueShow}}{{pass}}</td>
+                    <td width="150" align="left" valign="top">{{if repCM=='':}}
+                        All
+                    {{else:}}
+                    {{=repCM}}{{pass}}</td>
+                </tr>
+		  </table>
+	  </td>
+	</tr>
+	<tr height="10px"></tr>
+	<tr>
+		<td>
+			<table width="900" border="1" cellpadding="1" cellspacing="1" class="sample_border" >                
+                <tr align="left" class="blackCatHead" height="20px" ;  style="font-size:12px">
+                  <td width="50" rowspan="2"  style="border-right-width:3px;">VSL</td>
+                  <td width="80" rowspan="2"  style="border-right-width:3px;">Visit Date</td>
+                  <td width="60" rowspan="2"  style="border-right-width:3px;">Depot</td>
+                  <td colspan="2" align="center"  style="border-right-width:3px;">Visit By</td>
+                  <td colspan="2" align="center"  style="border-right-width:3px;">Doctor</td>
+                  <td align="center"  style="border-right-width:3px;">Details</td>
+                  </tr>
+                <tr align="left" class="blackCatHead" height="20px" ;  style="font-size:12px">
+                  <td  > ID</td>
+                  <td width="120"  >Name</td>
+                  <td  >ID</td>
+                  <td width="150"  >Name</td>
+                  <td  >&nbsp;</td>
+                </tr>
+                {{for i,record in enumerate(records):}}
+                    {{ if i==items_per_page: break}}
+                      <tr  align="left" class="blackCat"  style="vertical-align:middle; font-size:11px;">
+                        <td width="50" style="border-right-width:3px;">{{=record.id}}</td>
+                        <td width="80" style="border-right-width:3px;">{{=record.visit_date}}</td>
+                        <td width="60" style="border-right-width:3px;">{{=record.depot_id}}</td>
+                        <td width="50" >{{=record.rep_id}}</td>
+                        <td width="120" >{{=record.rep_name}}</td>
+                        <td width="50" >{{=record.doc_id}}</td>
+                        <td width="150" style="border-right-width:3px;">{{=record.doc_name}}</td>
+                        <td style="border-right-width:3px;">
+                        {{if record.giftnsample!='':}}                        
+                            {{dataList=str(record.giftnsample).split('rdsep')}}
+                            {{if len(dataList)==4:}}
+                            	{{propList=str(dataList[0]).split('fdsep')}}
+                            	{{giftList=str(dataList[1]).split('fdsep')}}
+                                {{sampleList=str(dataList[2]).split('fdsep')}}
+                                {{ppmList=str(dataList[3]).split('fdsep')}}
+                            	
+                                {{if str(dataList[0])!='' and len(propList)>0:}}
+                                	<table width="100%" border="1" cellpadding="1" cellspacing="1" class="sample_border" >
+                                    <tr  class="blackCat" style="background-color:#CAE4FF"><td width="80"><font color="#0000DD">Proposed:</font> ID</td><td >Name</td></tr>
+                                    {{for m in range(len(propList)):}}
+                                        {{propDataList=str(propList[m]).split(',')}}
+                                    
+                                        {{if len(propDataList)==2:}}<tr  class="blackCat" ><td >{{=propDataList[0]}}</td><td >{{=propDataList[1]}}</td></tr>{{pass}}
+                                        
+                                    {{pass}}
+                                    </table>
+                                {{pass}}
+                                
+                                
+                                {{if str(dataList[1])!='' and len(giftList)>0:}}
+                                	<table width="100%" border="1" cellpadding="1" cellspacing="1" class="sample_border" >
+                                    <tr  class="blackCat" style="background-color:#CAE4FF"><td width="80"><font color="#34B6E7">Gift:</font> ID</td><td >Name</td><td width="30">Qty</td></tr>
+                                    {{for n in range(len(giftList)):}}
+                                        {{giftDataList=str(giftList[n]).split(',')}}
+                                    
+                                        {{if len(giftDataList)==3:}}<tr  class="blackCat" ><td >{{=giftDataList[0]}}</td><td >{{=giftDataList[1]}}</td><td >{{=giftDataList[2]}}</td></tr>{{pass}}
+                                        
+                                    {{pass}}
+                                    </table>
+                                {{pass}}
+                                
+                                
+                                {{if str(dataList[2])!='' and len(sampleList)>0:}}
+                                	<table width="100%" border="1" cellpadding="1" cellspacing="1" class="sample_border" >
+                                    <tr  class="blackCat" style="background-color:#CAE4FF"><td width="80"><font color="#A40052">Sample:</font> ID</td><td >Name</td><td width="30" >Qty</td></tr>
+                                    {{for p in range(len(sampleList)):}}
+                                        {{sampleDataList=str(sampleList[p]).split(',')}}
+                                    
+                                        {{if len(sampleDataList)==3:}}<tr  class="blackCat" ><td >{{=sampleDataList[0]}}</td><td >{{=sampleDataList[1]}}</td><td >{{=sampleDataList[2]}}</td></tr>{{pass}}
+                                        
+                                    {{pass}}
+                                    </table>
+                                {{pass}}
+                                
+                                
+                                {{if str(dataList[3])!='' and len(ppmList)>0:}}
+                                	<table width="100%" border="1" cellpadding="1" cellspacing="1" class="sample_border" >
+                                    <tr  class="blackCat" style="background-color:#CAE4FF"><td width="80"><font color="#00954A">PPM:</font> ID</td><td >Name</td><td width="30" >Qty</td></tr>
+                                    {{for q in range(len(ppmList)):}}
+                                        {{ppmDataList=str(ppmList[q]).split(',')}}
+                                    
+                                        {{if len(ppmDataList)==3:}}<tr  class="blackCat" ><td >{{=ppmDataList[0]}}</td><td >{{=ppmDataList[1]}}</td><td >{{=ppmDataList[2]}}</td></tr>{{pass}}
+                                        
+                                    {{pass}}
+                                    </table>
+                                {{pass}}
+                                
+                                
+                                
+                            {{pass}}
+                        {{pass}}
+                        </td>
+                      </tr>
+                    {{pass}}
+              </table>
+		  
+		</td>
+			
+	</tr>
+</table>
+<br/>
+{{ if page: }}
+<a href="{{=URL(args=[page-page],vars=dict(fromDate=fromDate,toDate=toDate,regionValue=regionValue,areaValue=areaValue,territoryValue=territoryValue,marketValue=marketValue,repCM=repCM))}}">first</a> | 
+<a href="{{=URL(args=[page-1],vars=dict(fromDate=fromDate,toDate=toDate,regionValue=regionValue,areaValue=areaValue,territoryValue=territoryValue,marketValue=marketValue,repCM=repCM))}}">previous</a> |
+{{pass}}
+
+{{if len(records)>items_per_page:}}
+<a href="{{=URL(args=[page+1],vars=dict(fromDate=fromDate,toDate=toDate,regionValue=regionValue,areaValue=areaValue,territoryValue=territoryValue,marketValue=marketValue,repCM=repCM))}}">next</a>
+{{pass}}
+
+<br/>
+
+</body>
+</html>

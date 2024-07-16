@@ -1,0 +1,415 @@
+{{extend 'layout.html'}}
+
+  <link rel="stylesheet" href="{{=URL('static', 'js_and_css/ui.theme.css')}}" type="text/css" />
+  <link rel="stylesheet" href="{{=URL('static', 'js_and_css/jquery-ui.css')}}" type="text/css" />
+  <link rel="stylesheet" href="{{=URL('static', 'js_and_css/style.css')}}" type="text/css" />
+  <script src="{{=URL('static','js_and_css/jquery-1.8.2.js')}}"></script>
+  <script src="{{=URL('static','js_and_css/jquery-ui.js')}}"></script>
+  
+  <style type="text/css">
+	 input[type=text], input[type=password]{
+		margin: 2px 0px 2px 0px;
+		width:200px;
+		}
+	select {
+		margin: 2px 0px 2px 0px;
+		width:215px;
+		}
+	
+	div.error {
+		color: white;
+		padding: 0px;
+		width: 220px; 
+		margin-left:0px;
+	}
+	.page_color,body{
+		font-family:Arial, Helvetica, sans-serif;
+		font-size:13px;	
+		}
+ </style>
+
+<script>
+var base_url=location.protocol + "//" + location.hostname + (location.port && ":" + location.port) + "/{{=request.application}}/";
+
+$(function() {	
+	var beltListStr="";
+	var storeListStr="";
+	var marketListStr="";
+	
+	$('#sm_client_client_id').attr('placeholder','(Optional-Old ID)');
+	$('#sm_client_area_id').attr('placeholder','Select Territory');
+	$('#sm_client_depot_id').attr('placeholder','Select Branch');
+	$('#sm_client_store_id').attr('placeholder','Select Branch Store');
+	$('#sm_client_depot_belt_name').attr('placeholder','Select Branch Belt');
+	$('#sm_client_owner_name').attr('placeholder','(Optional)');
+	$('#sm_client_contact_no1').attr('placeholder','(Optional), Recommended');
+	$('#sm_client_contact_no2').attr('placeholder','(Optional)');
+	$('#sm_client_address').attr('placeholder','(Optional)');
+	$('#sm_client_nid').attr('placeholder','(Optional)');
+	$('#sm_client_market_id').attr('placeholder','Select Branch Market');
+	
+	$('#sm_client_depot_id').blur(function(){
+		var depotIdName=$('#sm_client_depot_id').val();
+		if(depotIdName!=''){
+			var dpIdNameArray=depotIdName.split("|");
+			
+			var depotId=dpIdNameArray[0];
+			$('#sm_client_depot_id').val(depotIdName);
+			
+			$.ajax({
+			  url: base_url+'default/get_depot_belt_list?depotid='+depotId,
+			  success: function(resStr1) {
+				  beltListStr=resStr1;
+			  }
+			});
+			
+			$.ajax({
+			  url: base_url+'default/get_depot_store_list?depotid='+depotId,
+			  success: function(resStr2) {
+				  storeListStr=resStr2;
+			  }
+			});
+			
+			$.ajax({
+			  url: base_url+'default/get_depot_market_list?depotid='+depotId,
+			  success: function(resStr3) {
+				  marketListStr=resStr3;
+			  }
+			});
+			
+		}		
+	});
+	
+//========================depot/Branch	
+    var scListStr="";
+	$.ajax({
+		  url: base_url+'default/get_depot_list',
+		  success: function(resStr) {
+			  scListStr=resStr
+		  }
+		});
+ 
+	$('#sm_client_depot_id').keyup(function(){	
+		
+		//-------------------------
+		var ref_list = scListStr.split(',');				
+		var ref_name=$("#sm_client_depot_id").val();
+		
+		//---------------- auto complete combo list
+		var ref_list_new=new Array();
+		lc=0;
+		i =0;
+		var refStr="";				
+		while (i < ref_list.length)
+		{
+			refStr=ref_list[i];
+			i=i+1;					
+			var res=refStr.toUpperCase().match(ref_name.toUpperCase());
+			if (res!=null){
+				ref_list_new[lc]=refStr;
+				lc=lc+1;
+				if (lc==30){
+					break;
+				};
+			}else{
+				continue;
+			}					
+		};
+		//alert (ref_list_new);
+		
+		//-------------- auto complete source
+		$( "input#sm_client_depot_id" ).autocomplete({
+			source: ref_list_new
+		});
+	
+  });  
+
+//========================territory 	  
+	var terListStr="";
+  		//alert(base_url+'client/get_depot_list');
+		$.ajax({
+			  url: base_url+'default/get_area_list',
+			  success: function(resStr) {
+				  terListStr=resStr
+			  }
+			});
+	 
+		$('#sm_client_area_id').keyup(function(){
+			//-------------------------
+			var ref_list = terListStr.split(',');				
+			var ref_name=$("#sm_client_area_id").val();
+			
+			//---------------- auto complete combo list
+			var ref_list_new=new Array();
+			lc=0;
+			i =0;
+			var refStr="";				
+			while (i < ref_list.length)
+			{
+				refStr=ref_list[i];
+				i=i+1;					
+				var res=refStr.toUpperCase().match(ref_name.toUpperCase());
+				if (res!=null){
+					ref_list_new[lc]=refStr;
+					lc=lc+1;
+					if (lc==30){
+						break;
+					};
+				}else{
+					continue;
+				}					
+			};
+			//alert (ref_list_new);
+			
+			//-------------- auto complete source
+			$( "input#sm_client_area_id" ).autocomplete({
+				source: ref_list_new
+			});
+	  });
+	  
+	  //------------Depot Belt
+	  $('#sm_client_depot_belt_name').keyup(function(){	
+		
+		//-------------------------
+		var ref_list = beltListStr.split(',');				
+		var ref_name=$("#sm_client_depot_belt_name").val();
+		
+		//---------------- auto complete combo list
+		var ref_list_new=new Array();
+		lc=0;
+		i =0;
+		var refStr="";				
+		while (i < ref_list.length)
+		{
+			refStr=ref_list[i];
+			i=i+1;					
+			var res=refStr.toUpperCase().match(ref_name.toUpperCase());
+			if (res!=null){
+				ref_list_new[lc]=refStr;
+				lc=lc+1;
+				if (lc==30){
+					break;
+				};
+			}else{
+				continue;
+			}					
+		};
+		//alert (ref_list_new);
+		
+		//-------------- auto complete source
+		$( "input#sm_client_depot_belt_name" ).autocomplete({
+			source: ref_list_new
+		});
+	
+  });  
+	  
+	  //------------Depot Store
+	  $('#sm_client_store_id').keyup(function(){	
+		
+		//-------------------------
+		var ref_list = storeListStr.split(',');				
+		var ref_name=$("#sm_client_store_id").val();
+		
+		//---------------- auto complete combo list
+		var ref_list_new=new Array();
+		lc=0;
+		i =0;
+		var refStr="";				
+		while (i < ref_list.length)
+		{
+			refStr=ref_list[i];
+			i=i+1;					
+			var res=refStr.toUpperCase().match(ref_name.toUpperCase());
+			if (res!=null){
+				ref_list_new[lc]=refStr;
+				lc=lc+1;
+				if (lc==30){
+					break;
+				};
+			}else{
+				continue;
+			}					
+		};
+		//alert (ref_list_new);
+		
+		//-------------- auto complete source
+		$( "input#sm_client_store_id" ).autocomplete({
+			source: ref_list_new
+		});
+	
+  }); 
+  
+  //------------Depot market
+	  $('#sm_client_market_id').keyup(function(){	
+		
+		//-------------------------
+		var ref_list = marketListStr.split(',');				
+		var ref_name=$("#sm_client_market_id").val();
+		
+		//---------------- auto complete combo list
+		var ref_list_new=new Array();
+		lc=0;
+		i =0;
+		var refStr="";				
+		while (i < ref_list.length)
+		{
+			refStr=ref_list[i];
+			i=i+1;					
+			var res=refStr.toUpperCase().match(ref_name.toUpperCase());
+			if (res!=null){
+				ref_list_new[lc]=refStr;
+				lc=lc+1;
+				if (lc==30){
+					break;
+				};
+			}else{
+				continue;
+			}					
+		};
+		//alert (ref_list_new);
+		
+		//-------------- auto complete source
+		$( "input#sm_client_market_id" ).autocomplete({
+			source: ref_list_new
+		});
+	
+  }); 
+	  
+});
+</script>
+
+<table width="100%"  border="0" cellspacing="0" cellpadding="0" style="background-color:#FFFFFF;" >
+  <tr height="30px" >
+    <td width="500"><span class="blackCatTitle">Customer/Retailer</span></td>
+    <form action="{{=URL(c='client',f='client')}}" method="post">
+    <td width="300" align="right"><input name="" type="submit"  value="Back"/></td>
+	</form>
+    <td>&nbsp;</td>
+  </tr>
+  <tr  height="1px" style="background-color:#CCCCCC;">
+	    <td colspan="3" ></td>
+  </tr>
+  </table>
+  
+  <table width="100%" height="500px"  border="0" cellspacing="0" cellpadding="0" class="page_color"  >
+  <tr height="100%"  style="vertical-align:top;">
+    <td>
+	<table width="100%"  border="0" cellpadding="0" cellspacing="0"  >
+      
+      <tr>
+        <td width="5">&nbsp;</td>
+        <td width="900" valign="top">
+
+		<br />
+	
+		{{if access_permission==True:}} 
+		<table width="900">
+			<tr>
+				<td width="450" valign="top">
+          <table width="450" class="blackCat">
+		  {{=form.custom.begin}}
+              <tr>
+                <td width="200">ID</td>
+                <td>{{=form.custom.widget.client_id}}</td>
+                </tr>
+              <tr>
+                <td width="200">Name</td>
+                <td>{{=form.custom.widget.name}}</td>
+                </tr>
+              <tr>
+                <td width="200">Territory</td>
+                <td>{{=form.custom.widget.area_id}}</td>
+              </tr>
+              <tr>
+                <td width="200">Branch</td>
+                <td>{{=form.custom.widget.depot_id}}</td>
+              </tr>
+              <tr>
+                <td>Store ID</td>
+                <td>{{=form.custom.widget.store_id}}</td>
+              </tr>
+              <tr>
+                <td width="200">Category</td>
+                <td>{{=form.custom.widget.category_id}}</td>
+                </tr>
+              <tr>
+                <td width="200">Sub Category</td>
+                <td>{{=form.custom.widget.sub_category_id}}</td>
+                </tr>
+              <tr>
+                <td width="200">Branch Belt</td>
+                <td>{{=form.custom.widget.depot_belt_name}}</td>
+              </tr>
+              <tr>
+                <td width="200">Contact Name</td>
+                <td>{{=form.custom.widget.owner_name}}</td>
+              </tr>
+              <tr>
+                <td width="200">Contact 1</td>
+                <td>{{=form.custom.widget.contact_no1}}</td>
+              </tr>
+            </table>
+			</td>
+			
+			<td width="450" valign="top">
+            
+              <table width="450" class="blackCat">
+              
+              <tr>
+                <td width="200">Contact 2</td>
+                <td>{{=form.custom.widget.contact_no2}}</td>
+              </tr>
+              <tr>
+                <td width="200">Address</td>
+                <td>{{=form.custom.widget.address}}</td>
+              </tr>
+              <tr>
+                <td width="200">Market ID</td>
+                <td>{{=form.custom.widget.market_id}}</td>
+              </tr>
+              <tr>
+                <td width="200">Thana</td>
+                <td>{{=form.custom.widget.thana}}</td>
+              </tr>
+              <tr>
+                <td width="200">District</td>
+                <td>{{=form.custom.widget.district_id}}</td>
+              </tr>
+              <tr>
+                <td width="200">Drug Registration Number</td>
+                <td>{{=form.custom.widget.drug_registration_num}}</td>
+              </tr>
+              <tr>
+                <td width="200">NID</td>
+                <td>{{=form.custom.widget.nid}}</td>
+              </tr>
+              <tr>
+                <td width="200">Doctor</td>
+                <td>{{=form.custom.widget.doctor}}</td>
+              </tr>
+              <tr>
+                <td width="200">Status</td>
+                <td>{{=form.custom.widget.status}}</td>
+              </tr>
+              <tr>
+                <td width="200">&nbsp;</td>
+                <td>{{=form.custom.submit}}</td>
+              </tr>
+              
+                  {{=form.custom.end}}
+                  </table>
+                </td>
+			</tr>
+			</table>
+         {{pass}} 
+		 
+          <br />
+          
+          </td>
+         </tr>
+    </table>
+    
+    </td>
+  </tr>
+</table>
+

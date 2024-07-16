@@ -1,0 +1,347 @@
+
+{{extend 'layout.html'}}
+  <link rel="stylesheet" href="{{=URL('static', 'js_and_css/ui.theme.css')}}" type="text/css" />
+  <link rel="stylesheet" href="{{=URL('static', 'js_and_css/jquery-ui.css')}}" type="text/css" />
+  <link rel="stylesheet" href="{{=URL('static', 'js_and_css/style.css')}}" type="text/css" />
+   <script src="{{=URL('static','js_and_css/jquery-1.8.2.js')}}"></script>
+    <script src="{{=URL('static','js_and_css/jquery-ui.js')}}"></script>
+  
+  
+  <style type="text/css">
+	 input[type=text], input[type=password],  select {
+		margin: 2px 0px 2px 0px;
+		width: 200px;
+	}
+	div.error {
+		width: 200px;
+	}
+	
+	#sm_promo_flat_rate_status,#sm_promo_flat_rate_allowed_credit_inv,#sm_promo_flat_rate_regular_discount_apply,#sm_promo_flat_rate_allow_bundle{
+		width: 215px;
+	}
+.page_color,body{
+	font-family:Arial, Helvetica, sans-serif;
+	font-size:13px;	
+	}
+ </style>
+ 
+ <script>
+var base_url=location.protocol + "//" + location.hostname + (location.port && ":" + location.port) + "/{{=request.application}}/";
+
+$(function() {
+			
+		$("#sm_promo_flat_rate_product_id").attr("placeholder",'Select Item');	
+		
+		$('#sm_promo_flat_rate_product_id').blur(function(){
+			var productIdName=$('#sm_promo_flat_rate_product_id').val();
+			if(productIdName!=''){
+				var proIdNameArray=productIdName.split("|");
+				if(proIdNameArray.length==2){
+					$('#sm_promo_flat_rate_product_id').val(proIdNameArray[0]);
+					$('#product_name').val(proIdNameArray[1]);
+					}
+				}
+			
+		});	
+	
+	 	var valueListStr="";
+		
+		$('#search_type').blur(function(){
+			if ($('#search_type').val()=='Product_id'){
+				$.ajax({
+					  url: base_url+'default/get_item_list',
+					  success: function(resStr) {
+						  valueListStr=resStr
+					  }
+					});
+			}else if ($('#search_type').val()=='Status'){
+				valueListStr="ACTIVE,INACTIVE";
+			}
+			
+	 	});
+	 
+		$('#search_value').keyup(function(){
+			//-------------------------
+			var valueList = valueListStr.split(',');				
+			var searchValue=$("#search_value").val();
+			
+			//---------------- auto complete combo list
+			var valueList_new=new Array();
+			lc=0;
+			i =0;
+			var valueStr="";				
+			while (i < valueList.length)
+			{
+				valueStr=valueList[i];
+				i=i+1;					
+				var res=valueStr.toUpperCase().match(searchValue.toUpperCase());
+				if (res!=null){
+					valueList_new[lc]=valueStr;
+					lc=lc+1;
+					if (lc==30){
+						break;
+					};
+				}else{
+					continue;
+				}					
+			};
+			//alert (ref_list_new);
+			
+			//-------------- auto complete source
+			$( "input#search_value" ).autocomplete({
+				source: valueList_new
+			});
+		
+	  }); 
+	   //==============	   
+}); 
+
+
+//========================productId
+$(function() {
+  var scListStr="";
+		$.ajax({
+			  url: base_url+'default/get_item_list',
+			  success: function(resStr) {
+				  scListStr=resStr
+			  }
+			});
+	 
+		$('#sm_promo_flat_rate_product_id').keyup(function(){	
+			
+			//-------------------------
+			var ref_list = scListStr.split(',');				
+			var ref_name=$("#sm_promo_flat_rate_product_id").val();
+			
+			//---------------- auto complete combo list
+			var ref_list_new=new Array();
+			lc=0;
+			i =0;
+			var refStr="";				
+			while (i < ref_list.length)
+			{
+				refStr=ref_list[i];
+				i=i+1;					
+				var res=refStr.toUpperCase().match(ref_name.toUpperCase());
+				if (res!=null){
+					ref_list_new[lc]=refStr;
+					lc=lc+1;
+					if (lc==30){
+						break;
+					};
+				}else{
+					continue;
+				}					
+			};
+			//alert (ref_list_new);
+			
+			//-------------- auto complete source
+			$( "input#sm_promo_flat_rate_product_id" ).autocomplete({
+				source: ref_list_new
+			});
+		
+	  });    
+});
+
+
+</script>
+ 
+<table width="100%"  border="0" cellspacing="0" cellpadding="0" style="background-color:#FFFFFF;" >
+  <tr height="30px" >
+    <td><span class="blackCatTitle">Flat Rate</span></td>
+    <td align="right"><span class="blackCatTitle">
+   
+    </span></td>
+    <td align="right" width="20px">&nbsp;</td>
+  </tr>
+  <tr  height="1px" style="background-color:#CCCCCC;">
+	    <td ></td><td ></td><td ></td>
+  </tr>
+  </table>
+  
+  
+  <table width="100%" height="500px"  border="0" cellspacing="0" cellpadding="0" class="page_color"  >
+  <tr height="100%"  style="vertical-align:top;">
+    <td>
+	<table width="100%"  border="0" cellpadding="0" cellspacing="0"  >
+
+      <tr>
+        <td width="10">&nbsp;</td>
+        <td valign="top">
+		
+		<br />
+	
+		{{if access_permission==True:}} 
+		<table width="800">
+			<tr>
+				<td width="485" valign="top">
+          <table width="400" class="blackCat">
+		  {{=form.custom.begin}}
+              <tr>
+                <td width="130">From-Date</td>
+                <td width="337">{{=form.custom.widget.from_date}}</td>
+                </tr>
+              <tr>
+                <td>To-Date</td>
+                <td>{{=form.custom.widget.to_date}}</td>
+                </tr>
+              <tr>
+                <td>Campaign Ref</td>
+                <td>{{=form.custom.widget.campaign_ref}}</td>
+                </tr>
+              <tr>
+                <td>Product ID</td>
+                <td>{{=form.custom.widget.product_id}}</td>
+                </tr>
+              <tr>
+                <td>Product Name</td>
+                <td><input type="text" name="" id="product_name" readonly="readonly"/></td>
+              </tr>
+              </table>
+			</td>
+			
+			<td width="303" valign="top">
+            
+              <table width="400" class="blackCat">			 
+                
+              <tr>
+                <td>Minimum Qty</td>
+                <td>{{=form.custom.widget.min_qty}}</td>
+              </tr>   
+               <tr>
+                 <td>Flat TP (Excuding Vat)</td>
+                 <td>{{=form.custom.widget.flat_rate}}</td>
+               </tr> 
+               <tr>
+                 <td>Allowed On Credit Invoice</td>
+                 <td>{{=form.custom.widget.allowed_credit_inv}}</td>
+               </tr>
+               <!--<tr>
+                 <td>Regular Discount Applied</td>
+                 <td>{{#=form.custom.widget.regular_discount_apply}}</td>
+               </tr>
+               <tr>
+                 <td>Allow Bundle</td>
+                 <td>{{#=form.custom.widget.allow_bundle}}</td>
+               </tr>-->
+               <tr>
+                 <td>Status </td>
+                 <td>{{=form.custom.widget.status}}</td>
+               </tr> 
+              <tr>
+                <td>&nbsp;</td>
+                <td>{{=form.custom.submit}}</td>
+              </tr>
+              
+                  {{=form.custom.end}}
+                  </table>
+                </td>
+			</tr>
+			</table>
+            <br />
+         {{pass}} 
+		 
+         <table width="1000" border="1" cellpadding="1" cellspacing="1" class="sample_border" >
+		   
+		   <form id="form1" name="form1" method="post" action="{{=URL(c='promotion',f='flat_rate')}}">
+            <tr align="left" class="blackCatHead"  height="20px" ;"vertical-align:middle">
+              <td width="100" >
+                <select name="search_type" id="search_type" style="width:150px" >
+                  <option value="" selected="selected">Select a type</option>
+                    {{if session.search_type_flat_rate=='Product_id':}}<option value="Product_id" selected="selected">Product ID/Name</option>{{else:}}<option value="Product_id" >Product ID/Name</option>{{pass}}
+                    {{if session.search_type_flat_rate=='Status':}}<option value="Status" selected="selected">Status</option>{{else:}}<option value="Status" >Status</option>{{pass}}
+                </select>
+              </td>
+              <td width="166" >
+              {{if session.search_value_flat_rate=='' or session.search_value_flat_rate==None:}}
+              	<input  name="search_value" type="text" id="search_value" size="25" value="" placeholder="Select a value" autocomplete="off" style="width:300px"/>
+              {{else:}}
+              	<input  name="search_value" type="text" id="search_value" size="25" value="{{=session.search_value_flat_rate}}" placeholder="Select a value" autocomplete="off" style="width:300px"/>
+              {{pass}}
+              
+              </td>
+              <td width="100" ><input type="submit" name="btn_filter_item" id="btn_filter_item" value="Filter"   class="button_update"/>
+			  <input type="submit" name="btn_all" id="btn_all" value="All"   class="button_update"/>		
+		  	   </td>
+				
+              <td align="right" >
+			  <a href="{{=URL(c='promotion',f='flat_rate_download')}}">
+				 	<input type="button" name="" id="" value="Download"   class="button_update"/>
+			    	</a>
+			{{if access_permission==True:}} 
+			  <a href="{{=URL(c='promotion',f='flat_rate_batch_upload')}}">
+			  <input type="button" name="" id="" value="Batch Upload"   class="button_update"/>
+			  </a>
+			  {{pass}}
+			  </td>
+            </tr>
+		      </form>
+          </table>
+		 <strong>Total:</strong> {{=totalCount}}<br />
+		 
+			 <table width="1083" border="1" cellpadding="1" cellspacing="1" class="sample_border" >
+                <tr align="left" class="blackCatHead"  height="20px" ;"vertical-align:middle">
+                  <td width="80" >From-Date</td>
+                  <td width="80" >To-Date</td>
+                  <td width="80" align="center" >Campaign Ref</td>
+                  <td width="50" align="center" >Product ID</td>
+                  <td width="150" >Product Name</td>
+                  <td width="30" align="center"  >Min Qnty</td>
+                  <td width="50" align="right"  >Flat TP (Excuding Vat)</td>
+                  <td width="50" align="right"  >Vat</td>
+                  <td width="60" align="right"  >Total</td>
+                  <td width="30" align="center"  >Allowed On Credit Inv.</td>
+                  <td width="50" align="center"  >Status </td>
+                  <td width="120" align="center"  >LastUpdated By&amp;Time</td>
+                  <td width="30" align="center"  ></td>
+                </tr>
+			    {{ p=0}} 		  
+			    {{for i,record in enumerate(records):}}
+			    {{ if i==items_per_page: break}}
+             
+            {{bgColor=''}}
+            {{if (datetime.datetime.strptime(str(record.to_date),'%Y-%m-%d') < datetime.datetime.strptime(str(current_date),'%Y-%m-%d')) or record.status=='INACTIVE':}}{{bgColor='background-color:#FC6'}}{{pass}}
+            
+            <tr  align="left" class="blackCat"  style="font-size:13px; {{=bgColor}}">            
+              <td width="80" >{{=record.from_date.strftime("%d-%b-'%y")}}</td>
+              <td width="80" >{{=record.to_date.strftime("%d-%b-'%y")}}</td>
+              <td width="80" align="center" >{{=record.campaign_ref}}</td>
+              <td width="50" align="center" >{{=record.product_id}}</td>
+              <td width="150"  >{{=record.product_name}}</td>
+              <td width="30" align="center"  >{{=record.min_qty}}</td>
+              <td width="50" align="right"  >{{=record.flat_rate}}</td>
+              <td width="50" align="right"  >{{=record.vat}}</td>
+              <td width="60" align="right"  >{{=round(record.flat_rate+record.vat,2)}}</td>
+              <td width="30" align="center"  >{{=record.allowed_credit_inv}}</td>
+              <td width="50" align="center"  >{{=record.status}}</td>
+              <td width="120" align="center"  ><span style="font-size:10px">{{=record.updated_by}}, {{=record.updated_on.strftime("%d-%b-'%y %I:%M%p")}}</span></td>
+              
+              <form id="form1" name="form1" method="post" action="{{=URL(c='promotion',f='flat_rate_edit',args=[page,record.id])}}">
+            <td width="30" align="center"  >
+              {{if access_permission==True:}} 
+                <input type="submit" name="btn_go" id="btn_go" value="&gt;&gt;"   class="button_update"/>
+              {{pass}}
+              </td>
+              </form>
+              
+            </tr>
+  
+			    
+			    {{pass}}
+		    </table>
+			  <p>&nbsp;</p>
+        </td></tr>
+    </table>
+    
+{{if page:}}
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="{{=URL(args=[page-page])}}">first</a> |  
+&nbsp;&nbsp;<a href="{{=URL(args=[page-1])}}">previous</a> |
+{{pass}}
+
+{{if len(records)>items_per_page:}}
+&nbsp;&nbsp;<a href="{{=URL(args=[page+1])}}">next</a>
+{{pass}}
+	</td>
+  </tr>
+</table>
+

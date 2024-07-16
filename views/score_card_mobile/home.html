@@ -1,0 +1,168 @@
+{{extend 'layout_mobile.html'}}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+ <style type="text/css">
+
+ input[type=number],input[type=text]{
+    margin: 2px 0px 2px 0px;
+	width:100%;
+	height:25px;
+	width:170px;
+}
+select{
+    margin: 2px 0px 2px 0px;
+	width:100%;
+	height:25px;
+	width:80px;
+}
+.page_color,body{
+	font-family:Arial, Helvetica, sans-serif;
+	font-size:16px;
+}
+input[type=submit]{
+	background-color:#074b83 !important;;
+	color:#FFF;
+	width:100%;
+	height:25px;
+	border-radius:10px;	
+	}
+#wrapper{ padding:0px;}
+
+ </style>
+
+
+<script> 
+ /*window.onpopstate=function(){
+	 window.location.href;
+	 location.reload();
+}; history.pushState({},'');*/
+ 
+</script>
+
+
+<body >   
+
+<div style="background-color: #2196f3 !important;box-shadow: 0 2px 5px 0 rgba(0,0,0,0.16),0 2px 10px 0 rgba(0,0,0,0.12); color:#FFFFFF"><h1>&nbsp;Score Card</h1></div>
+
+<!--{{if session.from_date==None:}}
+        <input type="text" class="date" name="from_date" placeholder="From Date" style=" width:80px;"/>
+    {{else:}}
+        <input type="text" class="date" name="from_date" value="{{=session.from_date}}" style=" width:80px;"/>
+    {{pass}}
+To &nbsp; &nbsp;
+    {{if session.to_date==None:}}
+        <input type="text" class="date" name="to_date" placeholder="To Date" style=" width:80px;"/>
+    {{else:}}
+        <input type="text" class="date" name="to_date" value="{{=session.to_date}}" style=" width:80px;"/>
+    {{pass}}-->
+{{monthList=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec']}}        
+<table style="border-collapse:collapse; width:100%;">
+	<form action="{{=URL(c='score_card_mobile',f='home')}}" >    	  
+    <tr >
+    	<td style="width:100px;">Year-Month</td>
+        <td style="width:1px;">:</td>
+    	<td style="text-align:left;" >        
+        	<select name="sch_year">
+            	{{for i in range(2021,2031):}}
+                	{{if i==first_currentDate.year:}}
+                    	<option value="{{=i}}" selected >{{=i}}</option>
+                    {{else:}}
+                    	<option value="{{=i}}" >{{=i}}</option>
+                    {{pass}}
+                {{pass}}
+            </select>
+            -            
+        	<select name="sch_month">
+            	{{for i in range(len(monthList)):}}
+                	{{if i==first_currentDate.month:}}
+                    	<option value="{{=i}}" selected >{{=monthList[i]}}</option>
+                    {{else:}}
+                    	<option value="{{=i}}" >{{=monthList[i]}}</option>
+                    {{pass}}
+                {{pass}}
+            </select>
+        </td>        
+     </tr>
+     <tr >
+    	<td>Region</td>
+        <td>:</td>
+    	<td style="text-align:left;"> 
+        	<input type="text" name="sch_region" placeholder="Region" /> 	
+        </td>        
+     </tr>
+     <tr >
+    	<td>Area</td>
+        <td>:</td>
+    	<td style="text-align:left;"> 
+        	<input type="text" name="sch_area" placeholder="Area" /> 	
+        </td>        
+     </tr>
+     <tr >
+    	<td>Territory</td>
+        <td>:</td>
+    	<td style="text-align:left;">
+        	<input type="text" name="sch_tr" placeholder="Territory" />  	
+        </td>        
+     </tr>
+     <!--<tr>
+     	<td>Territory:</td>
+        <td>
+        	<select name="sch_area">
+            	<option value="">Select Territory</option>
+                {{for i in range(len(level_area_list)):}}                	
+                	{{if level_area_list[i]==session.sch_area:}}               	
+                 		<option value="{{=level_area_list[i]}}" selected >{{=level_area_list[i]}}</option>
+                    {{else:}}
+                    	<option value="{{=level_area_list[i]}}" >{{=level_area_list[i]}}</option>
+                    {{pass}}   
+                {{pass}}
+            </select>
+        </td>
+     </tr>-->
+     <tr >     	
+        <td ></td>
+        <td ></td>
+        <td ><input type="submit" name="btn_report" value="Search" style="height:40px; width:80px"/></td>
+    </tr>
+    </form>
+</table>
+<div style="padding:2%;">
+{{if len(records)==0:}}
+	Not Available
+{{else:}}
+<table style="border-collapse:collapse; width:100%;font-size:12px;">	  
+    <tr style="background-color:#0b78d1; color:#FFF;border-bottom:1px solid #E6E6E6;">
+    	<td width="10%" >Region</td>
+        <td width="10%" >Area</td>
+    	<td width="10%" >Territory</td>
+        <td width="40%" >MPO</td>
+        <td width="30%" align="center" >Overall Score</td>
+    </tr>
+    {{for i in range(len(records)):}}
+    {{recordsS=records[i]}}  
+  <tr style="background-color:#f2f9fe;border-bottom:1px solid #E6E6E6;">
+    	<td >{{=recordsS['level1_id']}}</td>
+        <td >{{=recordsS['level2_id']}}</td>
+    	<td >{{=recordsS['level3_id']}}</td>
+        <td ><a href="{{=URL(c='score_card_mobile',f='rep_details',vars=dict(rep_id=recordsS['rep_id']))}}" target="_blank" a>{{=recordsS['rep_id']}}-{{=recordsS['rep_name']}}</a></td>
+        <td align="center" >   
+         {{for j in range(5):}}                  
+             {{if j>recordsS['overall_rate']:}}
+                    <span class="fa fa-star-o" style="color:orange; font-size:15px;"></span>           	
+            {{else:}}
+                {{if j+1>recordsS['overall_rate']:}}
+                    <span class="fa fa-star-half-full" style="color:orange; font-size:15px;"></span>
+                {{else:}}                	
+                    <span class="fa fa-star" style="color:orange; font-size:15px;"></span>                	
+                {{pass}}
+            {{pass}}
+         {{pass}}
+        </td>
+    </tr>
+    {{pass}}    
+</table>
+{{pass}}
+</div>
+
+</body>
+
+

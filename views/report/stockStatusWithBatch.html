@@ -1,0 +1,194 @@
+{{extend 'layout_invoice.html'}}
+
+<html>
+
+<head>
+
+<script type="text/javascript">
+
+function print_page()
+
+  {
+
+    window.print()
+
+  }
+
+</script>
+
+
+
+</head>
+
+<body>
+{{currentDate=datetime.datetime.strptime(str(current_date),'%Y-%m-%d')}}
+
+<table width="900px" style="border:none;" >
+    <tr >
+      <td width="100" ><strong>Branch/Depot:</strong></td>
+      <td width="250" ><strong style="font-size:14px">{{=depotID}}|{{=depotName}}</strong></td>
+      <td width="60" ><strong>Location:</strong></td>
+      <td ><strong style="font-size:14px">{{=storeID}}|{{=storeName}}</strong><span style="float:right">#1.01A</span></td>
+    </tr>
+</table>
+<table width="900px" style="border:none; text-align:center; font-weight:bold;" >
+    <tr >
+      <td ><div style="border: solid 2px #C4C4C4; width:300px; font-weight:bold;font-size:20px; float:left; color:#333" >IC Stock Status- Batch Wise</div><div style="font-weight:bold;font-size:14px; float:right" >Print Date & Time: {{=date_fixed.strftime('%d-%b-%y  %H:%M:%S%p')}}</div></td>
+    </tr>
+    <tr >
+      <td align="center" style="border-top:solid 2px #5E5EFF;border-right:solid 2px #5E5EFF;border-bottom:solid 2px #5E5EFF;border-left:solid 2px #5E5EFF;"><img style="width:100px;" src="{{=URL('static','images/comp_logo1.png')}}"/></td>
+    </tr>
+</table>
+<table width="900px;"> <tr>
+  <td style="text-align:right"><a href="{{=URL(c='report',f='downloadStockStatusWithBatch',vars=dict(depotID=depotID,depotName=depotName,storeID=storeID,storeName=storeName))}}" >Download</a></td></tr></table>
+
+
+    <table width="900" border="1" cellpadding="1" cellspacing="1" class="sample_border" >                
+		<thead>
+        <tr align="left" class="blackCatHead" height="20px" ;  style="font-size:11px;border-top:solid 2px #999999">
+          <td width="40"  >SL</td>
+          <td width="70"  >Product ID</td>
+
+          <td  >Name</td>
+
+          <td width="70"  >Batch</td>
+          <td width="70" align="left"  >Unit</td>
+          <td width="70" align="center"  >Status</td>
+          <td width="60" align="right"  >Qty</td>
+          <td width="70" align="right"  >TP</td>
+          <td width="70" align="right"  >TP X Qty</td>
+          <td width="70" align="right"  >M. Carton</td>
+          <td width="70" align="center"  >Exp. Date</td>
+      </tr>
+      	</thead>
+        
+        <tbody>
+        {{itemIdSubPre=''}}
+        {{itemNameSubPre=''}}
+        {{itemUnitSubPre=''}}
+        
+        {{itemIdPre=''}}  
+        {{itemNamePre=''}}
+        {{itemUnitPre=''}}   
+        
+        {{itemIdNew=''}}
+        {{itemNameNew=''}}           
+        {{itemUnitNew=''}}
+        
+        {{totalQty=0}}
+        {{netTotalQty=0}}
+        {{newRecFlag=0}}
+        
+        {{rowsl=0}}
+        {{totalTp=0}}
+        {{totalMCarton=0}}
+        
+        {{preItem=''}}
+        {{newItem=''}}
+        
+        {{for i,record in enumerate(records):}}
+        	
+            {{ #if i==items_per_page: break}}
+            
+            {{itemIdNew=record.sm_item.item_id}} 
+            {{itemNameNew=record[db.sm_item.name.max()]}}
+            {{itemUnitNew=record[db.sm_item.unit_type.max()]}}
+            
+            {{newItem=str(itemNameNew)+'_'+str(itemIdNew)}}
+            
+            {{if preItem!='' and newItem!='' and  preItem!=newItem:}}
+                {{itemIdSubPre=itemIdPre}}
+                {{itemNameSubPre=itemNamePre}}
+                {{itemUnitSubPre=itemUnitPre}}                
+                {{newRecFlag=1}}            
+            {{pass}}            
+            {{preItem=newItem}}
+            
+            {{itemIdPre=itemIdNew}}
+            {{itemNamePre=itemNameNew}}
+            {{itemUnitPre=itemUnitNew}}
+            
+            {{if newRecFlag==1:}}
+      <tr  align="left" style="vertical-align:middle; font-size:12px; font-weight:bold; background:#EBEBEB;">
+                      <td width="40" >{{rowsl+=1}}{{=rowsl}}</td>
+                      <td width="70" >{{=itemIdSubPre}}</td>        
+                        <td >{{=itemNameSubPre}}</td>        
+                        <td width="-2" style="text-align:center;"></td>
+                        <td width="0" align="left" style="text-align:left;">{{=itemUnitSubPre}}</td>
+                        <td width="70" align="center" style="text-align:center;">&nbsp;</td>
+                        <td width="60" align="right" style=" text-align:right; font-weight:bold;">{{=totalQty}}</td>
+                        <td width="70" align="right" style=" text-align:right;" colspan="4"></td>                       
+              </tr>                    
+                 {{totalQty=0}}   
+                 {{newRecFlag=0}}             
+            {{pass}}
+        	
+          <tr  align="left" class="blackCat"  style="vertical-align:middle; background-color:#FBFBFB; font-size:11px;">
+            <td width="40" >&nbsp;</td>
+            <td width="70" >{{=record.sm_item.item_id}}</td>    
+            <td >{{=record[db.sm_item.name.max()]}}</td>    
+            <td width="70" >{{=record.sm_depot_stock_balance.batch_id}}</td>
+            <td width="70" align="left" >{{=record[db.sm_item.unit_type.max()]}}</td>
+            
+            
+            <td width="70" align="center" >{{if datetime.datetime.strptime(str(record[db.sm_depot_stock_balance.expiary_date.max()]),'%Y-%m-%d')< currentDate:}}INACTIVE{{else:}}ACTIVE{{pass}}</td>
+            <td width="60" align="right" style=" text-align:right;">{{qty=record[db.sm_depot_stock_balance.quantity.sum()]}}{{=qty}}{{totalQty+=qty}}{{netTotalQty+=qty}}</td>
+            <td width="70" align="right" style=" text-align:right;">{{price=record.sm_item.price}}{{=easy_format(price)}}</td>
+            <td width="70" align="right" style=" text-align:right;">{{=easy_format(qty*price)}}{{totalTp+=(qty*price)}}</td>
+            <td width="70" align="right" style=" text-align:right;">{{if record[db.sm_item.item_carton.max()]>0:}}{{mCarton=round(round(qty,2)/record[db.sm_item.item_carton.max()],2)}}{{=mCarton}}{{totalMCarton+=mCarton}}{{else:}}-{{pass}}</td>
+            <td width="70" align="center" >{{=record[db.sm_depot_stock_balance.expiary_date.max()].strftime('%d-%b-%y')}}</td>
+          </tr>
+         {{pass}}
+         
+         {{if newRecFlag==0 and totalQty>0:}}
+         <tr  align="left" style="vertical-align:middle; font-size:12px; font-weight:bold; background:#EBEBEB;">
+              <td width="40" >{{rowsl+=1}}{{=rowsl}}</td>
+              <td width="70" >{{=itemIdPre}}</td>        
+                <td >{{=itemNamePre}}</td>        
+                <td width="-2" style="text-align:center;"></td>
+                <td width="0" align="left" style="text-align:left;">{{=itemUnitPre}}</td>
+                <td width="70" align="center" style="text-align:center;">&nbsp;</td>
+                <td width="60" align="right" style=" text-align:right; font-weight:bold;">{{=totalQty}}</td>
+                <td width="70" align="right" style=" text-align:right;" colspan="4"></td>                       
+         </tr> 
+          {{pass}}
+    </tbody> 
+  </table>
+<table width="900" style="border:none; margin:3px 0px;" >
+  <tr align="left" >          		
+       <td height="18" align="right" >&nbsp;</td>
+       <td align="right" >&nbsp;</td>
+       <td width="60" align="right" style="border-bottom-style:double;"><strong>{{=netTotalQty}}</strong></td>
+       <td width="10" align="right" >&nbsp;</td>
+      <td width="100" align="right" style="border-bottom-style:double;"><strong>{{=easy_format(totalTp)}}</strong></td>
+        <td width="60" align="right" style=" text-align:right;"><strong>{{=easy_format(totalMCarton)}}</strong></td>
+        <td width="60" align="right" style=" text-align:right;">&nbsp;</td>          	                      
+ 	</tr>  
+</table>
+<div>{{=rowsl}} Item(s) Printed</div>
+<div>NB: Zero Quantity Excluded</div>   
+<br/>
+<table width="900" >
+	<tr>
+	  <td width="150" align="left">__________________</td>
+	  <td align="center">____________________________________</td>
+	  <td width="20" align="center">&nbsp;</td>
+	  <td width="180" align="center">&nbsp;</td>
+  </tr>
+	<tr>
+	  <td width="150" align="left"><strong>Store Department</strong></td>
+	  <td width="150" align="center"><span style=" font-style:italic;">for</span>&nbsp;<strong>{{=session.cName}}</strong></td>
+	  <td width="20" align="center">&nbsp;</td>
+	  <td width="180" align="center">&nbsp;</td>
+  </tr>
+</table>
+
+
+<br/>
+
+
+
+</body>
+
+</html>
+

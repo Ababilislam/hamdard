@@ -1,0 +1,109 @@
+{{extend 'layout.html'}}
+
+<table width="100%" border="0" cellspacing="0" cellpadding="0" style="background-color:#FFFFFF;">
+  <tr height="30px">
+    <td width="500"><span class="blackCatTitle">Depot Belt Edit</span></td>
+    <form action="{{=URL(c='depot_distributor',f='index')}}" method="post">
+      <td width="380" align="right"><input name="" type="submit" value="Back" /></td>
+    </form>
+    <td>&nbsp;</td>
+  </tr>
+  <tr height="1px" style="background-color:#CCCCCC;">
+    <td colspan="3"></td>
+  </tr>
+</table>
+
+<form action="{{=URL(c='depot_distributor',f='depot_entry_edit', args=[id])}}">
+  <table width="100%" height="500px" border="0" cellspacing="0" cellpadding="0" class="page_color">
+    <tr height="100%" style="vertical-align:top;">
+      <td>
+        <table width="100%" border="0" cellpadding="0" cellspacing="0">
+
+          <tr>
+            <td width="5">&nbsp;</td>
+            <td width="900" valign="top">
+
+              <br />
+              <table width="900">
+                <tr>
+                  <td width="450" valign="top">
+                    <table width="450" class="blackCat">
+                      <tr>
+
+                        <td hidden>
+                          <input style="width: 200px;" name="item_id" id="item_id" readonly value={{=item_id}}></input>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td width="200" style="padding-top: 5px;">Depot</td>
+                        <td>
+                          <input style="width: 200px;" type="text" name="depot_id" id="depot_id" readonly value='{{=depot_id}}|{{=depot_name}}'></input>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td width="200" style="padding-top: 5px;">Dist Id</td>
+                        <td><input style="width: 200px;" type="text" name="dist_id" id="dist_id" value="{{=dist_id}}"></td>
+                      </tr>
+                      <tr>
+                        <td width="200" style="padding-top: 5px;">Dist Name</td>
+                        <td><input style="width: 200px;" type="text" name="dist_name" id="dist_name" value="{{=dist_name}}"></td>
+                      </tr>
+                      <tr>
+                        <td width="200" style="padding-top: 5px;">Dist Discount Percent</td>
+                        <td><input style="width: 200px;" type="text" name="dist_disc_percent" id="dist_disc_percent" value="{{=dist_disc_percent}}"></td>
+                      </tr>
+                      <tr hidden>
+                        <td>created on</td>
+                        <td><input style="width: 200px;" type="text" name="created_on"  value="{{=created_on}}"></td>
+                      </tr>
+                      <tr hidden>
+                        <td width="200">created_by</td>
+                        <td><input style="width: 200px;" type="text" name="created_by" value="{{=created_by}}"></td>
+                      </tr>
+                      <tr hidden>
+                        <td width="200">updated_on</td>
+                        <td><input style="width: 200px;" type="text" name="updated_on" id="updated_on" value="{{=updated_on}}"></td>
+                      </tr>
+                      <tr hidden>
+                        <td width="200">updated by</td>
+                        <td><input style="width: 200px;" type="text" name="updated_by" id="updated_by" value="{{=updated_by}}"></td>
+                      </tr>
+                      <tr>
+                        <td></td>
+                        <td style="padding-left: 0px;">
+                          <input type="submit" name="delete_btn" value=" Delete "
+                          style="width: 80px; background-color: red; color: white; border-radius: 4px; vertical-align:middle;height:30px ;"
+                          onclick="if (!confirm('Do you really want to Delete?')) { return false }">
+                          
+                          <input align="left" type="submit" name="update_btn" id="update_btn" value=" Update "
+                              style="vertical-align:middle;height:30px ;border-radius:4px; background-color: rgb(85, 189, 116); color: white; width: 80px; margin-left: 48px;" />
+                          
+                        </td>
+                      </tr>
+                      <tr>
+                        <td></td>
+                        <td style="padding-left: 130px;">
+                        </td>
+                        <!-- for item id  -->
+                        <!-- <div align="left" hidden>
+                          <input type="text" value ="{{=item_id}}" name ="itm"/>
+                        </div> -->
+                        <!-- end  -->
+                      </tr>
+                    </table>
+                  </td>
+
+            </td>
+          </tr>
+        </table>
+
+        <br />
+
+      </td>
+    </tr>
+  </table>
+
+  </td>
+  </tr>
+  </table>
+</form>

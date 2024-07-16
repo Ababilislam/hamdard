@@ -1,0 +1,835 @@
+{{extend 'layout_wap.html'}}
+
+<link rel="stylesheet" href="{{=URL('static', 'js_and_css/ui.theme.css')}}" type="text/css" />
+<link rel="stylesheet" href="{{=URL('static', 'js_and_css/jquery-ui.css')}}" type="text/css" />
+<link rel="stylesheet" href="{{=URL('static', 'js_and_css/style.css')}}" type="text/css" />
+  
+  <script src="{{=URL('static','js_and_css/jquery-1.8.2.js')}}"></script>
+  <script src="{{=URL('static','js_and_css/jquery-ui.js')}}"></script>
+  
+  <style type="text/css">
+	 input[type=text], input[type=password],  select {
+    margin: 2px 0px 2px 0px;
+	}
+	
+	#sm_client_status,#sm_client_category_id{
+	width:auto;
+	}
+	#sm_client_client_id,#sm_client_area_id{
+	width:70px;
+	}
+	
+	#sm_client_op_balance,#sm_client_balance,#sm_client_credit_limit{
+	width:60px;
+	text-align:right;
+	}
+	
+	div.error {
+		color: white;
+		padding: 0px;
+		width: auto; 
+		margin-left:0px;
+	}
+	.page_color,body{
+		font-family:Arial, Helvetica, sans-serif;
+		font-size:13px;	
+		}
+ </style>
+ 
+<script>
+
+function tour() {
+
+	var base_url=location.protocol + "//" + location.hostname + (location.port && ":" + location.port) + "/{{=request.application}}/";
+
+	$("#sResultButton").hide();
+	$("#sResultButton1").hide();
+	$("#wait_image").show();
+
+	var days_month={{=session.days_month}}	
+	var m_Count=$("#m_Count").val();	
+	
+	var submitStrMorning=''
+	var submitStrEvening=''
+	for (var i=0; i < days_month; i++){
+
+        for (var m=0; m < m_Count; m++){
+            var inputId='m_'+i+'_'+m  
+			check = $("#"+inputId).prop("checked");
+            if(check) {
+				var checkVal = $("#"+inputId).val().split('|')[0];
+				submitStrMorning=submitStrMorning+checkVal+'<fd>'
+			 }			  
+		}
+		
+		for (var e=0; e < m_Count; e++){
+			var inputId='e_'+i+'_'+e
+
+			check = $("#"+inputId).prop("checked");
+			if(check) {
+				var checkVal = $("#"+inputId).val().split('|')[0];
+				submitStrEvening=submitStrEvening+checkVal+'<fd>'
+				//alert (submitStrEvening)
+			}
+		}
+		
+		var iShow=parseInt(i+1)
+		if (iShow < 10) {
+			iShow='0'+iShow  
+		}
+		
+		var inputIdLeave= 'l_'+iShow
+		var inputIdHoly= 'h_'+iShow
+		//alert (inputIdLeave)
+
+		var inputIdHalfday= 'hd_'+iShow
+		var inputIdMeeting= 'm_'+iShow
+		
+		var inputIdEHalfday= 'ehd_'+iShow
+		var inputIdEMeeting= 'em_'+iShow
+		
+		//alert (inputIdLeave)
+		checkLeave = $("#"+inputIdLeave).prop("checked");
+		checkHoly = $("#"+inputIdHoly).prop("checked");
+		
+		checkHday = $("#"+inputIdHalfday).prop("checked");
+		checkMeeting = $("#"+inputIdMeeting).prop("checked");
+		
+		checkEHday = $("#"+inputIdEHalfday).prop("checked");
+		checkEMeeting = $("#"+inputIdEMeeting).prop("checked");
+		//alert (checkLeave)
+		
+		
+		if(checkLeave) {
+			var checkVal = $("#"+inputIdLeave).val().split('|')[0];
+			submitStrMorning=submitStrMorning+checkVal+'<fd>'
+		}
+		if(checkHoly) {
+			var checkVal = $("#"+inputIdHoly).val().split('|')[0];
+			submitStrMorning=submitStrMorning+checkVal+'<fd>'
+		}
+		if(checkHday) {
+			var checkVal = $("#"+inputIdHalfday).val().split('|')[0];
+			submitStrMorning=submitStrMorning+checkVal+'<fd>'
+		}
+		if(checkMeeting) {
+			var checkVal = $("#"+inputIdMeeting).val().split('|')[0];
+			submitStrMorning=submitStrMorning+checkVal+'<fd>'
+		}
+		
+		
+		if(checkEHday) {
+			var checkVal = $("#"+inputIdEHalfday).val().split('|')[0];
+			submitStrEvening=submitStrEvening+checkVal+'<fd>'
+		}
+		if(checkEMeeting) {
+			var checkVal = $("#"+inputIdEMeeting).val().split('|')[0];
+			submitStrEvening=submitStrEvening+checkVal+'<fd>'
+		}
+		//submitStrMorning=submitStrMorning+checkVal_leave+'<fd>'+inputIdHoly+'<fd>'
+	 	 submitStrMorning=submitStrMorning+'<rd>'
+		 submitStrEvening=submitStrEvening+'<rd>'
+	
+	}
+	
+
+	//alert (base_url+'tour_web/tourSubmit?submitStrMorning='+submitStrMorning+'&submitStrEvening='+submitStrEvening+'&days_month='+days_month)
+	$.ajax(base_url+'tour_web/tourSubmit?submitStrMorning='+submitStrMorning+'&submitStrEvening='+submitStrEvening+'&days_month='+days_month,{
+
+		type: 'POST',
+		timeout: 30000,
+		error: function(xhr) {
+		//alert ('Error: ' + xhr.status + ' ' + xhr.statusText);
+			$("#sResult").html('Please try again');
+			$("#sResultButton").show();
+			$("#sResultButton1").show();
+		},
+		success:function(data, status,xhr){	
+			if (data=='Success'){
+				$("#sResult").html('Submitted Successfully');
+				//alert ('Submitted Successfully');
+				$("#sResultButton").hide();
+				$("#sResultButton1").hide();
+				$("#wait_image").hide();
+			}
+			if (data=='Incomplete'){
+				$("#sResult").html('Please Complete Full month');
+				//alert ('Please Complete Full month');
+				$("#sResultButton").show();
+				$("#sResultButton1").show();
+				$("#wait_image").hide();
+			}
+				
+		
+		}
+		
+	});//end ajax
+	
+}; 
+
+
+//Save=================
+function tourSave() {
+	var base_url=location.protocol + "//" + location.hostname + (location.port && ":" + location.port) + "/{{=request.application}}/";
+
+	var days_month={{=session.days_month}}
+	
+	var m_Count=$("#m_Count").val();
+	
+	
+	var submitStrMorning=''
+	var submitStrEvening=''
+	for (var i=0; i < days_month; i++){
+
+         for (var m=0; m < m_Count; m++){
+             var inputId='m_'+i+'_'+m
+            // var checkId=i+'n'+m+"_"+marketId
+			 check = $("#"+inputId).prop("checked");
+ 		     
+			 
+             if(check) {
+				var checkVal = $("#"+inputId).val()//.split('|')[0];
+				
+				submitStrMorning=submitStrMorning+checkVal+'<fd>'
+				//alert (submitStrMorning)
+			 }
+			  
+		 }
+		  for (var e=0; e < m_Count; e++){
+             var inputId='e_'+i+'_'+e
+           
+			 check = $("#"+inputId).prop("checked");
+ 		     
+			 
+             if(check) {
+				var checkVal = $("#"+inputId).val()//.split('|')[0];
+				submitStrEvening=submitStrEvening+checkVal+'<fd>'
+			 }
+		  }
+		var iShow=parseInt(i+1)
+		if (iShow < 10) {
+                  iShow='0'+iShow  }
+		var inputIdLeave= 'l_'+iShow
+		var inputIdHoly= 'h_'+iShow
+		//alert (inputIdLeave)
+
+		var inputIdHalfday= 'hd_'+iShow
+		var inputIdMeeting= 'm_'+iShow
+		
+		var inputIdEHalfday= 'ehd_'+iShow
+		var inputIdEMeeting= 'em_'+iShow
+		//alert (inputIdLeave)
+		checkLeave = $("#"+inputIdLeave).prop("checked");
+		checkHoly = $("#"+inputIdHoly).prop("checked");
+		
+		checkHday = $("#"+inputIdHalfday).prop("checked");
+		checkMeeting = $("#"+inputIdMeeting).prop("checked");
+		
+		checkEHday = $("#"+inputIdEHalfday).prop("checked");
+		checkEMeeting = $("#"+inputIdEMeeting).prop("checked");
+		//alert (checkLeave)
+		
+		if(checkLeave) {
+			//alert ('asdad')
+			var checkVal = $("#"+inputIdLeave).val().split('|')[0];
+			//alert (checkVal)
+			submitStrMorning=submitStrMorning+checkVal+'<fd>'
+		}
+		if(checkHoly) {
+			var checkVal = $("#"+inputIdHoly).val().split('|')[0];
+			submitStrMorning=submitStrMorning+checkVal+'<fd>'
+		}
+				
+		
+		if(checkHday) {
+			var checkVal = $("#"+inputIdHalfday).val().split('|')[0];
+			submitStrMorning=submitStrMorning+checkVal+'<fd>'
+		}
+		
+		if(checkMeeting) {
+			var checkVal = $("#"+inputIdMeeting).val().split('|')[0];
+			submitStrMorning=submitStrMorning+checkVal+'<fd>'
+		}
+				
+		
+		
+		
+		if(checkEHday) {
+			var checkVal = $("#"+inputIdEHalfday).val().split('|')[0];
+			submitStrEvening=submitStrEvening+checkVal+'<fd>'
+		}
+		
+		if(checkEMeeting) {
+			var checkVal = $("#"+inputIdEMeeting).val().split('|')[0];
+			submitStrEvening=submitStrEvening+checkVal+'<fd>'
+		}
+
+		//submitStrMorning=submitStrMorning+checkVal_leave+'<fd>'+inputIdHoly+'<fd>'
+	 	
+	 	 submitStrMorning=submitStrMorning+'<rd>'
+		 submitStrEvening=submitStrEvening+'<rd>'
+	
+	}
+				$("#sResultButton").hide();
+				$("#sResultButton1").hide();
+				$("#wait_image").show();
+	
+	//alert (submitStrMorning)
+	//alert (base_url+'tour_web/tourSave?submitStrMorning='+submitStrMorning+'&submitStrEvening='+submitStrEvening)
+	$.ajax(base_url+'tour_web/tourSave?submitStrMorning='+submitStrMorning+'&submitStrEvening='+submitStrEvening,{
+
+		type: 'POST',
+		timeout: 30000,
+		error: function(xhr) {
+		//alert ('Error: ' + xhr.status + ' ' + xhr.statusText);
+		$("#sResult").html('Please try again');
+		$("#sResultButton").show();
+		$("#sResultButton1").show();
+		$("#wait_image").hide();
+							},
+		success:function(data, status,xhr){	
+		$("#sResult").html('Saved Successfully');
+		
+		$("#sResultButton").show();
+		$("#sResultButton1").show();
+		$("#wait_image").hide();
+		}
+		
+	});//end ajax
+	
+	
+}; 
+
+function uncheckAll(divid) {
+	 var LH=divid.split('_')[0]
+	 var iShow=parseInt(divid.split('_')[1])
+	  if (iShow < 10) {iShow='0'+iShow  }
+
+	 if (LH=='l'){
+	 	var inputID='l_'+iShow
+	 }
+	 else{
+		 var inputID= 'h_'+iShow
+		 }
+	 
+	 
+	 check = $("#"+inputID).prop("checked");
+	 
+	 if (check){
+		 var divIDShow='d_'+iShow
+		 var divIDShow_e='de_'+iShow
+		 $('#'+divIDShow).find('input[type=checkbox]:checked').attr("checked", false);
+		 $('#'+divIDShow_e).find('input[type=checkbox]:checked').attr("checked", false);
+		 
+		 $('#'+inputID).prop('checked', true);
+	 }
+
+}
+
+function checkAll(divid) {
+	 var iShow=divid
+	 
+	 if (iShow < 10) {iShow='0'+iShow  }
+
+	
+	var inputIDL='l_'+iShow
+	
+	var inputIDH= 'h_'+iShow
+	 
+	 var divIDShow='d_'+iShow
+	 var divIDShow_e='de_'+iShow
+	 
+	
+	 checkLeave = $("#"+inputIDL).prop("checked");
+	 checkHoly = $("#"+inputIDH).prop("checked");
+	 
+	
+	 
+	 
+	 if (checkLeave){
+		 	
+			checkLeave = $("#"+inputIDL).prop("checked");
+			$('#'+divIDShow).find('input[type=checkbox]:checked').attr("checked", false);
+			$('#'+divIDShow_e).find('input[type=checkbox]:checked').attr("checked", false);
+			
+			$('#'+inputIDL).prop('checked', true);
+		 
+	 }
+	 if (checkHoly){
+			checkLeave = $("#"+inputIDH).prop("checked");
+			$('#'+divIDShow).find('input[type=checkbox]:checked').attr("checked", false);
+			$('#'+divIDShow_e).find('input[type=checkbox]:checked').attr("checked", false);
+			//alert (inputIDH)
+			$('#'+inputIDH).prop('checked', true);
+		 
+	 
+	 } 
+
+}
+</script>
+
+
+<table width="100%"  border="0" cellspacing="0" cellpadding="0" style="background-color:#FFFFFF;" >
+  <tr height="30px" >
+    <td width="500"><span class="blackCatTitle">&nbsp;&nbsp;Tour</span></td>
+    <td width="500" align="right">&nbsp;</td>
+    <td align="right">&nbsp;</td>
+  </tr>
+  <tr  height="1px" style="background-color:#CCCCCC;">
+	    <td width="300" ></td><td ></td><td ></td>
+  </tr>
+  </table>
+  
+  
+  <table width="100%" height="500px"  border="0" cellspacing="0" cellpadding="0" class="page_color"  >
+  <tr height="100%"  style="vertical-align:top;">
+    <td>
+     <!--<form id="form1" name="form1" method="post" action="{{=URL(c='tour_web',f='tourSubmit')}}">-->
+    
+	<table width="100%"  border="0" cellpadding="0" cellspacing="0" bgcolor="#E6FFFF"  >
+      <tr>
+        <td width="5">&nbsp;</td>
+        <td style="font-size:16px; color:#30F">{{=monthShow}}<br />
+			 <br /></td>
+             <td style="font-size:16px; color:#30F">{{=status}}<br />
+			 <br /></td>
+      </tr>
+      </table>
+      
+			 <table width="100%" border="1" cellpadding="0" cellspacing="0" class="sample_border" bgcolor="#F0FFFF" >
+               <tr align="left" class="blackCatHead"  height="20px" ;"vertical-align:middle">
+                 <td  >Date</td>
+                
+                 <td width="45%" >Morning</td>
+                 <td width="45%" >Afternoon</td>
+                 
+               </tr>
+			   	
+
+				{{#link_path='http://127.0.0.1:8000/novivo/doc_client_firm_list/doc_client_farm'}}
+				{{link_path='http://w05.yeapps.com/mrep/doc_client_firm_list/doc_client_farm'}}
+			   	{{i=0
+                while i < days_month:
+                  
+                  iShow=i+1
+                  if (iShow < 10) :
+                  iShow='0'+str(iShow)
+                  pass
+                 # setDateG=str(first_currentDate).split(' ')[0]
+                  crrDate=str(current_date).split('-')[2]
+                  import calendar
+                  #setDate=str(setDateG).split('-')[0]+'-'+str(setDateG).split('-')[1]+'-'+str(iShow)
+                  setDate=str(setDateG)+'-'+str(iShow)
+                  year = int(setDate.split('-')[0])
+                  month = int(setDate.split('-')[1])
+                  day = int(setDate.split('-')[2])
+                  
+                  ans =calendar.weekday(year,month,day)
+                    
+                   
+                }}  
+			   	
+  				<tr  align="left" class="blackCat"  style="font-size:13px"> 	
+                    <td width="80" >{{=setDate}}<br>{{=calendar.day_name[ans]}}</td>
+                    
+                    <td width="45%" >
+                       <div id="d_{{=iShow}}">
+                     {{mCount=0}}
+                    {{for m,record in enumerate(marketTourRows):}}
+                      {{if (session.monthPass=='This' and i >= int(crrDate)) or session.monthPass=='Next':}}
+                      			 {{if (session.userType=='sup'):}}
+                             	{{searchStr='<'+setDate+'>'+record.level_name}}
+                                 {{if (status=='Draft'):}}
+                                 
+                                 {{#=session.monthPass}}
+                                         {{if (strValueMorning.find(searchStr)!=-1):}}
+                                  		<input id="m_{{=str(i)+'_'+str(m)}}" type="checkbox" value="{{=record.level_id}}|{{=record.level_name}}"  onclick="checkAll({{=str(iShow)}})" checked />
+                                        {{else:}}
+                                        <input id="m_{{=str(i)+'_'+str(m)}}" type="checkbox" value="{{=record.level_id}}|{{=record.level_name}}"  onclick="checkAll({{=str(iShow)}})"  />
+                                         {{pass}}
+                                      
+                          		
+                                {{pass}}
+
+                            {{ pass}}
+                            
+                            <!--=====================-->
+                            {{if (session.userType=='rep'):}}
+                            	 	 {{if (userSin=='SIN'):}}                          		  
+                                       {{searchStr='<'+setDate+'>'+record.area_name}}                                      
+                                           {{if (status=='Draft'):}}                                                                                      
+                                               {{if (strValueMorning.find(searchStr)!=-1):}}
+                                         		<input id="m_{{=str(i)+'_'+str(m)}}" type="checkbox" value="{{=record.area_id}}|{{=record.area_name}}"  onclick="checkAll({{=str(iShow)}})" checked="checked"/>
+                                                {{else:}}
+                                                
+                                                <input id="m_{{=str(i)+'_'+str(m)}}" type="checkbox" value="{{=record.area_id}}|{{=record.area_name}}"  onclick="checkAll({{=str(iShow)}})"/>
+                                                {{pass}}
+                                               
+                                           
+                                            {{pass}}
+                                       
+                                   
+                                  {{else:}} 
+
+
+                                       {{searchStr='<'+setDate+'>'+record.microunion_name}}
+                                           {{if (status=='Draft'):}}
+                                           
+                                               {{if (strValueMorning.find(searchStr)!=-1):}}
+                                         		<input id="m_{{=str(i)+'_'+str(m)}}" type="checkbox" value="{{=record.microunion_id}}|{{=record.microunion_name}}"  onclick="checkAll({{=str(iShow)}})" checked="checked"/>
+                                                {{else:}}
+                                                
+                                                <input id="m_{{=str(i)+'_'+str(m)}}" type="checkbox" value="{{=record.microunion_id}}|{{=record.microunion_name}}"  onclick="checkAll({{=str(iShow)}})"/>
+                                                {{pass}}
+                                            
+                                             {{pass}}
+                                 {{pass}}
+                            {{pass}}
+                                                       
+                           
+                            {{if (session.userType=='sup'):
+                            
+                       		searchStr='<'+setDate+'>'+record.level_name
+                       		 
+                             if ((strValueMorning.find(searchStr)!=-1)& ((status=='Submitted') | (status=='Confirmed'))):}}
+							 
+                             <a href="{{=link_path}}?setDate={{=setDate}}&setTime=Morning&area={{=record.level_name}}&this_val={{=session.monthPass}}" >   
+                       	
+							{{=record.level_name}}</a>|{{=strValueMorning.split(searchStr)[1].split('<rdrd>')[1]}}|{{=strValueMorning.split(searchStr)[1].split('<rdrd>')[2].split('<')[0]}}|{{=strValueMorning.split(searchStr)[1].split('<rdrd>')[3].split('<')[0]}}<br>
+											
+                             {{pass}}
+                             {{if (status=='Draft'):
+                             =record.level_name }}<br>
+                             {{ pass}}
+                            
+                       {{ pass}}
+                       
+
+                        {{if (session.userType=='rep'):}}
+                        
+                                  
+                            {{if (userSin=='SIN'):
+                            	 searchStr='<'+setDate+'>'+record.area_name
+                                 if ((strValueMorning.find(searchStr)!=-1)& ((status=='Submitted') | (status=='Confirmed'))):}}
+                                 <a href="{{=link_path}}?setDate={{=setDate}}&setTime=Morning&area={{=record.area_name}}&this_val={{=session.monthPass}}" >       
+                                
+                               {{=record.area_name}}</a>|{{=strValueMorning.split(searchStr)[1].split('<rdrd>')[1]}}|{{=strValueMorning.split(searchStr)[1].split('<rdrd>')[2].split('<')[0]}}|{{=strValueMorning.split(searchStr)[1].split('<rdrd>')[3].split('<')[0]}}<br>
+											
+                                {{pass}}
+                                
+                                
+                                {{if (status=='Draft'):
+                                =record.area_name}}<br>
+                              {{  pass}}
+                            
+                           {{ else: 
+                                
+                            	searchStr='<'+setDate+'>'+record.microunion_name
+                                if ((strValueMorning.find(searchStr)!=-1)& ((status=='Submitted') | (status=='Confirmed'))):}}
+                                <a href="{{=link_path}}?setDate={{=setDate}}&setTime=Morning&area={{=record.microunion_name}}&this_val={{=session.monthPass}}">
+
+                               {{=record.microunion_name}}</a>|{{=strValueMorning.split(searchStr)[1].split('<rdrd>')[1]}}|{{=strValueMorning.split(searchStr)[1].split('<rdrd>')[2].split('<')[0]}}|{{=strValueMorning.split(searchStr)[1].split('<rdrd>')[3].split('<')[0]}}<br>
+											
+                                {{pass}}
+                                
+                                {{if (status=='Draft'):
+                                =record.microunion_name}}<br>
+                                {{pass}}
+                                 
+                                
+                            {{pass}}
+                             
+                        {{pass}}
+                        
+                        
+                        
+                        
+                            
+                        
+                      {{ pass}}  
+                     
+                      {{mCount=mCount+1}}
+                      {{pass }}
+                      
+         
+                      
+                       {{if (session.monthPass=='This' and i >= int(crrDate)) or session.monthPass=='Next':}}
+                             {{searchStr='<'+setDate+'>LEAVE'}}
+                                 {{if (status=='Draft'):}}
+                                    
+                                        {{if (strValueMorning.find(searchStr)!=-1):}}
+                                      <input id="l_{{=str(iShow)}}" type="checkbox" value="LEAVE|LEAVE"  onclick="uncheckAll('l_'+{{=str(iShow)}})" checked="checked" />
+                                      {{else:}}
+                                       <input id="l_{{=str(iShow)}}" type="checkbox" value="LEAVE|LEAVE"  onclick="uncheckAll('l_'+{{=str(iShow)}})" />
+                                      {{pass}}
+                                  {{pass}}
+                      
+                      
+                                  {{if ((strValueMorning.find(searchStr)!=-1)& ((status=='Submitted') | (status=='Confirmed'))):}}
+                                    LEAVE<br>
+                                   {{pass}}
+                                {{if (status=='Draft'):}}
+                                  LEAVE<br>
+                                  {{pass}}
+                       {{pass}}
+                       
+                      {{if (session.monthPass=='This' and i >= int(crrDate)) or session.monthPass=='Next':}}
+                                   {{searchStr='<'+setDate+'>HOLYDAY'}}
+                                      {{if (status=='Draft'):}}
+                                      <input id="h_{{=str(iShow)}}" type="checkbox" value="HOLYDAY|HOLYDAY" onclick="uncheckAll('h_'+{{=str(iShow)}})"  />
+                                      {{pass}}
+                                  {{#pass}}
+                                  
+                                  {{if ((strValueMorning.find(searchStr)!=-1)& ((status=='Submitted') | (status=='Confirmed'))):}}
+                                  HOLYDAY<br>
+                                  {{pass}}
+                                  {{if (status=='Draft'):}}
+                                  HOLYDAY<br>
+                                  {{pass}}
+                       {{pass}}
+
+
+
+                        {{if (session.monthPass=='This' and i >= int(crrDate)) or session.monthPass=='Next':}}
+                             {{searchStr='<'+setDate+'>HALFDAY'}}
+                                 {{if (status=='Draft'):}}
+                                    
+                                      {{if (strValueMorning.find(searchStr)!=-1):}}
+                                      <input id="hd_{{=str(iShow)}}" type="checkbox" value="HALFDAY|HALFDAY"  onclick="uncheckAll('hd_'+{{=str(iShow)}})" checked="checked" />
+                                      {{else:}}
+                                       <input id="hd_{{=str(iShow)}}" type="checkbox" value="HALFDAY|HALFDAY"  onclick="uncheckAll('hd_'+{{=str(iShow)}})" />
+                                      {{pass}}
+                                  {{pass}}
+                      
+                      
+                                  {{if ((strValueMorning.find(searchStr)!=-1)& ((status=='Submitted') | (status=='Confirmed'))):}}
+                                    HALFDAY<br>
+                                   {{pass}}
+                                {{if (status=='Draft'):}}
+                                 HALFDAY<br>
+                                  {{pass}}
+                       {{pass}}
+                       
+                       
+                       
+                       {{if (session.monthPass=='This' and i >= int(crrDate)) or session.monthPass=='Next':}}
+                             {{searchStr='<'+setDate+'>MEETING'}}
+                                 {{if (status=='Draft'):}}
+                                    
+                                        {{if (strValueMorning.find(searchStr)!=-1):}}
+                                      <input id="m_{{=str(iShow)}}" type="checkbox" value="MEETING|MEETING"  onclick="uncheckAll('m_'+{{=str(iShow)}})" checked="checked" />
+                                      {{else:}}
+                                       <input id="m_{{=str(iShow)}}" type="checkbox" value="MEETING|MEETING"  onclick="uncheckAll('m_'+{{=str(iShow)}})" />
+                                      {{pass}}
+                                  {{pass}}
+                      
+                      
+                                  {{if ((strValueMorning.find(searchStr)!=-1)& ((status=='Submitted') | (status=='Confirmed'))):}}
+                                    MEETING<br>
+                                   {{pass}}
+                                {{if (status=='Draft'):}}
+                                 MEETING<br>
+                                  {{pass}}
+                       {{pass}}
+                       </div>
+                       
+                      </td>
+                      
+                      
+  
+  
+  					<!--Evening-->
+                      
+                     
+                      <td width="45%" >
+                       <div id="de_{{=iShow}}">
+                      {{for e,record in enumerate(marketTourRows):}}
+                       {{if (session.monthPass=='This' and i >= int(crrDate)) or session.monthPass=='Next':}}
+                           {{if (session.userType=='rep'):}}
+                           		{{if (userSin=='SIN'):}}
+                                        {{searchStrE='<'+setDate+'>'+record.area_name}}
+                                        {{if (status=='Draft'):}}
+                                        {{#=searchStrE}}
+                                        
+                                            {{if (strValueMorningE.find(searchStrE)!=-1):}}
+                                                <input id="e_{{=str(i)+'_'+str(e)}}" type="checkbox" value="{{=record.area_id}}|{{=record.area_name}}" onclick="checkAll({{=str(iShow)}})" checked="checked" />
+                                            {{else:}}
+                                                <input id="e_{{=str(i)+'_'+str(e)}}" type="checkbox" value="{{=record.area_id}}|{{=record.area_name}}" onclick="checkAll({{=str(iShow)}})" />
+                                            {{pass}}
+                                            
+                                        {{pass}}
+                                
+                                 {{else:}}
+                                            {{searchStrE='<'+setDate+'>'+record.microunion_name}}
+                                            {{if (status=='Draft'):}}
+                                                    {{#=searchStrE}}
+                                                    
+                                         
+                                               {{if (strValueMorningE.find(searchStrE)!=-1):}}
+                                                    <input id="e_{{=str(i)+'_'+str(e)}}" type="checkbox" value="{{=record.microunion_id}}|{{=record.microunion_name}}" onclick="checkAll({{=str(iShow)}})" checked="checked" />
+                                              {{else:}}
+                                                    <input id="e_{{=str(i)+'_'+str(e)}}" type="checkbox" value="{{=record.microunion_id}}|{{=record.microunion_name}}" onclick="checkAll({{=str(iShow)}})" />
+                                              {{pass}}
+                                              
+                                            {{pass}}
+                                 {{pass}}
+                           {{pass}}
+                           {{if (session.userType=='sup'):}}
+                     			{{searchStrE='<'+setDate+'>'+record.level_name}}
+                                {{if (status=='Draft'):}}
+                     
+                                    {{#=searchStrE}}
+                                    {{if (strValueMorningE.find(searchStrE)!=-1):}}     	
+                                       
+                                        <input id="e_{{=str(i)+'_'+str(e)}}" type="checkbox" value="{{=record.level_id}}|{{=record.level_name}}" onclick="checkAll({{=str(iShow)}})" checked="checked" />
+                                    {{else:}}
+                                        <input id="e_{{=str(i)+'_'+str(e)}}" type="checkbox" value="{{=record.level_id}}|{{=record.level_name}}" onclick="checkAll({{=str(iShow)}})" />
+                                    {{pass}}
+                               {{pass}}
+                           {{pass}}
+                           
+                           {{if (session.userType=='sup'):
+                     		searchStrE='<'+setDate+'>'+record.level_name
+                     		if ((strValueMorningE.find(searchStrE)!=-1) & ((status=='Submitted') | (status=='Confirmed'))):}}
+                            
+                                <a href="{{=link_path}}?setDate={{=setDate}}&setTime=Evening&area={{=record.level_name}}&this_val={{=session.monthPass}}" >           
+                       			
+                                {{=record.level_name}}</a>|{{=strValueMorningE.split(searchStrE)[1].split('<rdrd>')[1]}}|{{=strValueMorningE.split(searchStrE)[1].split('<rdrd>')[2].split('<')[0]}}|{{=strValueMorningE.split(searchStrE)[1].split('<rdrd>')[3].split('<')[0]}}<br>
+                                                                        
+                            {{pass}}
+                           
+                            {{if  (status=='Draft'):
+                       			=record.level_name}}<br>
+                            {{pass}}
+                            
+                        {{pass}}
+                           {{if (session.userType=='rep'):}}
+                          
+                          		{{if (userSin=='SIN'):
+                                        searchStrE='<'+setDate+'>'+record.area_name
+                                         if ((strValueMorningE.find(searchStrE)!=-1) & ((status=='Submitted') | (status=='Confirmed'))):}}
+                                         
+                                          <a href="{{=link_path}}?setDate={{=setDate}}&setTime=Evening&area={{=record.area_name}}&this_val={{=session.monthPass}}" >  
+                                       
+										{{=record.area_name}}</a>|{{=strValueMorningE.split(searchStrE)[1].split('<rdrd>')[1]}}|{{=strValueMorningE.split(searchStrE)[1].split('<rdrd>')[2].split('<')[0]}}|{{=strValueMorningE.split(searchStrE)[1].split('<rdrd>')[3].split('<')[0]}}<br>
+                                         
+                                         {{pass}}
+                                         
+                                         {{if  (status=='Draft'):
+                                        =record.area_name}}<br>
+                                       
+                                        {{pass}}
+                                       
+                                     
+                                 {{else:
+                                 
+                                      searchStrE='<'+setDate+'>'+record.microunion_name
+                                      
+                                      
+                                       if ((strValueMorningE.find(searchStrE)!=-1) & ((status=='Submitted') | (status=='Confirmed'))):}}
+									   <a href="{{=link_path}}?setDate={{=setDate}}&setTime=Evening&area={{=record.microunion_name}}&this_val={{=session.monthPass}}" >
+
+
+                                        {{=record.microunion_name}}</a>|{{=strValueMorningE.split(searchStrE)[1].split('<rdrd>')[1]}}|{{=strValueMorningE.split(searchStrE)[1].split('<rdrd>')[2].split('<')[0]}}|{{=strValueMorningE.split(searchStrE)[1].split('<rdrd>')[3].split('<')[0]}}<br>
+											
+                                      {{  pass}}
+                                       
+                                      {{if  (status=='Draft'):
+                                        =record.microunion_name}}{{#=strValueMorningE.split('<rdrd>')[1]}}<br>
+                                       {{pass}}  
+                                     
+                                    
+                                {{ pass}}
+                                
+                           {{ pass}}
+                           
+                           
+                        {{pass}} 
+                      {{pass}}
+
+
+
+
+                      {{if (session.monthPass=='This' and i >= int(crrDate)) or session.monthPass=='Next':}}
+                                     {{searchStrE='<'+setDate+'>HALF DAY'}}
+                                         {{if (status=='Draft'):}}
+                                            
+                                                {{if (strValueMorningE.find(searchStrE)!=-1):}}
+                                              <input id="ehd_{{=str(iShow)}}" type="checkbox" value="HALF DAY|HALF DAY"  onclick="uncheckAll('ehd_'+{{=str(iShow)}})" checked="checked" />
+                                              {{else:}}
+                                               <input id="ehd_{{=str(iShow)}}" type="checkbox" value="HALF DAY|HALF DAY"  onclick="uncheckAll('ehd_'+{{=str(iShow)}})" />
+                                              {{pass}}
+                                          {{pass}}
+                              
+                              
+                                          {{if ((strValueMorningE.find(searchStrE)!=-1)& ((status=='Submitted') | (status=='Confirmed'))):}}
+                                            HALF DAY<br>
+                                           {{pass}}
+                                        {{if (status=='Draft'):}}
+                                          HALF DAY<br>
+                                          {{pass}}
+                               {{pass}}
+                               
+                               
+                         
+                         
+                         {{if (session.monthPass=='This' and i >= int(crrDate)) or session.monthPass=='Next':}}
+                                     {{searchStrE='<'+setDate+'>Meeting'}}
+                                         {{if (status=='Draft'):}}
+                                            
+                                                {{if (strValueMorningE.find(searchStrE)!=-1):}}
+                                              <input id="em_{{=str(iShow)}}" type="checkbox" value="Meeting|Meeting"  onclick="uncheckAll('em_'+{{=str(iShow)}})" checked="checked" />
+                                              {{else:}}
+                                               <input id="em_{{=str(iShow)}}" type="checkbox" value="Meeting|Meeting"  onclick="uncheckAll('em_'+{{=str(iShow)}})" />
+                                              {{pass}}
+                                          {{pass}}
+                              
+                              
+                                          {{if ((strValueMorningE.find(searchStrE)!=-1)& ((status=='Submitted') | (status=='Confirmed'))):}}
+                                            Meeting<br>
+                                           {{pass}}
+                                        {{if (status=='Draft'):}}
+                                          Meeting<br>
+                                          {{pass}}
+                               {{pass}}
+                      
+                      </div>
+                      </td>
+                      
+                      
+                     
+                     <input type="hidden" name="m_Count" id="m_Count" value="{{=mCount}}"   />
+  				</tr>
+			   {{
+               i=i+1
+               pass}}
+               
+               {{if  (status=='Draft'):}}
+               <tr  align="left" class="blackCat"  style="font-size:13px">
+                        <td colspan="3" >
+                        <div id="sResult" style="font-size:16px; color:#00C"></div>
+                        <div id="wait_image" style="visibility:hidden"><img  style="" width="50px;" src="loading.gif" alt=""></div>
+                        <div id="sResultButton" style="font-size:16px; color:#00C">
+                          <input  type="submit" onclick="tourSave()" name="input" id="input" style="width:100%; height:30px" value="         Save         "   class="button_update" title=""/>
+                          </div>
+                          <br><br>
+                        </td>
+                      </tr>
+                      <tr  align="left" class="blackCat"  style="font-size:13px">
+                        <td colspan="3" >
+                        <div id="sResultButton1" style="font-size:16px; color:#00C">
+                          <input  type="submit" onclick="tour()" name="input" id="input" style="width:100%; height:30px" value="         Submit         "   class="button_update" title=""/></div>
+                        </td>
+                      </tr>
+</table>
+			{{pass}}
+
+
+
+	      </td>
+        </tr>
+    </table>
+    <br><br><br><br><br><br>
+
+
+

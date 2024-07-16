@@ -1,0 +1,219 @@
+
+{{extend 'layout.html'}}
+  
+  <style type="text/css">
+ input[type=text], input[type=password],  select {
+    margin: 2px 0px 2px 0px;
+}
+div.error {
+    width: 250px;
+}
+
+.rptlist{font-size:15px; height:auto; }
+.rptlist:hover{ height:auto;}
+.rptul{color:#0076AE; background-color:#F0F0F0;}
+.rptdiv{  font-size:16px; color:#0076AE; background-color:#F0F0F0;}
+
+#accordionReport ul{	list-style-type:none;margin:0; font-size:15px; }
+#accordionReport li{ margin:1px; border-radius:5px; border-bottom:1px solid #CCCCCC; font-size:15px; background-color:#F7F7F7; height:20px; padding:5px 2px 2px 15px;}/*:#F7F7F7*/
+
+#accordionReport li:hover{ height:21px;background-color:#F5F5F5; font-size:15px;}
+
+
+ </style>
+
+<script>
+ $(function() { 
+		
+	$( "#accordionReport" ).accordion({
+	  active:false,
+      heightStyle: "content",
+	  collapsible: true
+    });
+	
+  });
+  </script>
+
+ 
+<table width="100%"  border="0" cellspacing="0" cellpadding="0" style="background-color:#FFFFFF;" >
+  <tr height="30px" >
+    <td width="450"><span class="blackCatTitle">Visit - Details</span></td>
+    <form action="{{=URL(c='order_invoice',f='order',args=[page])}}" method="post">
+    <td width="510" style="text-align:right"><input name="" type="submit"  value="Back"/></td>
+    </form>
+    <td>&nbsp;</td>
+  </tr>
+  <tr  height="1px" style="background-color:#CCCCCC;">
+	    <td colspan="3" ></td>
+  </tr>
+  </table>
+  
+  
+  <table width="100%" height="500px"  border="0" cellspacing="0" cellpadding="0" class="page_color"  >
+  <tr height="100%"  style="vertical-align:top;">
+    <td>
+	<table width="100%"  border="0" cellpadding="0" cellspacing="0"  >
+      <tr>
+        <td width="5">&nbsp;</td>
+        <td>
+          <table width="900">
+            <tr>
+              <td width="400" valign="top">
+                <table width="400">
+                  <tr>
+                    <td width="100"><strong>Visit Sl</strong></td>
+                    <td><strong>:</strong> {{=visitRow[0].id}}</td>
+                    </tr>
+                  <tr>
+                    <td width="100"><strong>Distributor</strong></td>
+                    <td><strong>:</strong> {{=visitRow[0].depot_id}}-{{=visitRow[0].depot_name}}</td>
+                  </tr>
+                  <tr>
+                    <td width="100"><strong>Visit Date</strong></td>
+                    <td><strong>:</strong> {{=visitRow[0].order_date}}</td>
+                  </tr>
+                  <tr>
+                    <td width="100"><strong>Visit Type</strong></td>
+                    <td><strong>:</strong> {{=visitRow[0].visit_type}}</td>
+                    </tr>
+                  </table>
+                
+                </td>
+              <td width="400" valign="top">
+                <table width="400">
+                  <tr>
+                    <td width="100"><strong>SPO/Sup</strong></td>
+                    <td><strong>:</strong> {{=visitRow[0].rep_id}} - {{=visitRow[0].rep_name}}</td>
+                    </tr>
+                  <tr>
+                    <td width="100"><strong>Mobile</strong></td>
+                    <td><strong>:</strong> {{=visitRow[0].mobile_no}}</td>
+                    </tr>
+                  <tr>
+                    <td width="100"><strong>Retailer</strong></td>
+                    <td><strong>:</strong> <strong>{{=visitRow[0].client_id}} - {{=visitRow[0].client_name}}</strong></td>
+                    </tr>
+                  <tr>
+                    <td width="100"><strong>Market</strong></td>
+                    <td><strong>:</strong> {{=visitRow[0].area_id}} - {{=visitRow[0].area_name}}</td>
+                    </tr>
+                  </table>
+                
+                
+                </td>
+              <td valign="top"><div style=" border:2px #CCCCCC; border-radius:5px; background-color:#000; box-shadow:3px 3px 5px #CCCCCC; text-align:center; color:#E9E9E9;">
+              <img src="http://i01.businesssolutionapps.com/lscrmap_image/static/visit_pic/{{=visitRow[0].visit_image}}" style="width:100px; height:100px;" alt="Image" />
+            <!--  <img src="{{=URL('static','visit_pic/'+visitRow[0].visit_image)}}" style="width:100px; height:100px;" alt="Image" />-->
+              
+              </div></td>
+              </tr>
+            </table>          
+        </td>
+        </tr>
+      <tr>
+        <td width="5">&nbsp;</td>
+        <td align="left" valign="top">
+        <div id="accordionReport"  style="width:90%">		 			  
+		   <div  class="rptdiv">
+                <ul class="rptul">
+                    <li class="rptlist">Market Info</li>
+                </ul>
+		   </div>
+		   <div >
+                <table width="900" border="1" cellpadding="1" cellspacing="1" class="sample_border" >
+                   <tr align="left" class="blackCatHead"  height="20px" ;"vertical-align:middle">
+                     <td width="120" >Brand</td>
+                      <td width="80" align="right" >MonthlySales</td>
+                      <td width="50" align="right" >Stock</td>
+                      <td width="50" align="right" >CreditAmount</td>
+                      <td width="50" align="right" >Price</td>
+                      <td width="50" align="right" >FreeBag</td>
+                      <td width="50" align="right" >RetailerComm.</td>
+                      <td width="50" align="right" >TradePromotion</td>
+                      <td >Remarks</td>
+                  </tr>			   	  
+                    {{for mrow in marketInfoRows:}}			    	          
+                    <tr  align="left" class="blackCat"  style="vertical-align:middle">
+                      <td width="120" >{{=mrow.brand_name}}</td>
+                          <td width="80" align="right" >{{=mrow.monthly_sales}}</td>
+                          <td width="50" align="right" >{{=mrow.stock}}</td>
+                          <td width="50" align="right" >{{=mrow.credit_amt}}</td>
+                          <td width="50" align="right" >{{=mrow.price}}</td>
+                          <td width="50" align="right" >{{=mrow.free_bag}}</td>
+                          <td width="50" align="right" >{{=mrow.retailer_commission}}</td>
+                          <td width="50" align="right" >{{=mrow.trade_promotion}}</td>
+                          <td >{{=mrow.remarks}}</td>
+                    </tr>                  
+                    {{pass}}
+                </table>
+		</div>
+    	<div class="rptdiv"  >
+                <ul class="rptul" >
+                    <li class="rptlist" >Order</li>
+                </ul>
+            </div>
+          <div>
+			<table width="600" border="1" cellpadding="1" cellspacing="1" class="sample_border" >
+               <tr align="left" class="blackCatHead"  height="20px" ;"vertical-align:middle">
+                 <td width="180" >Item Name</td>
+                  <td width="100" >Item ID</td>
+                  <td width="100" >Category</td>
+                  <td width="80" align="right" >Qty</td>
+                  </tr>			   	  
+			    {{for orderRow in orderInfoRows:}}			    	          
+              		<tr  align="left" class="blackCat"  style="vertical-align:middle">
+              		  <td width="180" >{{=orderRow.item_name}}</td>
+                      <td width="100" >{{=orderRow.item_id}}</td>
+                      <td width="100" >{{=orderRow.category_id}}</td>
+                      <td width="80" align="right" >{{=orderRow.quantity}}</td>
+                      </tr>                  
+			    {{pass}}
+		    </table>          
+          </div>
+   		
+        	<div class="rptdiv"  >
+                <ul class="rptul" >
+                    <li class="rptlist" >Merchandizing</li>
+                </ul>
+            </div>
+          	<div>
+			<table width="900" border="1" cellpadding="1" cellspacing="1" class="sample_border" >
+               <tr align="left" class="blackCatHead"  height="20px" ;"vertical-align:middle">
+                  <td width="80" >Item ID</td>
+                  <td >Item Name</td>
+                  <td width="100" align="center" >Qty</td>
+                  <td width="100" align="center" >Visible</td>
+                  <td width="50" align="center" >Status</td>
+                  <td width="50" align="center" >Dismantled</td>
+                  <td width="50" align="center" >New?</td>
+                  <td width="100" align="center" >Installation Date</td>
+                </tr>			   	  
+			    {{for marchRow in visitMarcRows:}} 
+                    <tr  align="left" class="blackCat"  style="vertical-align:middle">
+                      <td width="80" >{{=marchRow.m_item_id}}</td> 
+                      <td >{{=marchRow.name}}</td>
+                      <td width="100" align="center" >{{=marchRow.qty}}</td>
+                      <td width="100" align="center" >{{=marchRow.visible}}</td>
+                      <td width="50" align="center" >{{=marchRow.condition_value}}</td>
+                      <td width="50" align="center" >{{=marchRow.dismantled}}</td>
+                      <td width="50" align="center" >{{if marchRow.new_flag==1:}}Yes{{pass}}</td>
+                      <td width="100" align="center" >{{=marchRow.installation_date}}</td>
+                    </tr>
+			    {{pass}}
+		    </table>        
+          </div>
+          
+      </div>
+        </td>
+      </tr>
+      
+      
+    </table>
+    
+	</td>
+  </tr>
+</table>
+<br />
+<br />
+
+

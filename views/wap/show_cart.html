@@ -1,0 +1,88 @@
+
+    
+{{extend 'layout_wap.html'}}
+    
+
+<table width="100%"  border="0" cellpadding="0" cellspacing="0">
+
+
+
+    
+    
+    <tr style="background-color:#DDDDDD">
+      <td colspan="2" align="left" >Route: Bashundhara </td>
+      </tr>
+    <tr style="background-color:#DDDDDD">
+      <td colspan="2"  align="left" >{{=session.wap_client_name}}[{{=session.wap_client_id}}]:</td>
+      </tr>
+	  
+    
+	{{for i in range(len(ins_list)):
+	dictData=ins_list[i]}}
+	
+	<form  name="form1" action="{{=URL(c='wap',f='item_change')}}" method="post"  >
+	<tr >
+      <td width="20" align="left" >{{#=dictData['qty']}}
+	  {{if (dictData['qty'].isdigit()):}}
+	  <input  type="text" name="item_qty" id="item_qty" size="2" value="{{=dictData['qty']}}"     />
+	  {{else:}}
+	  <input  type="text" name="item_qty" id="item_qty" size="2" value=""     />
+	  {{pass}}
+	  <input  type="hidden" name="item_id" id="item_id" size="2" value="{{=dictData['item_id']}}"   />
+	
+	   <input  type="hidden" name="category_id" id="category_id" size="2" value="{{=dictData['category_id']}}"   />
+	  <input  type="hidden" name="price" id="price" size="2" value="{{=dictData['price']}}"   />
+	  <input  type="hidden" name="item_name" id="item_name" size="2" value="{{=dictData['name']}}"   />
+	  </td>
+      <td  align="left" 
+	  
+	  {{if (dictData['qty'].isdigit()):}}
+	  style="color:"
+		{{else:}}
+	   style="color:#FF0000"
+	   {{pass}}
+	   
+	    >&nbsp;&nbsp;
+	  
+	  
+	  {{=dictData['name']}}[{{=dictData['item_id']}}]</td>
+      </tr>
+    <tr >
+      {{ pass}}
+    <tr>
+      <td align="left" >&nbsp;</td>
+      <td align="left" >
+	  <input type="submit" name="add_item" id="add_item" value="AddItem" />
+	  <input type="submit" name="submit" id="submit" value="Submit" /></td>
+    </tr>
+    <tr>
+      <td align="left" >&nbsp;</td>
+      <td align="left" ><a href="{{=URL(c='wap',f='menu')}}">Menu</a></td>
+    </tr>
+	</form>
+</table>   
+</div> 
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

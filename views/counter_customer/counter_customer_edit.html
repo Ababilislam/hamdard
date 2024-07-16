@@ -1,0 +1,137 @@
+{{extend 'layout.html'}}
+ 
+  <style type="text/css">
+	input[type=text], input[type=password],  select {
+		margin: 2px 0px 2px 0px;
+		width:250px;
+	}
+	
+	div.error {
+		width: 250px;
+	}
+	
+	#sm_doctor_gift_status{
+	width:auto;
+	}
+ </style>
+ 
+<table width="100%"  border="0" cellspacing="0" cellpadding="0" style="background-color:#FFFFFF;" >
+  <tr height="30px" >
+    <td width="300"><span class="blackCatTitle">Counter Customer-Edit</span></td>
+    
+	<form action="{{=URL(c='counter_customer',f='counter_customer_list')}}" method="post">
+	<td width="200" align="right"><input name="" type="submit"  value="Back"/></td>
+	</form>
+    <td>&nbsp;</td>
+  </tr>
+  <tr  height="1px" style="background-color:#CCCCCC;">
+	    <td colspan="3" ></td>
+  </tr>
+  </table>
+  
+  
+  <table width="100%" height="500px"  border="0" cellspacing="0" cellpadding="0" class="page_color"  >
+  <tr height="100%"  style="vertical-align:top;">
+    <td>
+	<table width="60%"  border="0" cellpadding="0" cellspacing="0"  >
+      <input type="hidden" name="record_id" id="record_id" value="{{=record_id}}"/>
+      <form action="{{=URL(c='counter_customer',f='counter_customer_edit', args=[record_id,customer_id])}}" method="post">
+
+                  <tr>
+                    <td width="150px" style="padding:10px"> Customer ID </td>
+                    <td>
+                    <input type="text" class="text" name="customer_id_btn" id="customer_id_btn" readonly value="{{=customer_id}}"style="width:150px;padding: 5px;"/></td>
+                    <td>&nbsp;</td>
+                  </tr>
+                  <tr>
+                    <td width="150px" style="padding:10px">Customer Name</td>
+                    <td>
+                    <input type="text" class="text" name="customer_name_btn" id="customer_name_btn" value="{{=customer_name}}"style="width:150px;padding: 5px"/></td>
+                    <td>&nbsp;</td>
+                  </tr>
+                  <tr>
+                    <td width="150px" style="padding:10px"> Phone </td>
+                    <td>
+                    <input type="text" class="text" name="phone_btn" id="phone_btn"  value="{{=phone}}"style="width:150px;padding: 5px;"/></td>
+                    <td>&nbsp;</td>
+                  </tr>
+                  <tr>
+                    <td width="150px" style="padding:10px">Gender</td>
+                    <td>
+                    <!-- <input type="text" class="text" name="gender_btn" id="gender_btn" value="{{#=gender}}"style="width:150px;padding: 5px"/> -->
+                    <select id="gender_btn" name="gender_btn" style="width:160px" required>
+                      {{if gender != '' or gender != None or gender != 'None':}}
+                      <option value="{{=gender}}">{{=gender}}</option>
+                      <option value="Male">Male</option>
+                      <option value="Female">Female</option>
+                      {{else:}}
+                      <option value="Male">Male</option>
+                      <option value="Female">Female</option>
+                      {{pass}}
+                    </select>
+                    </td>
+                    <td>&nbsp;</td>
+                  </tr>
+                  <tr>
+                    <td width="150px" style="padding:10px">Age</td>
+                    <td>
+                    <input type="text" class="text" name="age_btn" id="age_btn" value="{{=age}}"style="width:150px;padding: 5px"/></td>
+                    <td>&nbsp;</td>
+                  </tr>
+                  <tr>
+                    <td width="150px" style="padding:10px">Customer&nbsp;Category</td>
+                    <td>
+                    <select id="customer_category_btn" name="customer_category_btn" style="width:160px" required>
+                      {{if customer_category != '' or customer_category != None or customer_category != 'None':}}
+                      <option value="{{=customer_category}}">{{=customer_category}}</option>
+                      <option value="General Customer">General Customer</option>
+                      <option value="STAFF">STAFF</option>
+                      {{else:}}
+                      <option value="General Customer">General Customer</option>
+                      <option value="STAFF">STAFF</option>
+                      {{pass}}
+                    </select>
+                    </td>
+                    <td>&nbsp;</td>
+                  </tr>
+                  <tr>
+                    <td width="150px" style="padding:10px">Staff ID</td>
+                    <td>
+                    <input type="text" class="text" name="staff_id_btn" id="staff_id_btn" value="{{=staff_id}}"style="width:150px;padding: 5px"/></td>
+                    <td>&nbsp;</td>
+                  </tr>
+                  <tr>
+                    <td>&nbsp;&nbsp;</td>
+                  </tr>
+
+                  <tr >
+                   <td width="150px" >&nbsp;</td>
+                    <td style="margin-left: 10px;">
+                      <input type="submit" name="btn_delete" id="btn_delete" value=" Delete  " style="vertical-align:middle;height:25px ;"onclick="if (!confirm('Do you really want to delete?')) { return false }">
+                    </td>
+                    <td>&nbsp;&nbsp;</td>
+                  </tr>
+                 
+                  <tr>
+                    <td width="150px" >&nbsp;</td>
+                    <td style="margin-left: 10px;">
+                      <input type="submit" name="update_btn" id="update_btn" value=" Update " style="vertical-align:middle;height:25px ;" >
+                    </td>
+                    <td>&nbsp;</td>
+                  </tr>
+      			
+      			<tr height="2px">
+                    <td width="100"></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                  </tr>
+                </form>
+          </table>
+       
+      </tr>
+    </table>
+	</td>
+  </tr>
+</table>
+

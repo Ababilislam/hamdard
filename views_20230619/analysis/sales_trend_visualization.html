@@ -1,0 +1,164 @@
+{{extend 'layout_report.html'}}
+<html>
+<head>
+<script type="text/javascript">
+function print_page()
+  {
+    window.print()
+  }
+</script>
+
+
+<link rel="stylesheet" href="{{=URL('static', 'jchart/styles/jchartfx.css')}}" type="text/css" />
+<script src="{{=URL('static','jchart/js/jchartfx.system.js')}}"></script>
+<script src="{{=URL('static','jchart/js/jchartfx.coreVector.js')}}"></script>
+<script src="{{=URL('static','jchart/js/jchartfx.advanced.js')}}"></script>
+
+<style type="text/css">
+.jchartfx .Title {
+     font-size:12pt;
+     font-weight: bold;
+	 color:#000000;
+}
+
+input[type=submit] {
+    margin: 2px 0px 2px 0px;
+	padding: 0px 0px 2px 0px;
+	width:250px;
+}
+input[type=text] {
+	width:120px;
+}
+
+.checkbox{
+padding-left:0px;
+}
+.multiselect{ 
+		text-align:left;
+		height:28px;
+}
+
+<!--Chart color-->
+	.jchartfx .Attribute3{
+		 fill:#C44000;
+	}
+	.jchartfx .Attribute0{
+		 fill:#4F81BD; 
+	}
+	.jchartfx .Attribute1{
+		 fill:#C0504D;
+	}
+	
+	  .jchartfx .Attribute0Line{
+		 stroke:#C0504D;
+		 stroke-width:2;
+	}
+	 .jchartfx .Attribute1Line{
+		 stroke:#4F81BD;
+		 stroke-width:2;	
+	}
+	<!--color-->
+	
+</style>
+
+
+<script type="text/javascript" language="javascript">   
+	var chart2;
+    function loadChart()
+      {
+		//------------------------Type Wise Patient
+		chart2 = new cfx.Chart();
+		chart2.getData().setSeries(1);
+		
+		var series2 = chart2.getSeries().getItem(0);
+		chart2.setGallery(cfx.Gallery.Lines);
+		
+		var title = new cfx.TitleDockable();
+		title.setText("Sales Trend Visualization - {{=str(monthName)}}'{{=str(year)}}");
+		title.setAlignment(cfx.StringAlignment.Center);
+		
+		chart2.getTitles().add(title);
+		
+		//chart2.getSeries().getItem(0).setColor("#FF0000");
+		//chart2.getSeries().getItem(0).setColor("#FFFF00");
+				
+		var dataPtype= new Array();
+		dataPtype=eval($('#chartDataReport').val());
+		
+		chart2.setDataSource(dataPtype);
+		chart2.getAllSeries().getPointLabels().setVisible(true);
+		chart2.getLegendBox().setVisible(true);
+		
+		var divHolder2 = document.getElementById('ChartDivReport');
+		chart2.create(divHolder2); 
+		//---------------------------------------------------------
+		
+	}
+</script>
+
+<script>
+ $(function() {
+	$("#ChartDivReport").empty();		
+	 loadChart();
+  });
+  </script>
+
+</head>
+
+<body id="htmlbody">
+<input type="hidden" value="{{=salesTrendList}}" id="chartDataReport"/>
+
+
+<div class="blackCatTitle">&nbsp;Sales Trend Visualization ({{=str(year)}}-{{=str(monthName)}})</div>
+
+
+<br/>
+<div id="ChartDivReport" style="width:900px;height:450px;"></div>
+
+<table width="700px" cellspacing="1" cellpadding="1">
+	
+  <tr>
+		<td>
+			<table width="900" border="1" cellpadding="1" cellspacing="1" class="sample_border" >                
+                <tr align="left" class="blackCatHead" height="20px" ;  style="font-size:12px;background-color:#E6E6E6">
+                  <td width="300"  style="border-right-width:3px;">Day</td>
+                  <td width="120" align="right"  >Lifting Plan</td>
+                  <td width="120" align="right"  >Actual</td>
+                  </tr>
+                
+                {{totalPlan=0}}
+                {{totalAchievement=0}}
+                
+                {{for i in range(len(salesTrendList)):}}
+                	{{recDate=salesTrendList[i]}}
+                
+              <tr  align="left" class="blackCat"  style="vertical-align:middle; font-size:11px;">
+                <td width="300" style="border-right-width:3px;">{{=recDate['Day']}}</td>
+                <td width="120" align="right" ><span style="border-right-width:3px;">{{=recDate['Lifting Plan']}}</span>{{totalPlan+=recDate['Lifting Plan']}}</td>
+                <td width="120" align="right" >{{=recDate['Actual']}}{{totalAchievement+=recDate['Actual']}}</td>
+              </tr>
+                {{pass}}
+                
+              <tr  align="left" class="blackCat"  style="vertical-align:middle; font-size:11px;">
+                <td width="300" style="border-right-width:3px;"><strong>Total</strong></td>
+                <td width="120" align="right" ><strong><span style="border-right-width:3px;">{{=totalPlan}}</span></strong></td>
+                <td width="120" align="right" ><strong>{{=totalAchievement}}</strong></td>
+              </tr>
+            
+            </table>
+		  
+	  </td>
+			
+	</tr>
+</table>
+
+
+<p>
+<br/>
+  
+  
+  <br/>
+</p>
+
+</body>
+</html>

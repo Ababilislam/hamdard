@@ -1,0 +1,264 @@
+{{extend 'layout.html'}}
+  <link rel="stylesheet" href="{{=URL('static', 'js_and_css/ui.theme.css')}}" type="text/css" />
+  <link rel="stylesheet" href="{{=URL('static', 'js_and_css/jquery-ui.css')}}" type="text/css" />
+  <link rel="stylesheet" href="{{=URL('static', 'js_and_css/style.css')}}" type="text/css" />
+   <script src="{{=URL('static','js_and_css/jquery-1.8.2.js')}}"></script>
+    <script src="{{=URL('static','js_and_css/jquery-ui.js')}}"></script>
+    
+ <style type="text/css">
+	input[type=text], input[type=password],  select {
+		margin: 2px 0px 2px 0px;
+		width:100px;
+	}
+	div.error {
+		margin-left:0px;
+		width:100px;
+	}
+	#uni_middle_str5{
+	width:300px;
+	}
+	.page_color,body{
+		font-family:Arial, Helvetica, sans-serif;
+		font-size:13px;	
+		}
+ </style>
+ 
+<script>
+var base_url=location.protocol + "//" + location.hostname + (location.port && ":" + location.port) + "/{{=request.application}}/";
+
+$(function() {
+	 	var valueListStr="";
+		
+		$('#search_type').blur(function(){
+			if ($('#search_type').val()=='DocID'){				
+				$.ajax({
+					  url: base_url+'default/get_doctor_list',
+					  success: function(resStr) {
+						  valueListStr=resStr
+					  }
+					});
+			}else if ($('#search_type').val()=='Status'){
+				valueListStr='ACTIVE,INACTIVE'
+				
+			}else if ($('#search_type').val()=='RouteID'){
+				$.ajax({
+					  url: base_url+'default/get_area_list',
+					  success: function(resStr) {
+						  valueListStr=resStr
+					  }
+					});
+			
+			}else if ($('#search_type').val()=='DepotID'){
+				$.ajax({
+					  url: base_url+'default/get_depot_list',
+					  success: function(resStr) {
+						  valueListStr=resStr
+					  }
+					});
+			
+			}else if ($('#search_type').val()=='Region'){
+				$.ajax({
+					  url: base_url+'default/get_region_list',
+					  success: function(resStr) {
+						  valueListStr=resStr
+					  }
+					});
+			
+			}else if ($('#search_type').val()=='RepID'){
+				$.ajax({
+					  url: base_url+'default/get_all_ff_list',
+					  success: function(resStr) {
+						  valueListStr=resStr
+					  }
+					});
+			};			
+	 	});
+	 	
+		$('#search_value').keyup(function(){
+			//-------------------------
+			var valueList = valueListStr.split(',');				
+			var searchValue=$("#search_value").val();
+			
+			//---------------- auto complete combo list
+			var valueList_new=new Array();
+			lc=0;
+			i =0;
+			var valueStr="";				
+			while (i < valueList.length)
+			{
+				valueStr=valueList[i];
+				i=i+1;					
+				var res=valueStr.toUpperCase().match(searchValue.toUpperCase());
+				if (res!=null){
+					valueList_new[lc]=valueStr;
+					lc=lc+1;
+					if (lc==30){
+						break;
+					};
+				}else{
+					continue;
+				}					
+			};
+			//alert (ref_list_new);
+			
+			//-------------- auto complete source
+			$( "input#search_value" ).autocomplete({
+				source: valueList_new
+			});
+		
+	  }); 
+	  
+}); 
+
+</script>
+
+ 
+<body class="claro">   
+<table width="100%"  border="0" cellspacing="0" cellpadding="0" style="background-color:#FFFFFF;" >
+  <tr height="30px" >
+    <td width="800"><span class="blackCatTitle">Doctor Visit</span></td>
+    
+	<form action="{{=URL(c='doctor',f='doctor_home')}}" method="post">
+	<td width="210" align="right"><!--<input name="" type="submit"  value="Back"/>--></td>
+	</form>
+	
+	
+    <td>&nbsp;</td>
+  </tr>
+  <tr  height="1px" style="background-color:#CCCCCC;">
+	    <td colspan="3" ></td>
+  </tr>
+</table>
+  
+  <table width="100%" height="500px"  border="0" cellspacing="0" cellpadding="0" class="page_color" id="table_big"  >
+  <tr height="100%"  style="vertical-align:top;">
+    <td width="10px">&nbsp;</td>
+    <td>
+	<table width="100%"  border="0" cellpadding="0" cellspacing="0"  >
+      <tr>
+        <td>&nbsp;</td>
+      </tr>
+      <tr>
+        <td>
+		{{#if access_permission==True:}} 
+		<!--<table width="500" class="blackCat">
+		  {{#=form.custom.begin}}
+              <tr>
+                <td width="120"> Doctor ID </td>
+                <td>{{#=form.custom.widget.str1}}</td>
+              </tr>
+              <tr>
+                <td width="120">Field Force ID </td>
+                <td>{{#=form.custom.widget.str3}}</td>
+              </tr>
+              <tr>
+                <td width="120">Feedback</td>
+                <td>{{#=form.custom.widget.str5}}</td>
+              </tr>
+              
+              <tr>
+                <td width="120">&nbsp;</td>
+                <td>{{#=form.custom.submit}}</td>
+              </tr>
+              
+            <tr>
+              <td width="120"></td>
+              <td></td>
+             </tr>
+			   {{#=form.custom.end}}
+            </table>-->
+			{{#pass}} 
+		
+		<table width="1000" border="1"  class="sample_border" >
+          <form id="form1" name="form1" method="post" action="{{=URL(c='doctor_visit',f='doctor_visit_add')}}">
+            <tr align="left" class="blackCatHead"  height="20px">
+              <td width="100" height="28" >
+                <select name="search_type" id="search_type" style="width:250px" >
+                  <option selected="selected" value="">Select a Type</option>
+                  {{if session.searchType_docvisit=='DocID':}}<option value="DocID" selected="selected">Doctor ID/Name/Mobile</option>{{else:}}<option value="DocID" >Doctor ID/Name/Mobile</option>{{pass}}
+                  {{if session.searchType_docvisit=='RepID':}}<option value="RepID" selected="selected">Field-Force ID/Name/Mobile</option>{{else:}}<option value="RepID" >Field-Force ID/Name/Mobile</option>{{pass}}
+                  {{if session.searchType_docvisit=='Date':}}<option value="Date" selected="selected">Date</option>{{else:}}<option value="Date" >Date</option>{{pass}}
+                  {{if session.searchType_docvisit=='DepotID':}}<option value="DepotID" selected="selected">Depot ID/Name</option>{{else:}}<option value="DepotID" >Depot ID/Name</option>{{pass}}
+				</select>
+              </td>
+              <td width="300" >
+              
+              	{{if session.searchValue_docvisit=='' or session.searchValue_docvisit==None:}}
+                    <input  name="search_value" type="text" id="search_value" size="25" value="" placeholder="Select value" autocomplete="off" style="width:300px"/>
+                {{else:}}
+                    <input  name="search_value" type="text" id="search_value" size="25" value="{{=session.searchValue_docvisit}}" placeholder="Select value" autocomplete="off" style="width:300px"/>
+                {{pass}}
+              
+              </td>
+              <td align="left"  ><input type="submit" name="btn_filter" id="btn_filter" value="Filter"   class="button_update"/>
+                &nbsp;
+                <input type="submit" name="btn_filter_all" id="btn_filter_all" value="All"   class="button_update"/>
+                &nbsp;&nbsp;</td>
+              <td width="200" align="right"  ><a href="{{=URL(c='doctor_visit',f='download_doctor_visit')}}">
+                
+		  </td>
+          </tr>
+		  </form>
+        </table>
+          <br />
+			 <table width="1000" border="1" cellpadding="1" cellspacing="1" class="sample_border" >
+               <tr align="left" class="blackCatHead"  height="20px" ;>
+                 <td width="50" >Ref</td>
+                 <td width="200" >Doctor</td>
+                 <td width="200" >Field Force </td>
+                 <td width="150" >Visit Date </td>
+                 <td width="100" >Depot-Route</td>
+                 <td align="left" >Feedback</td>
+                 <td width="50" align="center" >Status</td>
+                 <td width="50" align="right" >GeoInfo</td>
+                 <td width="50" align="right" >Details</td>
+               </tr>
+			   
+	   {{ p=0}} 		  
+	   {{for i,record in enumerate(records):}}
+	   	  {{ if i==items_per_page: break}}
+		  <tr  align="left" class="blackCat"  style="vertical-align:middle; font-size:10px;">
+		    <td width="50" >{{=record.id}}</td> 
+		  <td width="200" >{{=record.doc_id}} | {{=record.doc_name}}</td>
+		  <td width="200" >{{=record.rep_id}} | {{=record.rep_name}}</td>
+		  <td width="150" >{{=record.visit_dtime}}</td>
+		  <td width="100" >{{=record.depot_id}} | {{=record.route_id}}</td>
+		  <td align="left" >{{=record.feedback}}</td>
+		  <td width="50" align="center"  >{{=record.ho_status}}</td>
+		  {{#=str(record.latitude)}}
+		  {{lat_long=str(record.latitude)+','+str(record.longitude)
+		  #=lat_long
+		  }}
+		  <td width="50" align="right"  >
+		  {{if (str(lat_long)!='0,0'): }}
+		  <a href="{{='https://maps.google.com/?q='+str(lat_long)}}" target="_blank">Location</a>
+		  {{pass}}
+		  </td>
+		  <td width="50" align="right"  >
+		  {{if record.giftnsample!='':}}
+		  <a href="{{=URL(c='doctor_visit',f='preview_doctor_visit',args=[page,record.doc_id,record.rep_id,record.depot_id,record.route_id],vars=dict(doc=record.doc_name,rep=record.rep_name,vsitdt=record.visit_dtime,feedbk=record.feedback,dtldata=record.giftnsample))}}" target="_blank">
+		  <input type="submit" name="btn_go" id="btn_go" value="&gt;&gt;"   class="button_update"/></a>	
+		  {{pass}}		  </td>
+		  </form>
+		</tr>
+			   {{pass}}
+		    </table>
+		  <br>
+		  
+		  </td></tr>
+    </table>
+   
+{{if page:}}
+<a href="{{=URL(args=[page-page])}}">first</a> |   
+<a href="{{=URL(args=[page-1])}}">previous</a> |
+{{pass}}
+
+{{if len(records)>items_per_page:}}
+<a href="{{=URL(args=[page+1])}}">next</a>
+{{pass}}
+
+</td>
+  </tr>
+</table>
+
+</body>

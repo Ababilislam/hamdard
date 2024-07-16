@@ -1,0 +1,125 @@
+{{extend 'layout_invoice.html'}}
+
+<html>
+
+<head>
+
+<script type="text/javascript">
+
+function print_page()
+  {
+    window.print()
+  }
+</script>
+
+</head>
+
+<body>
+<span style="float:right; font-size:14px">#23.02</span>
+<table width="900" cellpadding="0" cellspacing="0" style="border:none;" >
+    <tr >
+      <td width="300" ><div style="border: solid 2px #C4C4C4; width:100%; font-weight:bold;font-size:20px" >Adjustment Details</div></td>
+      <td width="100" align="right" >Date From</td>
+      <td width="2" >:</td>
+      <td width="100" >{{=datetime.datetime.strptime(str(fromDate),'%Y-%m-%d').strftime('%d-%b-%y')}}</td>
+      <td width="20" align="right" >To</td>
+      <td width="2" >:</td>
+      <td width="100" >{{=datetime.datetime.strptime(str(toDate),'%Y-%m-%d').strftime('%d-%b-%y')}}</td>
+      <td width="30" align="right" ><a href="{{=URL(c='report',f='adjustmentDetails_download',vars=dict(fromDate=fromDate,toDate=toDate,depotID=depotID,storeID=storeID))}}" >Download</a></td>
+      <td width="100" ><img style="width:80px;" src="{{=URL('static','images/comp_logo1.png')}}"/></td>
+  </tr>
+</table>
+
+<table width="900" border="1" cellpadding="1" cellspacing="1" class="sample_border" >
+<thead>
+  <tr align="left" class="blackCatHead" height="20px" ;  style="font-size:12px;border-top:solid 2px #999999">
+      <td width="50" align="center"  >Item Id</td>
+      <td width="80"  >Item Name</td>
+      <td width="80" align="center"  >Adj. No</td>
+      <td width="60" align="center"  >Date</td>
+      <td width="170" align="left"  > Location</td>
+      <td width="50" align="center"  >Type</td>
+      <td width="80" align="center"  >Quantity</td>
+      <td width="80" align="right"  > Trade Price</td>
+      
+  </tr>
+  </thead>
+  <tbody>
+	{{totalQty=0}}
+    {{totalTp=0}}
+    {{for i in range(len(recItemList)):}}
+        {{dictData=recItemList[i]}}        
+  
+  <tr  align="left" class="blackCat"  style="background-color:#F7F7F7; font-size:11px;">
+    <td width="50" align="center" style=" text-align:center;"><strong>{{=dictData['ItemID']}}</strong></td>
+    <td colspan="4" ><strong>{{=dictData['itemName']}}</strong></td>
+    <td width="50" align="right" style=" text-align:center; font-weight:bold;">&nbsp;</td>
+    <td width="80" align="right" style=" text-align:center; font-weight:bold;">{{=dictData['hQty']}}{{totalQty+=int(dictData['hQty'])}}</td> 
+    <td width="80" align="right" style=" text-align:right; font-weight:bold;">{{if dictData['hTp'] < 0:}}({{=easy_format(float(dictData['hTp'])*(-1))}}){{else:}}{{=easy_format(float(dictData['hTp']))}}{{pass}}{{totalTp+=float(dictData['hTp'])}}</td>                
+  </tr>
+      {{detailList=dictData['rDetails']}}
+      {{for j in range(len(detailList)):}}
+        {{dictDetData=detailList[j]}}   	
+  <tr align="left" style="background-color:#FBFBFB; font-size:11px">          		
+               <td height="18" colspan="2" align="center" ></td>
+               <td width="80" align="center" style="font-size:13px; font-weight:bold">{{=dictDetData['slNo']}}</td>
+               <td align="center" >{{=dictDetData['recDate']}}</td>
+                <td width="170" >{{=dictDetData['trFrom']}}:{{=dictDetData['trFromName']}}</td>
+                <td width="50" align="right" style=" text-align:center;">{{=dictDetData['adjType']}}</td>
+                <td width="80" align="right" style=" text-align:center;">{{=dictDetData['qty']}}</td>
+                <td width="80" align="right" style=" text-align:right;">{{if (float(dictDetData['recTp']) < 0):}}({{=easy_format(float(dictDetData['recTp'])*(-1))}}){{else:}}{{=easy_format(float(dictDetData['recTp']))}}{{pass}}</td>          	                      
+  </tr>     
+      {{pass}}  
+   {{pass}}
+   </tbody>
+</table>
+<table width="900" style="border: solid 1px #C4C4C4; margin:3px 0px;" >
+  <tr align="left" >          		
+       <td height="18" align="right" ><strong>Total </strong></td>
+      <td width="2" ><strong>:</strong></td>
+      <td width="80" align="right" ><strong>{{=totalQty}}</strong>&nbsp;&nbsp;</td>
+        <td width="100" align="right" style=" text-align:right;"><strong>{{if (float(totalTp) < 0):}}({{=easy_format(totalTp*(-1))}}){{else:}}{{=easy_format(totalTp)}}{{pass}}</strong></td>          	                      
+  </tr>  
+</table>   
+<br/>
+<table width="900" >
+	<tr>
+	  <td width="150" align="left">__________________</td>
+	  <td align="center">____________________________________</td>
+	  <td width="20" align="center">&nbsp;</td>
+	  <td width="180" align="center">&nbsp;</td>
+  </tr>
+	<tr>
+	  <td width="150" align="left"><strong>Store Department</strong></td>
+	  <td width="150" align="center"><span style=" font-style:italic;">for</span>&nbsp;<strong>{{=session.cName}}</strong></td>
+	  <td width="20" align="center">&nbsp;</td>
+	  <td width="180" align="center">&nbsp;</td>
+  </tr>
+</table>
+
+<!--{{ #if page: }}
+
+<a href="{{=URL(args=[page-page],vars=dict(fromDate=fromDate,toDate=toDate,depotID=depotID,depotName=depotName,storeID=storeID,storeName=storeName))}}">first</a> | 
+
+<a href="{{=URL(args=[page-1],vars=dict(fromDate=fromDate,toDate=toDate,depotID=depotID,depotName=depotName,storeID=storeID,storeName=storeName))}}">previous</a> |
+
+{{pass}}
+
+
+
+{{#if len(records)>items_per_page:}}
+
+<a href="{{=URL(args=[page+1],vars=dict(fromDate=fromDate,toDate=toDate,depotID=depotID,depotName=depotName,storeID=storeID,storeName=storeName))}}">next</a>
+
+{{pass}}-->
+
+
+
+<br/>
+
+
+
+</body>
+
+</html>
+

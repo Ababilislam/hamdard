@@ -1,0 +1,426 @@
+{{extend 'layout_sample_report.html'}}
+
+<html>
+<head>
+</head>
+<body>
+{{filter1=''; filter2=''; filter3='';}}
+
+{{    
+    if pr_year1!='':
+        filter1=str(pr_year1)
+    pass
+    
+    if pr_year2!='':
+        filter2=str(pr_year2)
+    pass        	
+    
+    if pr_quarter1!='':
+        filter1='Q'+str(pr_quarter1)+', '+str(pr_year1)
+    pass
+    
+    if pr_quarter2!='':
+        filter2='Q'+str(pr_quarter2)+', '+str(pr_year2)
+    pass 
+           
+    if pr_month1!='':
+        filter1=str(datetime.datetime.strptime(str(date_from_1),'%Y-%m-%d').strftime('%b-%y')) #'Q'+str(pr_quarter1)+', '+
+    pass
+    
+    if pr_month2!='':
+        filter2=str(datetime.datetime.strptime(str(date_from_2),'%Y-%m-%d').strftime('%b-%y')) #'Q'+str(pr_quarter2)+', '+
+    pass
+    
+    if pr_cycle1!='':
+        filter1='C'+pr_cycle1+', '+str(datetime.datetime.strptime(str(date_from_1),'%Y-%m-%d').strftime('%b-%y'))
+    pass
+    
+    if pr_cycle2!='':
+        filter2='C'+pr_cycle2+', '+str(datetime.datetime.strptime(str(date_from_2),'%Y-%m-%d').strftime('%b-%y'))
+    pass  
+    
+    
+    ## =====
+    if pr_year2!='':
+        filter3='Year : '+str(pr_year2)
+    pass
+    
+    if pr_quarter2!='':
+        filter3='Quarter : Q'+str(pr_quarter2)+', '+str(pr_year2)
+    pass 
+    
+    if pr_month2!='':
+        filter3='Month : '+str(datetime.datetime.strptime(str(date_from_2),'%Y-%m-%d').strftime('%b-%y')) #'Q'+str(pr_quarter2)+', '+
+    pass
+    
+    if pr_cycle2!='':
+        filter3='Type : C'+pr_cycle2+', '+str(datetime.datetime.strptime(str(date_from_2),'%Y-%m-%d').strftime('%b-%y'))
+    pass     
+    
+                  
+}}
+<table width="900px" style="border:none; text-align:center; font-weight:bold;" >
+        <tr >
+            <td width="104" >&nbsp;</td>
+            <td width="680" align="center" ><span style="border-bottom:1px solid #333;">Company Track </span></td>
+            <td width="100" ><img  height="30px" src="{{=URL('static','images/comp_logo1.png')}}"/></td>
+        </tr>
+</table>
+
+    <table width="900" style="border:none; font-weight:bold;" >
+        <!--<tr >
+            <td width="150"  >Pevious</td>
+            <td width="2" >:</td>
+            <td colspan="4" >{{#=date_from_1}}&nbsp;&nbsp; To &nbsp;&nbsp; {{#=date_to_1}}</td>    
+            <td width="100"  ></td>
+            <td width="2" ></td>
+            <td></td>
+            <td width="100"  ></td>
+            <td width="2" ></td>
+            <td></td>            
+        </tr>
+        <tr >
+            <td width="150"  >Current</td>
+            <td width="2" >:</td>
+            <td colspan="4" >{{#=date_from_2}}&nbsp;&nbsp; To &nbsp;&nbsp; {{#=date_to_2}}</td>    
+            <td width="100"  ></td>
+            <td width="2" ></td>
+            <td></td>
+            <td width="100"  ></td>
+            <td width="2" ></td>
+            <td></td>            
+        </tr>-->
+        <tr >
+            <td colspan="9" align="center"  >{{if filter3!='':}}{{=filter3}}{{else:}}{{pass}}</td>
+      </tr>
+      <tr >
+            <td width="50"  >REGION</td>
+            <td width="2" >:</td>
+            <td width="200" >{{=reg_name}}</td>    
+            <td width="50" align="right"  >ZM</td>
+            <td width="2" >:</td>
+            <td width="200">{{=pr_zone}}</td>
+            <td width="50" align="right"  >AM</td>
+            <td width="2" >:</td>
+            <td width="200">{{=pr_area}}</td> 
+        </tr>
+        
+    </table>
+        
+    <table width="900px" border="1" cellpadding="1" cellspacing="1" class="sample_border" >    
+        {{level0_sup_name=''}}
+        {{for j in range(len(recordListH0)):}}
+        {{recordListStrH0=recordListH1[j]}} 
+        
+        {{        
+        for k in range(len(supListH0)):
+            supListH0Str=supListH0[k]
+            if str(supListH0Str['level_id']).strip().upper()==str(recordListStrH0['zone_id']).strip().upper():
+                if level0_sup_name=='':
+                    level0_sup_name=supListH0Str['level0_sup_name']
+                else:
+                    level0_sup_name+=','+supListH0Str['level0_sup_name']
+                pass
+            pass
+        pass
+        
+        }} 
+           	
+        <tr align="left" style="background-color:#DBDBDB; font-size:11px; font-weight:bold;" >		    
+            <td colspan="10" >{{=recordListStrH0['zone_id']}}&nbsp;&nbsp;:{{=level0_sup_name}}</td> 
+            
+      	</tr>  
+        {{pass}}      
+    	<tr align="left" style="background-color:#EBEBEB; font-size:12px; font-weight:bold;" >		    
+            <td width="100" rowspan="2" >RM</td> 
+            <td width="250" rowspan="2" >RM TM</td> 
+            <td width="250" rowspan="2" >RM Name</td> 
+            <!--<td width="100" >P1_RX QTY</td>Previous-->
+            <td colspan="3" align="center" >{{if filter1!='':}}{{=filter1}}{{else:}}{{pass}}</td> 
+            <!--<td width="100" >P2_RX QTY</td>Current-->
+            <td colspan="3" align="center" >{{if filter2!='':}}{{=filter2}}{{else:}}{{pass}}</td> 
+            <td width="100" rowspan="2" align="right" >GROWTH (%)</td>
+      	</tr>
+        <tr align="left" style="background-color:#EBEBEB; font-size:12px; font-weight:bold;" >		    
+            <!--<td width="100" >P1_RX QTY</td>-->
+            <td width="100" align="center" >Base</td> 
+            <td width="100" align="center" >IPI</td>  
+            <td width="100" align="right" >%</td> 
+            <!--<td width="100" >P2_RX QTY</td>-->
+            <td width="100" align="center" >Base</td> 
+            <td width="100" align="center" >IPI</td>  
+            <td width="100" align="right" >%</td> 
+   	  </tr>
+      	
+        {{for i in range(len(recordList0)):}}
+        {{recordListStr0=recordList0[i]}} 
+        
+        
+              
+          	<tr  align="left" style="font-size:11px;">
+                <td width="100" >{{=recordListStr0['zone_id']}}</td>
+                <td width="250" >{{=recordListStr0['zone_name']}}</td>
+                <td width="250" >{{=level0_sup_name}}</td>
+                <!--<td width="100" align="center" >{{=recordListStr0['rxCount1']}}</td>-->
+                <td width="100" align="center" >{{=recordListStr0['med_total1']}}</td>
+                <td width="100" align="center" >{{=recordListStr0['med_self1']}}</td>
+                <td width="100" align="right">{{if recordListStr0['perP1']==None:}} {{else:}}{{=recordListStr0['perP1']}}{{pass}}</td>
+                <!--<td width="100" align="center" >{{=recordListStr0['rxCount2']}}</td>-->
+                <td width="100" align="center" >{{=recordListStr0['med_total2']}}</td>
+                <td width="100" align="center" >{{=recordListStr0['med_self2']}}</td>
+                <td width="100" align="right">{{if recordListStr0['perP2']==None:}} {{else:}}{{=recordListStr0['perP2']}}{{pass}}</td>
+                <td width="100" align="right">{{if recordListStr0['growth']==None:}} {{else:}}{{=recordListStr0['growth']}}{{pass}}</td>
+            </tr> 
+              
+        {{pass}}
+       
+	</table>
+
+    <br/>       
+        
+    <table width="900px" border="1" cellpadding="1" cellspacing="1" class="sample_border" >    
+        {{for j in range(len(recordListH1)):}}
+        {{recordListStrH1=recordListH1[j]}}
+         
+           	
+        <tr align="left" style="background-color:#DBDBDB; font-size:11px; font-weight:bold;" >		    
+            <td colspan="10" >{{=recordListStrH1['zone_id']}}&nbsp;&nbsp;:{{=level0_sup_name}}</td> 
+            
+      	</tr>  
+        {{pass}}      
+    	<tr align="left" style="background-color:#EBEBEB; font-size:12px; font-weight:bold;" >		    
+            <td width="100" rowspan="2" >ZM</td> 
+            <td width="250" rowspan="2" >ZM TM</td> 
+            <td width="250" rowspan="2" >ZM Name</td> 
+            <!--<td width="100" >P1_RX QTY</td>Previous-->
+            <td colspan="3" align="center" >{{if filter1!='':}}{{=filter1}}{{else:}}{{pass}}</td> 
+            <!--<td width="100" >P2_RX QTY</td>Current-->
+            <td colspan="3" align="center" >{{if filter2!='':}}{{=filter2}}{{else:}}{{pass}}</td> 
+            <td width="100" rowspan="2" align="right" >GROWTH (%)</td>
+      	</tr>
+        <tr align="left" style="background-color:#EBEBEB; font-size:12px; font-weight:bold;" >		    
+            <!--<td width="100" >P1_RX QTY</td>-->
+            <td width="100" align="center" >Base</td> 
+            <td width="100" align="center" >IPI</td>  
+            <td width="100" align="right" >%</td> 
+            <!--<td width="100" >P2_RX QTY</td>-->
+            <td width="100" align="center" >Base</td> 
+            <td width="100" align="center" >IPI</td>  
+            <td width="100" align="right" >%</td> 
+   	  </tr>
+      	
+        {{for i in range(len(recordList1)):}}
+        {{recordListStr1=recordList1[i]}}
+        	{{if recordListStrH1['zone_id']==recordListStr1['zone_id']:}}
+            {{  level1_sup_name=''    
+                for k in range(len(supListH1)):
+                    supListH1Str=supListH1[k]
+                    if str(supListH1Str['level_id']).strip().upper()==str(recordListStr1['reg_id']).strip().upper():
+                        if level1_sup_name=='':
+                            level1_sup_name=supListH1Str['level1_sup_name']
+                        else:
+                            level1_sup_name+=','+supListH1Str['level1_sup_name']
+                        pass
+                    pass
+                pass
+        
+       		 }}                               
+          	<tr  align="left" style="font-size:11px;">
+                <td width="100" >{{=recordListStr1['reg_id']}}</td>
+                <td width="250" >{{=recordListStr1['reg_name']}}</td>
+                <td width="250" >{{=level1_sup_name}}</td>
+                <!--<td width="100" align="center" >{{=recordListStr1['rxCount1']}}</td>-->
+                <td width="100" align="center" >{{=recordListStr1['med_total1']}}</td>
+                <td width="100" align="center" >{{=recordListStr1['med_self1']}}</td>
+                <td width="100" align="right">{{if recordListStr1['perP1']==None:}} {{else:}}{{=recordListStr1['perP1']}}{{pass}}</td>
+                <!--<td width="100" align="center" >{{=recordListStr1['rxCount2']}}</td>-->
+                <td width="100" align="center" >{{=recordListStr1['med_total2']}}</td>
+                <td width="100" align="center" >{{=recordListStr1['med_self2']}}</td>
+                <td width="100" align="right">{{if recordListStr1['perP2']==None:}} {{else:}}{{=recordListStr1['perP2']}}{{pass}}</td>
+                <td width="100" align="right">{{if recordListStr1['growth']==None:}} {{else:}}{{=recordListStr1['growth']}}{{pass}}</td>
+            </tr> 
+            {{pass}}           
+        {{pass}}
+       
+	</table>
+
+    <br/>
+    <table width="900px" border="1" cellpadding="1" cellspacing="1" class="sample_border" >
+    	
+        {{for j in range(len(recordListH2)):}}
+        {{recordListStrH2=recordListH2[j]}}
+        {{  level1_sup_name=''    
+                for k in range(len(supListH1)):
+                    supListH1Str=supListH1[k]
+                    if str(supListH1Str['level_id']).strip().upper()==str(recordListStrH2['reg_id']).strip().upper():
+                        if level1_sup_name=='':
+                            level1_sup_name=supListH1Str['level1_sup_name']
+                        else:
+                            level1_sup_name+=','+supListH1Str['level1_sup_name']
+                        pass
+                    pass
+                pass
+        
+       		 }}  
+            
+    	
+        <tr align="left" style="background-color:#DBDBDB; font-size:11px; font-weight:bold;" >		    
+            <td colspan="10" >{{=recordListStrH2['reg_id']}}&nbsp;&nbsp;:{{=level1_sup_name}}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{=recordListStrH2['zone_id']}}&nbsp;&nbsp;:{{=level0_sup_name}}</td> 
+            
+      	</tr>
+        
+    	<tr align="left" style="background-color:#EBEBEB; font-size:12px; font-weight:bold;" >		    
+            <td width="100" rowspan="2" >AM</td> 
+            <td width="250" rowspan="2" >AM TM</td> 
+            <td width="250" rowspan="2" >AM Name</td> 
+            <!--<td width="100" >P1_RX QTY</td>-->
+            <td colspan="3" align="center" >{{if filter1!='':}}{{=filter1}}{{else:}}{{pass}}</td> 
+            <!--<td width="100" >P2_RX QTY</td>-->
+            <td colspan="3" align="center" >{{if filter2!='':}}{{=filter2}} {{else:}}{{pass}}</td> 
+            <td width="100" rowspan="2" align="right" >GROWTH (%)</td>
+      	</tr>
+        <tr align="left" style="background-color:#EBEBEB; font-size:12px; font-weight:bold;" >		    
+            <!--<td width="100" >P1_RX QTY</td>-->
+            <td width="100" align="center" >Base</td> 
+            <td width="100" align="center" >IPI</td>  
+            <td width="100" align="right" >%</td> 
+            <!--<td width="100" >P2_RX QTY</td>-->
+            <td width="100" align="center" >Base</td> 
+            <td width="100" align="center" >IPI</td>  
+            <td width="100" align="right" >%</td> 
+   	  </tr>
+        {{for i in range(len(recordList2)):}}
+        {{recordListStr2=recordList2[i]}} 
+             {{if recordListStrH2['zone_id']==recordListStr2['zone_id'] and recordListStrH2['reg_id']==recordListStr2['reg_id']:}} 
+             {{  level2_sup_name=''    
+                for k in range(len(supListH2)):
+                    supListH2Str=supListH2[k]
+                    if str(supListH2Str['level_id']).strip().upper()==str(recordListStr2['tl_id']).strip().upper():
+                        if level2_sup_name=='':
+                            level2_sup_name=supListH2Str['level2_sup_name']
+                        else:
+                            level2_sup_name+=','+supListH2Str['level2_sup_name']
+                        pass
+                    pass
+                pass
+        
+       		 }}        
+          	<tr  align="left" style="font-size:11px;">
+                <td width="100" >{{=recordListStr2['tl_id']}}</td>
+                <td width="250" >{{=recordListStr2['tl_name']}}</td>
+                <td width="250" >{{=level2_sup_name}}</td>
+                <!--<td width="100" align="center" >{{=recordListStr2['rxCount1']}}</td>-->
+                <td width="100" align="center" >{{=recordListStr2['med_total1']}}</td>
+                <td width="100" align="center" >{{=recordListStr2['med_self1']}}</td>
+                <td width="100" align="right">{{if recordListStr2['perP1']==None:}} {{else:}}{{=recordListStr2['perP1']}}{{pass}}</td>
+                <!--<td width="100" align="center" >{{=recordListStr2['rxCount2']}}</td>-->
+                <td width="100" align="center" >{{=recordListStr2['med_total2']}}</td>
+                <td width="100" align="center" >{{=recordListStr2['med_self2']}}</td>
+                <td width="100" align="right">{{if recordListStr2['perP2']==None:}} {{else:}}{{=recordListStr2['perP2']}}{{pass}}</td>
+                <td width="100" align="right">{{if recordListStr2['growth']==None:}} {{else:}}{{=recordListStr2['growth']}}{{pass}}</td>
+            </tr>
+            {{pass}}
+            {{pass}}
+        {{pass}}
+        
+	</table>		 	
+    <br/>
+    <table width="900px" border="1" cellpadding="1" cellspacing="1" class="sample_border" >
+    	
+        {{for j in range(len(recordListH3)):}}
+        {{recordListStrH3=recordListH3[j]}}
+        
+        {{  level1_sup_name=''    
+                for m in range(len(supListH1)):
+                    supListH1Str=supListH1[m]
+                    if str(supListH1Str['level_id']).strip().upper()==str(recordListStrH3['reg_id']).strip().upper():
+                        if level1_sup_name=='':
+                            level1_sup_name=supListH1Str['level1_sup_name']
+                        else:
+                            level1_sup_name+=','+supListH1Str['level1_sup_name']
+                        pass
+                    pass
+                pass
+        
+       		 }}  
+             
+        
+        {{  level2_sup_name=''    
+                for k in range(len(supListH2)):
+                    supListH2Str=supListH2[k]
+                    if str(supListH2Str['level_id']).strip().upper()==str(recordListStrH3['tl_id']).strip().upper():
+                        if level2_sup_name=='':
+                            level2_sup_name=supListH2Str['level2_sup_name']
+                        else:
+                            level2_sup_name+=','+supListH2Str['level2_sup_name']
+                        pass
+                    pass
+                pass
+        
+       		 }}      
+    	
+        <tr align="left" style="background-color:#DBDBDB; font-size:11px; font-weight:bold;" >		    
+            <td colspan="10" >{{=recordListStrH3['tl_id']}}&nbsp;&nbsp;:{{=level2_sup_name}}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{=recordListStrH3['reg_id']}}&nbsp;&nbsp;:{{=level1_sup_name}}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{=recordListStrH3['zone_id']}}&nbsp;&nbsp;:{{=level0_sup_name}}</td> 
+            
+      	</tr>
+        
+    	<tr align="left" style="background-color:#EBEBEB; font-size:12px; font-weight:bold;" >		    
+            <td width="100" rowspan="2" >MPO</td> 
+            <td width="250" rowspan="2" >MPO TM</td> 
+            <td width="250" rowspan="2" >MPO Name</td> 
+            <!--<td width="100" >P1_RX QTY</td>-->
+            <td colspan="3" align="center" >{{if filter1!='':}}{{=filter1}} {{else:}}{{pass}}</td> 
+            <!--<td width="100" >P2_RX QTY</td>-->
+            <td colspan="3" align="center" >{{if filter2!='':}}{{=filter2}} {{else:}}{{pass}}</td> 
+            <td width="100" rowspan="2" align="right" >GROWTH (%)</td>
+      	</tr>
+        <tr align="left" style="background-color:#EBEBEB; font-size:12px; font-weight:bold;" >		    
+            <!--<td width="100" >P1_RX QTY</td>-->
+            <td width="100" align="center" >Base</td> 
+            <td width="100" align="center" >IPI</td>  
+            <td width="100" align="right" >%</td> 
+            <!--<td width="100" >P2_RX QTY</td>-->
+            <td width="100" align="center" >Base</td> 
+            <td width="100" align="center" >IPI</td>  
+            <td width="100" align="right" >%</td> 
+   	  </tr>
+        {{for i in range(len(recordList3)):}}
+        {{recordListStr3=recordList3[i]}}
+           {{if recordListStrH3['zone_id']==recordListStr3['zone_id'] and recordListStrH3['reg_id']==recordListStr3['reg_id'] and recordListStrH3['tl_id']==recordListStr3['tl_id']:}}
+          	{{  rep_name=''    
+                for k in range(len(supListH3)):
+                    supListH3Str=supListH3[k]
+                    if str(supListH3Str['area_id']).strip().upper()==str(recordListStr3['area_id']).strip().upper():
+                        if rep_name=='':
+                            rep_name=supListH3Str['rep_name']
+                        else:
+                            rep_name+=','+supListH3Str['rep_name']
+                        pass
+                    pass
+                pass
+        
+       		 }}
+            <tr  align="left" style="font-size:11px;">
+                <td width="100" >{{=recordListStr3['area_id']}}</td>
+                <td width="250" >{{=recordListStr3['area_name']}}</td>
+                <td width="250" >{{=rep_name}}</td>
+                <!--<td width="100" align="center" >{{=recordListStr3['rxCount1']}}</td>-->
+                <td width="100" align="center" >{{=recordListStr3['med_total1']}}</td>
+                <td width="100" align="center" >{{=recordListStr3['med_self1']}}</td>
+                <td width="100" align="right">{{if recordListStr3['perP1']==None:}} {{else:}}{{=recordListStr3['perP1']}}{{pass}}</td>
+                <!--<td width="100" align="center" >{{=recordListStr3['rxCount2']}}</td>-->
+                <td width="100" align="center" >{{=recordListStr3['med_total2']}}</td>
+                <td width="100" align="center" >{{=recordListStr3['med_self2']}}</td>
+                <td width="100" align="right">{{if recordListStr3['perP2']==None:}} {{else:}}{{=recordListStr3['perP2']}}{{pass}}</td>
+                <td width="100" align="right">{{if recordListStr3['growth']==None:}} {{else:}}{{=recordListStr3['growth']}}{{pass}}</td>
+            </tr>
+            {{pass}}
+           {{pass}}
+        {{pass}}
+        
+</table>		 
+
+</body>
+
+</html>
+

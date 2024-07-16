@@ -1,0 +1,1405 @@
+{{extend 'layout.html'}}
+<link rel="stylesheet" href="{{=URL('static', 'js_and_css/ui.theme.css')}}" type="text/css" />
+<link rel="stylesheet" href="{{=URL('static', 'js_and_css/jquery-ui.css')}}" type="text/css" />
+<link rel="stylesheet" href="{{=URL('static', 'js_and_css/style.css')}}" type="text/css" />
+
+<script src="{{=URL('static','js_and_css/jquery-1.8.2.js')}}"></script>
+<script src="{{=URL('static','js_and_css/jquery-ui.js')}}"></script>
+
+<style type="text/css">
+	input[type=text], input[type=password],  select {
+		margin: 2px 0px 2px 0px;
+		width:100px;
+	}
+	
+	div.error {
+		margin-left:0px;
+		width:100px;
+	}
+	
+	#uni_middle_str5{
+		width:300px;
+	}
+	
+	.page_color,body{
+		font-family:Arial, Helvetica, sans-serif;
+		font-size:13px;	
+	}
+</style>
+
+
+<script>
+var base_url=location.protocol + "//" + location.hostname + (location.port && ":" + location.port) + "/{{=request.application}}/";
+
+
+
+$(function() {
+	
+	//------------------------
+
+	$.ajax({
+		  url: base_url+'default/get_generic_name_list',
+		  success: function(resStr) {
+			  genStr=resStr
+		  }
+		});
+ 
+	$('#med_generic').keyup(function(){	
+		
+		//-------------------------
+		var ref_list = genStr.split(',');				
+		var ref_name=$("#med_generic").val();
+		
+		//---------------- auto complete combo list
+		var ref_list_new=new Array();
+		lc=0;
+		i =0;
+		var refStr="";				
+		while (i < ref_list.length)
+		{
+			refStr=ref_list[i];
+			i=i+1;					
+			var res=refStr.toUpperCase().match(ref_name.toUpperCase());
+			if (res!=null){
+				ref_list_new[lc]=refStr;
+				lc=lc+1;
+				if (lc==30){
+					break;
+				};
+			}else{
+				continue;
+			}					
+		};
+		//alert (ref_list_new);
+		
+		//-------------- auto complete source
+		$( "input#med_generic" ).autocomplete({
+			source: ref_list_new
+		});
+		
+	});	
+	
+// ========================== ff 
+	$.ajax({
+		  url: base_url+'default/get_rep_list',
+		  success: function(resStr) {
+			  ffStr=resStr
+		  }
+		});
+ 
+	$('#pr_ff').keyup(function(){	
+		
+		//-------------------------
+		var ref_list = ffStr.split(',');				
+		var ref_name=$("#pr_ff").val();
+		
+		//---------------- auto complete combo list
+		var ref_list_new=new Array();
+		lc=0;
+		i =0;
+		var refStr="";				
+		while (i < ref_list.length)
+		{
+			refStr=ref_list[i];
+			i=i+1;					
+			var res=refStr.toUpperCase().match(ref_name.toUpperCase());
+			if (res!=null){
+				ref_list_new[lc]=refStr;
+				lc=lc+1;
+				if (lc==30){
+					break;
+				};
+			}else{
+				continue;
+			}					
+		};
+		//alert (ref_list_new);
+		
+		//-------------- auto complete source
+		$( "input#pr_ff" ).autocomplete({
+			source: ref_list_new
+		});
+		
+	});	
+	
+	// ========================== doctor
+	 
+	$.ajax({
+		  url: base_url+'default/get_doctor_list',
+		  success: function(resStr) {
+			  docStr=resStr
+		  }
+		});
+ 
+	$('#pr_doctor').keyup(function(){	
+		
+		//-------------------------
+		var ref_list = docStr.split(',');				
+		var ref_name=$("#pr_doctor").val();
+		
+		//---------------- auto complete combo list
+		var ref_list_new=new Array();
+		lc=0;
+		i =0;
+		var refStr="";				
+		while (i < ref_list.length)
+		{
+			refStr=ref_list[i];
+			i=i+1;					
+			var res=refStr.toUpperCase().match(ref_name.toUpperCase());
+			if (res!=null){
+				ref_list_new[lc]=refStr;
+				lc=lc+1;
+				if (lc==30){
+					break;
+				};
+			}else{
+				continue;
+			}					
+		};
+		//alert (ref_list_new);
+		
+		//-------------- auto complete source
+		$( "input#pr_doctor" ).autocomplete({
+			source: ref_list_new
+		});
+		
+	});	
+		
+
+});
+function MM_jumpMenu(targ,selObj,restore){ //v3.0
+  eval(targ+".location='"+selObj.options[selObj.selectedIndex].value+"'");
+  if (restore) selObj.selectedIndex=0;
+}
+
+
+//------------ get zone
+function getZone(){
+	var pr_region=$("#pr_region").val();
+	$("#pr_zone").empty();
+	$("#pr_area").empty();
+	$("#pr_territory").empty();
+	$.ajax({
+		  url: base_url+'pr_report/get_zone?region='+pr_region,
+		  success: function(resStr) {
+			  retStr1=resStr.split("<rd>");
+			  retStrLen=retStr1.length;
+			  var combStr='<option value="">ALL</option>';
+			  for(i=0;i<retStrLen;i++){
+				  retStr2=retStr1[i].split('<fd>');				  
+				  combStr+='<option value="'+retStr2[0]+'">'+retStr2[1]+'</option>';
+				  }
+			  $("#pr_zone").empty();
+			  $("#pr_zone").append(combStr);
+		  }
+		});
+	
+	}
+
+function getZone1(){
+	var pr_region=$("#pr_region1").val();
+	$("#pr_zone1").empty();
+	$("#pr_area1").empty();
+	$("#pr_territory1").empty();
+	$.ajax({
+		  url: base_url+'pr_report/get_zone?region='+pr_region,
+		  success: function(resStr) {
+			  retStr1=resStr.split("<rd>");
+			  retStrLen=retStr1.length;
+			  var combStr='<option value="">ALL</option>';
+			  for(i=0;i<retStrLen;i++){
+				  retStr2=retStr1[i].split('<fd>');				  
+				  combStr+='<option value="'+retStr2[0]+'">'+retStr2[1]+'</option>';
+				  }
+			  $("#pr_zone1").empty();
+			  $("#pr_zone1").append(combStr);
+		  }
+		});
+	
+	}
+
+//------------ get area
+function getArea(){
+	var pr_region=$("#pr_region").val();
+	var pr_zone=$("#pr_zone").val();
+	$("#pr_area").empty();
+	$("#pr_territory").empty();
+	
+	$.ajax({
+		  url: base_url+'pr_report/get_area?region='+pr_region+'&zone='+pr_zone,
+		  success: function(resStr) {
+			  retStr1=resStr.split("<rd>");
+			  retStrLen=retStr1.length;	
+			  var combStr='<option value="">ALL</option>';		  
+			  for(i=0;i<retStrLen;i++){
+				  retStr2=retStr1[i].split('<fd>');				  
+				  combStr+='<option value="'+retStr2[0]+'">'+retStr2[1]+'</option>';
+				  }
+			  $("#pr_area").append(combStr);
+		  }
+		});
+}
+
+function getArea1(){
+	var pr_region=$("#pr_region1").val();
+	var pr_zone=$("#pr_zone1").val();
+	$("#pr_area1").empty();
+	$("#pr_territory1").empty();
+	
+	$.ajax({
+		  url: base_url+'pr_report/get_area?region='+pr_region+'&zone='+pr_zone,
+		  success: function(resStr) {
+			  retStr1=resStr.split("<rd>");
+			  retStrLen=retStr1.length;	
+			  var combStr='<option value="">ALL</option>';		  
+			  for(i=0;i<retStrLen;i++){
+				  retStr2=retStr1[i].split('<fd>');				  
+				  combStr+='<option value="'+retStr2[0]+'">'+retStr2[1]+'</option>';
+				  }
+			  $("#pr_area1").append(combStr);
+		  }
+		});
+}
+
+//------------ get area
+function getTerritory(){
+	var pr_region=$("#pr_region").val();
+	var pr_zone=$("#pr_zone").val();
+	var pr_area=$("#pr_area").val();
+	
+	$.ajax({
+		  url: base_url+'pr_report/get_territory?region='+pr_region+'&zone='+pr_zone+'&area='+pr_area,
+		  success: function(resStr) {
+			  retStr1=resStr.split("<rd>");
+			  retStrLen=retStr1.length;			  
+			  var combStr='<option value="">ALL</option>';
+			  for(i=0;i<retStrLen;i++){
+				  retStr2=retStr1[i].split('<fd>');				  
+				  combStr+='<option value="'+retStr2[0]+'">'+retStr2[1]+'</option>';
+				  }
+			  $("#pr_territory").empty();	
+			  $("#pr_territory").append(combStr);
+		  }
+		});
+}
+
+function getTerritory1(){
+	var pr_region=$("#pr_region1").val();
+	var pr_zone=$("#pr_zone1").val();
+	var pr_area=$("#pr_area1").val();
+	
+	$.ajax({
+		  url: base_url+'pr_report/get_territory?region='+pr_region+'&zone='+pr_zone+'&area='+pr_area,
+		  success: function(resStr) {
+			  retStr1=resStr.split("<rd>");
+			  retStrLen=retStr1.length;			  
+			  var combStr='<option value="">ALL</option>';
+			  for(i=0;i<retStrLen;i++){
+				  retStr2=retStr1[i].split('<fd>');				  
+				  combStr+='<option value="'+retStr2[0]+'">'+retStr2[1]+'</option>';
+				  }
+			  $("#pr_territory1").empty();	
+			  $("#pr_territory1").append(combStr);
+		  }
+		});
+}
+// get quater 1
+
+function getQuarter1(){		
+	var combStr='<option value="">Quater</option>';
+	combStr+='<option value="1">One</option>';
+	combStr+='<option value="2">Two</option>';
+	combStr+='<option value="3">Three</option>';
+	combStr+='<option value="4">Four</option>';
+	
+	$("#pr_quarter1").empty();	
+	$("#pr_quarter1").append(combStr);
+	
+	$("#pr_month1").empty();
+	$("#pr_cycle1").empty();	
+	}
+
+
+function getMonth1(){
+	var quarter=$("#pr_quarter1").val();
+	var combStr='';
+	
+	if(quarter==1){
+		combStr='<option value="">Month</option>';
+		combStr+='<option value="01">Jan</option>';
+		combStr+='<option value="02">Feb</option>';
+		combStr+='<option value="03">March</option>';
+	}else if(quarter==2){
+		combStr='<option value="">Month</option>';
+		combStr+='<option value="04">Apr</option>';
+		combStr+='<option value="05">May</option>';
+		combStr+='<option value="06">Jun</option>';
+	}else if(quarter==3){
+		combStr='<option value="">Month</option>';
+		combStr+='<option value="07">July</option>';
+		combStr+='<option value="08">Aug</option>';
+		combStr+='<option value="09">Sep</option>';
+	}else if(quarter==4){
+		combStr='<option value="">Month</option>';
+		combStr+='<option value="10">Oct</option>';
+		combStr+='<option value="11">Nov</option>';
+		combStr+='<option value="12">Dec</option>';
+	}else{
+		combStr='<option value="">Month</option>';
+	}		
+
+	
+	$("#pr_month1").empty();	
+	$("#pr_month1").append(combStr);
+	
+	
+	$("#pr_cycle1").empty();
+	}
+
+function getCycle1(){
+	var pr_month=$("#pr_month1").val();
+	
+	var combStr='<option value="">Cycle</option>';
+	combStr+='<option value="1">C1</option>';
+	combStr+='<option value="2">C2</option>';
+	combStr+='<option value="3">C3</option>';
+	combStr+='<option value="4">C4</option>';
+	
+	$("#pr_cycle1").empty();	
+	$("#pr_cycle1").append(combStr);	
+	
+	
+	}
+
+// get quater 1
+
+function getQuarter2(){		
+	var combStr='<option value="">Quater</option>';
+	combStr+='<option value="1">One</option>';
+	combStr+='<option value="2">Two</option>';
+	combStr+='<option value="3">Three</option>';
+	combStr+='<option value="4">Four</option>';
+	
+	$("#pr_quarter2").empty();	
+	$("#pr_quarter2").append(combStr);
+	
+	$("#pr_month2").empty();
+	$("#pr_cycle2").empty();	
+	}
+
+
+function getMonth2(){
+	var quarter=$("#pr_quarter2").val();
+	var combStr='';
+	
+	if(quarter==1){
+		combStr='<option value="">Month</option>';
+		combStr+='<option value="01">Jan</option>';
+		combStr+='<option value="02">Feb</option>';
+		combStr+='<option value="03">March</option>';
+	}else if(quarter==2){
+		combStr='<option value="">Month</option>';
+		combStr+='<option value="04">Apr</option>';
+		combStr+='<option value="05">May</option>';
+		combStr+='<option value="06">Jun</option>';
+	}else if(quarter==3){
+		combStr='<option value="">Month</option>';
+		combStr+='<option value="07">July</option>';
+		combStr+='<option value="08">Aug</option>';
+		combStr+='<option value="09">Sep</option>';
+	}else if(quarter==4){
+		combStr='<option value="">Month</option>';
+		combStr+='<option value="10">Oct</option>';
+		combStr+='<option value="11">Nov</option>';
+		combStr+='<option value="12">Dec</option>';
+	}else{
+		combStr='<option value="">Month</option>';
+	}		
+
+	
+	$("#pr_month2").empty();	
+	$("#pr_month2").append(combStr);
+		
+	$("#pr_cycle2").empty();
+	
+	}
+
+function getCycle2(){
+	var pr_month=$("#pr_month2").val();
+	
+	var combStr='<option value="">Cycle</option>';
+	combStr+='<option value="1">C1</option>';
+	combStr+='<option value="2">C2</option>';
+	combStr+='<option value="3">C3</option>';
+	combStr+='<option value="4">C4</option>';
+	
+	$("#pr_cycle2").empty();	
+	$("#pr_cycle2").append(combStr);	
+	
+	
+	}
+
+
+
+
+
+
+$(function() {
+//========================depot/Branch	
+    var scListStr="";
+	$.ajax({
+		  url: base_url+'default/get_depot_list',
+		  success: function(resStr) {
+			  scListStr=resStr
+		  }
+		});
+//=================Sales Comparision
+$('#sales_depot_id_SC').blur(function(){
+		var depotIdName=$('#sales_depot_id_SC').val();
+		if(depotIdName!=''){
+			var dpIdNameArray=depotIdName.split("|");
+			
+			var depotId=dpIdNameArray[0];
+			
+			$.ajax({
+			  url: base_url+'default/get_depot_store_list?depotid='+depotId,
+			  success: function(resStr2) {
+				 // alert (resStr2)
+				  storeListStr=resStr2;
+			  }
+			});
+			
+		}		
+	});
+$('#sales_depot_id_SC').keyup(function(){	
+		
+		//-------------------------
+		var ref_list = scListStr.split(',');				
+		var ref_name=$("#sales_depot_id_SC").val();
+		
+		//---------------- auto complete combo list
+		var ref_list_new=new Array();
+		lc=0;
+		i =0;
+		var refStr="";				
+		while (i < ref_list.length)
+		{
+			refStr=ref_list[i];
+			i=i+1;					
+			var res=refStr.toUpperCase().match(ref_name.toUpperCase());
+			if (res!=null){
+				ref_list_new[lc]=refStr;
+				lc=lc+1;
+				if (lc==30){
+					break;
+				};
+			}else{
+				continue;
+			}					
+		};
+		//alert (ref_list_new);
+		
+		//-------------- auto complete source
+		$( "input#sales_depot_id_SC" ).autocomplete({
+			source: ref_list_new
+		});
+	
+  }); 
+  
+ //------------Depot Store
+
+	 var depotIdNameSC=$('#sales_depot_id_SC').val(); 
+	 
+	 if(depotIdNameSC!=''){
+			var dpIdNameArray=depotIdNameSC.split("|");
+			var depotId=dpIdNameArray[0]; 
+	  $.ajax({
+			  url: base_url+'default/get_depot_store_list?depotid='+depotId,
+			  success: function(resStr2) {
+				 // alert (resStr2)
+				  storeListStrSC=resStr2;
+			  }
+			});
+	 }
+	  $('#store_id_SC').keyup(function(){	
+		
+		//-------------------------
+		var ref_list = storeListStrSC.split(',');				
+		var ref_name=$("#store_id_SC").val();
+		
+		//---------------- auto complete combo list
+		var ref_list_new=new Array();
+		lc=0;
+		i =0;
+		var refStr="";				
+		while (i < ref_list.length)
+		{
+			refStr=ref_list[i];
+			i=i+1;					
+			var res=refStr.toUpperCase().match(ref_name.toUpperCase());
+			if (res!=null){
+				ref_list_new[lc]=refStr;
+				lc=lc+1;
+				if (lc==30){
+					break;
+				};
+			}else{
+				continue;
+			}					
+		};
+		//alert (ref_list_new);
+		
+		//-------------- auto complete source
+		$( "input#store_id_SC" ).autocomplete({
+			source: ref_list_new
+		});
+		
+	  });
+
+
+$.ajax({
+		  url: base_url+'default/get_rsm_list',
+		  success: function(resStr) {
+			  rsmStr=resStr
+			  //alert (fmStr)
+		  }
+		});
+ 
+	$('#rsm_SC').keyup(function(){	
+		
+		//-------------------------
+		var ref_list = rsmStr.split(',');				
+		var ref_name=$("#rsm_SC").val();
+		
+		//---------------- auto complete combo list
+		var ref_list_new=new Array();
+		lc=0;
+		i =0;
+		var refStr="";				
+		while (i < ref_list.length)
+		{
+			refStr=ref_list[i];
+			i=i+1;					
+			var res=refStr.toUpperCase().match(ref_name.toUpperCase());
+			if (res!=null){
+				ref_list_new[lc]=refStr;
+				lc=lc+1;
+				if (lc==30){
+					break;
+				};
+			}else{
+				continue;
+			}					
+		};
+		//alert (ref_list_new);
+		
+		//-------------- auto complete source
+		$( "input#rsm_SC" ).autocomplete({
+			source: ref_list_new
+		});
+		
+	});	
+$.ajax({
+		  url: base_url+'default/get_fm_list',
+		  success: function(resStr) {
+			  fmStr=resStr
+			  //alert (fmStr)
+		  }
+		});
+ 
+	$('#fm_SC').keyup(function(){	
+		
+		//-------------------------
+		var ref_list = fmStr.split(',');				
+		var ref_name=$("#fm_SC").val();
+		
+		//---------------- auto complete combo list
+		var ref_list_new=new Array();
+		lc=0;
+		i =0;
+		var refStr="";				
+		while (i < ref_list.length)
+		{
+			refStr=ref_list[i];
+			i=i+1;					
+			var res=refStr.toUpperCase().match(ref_name.toUpperCase());
+			if (res!=null){
+				ref_list_new[lc]=refStr;
+				lc=lc+1;
+				if (lc==30){
+					break;
+				};
+			}else{
+				continue;
+			}					
+		};
+		//alert (ref_list_new);
+		
+		//-------------- auto complete source
+		$( "input#fm_SC" ).autocomplete({
+			source: ref_list_new
+		});
+		
+	});	
+	
+	
+	//---------------- MSO		
+	
+    var collMSOListStr="";
+	$.ajax({
+		  url: base_url+'default/get_rep_list',
+		  success: function(resStr) {
+			  //alert (resStr)
+			  collMSOListStr=resStr
+		  }
+		});
+ 
+	$('#mso_id_sales').keyup(function(){	
+		
+		//-------------------------
+		var ref_list = collMSOListStr.split(',');
+					
+		var ref_name=$("#mso_id_sales").val();
+		
+		//---------------- auto complete combo list
+		var ref_list_new=new Array();
+		lc=0;
+		i =0;
+		var refStr="";				
+		while (i < ref_list.length)
+		{
+			refStr=ref_list[i];
+			i=i+1;					
+			var res=refStr.toUpperCase().match(ref_name.toUpperCase());
+			if (res!=null){
+				ref_list_new[lc]=refStr;
+				lc=lc+1;
+				if (lc==30){
+					break;
+				};
+			}else{
+				continue;
+			}					
+		};
+		//alert (ref_list_new);
+		
+		//-------------- auto complete source
+		$( "input#mso_id_sales" ).autocomplete({
+			source: ref_list_new
+		});	
+	
+  }); 
+  //------------------------Product
+  $.ajax({
+		  url: base_url+'default/get_item_list',
+		  success: function(resStr) {
+			  valueListStr=resStr
+		  }
+		});
+		$('#product').keyup(function(){
+			//-------------------------
+			var valueList = valueListStr.split(',');				
+			var searchValue=$("#product").val();
+			
+			//---------------- auto complete combo list
+			var valueList_new=new Array();
+			lc=0;
+			i =0;
+			var valueStr="";				
+			while (i < valueList.length)
+			{
+				valueStr=valueList[i];
+				i=i+1;					
+				var res=valueStr.toUpperCase().match(searchValue.toUpperCase());
+				if (res!=null){
+					valueList_new[lc]=valueStr;
+					lc=lc+1;
+					if (lc==30){
+						break;
+					};
+				}else{
+					continue;
+				}					
+			};
+			//alert (ref_list_new);
+			
+			//-------------- auto complete source
+			$( "input#product" ).autocomplete({
+				source: valueList_new
+			});
+		
+	  }); 
+	   //==============	  
+	   
+	   
+	   
+	    //------------------------Product
+
+		$('#product').keyup(function(){
+			//-------------------------
+			var valueList = valueListStr.split(',');				
+			var searchValue=$("#product").val();
+			
+			//---------------- auto complete combo list
+			var valueList_new=new Array();
+			lc=0;
+			i =0;
+			var valueStr="";				
+			while (i < valueList.length)
+			{
+				valueStr=valueList[i];
+				i=i+1;					
+				var res=valueStr.toUpperCase().match(searchValue.toUpperCase());
+				if (res!=null){
+					valueList_new[lc]=valueStr;
+					lc=lc+1;
+					if (lc==30){
+						break;
+					};
+				}else{
+					continue;
+				}					
+			};
+			//alert (ref_list_new);
+			
+			//-------------- auto complete source
+			$( "input#product" ).autocomplete({
+				source: valueList_new
+			});
+		
+	  }); 
+	   //==============
+	   
+	   //========================
+
+	
+	$.ajax({
+		  url: base_url+'default/get_doctor_list',
+		  success: function(resStr) {
+			  docStr=resStr
+		  }
+		});
+ 
+	$('#doc_id_sales').keyup(function(){	
+		
+		//-------------------------
+		var ref_list = docStr.split(',');				
+		var ref_name=$("#doc_id_sales").val();
+		
+		//---------------- auto complete combo list
+		var ref_list_new=new Array();
+		lc=0;
+		i =0;
+		var refStr="";				
+		while (i < ref_list.length)
+		{
+			refStr=ref_list[i];
+			i=i+1;					
+			var res=refStr.toUpperCase().match(ref_name.toUpperCase());
+			if (res!=null){
+				ref_list_new[lc]=refStr;
+				lc=lc+1;
+				if (lc==30){
+					break;
+				};
+			}else{
+				continue;
+			}					
+		};
+		//alert (ref_list_new);
+		
+		//-------------- auto complete source
+		$( "input#doc_id_sales" ).autocomplete({
+			source: ref_list_new
+		});
+		
+	});	 
+	   
+	   
+	   
+	   
+	   
+	 //=========================  
+	   
+	//----------------
+	
+	$.ajax({
+		  url: base_url+'default/get_tl_list',
+		  success: function(resStr) {
+			  trtStr=resStr
+		  }
+		});
+ 
+	$('#tr_SC').keyup(function(){	
+		
+		//-------------------------
+		var ref_list = trtStr.split(',');				
+		var ref_name=$("#tr_SC").val();
+		
+		//---------------- auto complete combo list
+		var ref_list_new=new Array();
+		lc=0;
+		i =0;
+		var refStr="";				
+		while (i < ref_list.length)
+		{
+			refStr=ref_list[i];
+			i=i+1;					
+			var res=refStr.toUpperCase().match(ref_name.toUpperCase());
+			if (res!=null){
+				ref_list_new[lc]=refStr;
+				lc=lc+1;
+				if (lc==30){
+					break;
+				};
+			}else{
+				continue;
+			}					
+		};
+		//alert (ref_list_new);
+		
+		//-------------- auto complete source
+		$( "input#tr_SC" ).autocomplete({
+			source: ref_list_new
+		});
+		
+	});	
+
+
+
+});
+
+
+</script>
+
+
+<body class="claro">   
+
+<table width="100%"  border="0" cellspacing="0" cellpadding="0" style="background-color:#FFFFFF;" >
+    <tr height="30px" >
+        <td width="800"><span class="blackCatTitle">Prescription  Report</span></td>
+        <form action="{{=URL(c='doctor',f='doctor_home')}}" method="post">
+        <td width="210" align="right"><!--<input name="" type="submit"  value="Back"/>--></td>
+        </form>
+        <td>&nbsp;</td>
+    </tr>
+    <tr  height="1px" style="background-color:#CCCCCC;">
+    	<td colspan="3" ></td>
+    </tr>
+</table>
+
+<form name="form2" id="form2" action="{{=URL(c='pr_report',f='index')}}" target="_blank">
+<table width="900" border="0" cellpadding="0" cellspacing="0" style="background-color:#F8F8F8;">
+    <tr style="background-color:#F8F8F8;">
+        <td>
+            <table width="548"  style="background-color:#F8F8F8;">            	
+                <tr style="background-color:#E9E9E9; height:25px">
+                    <td width="1">&nbsp;</td>
+                    <td width="69">&nbsp;</td>
+                    <td width="4">&nbsp;</td>
+                    <td width="454">&nbsp;</td>
+                </tr>
+                <tr >
+                    <td>&nbsp;</td>
+                    <td>Date Range</td>
+                    <td>:</td>
+                    <td><span style="vertical-align:middle;"> {{=search_form.custom.widget.from_dt_3}} To {{=search_form.custom.widget.to_dt_3}}</span></td>
+                </tr>
+                
+                
+                
+                 <tr >
+                    <td>&nbsp;</td>
+                    <td>Region</td>
+                    <td>:</td>
+                    <td colspan="4">
+                    	<select id="pr_region" name="pr_region" style="width:250px" onChange="getZone()">
+                        	<option value="">National</option>
+                            {{for row in regionRows:}}
+                            	<option value="{{=row.level_id}}">{{=row.level_name}}</option>
+                            {{pass}}
+                        </select>
+                    </td>                    
+                </tr>
+                 <tr >
+                    <td>&nbsp;</td>
+                    <td>Zone</td>
+                    <td>:</td>
+                    <td colspan="4">
+                    	<select id="pr_zone" name="pr_zone" style="width:250px" onChange="getArea()">
+                        </select>
+                    </td>
+                </tr>
+         
+         
+         
+
+                
+                
+                 <tr >
+                    <td>&nbsp;</td>
+                    <td>Area</td>
+                    <td>:</td>
+                    <td colspan="4">
+                    	<select id="pr_area" name="pr_area" style="width:250px" onChange="getTerritory()">                    
+                        </select>
+                    </td>
+                </tr>
+                
+                 <tr >
+                    <td>&nbsp;</td>
+                    <td>Territory</td>
+                    <td>:</td>
+                    <td colspan="4">
+                    	<select id="pr_territory" name="pr_territory" style="width:250px" >
+                        </select>	
+                    </td>
+                </tr>
+                
+                 <tr >
+                    <td>&nbsp;</td>
+                    <td>Doctor</td>
+                    <td>:</td>
+                    <td colspan="4"><input  name="pr_doctor" type="text" id="pr_doctor" size="25" value="" placeholder="Search Doctor" autocomplete="off" style="width:235px"/></td>
+                </tr>
+                
+                
+                <tr >
+                    <td>&nbsp;</td>
+                    <td>Field Force</td>
+                    <td>:</td>
+                    <td colspan="4"><input  name="pr_ff" type="text" id="pr_ff" size="25" value="" placeholder="Search Field Force" autocomplete="off" style="width:235px"/></td>
+                </tr>
+                
+                  <tr >
+                    <td>&nbsp;</td>
+                    <td>Generic</td>
+                    <td>:</td>
+                    <td colspan="4"><input  name="med_generic" type="text" id="med_generic" size="25" value="" placeholder="Search Generic" autocomplete="off" style="width:235px"/></td>
+                </tr>
+                
+                
+                 <tr >
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td colspan="4">&nbsp;</td>
+                </tr>
+                
+                <!--<tr >
+                    <td>&nbsp;</td>
+                    <td>Depot/Branch</td>
+                    <td>:</td>
+                    <td> 
+                    {{if (session.user_type=='Depot' and session.user_depot_category=='DEPOT'):}}
+                    	<input type="text" name="sales_depot_id_SC" id="sales_depot_id_SC" size="25" value="{{=session.depot_id}}|{{=session.user_depot_name}}" placeholder="Select Branch/Depot" autocomplete="off" style="width:288px"/>
+                    {{else:}}
+                    	<input  name="sales_depot_id_SC" type="text" id="sales_depot_id_SC" class="depot_id" size="25" value="" placeholder="Select Branch/Depot" autocomplete="off" style="width:288px"/>
+                    {{pass}} 
+                    </td>
+                </tr>               
+                <tr >
+                    <td>&nbsp;</td>
+                    <td>Product <font style="color:#B93976; font-size:20px">*</font></td>
+                    <td>:</td>
+                    <td>
+                    	<input  name="product" type="text" id="product" size="25" value="" placeholder="Product" autocomplete="off" style="width:288px"/>
+                    </td>
+                </tr>               
+                <tr >
+                    <td>&nbsp;</td>
+                    <td>A/B/C <font style="color:#B93976; font-size:20px">*</font></td>
+                    <td>&nbsp;</td>
+                    <td><input  name="category" type="text" id="category" size="25" value="" placeholder="A/B/C" autocomplete="off" style="width:288px"/></td>
+                </tr>
+                <tr >
+                    <td width="1">&nbsp;</td>
+                    <td>RSM</td>
+                    <td>:</td>
+                    <td width="415"><input  name="rsm_SC" type="text" id="rsm_SC" size="25" value="" placeholder="RSM" autocomplete="off" style="width:288px"/></td>
+                </tr>
+                    <td>&nbsp;</td>
+                    <td>AM</td>
+                    <td width="10">:</td>
+                    <td><input  name="fm_SC" type="text" id="fm_SC" size="25" value="" placeholder="AM" autocomplete="off" style="width:288px"/></td>
+                </tr>
+                <tr >
+                    <td>&nbsp;</td>
+                    <td>TR</td>
+                    <td>:</td>
+                    <td><input  name="tr_SC" type="text" id="tr_SC" size="25" value="" placeholder="TR" autocomplete="off" style="width:288px"/></td>
+                </tr>
+                <tr >
+                    <td>&nbsp;</td>
+                    <td>MPO/MSO</td>
+                    <td>:</td>
+                    <td><input  name="mso_id_sales" type="text" id="mso_id_sales" size="25" value="" placeholder="Select MSO" autocomplete="off" style="width:288px"/></td>
+                </tr>
+                <tr >
+                    <td>&nbsp;</td>
+                    <td>Doctor</td>
+                    <td>:</td>
+                    <td><input  name="doc_id_sales" type="text" id="doc_id_sales" size="25" value="" placeholder="Select Doctor" autocomplete="off" style="width:288px"/></td>
+                </tr>-->        
+            </table>          
+      </td>
+        <td align="right">
+            <table width="354" style="background-color:#F8F8F8;">
+            	<tr style="background-color:#E9E9E9; height:25px">
+                    <td width="246">&nbsp;</td>
+                    <td width="100">&nbsp;</td>
+                </tr>
+                <tr style="background-color:#E6FFFF; height:25px">
+                    <td colspan="2">Prescription Summary</td>
+                </tr>
+                <!--<tr >
+                    <td><input type="submit" name="btn_prSummary" style="width:245px;" value="Summary" title="Date Range" /></td>
+                    <td><input type="submit" name="btn_prSummaryD" style="width:100px;" value="D"  title="RSM, FM, MSO, TR, Doctor" disabled /></td>
+                </tr>
+                
+                <tr >
+                    <td><input type="submit" name="btn_prNewSummary" style="width:245px;" value="MSO Wise Summary" title="Date Range" /></td>
+                    <td><input type="submit" name="btn_prNewSummary" style="width:100px;" value="D"  title="RSM, FM, MSO, TR, Doctor" disabled /></td>
+                </tr>-->
+                <!--<tr >
+                    <td><input type="submit" name="btn_drSummary" style="width:245px;" value="Doctor Wise Summary" title="Date Range" /></td>
+                    <td><input type="submit" name="btn_drSummary" style="width:100px;" value="D"  title="RSM, FM, MSO, TR, Doctor" disabled /></td>
+                </tr> 
+                <tr >
+                    <td><input type="submit" name="btn_zeroDrList" style="width:245px;" value="Zero Doctor List" title="Date Range" /></td>
+                    <td><input type="submit" name="btn_zeroDrList" style="width:100px;" value="D"  title="RSM, FM, MSO, TR, Doctor" disabled /></td>
+                </tr>-->
+                <!-- <tr >
+                    <td><input type="submit" name="btn_prNewRSMSummary" style="width:245px;" value="Region Wise Summary" title="Date Range" /></td>
+                    <td><input type="submit" name="btn_prNewRSMSummary" style="width:100px;" value="D"  title="RSM, FM, MSO, TR, Doctor" disabled /></td>
+                </tr> 
+                <tr >
+                    <td><input type="submit" name="btn_regSummary" style="width:245px;" value="Region Wise Summary" title="Date Range" /></td>
+                    <td><input type="submit" name="btn_regSummary" style="width:100px;" value="D"  title="RSM, FM, MSO, TR, Doctor" disabled /></td>
+                </tr>-->
+                <!--<tr >
+                    <td><input type="submit" name="btn_ProSummary" style="width:245px;" value="Product Wise Summary" title="Date Range" /></td>
+                    <td><input type="submit" name="btn_ProSummary" style="width:100px;" value="D"  title="RSM, FM, MSO, TR, Doctor" disabled /></td>
+                </tr> --> 
+                
+        <tr >
+                	<td colspan="2"><input type="submit" name="btn_sum_day_wise" style="width:350px;" value="Summary Day Wise" /></td>
+              </tr>    
+                
+                 <tr >
+                	<td colspan="2"><input type="submit" name="btn_area_wise" style="width:350px;" value="Summary Area Wise" /></td>
+                </tr>      
+                
+          <tr >
+                	<td colspan="2"><input type="submit" name="btn_pr_details_d" style="width:350px;" value=" Details Download" /></td><!--<input type="submit" name="btn_pr_details" style="width:300px;" value="Prescription Details" />&nbsp;-->
+              </tr> 
+                
+                
+                   <tr style="height:20px;" >
+                	<td colspan="2"></td>
+                </tr>      
+                
+                <td ><input type="submit" name="btn_pr_summary" style="width:245px; background-color:#E6FFFF;" value="Summary" /></td>
+                    <td><input type="submit" name="btn_pr_summary_d" style="width:100px;" value=" D " /></td>
+                </tr>
+                
+                
+                 <tr style="height:20px;" >
+                	<td colspan="2"></td>
+                </tr>
+                
+                
+                
+                
+                <tr >
+                	<td ><input type="submit" name="btn_orphan_med_list" style="width:245px;" value="Orphan Medicine List" /></td>
+                    <td><input type="submit" name="btn_orphan_med_list_d" style="width:100px;" value=" D " /></td>
+                </tr> 
+                
+                 <tr>
+                    <td></td>
+                    <td>&nbsp;</td>
+                </tr>
+                <tr >
+                    <td></td>
+                    <td>&nbsp;</td>
+                </tr>                
+                <tr style="background-color:#E6FFFF; height:25px">
+                    <td >Physician Prescription Share <font style="color:#B93976; font-size:20px"></font></td>
+                    <td>&nbsp;</td>
+                </tr>
+                <tr style="height:25px" >
+                    <td><input type="submit" name="btn_physician_track" style="width:245px;" value="Physician Track" /></td>
+                    <td><input type="submit" name="btn_physician_track_d" style="width:100px;" value="D"  /></td>
+                </tr>
+                 <tr >
+                    <td></td>
+                    <td>&nbsp;</td>
+                </tr>
+                
+                
+                   <tr style="height:20px;" >
+                	<td colspan="2"></td>
+                </tr>
+      
+                <tr >
+                    <td><input type="submit" name="btn_regionSummary" style="width:245px;" value="Region Wise Summary" title="Date Range" /></td>
+                    <td><input type="submit" name="btn_regSummary" style="width:100px;" value="D"  title="RSM, FM, MSO, TR, Doctor" disabled /></td>
+                </tr> 
+                <tr >
+                    <td><input type="submit" name="btn_tlSummary" style="width:245px;" value="Area Wise Summary" title="Date Range" /></td>
+                    <td><input type="submit" name="btn_regSummary" style="width:100px;" value="D"  title="RSM, FM, MSO, TR, Doctor" disabled /></td>
+                </tr> 
+                <tr >
+                    <td><input type="submit" name="btn_areaSummary" style="width:245px;" value="Territory Wise Summary" title="Date Range" /></td>
+                    <td><input type="submit" name="btn_regSummary" style="width:100px;" value="D"  title="RSM, FM, MSO, TR, Doctor" disabled /></td>
+                </tr> 
+                <tr >
+                    <td><input type="submit" name="btn_mpoSummary" style="width:245px;" value="MPO Wise Summary" title="Date Range" /></td>
+                    <td><input type="submit" name="btn_regSummary" style="width:100px;" value="D"  title="RSM, FM, MSO, TR, Doctor" disabled /></td>
+                </tr>                
+            </table>
+        </td>
+    </tr>
+</table> 
+</form>
+<form name="form2" id="form2" action="{{=URL(c='pr_report',f='index')}}" target="_blank">
+<!--<table width="900" border="0" cellpadding="0" cellspacing="0" style="background-color:#F8F8F8;">
+    <tr>
+        <td>
+            <table width="500"  style="background-color:#F8F8F8;">
+                <tr style="background-color:#E9E9E9; height:25px">
+                    <td width="1">&nbsp;</td>
+                    <td width="104">&nbsp;</td>
+                    <td width="10">&nbsp;</td>
+                    <td width="415">&nbsp;</td>
+                </tr>
+                <tr >
+                    <td>&nbsp;</td>
+                    <td>Date </td>
+                    <td>:</td>
+                    <td><span style="vertical-align:middle;">{{=search_form.custom.widget.from_dt_2}}</span></td>
+                </tr>
+                <tr >
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                </tr>
+                <tr>    
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                </tr>
+            </table>        
+        </td>
+        <td align="right">
+            <table width="400" style="background-color:#F8F8F8;">
+            	<tr style="background-color:#E9E9E9; height:25px">
+                    <td width="1">&nbsp;</td>
+                </tr>
+                <tr style="background-color:#E6FFFF; height:25px">
+                    <td>Prescription Daily Summary</td>
+                </tr>
+                <tr >
+                    <td><input type="submit" name="btn_prdSummary" style="width:350px;"  value="Summary" title="Single Date" /></td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+</table>-->
+</form>
+
+
+
+<table width="900" border="0" cellpadding="0" cellspacing="0" style="margin:0px; background-color:#F8F8F8;" >
+    <form name="form2" id="form2" action="{{=URL(c='pr_report',f='index')}}" target="_blank">
+    <tr>
+        <td valign="top">
+            <table width="550" height="300px;" >
+                <tr style="background-color:#E9E9E9; height:25px">
+                    <td width="1">&nbsp;</td>
+                    <td width="81">&nbsp;</td>
+                    <td width="6">&nbsp;</td>
+                    <td colspan="4">&nbsp;</td>
+                </tr>
+                <tr >
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td width="77">Year</td>
+                    <td width="83">Quarter</td>
+                    <td width="82">Month</td>
+                  <td width="188">Type</td>
+                </tr>
+                <tr >
+                    <td>&nbsp;</td>
+                    <td>Previous</td>
+                    <td>:</td>
+                    <td colspan="4">
+                    	<select id="pr_year1" name="pr_year1" style="width:80px" onChange="getQuarter1()">
+                        	<option value="">Year</option>
+                            {{for i in range(2017,2026):}}
+                            <option value="{{=i}}">{{=i}}</option>
+                            {{pass}}
+                        </select>
+                        <select id="pr_quarter1" name="pr_quarter1" style="width:80px" onChange="getMonth1()">
+                        	<option value="">Quarter</option>                        	
+                        </select>
+                        <select id="pr_month1" name="pr_month1" style="width:80px" onChange="getCycle1()">
+                        	<option value="">Month</option>
+                        </select>
+                        <select id="pr_cycle1" name="pr_cycle1" style="width:80px" >
+                        	<option value="">Cycle</option>
+                        </select>
+                        
+                    </td>
+                </tr> 
+                <tr >
+                    <td>&nbsp;</td>
+                    <td>Current</td>
+                    <td>:</td>
+                    <td colspan="4">
+                    	<select id="pr_year2" name="pr_year2" style="width:80px" onChange="getQuarter2()">
+                        	<option value="">Year</option>
+                            {{for i in range(2017,2026):}}
+                            <option value="{{=i}}">{{=i}}</option>
+                            {{pass}}
+                        </select>
+                        <select id="pr_quarter2" name="pr_quarter2" style="width:80px" onChange="getMonth2()">
+                        	<option value="">Quater</option>
+                        </select>
+                        <select id="pr_month2" name="pr_month2" style="width:80px" onChange="getCycle2()">
+                        	<option value="">Month</option>
+                        </select>
+                        <select id="pr_cycle2" name="pr_cycle2" style="width:80px" >
+                        	<option value="">Cycle</option>
+                        </select>
+                        
+                    </td>
+                </tr>
+                <tr >
+                    <td>&nbsp;</td>
+                    <td>Region</td>
+                    <td>:</td>
+                    <td colspan="4">
+                    	<select id="pr_region1" name="pr_region1" style="width:250px" onChange="getZone1()">
+                        	<option value="">National</option>
+                            {{for row in regionRows:}}
+                            	<option value="{{=row.level_id}}">{{=row.level_name}}</option>
+                            {{pass}}
+                        </select>
+                    </td>                    
+                </tr>
+                <tr >
+                    <td>&nbsp;</td>
+                    <td>Zone</td>
+                    <td>:</td>
+                    <td colspan="4">
+                    	<select id="pr_zone1" name="pr_zone1" style="width:250px" onChange="getArea1()">
+                        </select>
+                    </td>
+                </tr>
+                <tr >
+                    <td>&nbsp;</td>
+                    <td>Area</td>
+                    <td>:</td>
+                    <td colspan="4">
+                    	<select id="pr_area1" name="pr_area1" style="width:250px" onChange="getTerritory1()">                    
+                        </select>
+                    </td>
+                </tr>
+                
+                <tr >
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td colspan="4">&nbsp;</td>
+                </tr>
+                <tr >
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td colspan="4">&nbsp;</td>
+                </tr>
+                <tr >
+                  <td>&nbsp;</td>
+                  <td>&nbsp;</td>
+                  <td>&nbsp;</td>
+                  <td colspan="4">&nbsp;</td>
+                </tr>             
+            </table>
+        </td>
+        <td valign="top">
+            <table width="350">
+                <tr style="background-color:#E9E9E9; height:25px">
+                    <td></td>
+                    <td>&nbsp;</td>
+                </tr>
+                <tr style="background-color:#E6FFFF; height:25px">
+                    <td >General Prescription Share <font style="color:#B93976; font-size:20px"></font></td>
+                    <td>&nbsp;</td>
+                </tr>
+                <!--<tr style="height:25px" >
+                    <td><input type="submit" name="btn_company_track" style="width:245px;" value="Company Track"  /></td>
+                    <td><input type="submit" name="btn_company_track_d" style="width:100px;" value="D"  /></td>
+                </tr>-->
+                <tr style="height:25px" >
+                    <td><input type="submit" name="btn_company_track1" style="width:245px;" value="Company Track"  /></td>
+                    <td><input type="submit" name="btn_company_track_d1" style="width:100px;" value="D" readonly  /></td>
+                </tr>
+                <tr style="height:25px" >
+                    <td><input type="submit" name="btn_company_track2" style="width:245px;" value="Company Track New"  /></td>
+                    <td><input type="submit" name="btn_company_track_d1" style="width:100px;" value="D" readonly  /></td>
+                </tr>
+                <tr style="height:25px" >
+                    <td><input type="submit" name="btn_company_track_rm" style="width:245px;" value="Company Track (RM)" readonly /></td>
+                    <td><input type="submit" name="btn_company_track_rm_d" style="width:100px;" value="D" readonly  /></td>
+                </tr>
+                <tr style="height:25px" >
+                    <td><input type="submit" name="btn_company_track_zm" style="width:245px;" value="Company Track (ZM)" readonly /></td>
+                    <td><input type="submit" name="btn_company_track_zm_d" style="width:100px;" value="D" readonly /></td>
+                </tr>
+                <tr style="height:25px" >
+                    <td><input type="submit" name="btn_company_track_am" style="width:245px;" value="Company Track (AM)" readonly /></td>
+                    <td><input type="submit" name="btn_company_track_am_d" style="width:100px;" value="D" readonly /></td>
+                </tr>
+                <tr style="height:25px" >
+                    <td><input type="submit" name="btn_company_track_mpo" style="width:245px;" value="Company Track (MPO)" readonly /></td>
+                    <td><input type="submit" name="btn_company_track_mpo_d" style="width:100px;" value="D" readonly /></td>
+                </tr>
+                <tr >
+                    <td></td>
+                    <td>&nbsp;</td>
+                </tr>
+                <tr style="background-color:#E6FFFF; height:25px">
+                    <td >Institute Prescription Share <font style="color:#B93976; font-size:20px"></font></td>
+                    <td>&nbsp;</td>
+                </tr>
+                <tr style="height:25px" >
+                    <td><input type="submit" name="btn_institute_track_rm" style="width:245px;" value="Institute Track (RM)" disabled /></td>
+                    <td><input type="submit" name="btn_institute_track_rm_d" style="width:100px;" value="D" disabled /></td>
+                </tr>
+                <tr style="height:25px" >
+                    <td><input type="submit" name="btn_institute_track_zm" style="width:245px;" value="Institute Track (ZM)" disabled /></td>
+                    <td><input type="submit" name="btn_institute_track_zm_d" style="width:100px;" value="D" disabled /></td>
+                </tr>
+                <tr style="height:25px" >
+                    <td><input type="submit" name="btn_institute_track_am" style="width:245px;" value="Institute Track (AM)" disabled /></td>
+                    <td><input type="submit" name="btn_institute_track_am_d" style="width:100px;" value="D" disabled /></td>
+                </tr>
+                <tr style="height:25px" >
+                    <td><input type="submit" name="btn_institute_track_mpo" style="width:245px;" value="Institute Track (MPO)" disabled /></td>
+                    <td><input type="submit" name="btn_institute_track_mpo_d" style="width:100px;" value="D" disabled /></td>
+                </tr>
+                
+            </table>
+        </td>
+    </tr>
+    </form>
+</table>
+
+</body>
+

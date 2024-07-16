@@ -1,0 +1,89 @@
+{{extend 'layout_sample_report.html'}}
+
+<html>
+<head>
+</head>
+<body>
+<table width="900px" style="border:none; text-align:center; font-weight:bold;" >
+        <tr >
+            <td width="100" >&nbsp;</td>
+            <td align="center" ><span style="border-bottom:1px solid #333;">Prescription Summary Area Wise</span></td>
+            <td width="100" ><img  height="30px" src="{{=URL('static','images/comp_logo1.png')}}"/></td>
+        </tr>
+    </table>
+
+    <table width="900" style="border:none; font-weight:bold;" >
+        <tr >
+            <td width="100"  >Date Range</td>
+            <td width="2" >:</td>
+            <td colspan="4" >{{=date_from}}&nbsp;&nbsp; To &nbsp;&nbsp; {{=date_to}}</td>    
+            <td width="100"  ></td>
+            <td width="2" ></td>
+            <td></td>
+            <td width="100"  ></td>
+            <td width="2" ></td>
+            <td></td>            
+        </tr>
+        <tr >
+        	<td width="100"  >Region</td>
+            <td width="2" >:</td>
+            <td width="100" >{{if pr_region=='':}}ALL{{else:}}{{=pr_region}}{{pass}}</td>
+        	<td width="100"  >Zone</td>
+            <td width="2" >:</td>
+            <td width="100" >{{if pr_zone=='':}}ALL{{else:}}{{=pr_zone}}{{pass}}</td>
+            <td width="100"  >Area</td>
+            <td width="2" >:</td>
+            <td width="100" >{{if pr_area=='':}}ALL{{else:}}{{=pr_area}}{{pass}}</td>    
+            <td width="100"  >Territory</td>
+            <td width="2" >:</td>
+            <td>{{if pr_territory=='':}}ALL{{else:}}{{=pr_territory}}{{pass}}</td>            
+        </tr>
+        <tr >
+            <td width="100"  >Field Force</td>
+            <td width="2" >:</td>
+            <td colspan="4" >{{if pr_ff=='':}}ALL{{else:}}{{=pr_ff}}{{pass}}</td>    
+            <td width="100"  >Doctor</td>
+            <td width="2" >:</td>
+            <td colspan="4" >{{if pr_doctor=='':}}ALL{{else:}}{{=pr_doctor}}{{pass}}</td>
+            <td width="100"  ></td>
+            <td width="2" ></td>
+            <td></td>            
+        </tr>		  
+    </table>
+	
+    <br/>
+    <table width="900px" border="1" cellpadding="1" cellspacing="1" class="sample_border" >
+        <tr align="left" style="background-color:#EBEBEB; font-size:12px; font-weight:bold;" >		    
+            <td style="width:50px;">Area id</td> 
+            <td style="width:150px;">Area Name</td> 
+            <td style="width:50px;">Rep id</td> 
+            <td style="width:150px;">Rep Name</td> 
+            <td style="width:50px;">Doctor Id</td>
+            <td style="width:200px;">Doctor Name</td>                   
+            <td style="width:50px; text-align:right;">Count</td>
+      </tr>
+        
+        {{gTotal=0}}
+        {{for i,record in enumerate(records):}}
+        
+        <tr  align="left" style="font-size:11px;">
+            <td >{{=record[db.sm_prescription_head.area_id]}}</td>
+            <td >{{=record[db.sm_prescription_head.area_name]}}</td>
+            <td >{{=record[db.sm_prescription_head.submit_by_id]}}</td>
+            <td >{{=record[db.sm_prescription_head.submit_by_name]}}</td>
+            <td >{{=record[db.sm_prescription_head.doctor_id]}}</td>
+            <td >{{=record[db.sm_prescription_head.doctor_name]}}</td>
+            <td style="text-align:right;">{{=record[db.sm_prescription_head.id.count()]}}{{gTotal+=record[db.sm_prescription_head.id.count()]}}</td>
+        </tr>
+        {{pass}}        
+        <tr  align="left" style=" background-color:#F4F4F4; font-size:11px; font-weight:bold;">
+            <td style="text-align:center" colspan="6"></td>                    
+            <td style="text-align:right;">{{=gTotal}}</td>
+        </tr>
+        
+</table>		 
+
+</body>
+
+</html>
+
