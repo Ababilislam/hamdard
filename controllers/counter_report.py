@@ -160,11 +160,11 @@ def product_Wise_Report_download():
         item_id = str(recordStr['item_id'])
         item_name = str(recordStr['item_name'])
         quantity = str(recordStr['total_quantity'])
-        item_unit = get_unit(item_id)
+        item_unit = int(get_unit(item_id))
         total_invoice_return = invoice_return(from_dt,to_dt,item_id,branch_id)
-        net = (int(quantity)-int(total_invoice_return))
-        box=int(int(net)/int(item_unit))
-        strip=int(int(net)%int(item_unit))
+        net = int(quantity)-int(total_invoice_return)
+        box=int(net/item_unit)
+        strip=int(net%item_unit)
         i += 1
         myString += str(i)+','+str(item_id)+','+str(item_name)+','+str(item_unit)+','+str(quantity)+','+ str(total_invoice_return)+','+str(net)+','+str(box)+','+str(strip)+'\n'
     
